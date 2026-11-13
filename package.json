@@ -1,6 +1,6 @@
 {
   "name": "plataforma-po-desktop",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Dashboard para Product Owners no Azure DevOps",
   "main": "./out/main/index.js",
