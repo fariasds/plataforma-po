@@ -70,9 +70,15 @@ jobs:
           # de esconder a versão. Quem decide publicar lê o arquivo.
           npm audit --omit=dev --json | Out-File -Encoding utf8 dist/laudo/npm-audit.json
           $global:LASTEXITCODE = 0
-          Get-ChildItem dist/laudo -File | ForEach-Object {
-            "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
-          } | Out-File -Encoding ascii dist/laudo/laudo.sha256
+          # A lista vai para uma variável antes de gravar: num pipeline direto, o
+          # Out-File cria o laudo.sha256 primeiro, ele entra na listagem e o
+          # Get-FileHash tenta ler o arquivo que ainda está aberto para escrita.
+          $hashes = Get-ChildItem dist/laudo -File |
+            Where-Object Name -ne 'laudo.sha256' |
+            ForEach-Object {
+              "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
+            }
+          $hashes | Out-File -Encoding ascii dist/laudo/laudo.sha256
 
       - name: SHA-256 do instalador
         id: hash
