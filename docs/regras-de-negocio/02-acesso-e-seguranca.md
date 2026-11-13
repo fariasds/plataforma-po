@@ -55,6 +55,7 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-29 | A janela é endurecida | `tests/security/rn-sec-29-janela-endurecida.test.ts` |
 | RN-SEC-30 | Varredura do Electron sem apontamento novo | `npm run verify:electron` · `tests/security/electronegativity-aceitos.json` |
 | RN-SEC-31 | A tela Segurança só promete o que é provado | `src/renderer/src/features/security/guarantees.test.ts` |
+| RN-SEC-32 | Para o GitHub só sai o que já é público | `tests/security/rn-sec-32-publicacao-so-da-historia-publica.test.ts` · hook de `pre-push` |
 
 As regras da Configuração que protegem o PAT (`RN-CFG-04`, `05` e `06`) estão em
 [03-configuracao.md](03-configuracao.md), cada uma com o seu teste.
@@ -461,6 +462,33 @@ linha e forma, **nunca o valor**: o log do CI é público.
 **Provado por:** `tests/security/rn-sec-28-varredura-de-credenciais.test.ts`, que acha
 cada forma num arquivo temporário, não acha nada no repositório e confere que o CI e
 o hook chamam o script.
+
+### RN-SEC-32 · Para o GitHub só sai o que já é público
+
+Um repositório público não esquece nada do que um dia recebeu: apagar depois não
+basta. Por isso a barreira fica **antes** do push, no hook de `pre-push`
+(`scripts/verify-push.mjs`), e recusa o envio se:
+
+1. **o clone guarda alguma história além da pública.** Toda história publicada
+   nasce do commit que inaugurou o repositório; um clone com outra raiz não publica
+   nada, nem uma branch limpa. O que nunca esteve no disco não tem como ser enviado;
+2. **um commit enviado não descende só dessa raiz** — um merge com história alheia;
+3. **autor ou committer de commit novo não é um endereço noreply do GitHub;**
+4. **um commit novo cria um caminho que não pode ser público**, qualquer que seja o
+   conteúdo (dados de Perfil, planos internos, artefatos de build, `.env`);
+5. **uma linha adicionada ou a mensagem de um commit tem forma de credencial**
+   (`RN-SEC-28`) **ou um termo da lista de termos** — a mesma do `verify:neutral`.
+
+Cada commit novo é olhado, não só o último: um termo que entra num commit e sai no
+seguinte continua no histórico. A lista vem de `git config plataforma.denylist` (ou
+`PO_NEUTRAL_DENYLIST`) e **é obrigatória**: sem ela o push é recusado. Quem contribui
+e não tem a lista abre mão dela explicitamente com `PO_PUSH_SEM_LISTA=1`. A saída diz
+commit, arquivo, linha e o número do termo, **nunca o termo**.
+
+**Provado por:** `tests/security/rn-sec-32-publicacao-so-da-historia-publica.test.ts`,
+que monta repositórios de verdade com um remoto local e confere cada recusa, o termo
+que some no commit seguinte, o escopo dos termos, e que um `git push` real com o hook
+é barrado sem o remoto receber nada.
 
 ---
 

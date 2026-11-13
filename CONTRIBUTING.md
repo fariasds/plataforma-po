@@ -70,6 +70,15 @@ mostre o teste falhando, restaure. Conte isso no PR.
   git config core.hooksPath .githooks
   ```
 
+  O mesmo comando liga o hook de `pre-push` (`RN-SEC-32`), que confere autor
+  noreply, credenciais e caminhos de cada commit antes de enviar. Ele também exige a
+  lista de termos do mantenedor; quem contribui não tem a lista e abre mão dela
+  explicitamente no push:
+
+  ```bash
+  PO_PUSH_SEM_LISTA=1 git push
+  ```
+
 ## Cenários e resultados aprovados
 
 Um **Cenário** é uma Configuração fictícia com o estado de um Azure fictício e uma
