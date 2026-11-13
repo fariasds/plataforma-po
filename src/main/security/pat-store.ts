@@ -1,4 +1,7 @@
 import { existsSync, readFileSync, statSync, unlinkSync } from 'fs'
+// A API síncrona do safeStorage está descontinuada desde o Electron 45 e sai no 46:
+// antes de subir para o 46, migrar para `encryptStringAsync`/`decryptStringAsync`.
+// O cifrado de hoje continua legível pela API assíncrona, então não há perda de PAT.
 import { safeStorage } from 'electron'
 import { AppError } from '@shared/errors'
 import { writeFileAtomic } from '../profile/atomic-write'
