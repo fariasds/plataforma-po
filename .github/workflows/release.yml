@@ -149,10 +149,24 @@ jobs:
           INSTALLER: ${{ needs.build.outputs.installer }}
           SHA256: ${{ needs.build.outputs.sha256 }}
         run: |
+          # O link direto vem primeiro: a lista de Assets fica no fim da página e
+          # mistura o instalador com o laudo, e quem só quer instalar se perde.
+          $download = "https://github.com/$env:GH_REPO/releases/download/$env:TAG/$env:INSTALLER"
           $notes = @"
-          ## Instalador
+          ## Baixar
 
-          ``$env:INSTALLER``
+          ### [⬇ Baixar o instalador para Windows]($download)
+
+          ``$env:INSTALLER``, o único arquivo necessário para instalar. Os outros
+          arquivos em **Assets**, no fim desta página, são o laudo de segurança
+          desta versão.
+
+          O Windows vai mostrar o aviso do SmartScreen ("editor desconhecido"),
+          porque o instalador não tem assinatura de código. Clique em **Mais
+          informações → Executar assim mesmo**. O passo a passo está no
+          [README](https://github.com/$env:GH_REPO#instalar).
+
+          ## Conferir o instalador
 
           **SHA-256:** ``$env:SHA256``
 
