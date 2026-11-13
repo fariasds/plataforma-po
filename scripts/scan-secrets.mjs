@@ -16,7 +16,7 @@
  * Sai com 1 se encontrar algo, e com 0 se não.
  */
 import { execFileSync } from 'node:child_process'
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { closeSync, fstatSync, openSync, readdirSync, readFileSync } from 'node:fs'
 import { join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -64,6 +64,27 @@ function isBinary(buffer) {
   return buffer.subarray(0, 8000).includes(0)
 }
 
+/**
+ * Conteúdo do arquivo, ou `null` se ele não deve ser varrido. Checagem e leitura
+ * usam o mesmo descritor: com `stat` e leitura pelo caminho, o arquivo pode ser
+ * trocado entre as duas, e o tamanho checado deixa de ser o do que foi lido.
+ */
+function readCandidate(full) {
+  let fd
+  try {
+    fd = openSync(full, 'r')
+  } catch {
+    return null // apagado no disco mas ainda no índice
+  }
+  try {
+    const stat = fstatSync(fd)
+    if (!stat.isFile() || stat.size > MAX_FILE_BYTES) return null
+    return readFileSync(fd)
+  } finally {
+    closeSync(fd)
+  }
+}
+
 /** Varre arquivos dados por caminho relativo a `root`. */
 export function scanFiles(root, files) {
   const findings = []
@@ -73,16 +94,8 @@ export function scanFiles(root, files) {
       findings.push({ file: path, line: 0, shape: 'arquivo de credencial' })
       continue
     }
-    const full = join(root, file)
-    let stat
-    try {
-      stat = statSync(full)
-    } catch {
-      continue // apagado no disco mas ainda no índice
-    }
-    if (!stat.isFile() || stat.size > MAX_FILE_BYTES) continue
-    const buffer = readFileSync(full)
-    if (isBinary(buffer)) continue
+    const buffer = readCandidate(join(root, file))
+    if (!buffer || isBinary(buffer)) continue
     for (const finding of scanText(buffer.toString('utf8')))
       findings.push({ file: path, ...finding })
   }
