@@ -1,0 +1,41 @@
+{
+  "historical": { "workItems": [{ "id": 101 }, { "id": 102 }] },
+  "active": { "workItems": [{ "id": 102 }, { "id": 103 }] },
+  "workitems": {
+    "value": [
+      {
+        "id": 101,
+        "fields": {
+          "System.Id": 101,
+          "System.Title": "Carrinho perde itens ao trocar de aba [reincidente]",
+          "System.State": "Done",
+          "System.CreatedDate": "2026-09-02T10:00:00",
+          "System.IterationPath": "Contoso\\Sprint 12",
+          "Microsoft.VSTS.Common.ClosedDate": "2026-09-09T15:00:00",
+          "Microsoft.VSTS.Scheduling.DueDate": "2026-09-10T17:00:00",
+          "Contoso.Gravidade": "Crítica - 8h"
+        }
+      },
+      {
+        "id": 102,
+        "fields": {
+          "System.Id": 102,
+          "System.Title": "Cupom aplicado duas vezes",
+          "System.State": "Approved",
+          "System.CreatedDate": "2026-09-03T09:00:00",
+          "System.IterationPath": "Contoso\\Sprint 12"
+        }
+      },
+      {
+        "id": 103,
+        "fields": {
+          "System.Id": 103,
+          "System.Title": "Frete zerado para CEP inválido",
+          "System.State": "Committed",
+          "System.CreatedDate": "2026-07-01T09:00:00",
+          "System.IterationPath": "Contoso\\Sprint 8"
+        }
+      }
+    ]
+  }
+}

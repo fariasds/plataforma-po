@@ -1,0 +1,267 @@
+{
+  "app": {
+    "dados": {
+      "items": [
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 20601,
+          "priority": null,
+          "product": "app",
+          "qa": 1,
+          "state": "Done",
+          "title": "Histórico de compras",
+          "total": 3
+        },
+        {
+          "backend": 2,
+          "frontend": 2,
+          "id": 20602,
+          "priority": null,
+          "product": "app",
+          "qa": 1,
+          "state": "Committed",
+          "title": "Pagamento com carteira digital",
+          "total": 5
+        },
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 20603,
+          "priority": null,
+          "product": "app",
+          "qa": 0,
+          "state": "Approved",
+          "title": "Tela de boas-vindas",
+          "total": 2
+        }
+      ],
+      "totals": {
+        "backend": 4,
+        "frontend": 4,
+        "geral": 10,
+        "qa": 2
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 02 de nov. → 13 de nov.\n\nApp Mobile · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos | Uso da capacidade | Situação |\n| --- | --- | --- | --- |\n| Front | 4 | 8% | 🟢 Dentro da capacidade |\n| Back | 4 | 8% | 🟢 Dentro da capacidade |\n| QA | 2 | — | — |\n| **Total geral** | **10** | 8% | 🟢 Dentro da capacidade |\n\n## Capacidade da sprint\n\n10 dias de sprint · 6h produtivas por dia\n\n|  | Front | Back |\n| --- | --- | --- |\n| Devs | 2 | 2 |\n| Reserva a bugs | 20% | 20% |\n| Capacidade | 96h | 96h |\n| Alocado | 8h | 8h |\n| Saldo | 88h | 88h |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Front | Back | QA | Total |\n| --- | --- | --- | --- | --- | --- | --- |\n| [#20602](https://dev.azure.com/contoso/_workitems/edit/20602) | Pagamento com carteira digital | — | 2 | 2 | 1 | **5** |\n| [#20601](https://dev.azure.com/contoso/_workitems/edit/20601) | Histórico de compras | — | 1 | 1 | 1 | **3** |\n| [#20603](https://dev.azure.com/contoso/_workitems/edit/20603) | Tela de boas-vindas | — | 1 | 1 | 0 | **2** |\n| **Total** | 3 itens |  | **4** | **4** | **2** | **10** |\n",
+    "sprint": "2026-11-02_2026-11-13"
+  },
+  "digital": {
+    "dados": {
+      "items": [
+        {
+          "backend": 2,
+          "frontend": 2,
+          "id": 10601,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Done",
+          "title": "Checkout em uma etapa",
+          "total": 5
+        },
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 10602,
+          "priority": null,
+          "product": "loja",
+          "qa": 0,
+          "state": "Done",
+          "title": "Cupom de primeira compra",
+          "total": 2
+        },
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 10603,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Committed",
+          "title": "Frete por região",
+          "total": 3
+        },
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 10604,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Committed",
+          "title": "Avaliações de produto",
+          "total": 3
+        },
+        {
+          "backend": 4,
+          "frontend": 3,
+          "id": 10605,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Committed",
+          "title": "Busca por voz",
+          "total": 8
+        },
+        {
+          "backend": 4,
+          "frontend": 3,
+          "id": 10606,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Approved",
+          "title": "Lista de desejos",
+          "total": 8
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 10607,
+          "priority": null,
+          "product": "loja",
+          "qa": null,
+          "state": "Approved",
+          "title": "Ajuste de layout no rodapé",
+          "total": null
+        },
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 20601,
+          "priority": null,
+          "product": "app",
+          "qa": 1,
+          "state": "Done",
+          "title": "Histórico de compras",
+          "total": 3
+        },
+        {
+          "backend": 2,
+          "frontend": 2,
+          "id": 20602,
+          "priority": null,
+          "product": "app",
+          "qa": 1,
+          "state": "Committed",
+          "title": "Pagamento com carteira digital",
+          "total": 5
+        },
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 20603,
+          "priority": null,
+          "product": "app",
+          "qa": 0,
+          "state": "Approved",
+          "title": "Tela de boas-vindas",
+          "total": 2
+        }
+      ],
+      "totals": {
+        "backend": 17,
+        "frontend": 15,
+        "geral": 39,
+        "qa": 7
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 02 de nov. → 13 de nov.\n\nDigital · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos | Uso da capacidade | Situação |\n| --- | --- | --- | --- |\n| Front | 15 | 35% | 🟢 Dentro da capacidade |\n| Back | 17 | 44% | 🟢 Dentro da capacidade |\n| QA | 7 | — | — |\n| **Total geral** | **39** | 40% | 🟢 Dentro da capacidade |\n\n| Produto | Front | Back | QA | Total | % da sprint |\n| --- | --- | --- | --- | --- | --- |\n| Loja Online | 11 | 13 | 5 | 29 | 74% |\n| App Mobile | 4 | 4 | 2 | 10 | 26% |\n\n## Capacidade da sprint\n\n10 dias de sprint · 6h produtivas por dia\n\n|  | Front | Back |\n| --- | --- | --- |\n| Devs | 2 | 2 |\n| Reserva a bugs | 20% | 20% |\n| Capacidade | 96h | 96h |\n| Alocado | 34h | 42h |\n| Saldo | 62h | 54h |\n\n## Itens da sprint\n\n| ID | Título | Produto | Prioridade | Front | Back | QA | Total |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| [#10605](https://dev.azure.com/contoso/_workitems/edit/10605) | Busca por voz | Loja Online | — | 3 | 4 | 1 | **8** |\n| [#10606](https://dev.azure.com/contoso/_workitems/edit/10606) | Lista de desejos | Loja Online | — | 3 | 4 | 1 | **8** |\n| [#10601](https://dev.azure.com/contoso/_workitems/edit/10601) | Checkout em uma etapa | Loja Online | — | 2 | 2 | 1 | **5** |\n| [#20602](https://dev.azure.com/contoso/_workitems/edit/20602) | Pagamento com carteira digital | App Mobile | — | 2 | 2 | 1 | **5** |\n| [#10603](https://dev.azure.com/contoso/_workitems/edit/10603) | Frete por região | Loja Online | — | 1 | 1 | 1 | **3** |\n| [#10604](https://dev.azure.com/contoso/_workitems/edit/10604) | Avaliações de produto | Loja Online | — | 1 | 1 | 1 | **3** |\n| [#20601](https://dev.azure.com/contoso/_workitems/edit/20601) | Histórico de compras | App Mobile | — | 1 | 1 | 1 | **3** |\n| [#10602](https://dev.azure.com/contoso/_workitems/edit/10602) | Cupom de primeira compra | Loja Online | — | 1 | 1 | 0 | **2** |\n| [#20603](https://dev.azure.com/contoso/_workitems/edit/20603) | Tela de boas-vindas | App Mobile | — | 1 | 1 | 0 | **2** |\n| [#10607](https://dev.azure.com/contoso/_workitems/edit/10607) | Ajuste de layout no rodapé | Loja Online | — | — | — | — | **—** |\n| **Total** | 10 itens |  |  | **15** | **17** | **7** | **39** |\n",
+    "sprint": "2026-11-02_2026-11-13"
+  },
+  "loja": {
+    "dados": {
+      "items": [
+        {
+          "backend": 2,
+          "frontend": 2,
+          "id": 10601,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Done",
+          "title": "Checkout em uma etapa",
+          "total": 5
+        },
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 10602,
+          "priority": null,
+          "product": "loja",
+          "qa": 0,
+          "state": "Done",
+          "title": "Cupom de primeira compra",
+          "total": 2
+        },
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 10603,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Committed",
+          "title": "Frete por região",
+          "total": 3
+        },
+        {
+          "backend": 1,
+          "frontend": 1,
+          "id": 10604,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Committed",
+          "title": "Avaliações de produto",
+          "total": 3
+        },
+        {
+          "backend": 4,
+          "frontend": 3,
+          "id": 10605,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Committed",
+          "title": "Busca por voz",
+          "total": 8
+        },
+        {
+          "backend": 4,
+          "frontend": 3,
+          "id": 10606,
+          "priority": null,
+          "product": "loja",
+          "qa": 1,
+          "state": "Approved",
+          "title": "Lista de desejos",
+          "total": 8
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 10607,
+          "priority": null,
+          "product": "loja",
+          "qa": null,
+          "state": "Approved",
+          "title": "Ajuste de layout no rodapé",
+          "total": null
+        }
+      ],
+      "totals": {
+        "backend": 13,
+        "frontend": 11,
+        "geral": 29,
+        "qa": 5
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 02 de nov. → 13 de nov.\n\nLoja Online · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos | Uso da capacidade | Situação |\n| --- | --- | --- | --- |\n| Front | 11 | 27% | 🟢 Dentro da capacidade |\n| Back | 13 | 35% | 🟢 Dentro da capacidade |\n| QA | 5 | — | — |\n| **Total geral** | **29** | 31% | 🟢 Dentro da capacidade |\n\n## Capacidade da sprint\n\n10 dias de sprint · 6h produtivas por dia\n\n|  | Front | Back |\n| --- | --- | --- |\n| Devs | 2 | 2 |\n| Reserva a bugs | 20% | 20% |\n| Capacidade | 96h | 96h |\n| Alocado | 26h | 34h |\n| Saldo | 70h | 62h |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Front | Back | QA | Total |\n| --- | --- | --- | --- | --- | --- | --- |\n| [#10605](https://dev.azure.com/contoso/_workitems/edit/10605) | Busca por voz | — | 3 | 4 | 1 | **8** |\n| [#10606](https://dev.azure.com/contoso/_workitems/edit/10606) | Lista de desejos | — | 3 | 4 | 1 | **8** |\n| [#10601](https://dev.azure.com/contoso/_workitems/edit/10601) | Checkout em uma etapa | — | 2 | 2 | 1 | **5** |\n| [#10603](https://dev.azure.com/contoso/_workitems/edit/10603) | Frete por região | — | 1 | 1 | 1 | **3** |\n| [#10604](https://dev.azure.com/contoso/_workitems/edit/10604) | Avaliações de produto | — | 1 | 1 | 1 | **3** |\n| [#10602](https://dev.azure.com/contoso/_workitems/edit/10602) | Cupom de primeira compra | — | 1 | 1 | 0 | **2** |\n| [#10607](https://dev.azure.com/contoso/_workitems/edit/10607) | Ajuste de layout no rodapé | — | — | — | — | **—** |\n| **Total** | 7 itens |  | **11** | **13** | **5** | **29** |\n",
+    "sprint": "2026-11-02_2026-11-13"
+  }
+}

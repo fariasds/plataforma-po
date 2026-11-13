@@ -1,0 +1,114 @@
+{
+  "loja": {
+    "activeBugItems": [
+      {
+        "createdDate": "2026-09-15T09:00:00",
+        "criticality": "Não informado",
+        "id": 1006,
+        "isRecurrent": false,
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "productId": "loja",
+        "sprintKey": "2026-09-07_2026-09-18",
+        "sprintLabel": "07 de set. → 18 de set.",
+        "sprintName": "Sprint 2",
+        "state": "Approved",
+        "title": "Imagem quebrada na vitrine"
+      }
+    ],
+    "activeBugsByState": [
+      {
+        "name": "Approved",
+        "value": 1
+      }
+    ],
+    "activeBugsCount": 1,
+    "allBugs": [
+      {
+        "closedDate": "2026-09-23T15:00:00",
+        "closedSprintKey": "2026-09-21_2026-10-02",
+        "createdDate": "2026-09-22T09:00:00",
+        "criticality": "Não informado",
+        "id": 1005,
+        "isRecurrent": false,
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "productId": "loja",
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "state": "Done",
+        "title": "Frete calculado em dobro"
+      },
+      {
+        "createdDate": "2026-09-15T09:00:00",
+        "criticality": "Não informado",
+        "id": 1006,
+        "isRecurrent": false,
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "productId": "loja",
+        "sprintKey": "2026-09-07_2026-09-18",
+        "sprintLabel": "07 de set. → 18 de set.",
+        "sprintName": "Sprint 2",
+        "state": "Approved",
+        "title": "Imagem quebrada na vitrine"
+      }
+    ],
+    "criticalityBreakdown": [
+      {
+        "name": "Não informado",
+        "value": 1
+      }
+    ],
+    "criticalityConfigured": false,
+    "monthStats": [
+      {
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "total": 2
+      }
+    ],
+    "recurrenceConfigured": false,
+    "sprintStats": [
+      {
+        "finishDate": "2026-09-04T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-08-24_2026-09-04",
+        "sprintLabel": "24 de ago. → 04 de set.",
+        "sprintName": "Sprint 1",
+        "startDate": "2026-08-24T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-09-18T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-09-07_2026-09-18",
+        "sprintLabel": "07 de set. → 18 de set.",
+        "sprintName": "Sprint 2",
+        "startDate": "2026-09-07T00:00:00Z",
+        "total": 1
+      },
+      {
+        "finishDate": "2026-10-02T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "startDate": "2026-09-21T00:00:00Z",
+        "total": 1
+      }
+    ],
+    "stateOrder": [
+      "New",
+      "Approved",
+      "Committed",
+      "Done"
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "projects": {
+    "count": 2,
+    "value": [
+      { "id": "00000000-0000-0000-0000-000000000002", "name": "Varejo", "state": "wellFormed" },
+      { "id": "00000000-0000-0000-0000-000000000001", "name": "Loja Online", "state": "wellFormed" }
+    ]
+  },
+  "projectDetails": {
+    "00000000-0000-0000-0000-000000000001": {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "name": "Loja Online",
+      "capabilities": {
+        "processTemplate": {
+          "templateName": "Scrum",
+          "templateTypeId": "6b724908-ef14-45cf-84f8-768b5384da45"
+        },
+        "versioncontrol": { "sourceControlType": "Git" }
+      },
+      "defaultTeam": { "id": "00000000-0000-0000-0000-0000000000a1", "name": "Loja Online Team" }
+    },
+    "00000000-0000-0000-0000-000000000002": {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "name": "Varejo",
+      "capabilities": {
+        "processTemplate": {
+          "templateName": "Varejo Ágil",
+          "templateTypeId": "00000000-0000-0000-0000-0000000000f1"
+        }
+      },
+      "defaultTeam": { "id": "00000000-0000-0000-0000-0000000000a2", "name": "Varejo Team" }
+    }
+  },
+  "teams": {
+    "count": 2,
+    "value": [
+      {
+        "id": "00000000-0000-0000-0000-0000000000a3",
+        "name": "Checkout",
+        "description": "Time do checkout"
+      },
+      {
+        "id": "00000000-0000-0000-0000-0000000000a1",
+        "name": "Loja Online Team",
+        "description": "The default project team."
+      }
+    ]
+  },
+  "areas": {
+    "id": 1,
+    "name": "Loja Online",
+    "structureType": "area",
+    "hasChildren": true,
+    "path": "\\Loja Online\\Area",
+    "children": [
+      {
+        "id": 2,
+        "name": "Catalogo",
+        "structureType": "area",
+        "hasChildren": false,
+        "path": "\\Loja Online\\Area\\Catalogo"
+      },
+      {
+        "id": 3,
+        "name": "Checkout",
+        "structureType": "area",
+        "hasChildren": true,
+        "path": "\\Loja Online\\Area\\Checkout",
+        "children": [
+          {
+            "id": 4,
+            "name": "Pagamentos",
+            "structureType": "area",
+            "hasChildren": false,
+            "path": "\\Loja Online\\Area\\Checkout\\Pagamentos"
+          }
+        ]
+      }
+    ]
+  },
+  "fields": {
+    "count": 6,
+    "value": [
+      { "name": "Title", "referenceName": "System.Title", "type": "string", "readOnly": false },
+      {
+        "name": "Effort",
+        "referenceName": "Microsoft.VSTS.Scheduling.Effort",
+        "type": "double",
+        "readOnly": false
+      },
+      {
+        "name": "Retrabalho",
+        "referenceName": "Custom.Retrabalho",
+        "type": "integer",
+        "readOnly": false
+      },
+      {
+        "name": "Esforço Front",
+        "referenceName": "Custom.EsforcoFront",
+        "type": "double",
+        "readOnly": false
+      },
+      {
+        "name": "Campo apagado",
+        "referenceName": "Custom.Apagado",
+        "type": "string",
+        "isDeleted": true
+      },
+      {
+        "name": "Criticidade",
+        "referenceName": "Contoso.Criticidade",
+        "type": "string",
+        "readOnly": false,
+        "isPicklist": true
+      }
+    ]
+  }
+}

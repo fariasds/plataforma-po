@@ -1,0 +1,179 @@
+{
+  "Contoso": {
+    "areas": {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "name": "Checkout",
+              "path": "Contoso\\Loja\\Checkout"
+            },
+            {
+              "children": [],
+              "name": "QA",
+              "path": "Contoso\\Loja\\QA"
+            }
+          ],
+          "name": "Loja",
+          "path": "Contoso\\Loja"
+        },
+        {
+          "children": [],
+          "name": "App",
+          "path": "Contoso\\App"
+        }
+      ],
+      "name": "Contoso",
+      "path": "Contoso"
+    },
+    "campos": [
+      {
+        "name": "Criticidade",
+        "referenceName": "Contoso.Criticidade",
+        "type": "string"
+      },
+      {
+        "name": "Retrabalho",
+        "referenceName": "Contoso.Retrabalho",
+        "type": "integer"
+      }
+    ],
+    "processo": {
+      "categories": {
+        "bug": "Bug",
+        "requirement": [
+          "Product Backlog Item"
+        ],
+        "task": "Task"
+      },
+      "workItemTypes": [
+        {
+          "estimateField": "Microsoft.VSTS.Scheduling.Effort",
+          "name": "Product Backlog Item",
+          "referenceName": "Microsoft.VSTS.WorkItemTypes.ProductBacklogItem",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "New"
+            },
+            {
+              "category": "Proposed",
+              "name": "Approved"
+            },
+            {
+              "category": "InProgress",
+              "name": "Committed"
+            },
+            {
+              "category": "Completed",
+              "name": "Done"
+            },
+            {
+              "category": "Removed",
+              "name": "Removed"
+            }
+          ]
+        },
+        {
+          "estimateField": "Microsoft.VSTS.Scheduling.Effort",
+          "name": "Bug",
+          "referenceName": "Microsoft.VSTS.WorkItemTypes.Bug",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "New"
+            },
+            {
+              "category": "Proposed",
+              "name": "Approved"
+            },
+            {
+              "category": "InProgress",
+              "name": "Committed"
+            },
+            {
+              "category": "Completed",
+              "name": "Done"
+            },
+            {
+              "category": "Removed",
+              "name": "Removed"
+            }
+          ]
+        },
+        {
+          "estimateField": null,
+          "name": "Task",
+          "referenceName": "Microsoft.VSTS.WorkItemTypes.Task",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "To Do"
+            },
+            {
+              "category": "InProgress",
+              "name": "In Progress"
+            },
+            {
+              "category": "Completed",
+              "name": "Done"
+            },
+            {
+              "category": "Removed",
+              "name": "Removed"
+            }
+          ]
+        }
+      ]
+    },
+    "sugestao": {
+      "bugStateOrder": [
+        "New",
+        "Approved",
+        "Committed",
+        "Done"
+      ],
+      "bugType": "Bug",
+      "deliveredStates": [
+        "Done"
+      ],
+      "devDoneState": null,
+      "developmentTypes": [
+        "Product Backlog Item"
+      ],
+      "estimateField": "Microsoft.VSTS.Scheduling.Effort",
+      "inProgressState": "Committed",
+      "plannableTypes": [
+        "Product Backlog Item"
+      ],
+      "removedStates": [
+        "Removed"
+      ],
+      "taskType": "Task",
+      "terminalStates": [
+        "Done",
+        "Removed"
+      ],
+      "testingState": null,
+      "workItemTypes": [
+        "Product Backlog Item",
+        "Bug"
+      ]
+    },
+    "times": [
+      {
+        "id": "team-00000000-0000-4000-9000-000000000001",
+        "name": "Contoso Team"
+      }
+    ]
+  },
+  "projetos": [
+    {
+      "defaultTeam": "Contoso Team",
+      "id": "00000000-0000-4000-9000-000000000001",
+      "name": "Contoso",
+      "process": "Scrum"
+    }
+  ]
+}

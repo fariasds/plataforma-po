@@ -1,0 +1,61 @@
+{
+  "loja": {
+    "dados": {
+      "items": [
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 6001,
+          "priority": 1,
+          "product": "loja",
+          "qa": null,
+          "state": "Done",
+          "title": "Retirada na loja física",
+          "total": 3
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 6002,
+          "priority": 1,
+          "product": "loja",
+          "qa": null,
+          "state": "Committed",
+          "title": "Agendamento de entrega",
+          "total": 5
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 6003,
+          "priority": 2,
+          "product": "loja",
+          "qa": null,
+          "state": "New",
+          "title": "Rastreamento em tempo real",
+          "total": 8
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 6004,
+          "priority": 3,
+          "product": "loja",
+          "qa": null,
+          "state": "New",
+          "title": "Aviso de horário de retirada",
+          "total": 1
+        }
+      ],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 17,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 05 de out. → 16 de out.\n\nLoja Online · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **17** |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Total |\n| --- | --- | --- | --- |\n| [#6002](https://dev.azure.com/contoso/_workitems/edit/6002) | Agendamento de entrega | P1 | **5** |\n| [#6001](https://dev.azure.com/contoso/_workitems/edit/6001) | Retirada na loja física | P1 | **3** |\n| [#6003](https://dev.azure.com/contoso/_workitems/edit/6003) | Rastreamento em tempo real | P2 | **8** |\n| [#6004](https://dev.azure.com/contoso/_workitems/edit/6004) | Aviso de horário de retirada | P3 | **1** |\n| **Total** | 4 itens |  | **17** |\n",
+    "sprint": "2026-10-05_2026-10-16"
+  }
+}

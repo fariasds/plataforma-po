@@ -1,0 +1,87 @@
+{
+  "loja": {
+    "bugStateMonthSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "states": {
+          "Committed": 21,
+          "New": 1
+        }
+      }
+    ],
+    "bugStateOrder": [
+      "New",
+      "Approved",
+      "Committed",
+      "Done"
+    ],
+    "bugStateSprintSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "states": {
+          "Committed": 21,
+          "New": 1
+        }
+      }
+    ],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 89,
+        "devHours": 169,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 190
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 89,
+        "devHours": 169,
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "totalHours": 190
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  }
+}

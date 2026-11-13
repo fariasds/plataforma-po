@@ -1,0 +1,65 @@
+{
+  "$schema": "../resources/profile-template/configuracao.schema.json",
+  "version": 1,
+  "organization": "contoso",
+  "appearance": { "accentColor": "#2F6FED" },
+  "processProfiles": {
+    "scrum": {
+      "workItemTypes": ["Product Backlog Item", "Bug"],
+      "plannableTypes": ["Product Backlog Item"],
+      "developmentTypes": ["Product Backlog Item"],
+      "bugType": "Bug",
+      "taskType": "Task",
+      "estimateField": "Microsoft.VSTS.Scheduling.Effort",
+      "deliveredStates": ["Done"],
+      "terminalStates": ["Done", "Removed"],
+      "removedStates": ["Removed"],
+      "inProgressState": "Committed",
+      "devDoneState": null,
+      "testingState": null,
+      "bugStateOrder": ["New", "Approved", "Committed", "Done"]
+    }
+  },
+  "products": [
+    {
+      "id": "loja",
+      "name": "Loja Online",
+      "color": "#7B61FF",
+      "project": "Contoso",
+      "team": "Loja Team",
+      "areaPaths": ["Contoso\\Loja"],
+      "excludedAreaPaths": ["Contoso\\Loja\\QA"],
+      "processProfile": "scrum"
+    },
+    {
+      "id": "app",
+      "name": "App Mobile",
+      "color": "#00A58E",
+      "project": "Contoso",
+      "team": "App Team",
+      "areaPaths": ["Contoso\\App"],
+      "processProfile": "scrum"
+    }
+  ],
+  "groups": [{ "id": "digital", "name": "Digital", "products": ["loja", "app"] }],
+  "customFields": {
+    "reworkCount": null,
+    "effortFrontend": null,
+    "effortBackend": null,
+    "effortQa": null,
+    "criticality": null
+  },
+  "criticality": [],
+  "recurrentBugTag": null,
+  "calendar": {
+    "country": "BR",
+    "extraHolidays": [],
+    "workingHours": [
+      { "start": "09:00", "end": "12:00" },
+      { "start": "13:00", "end": "18:00" }
+    ],
+    "productiveHoursPerDay": 6
+  },
+  "storyPoints": { "1": 2, "2": 4, "3": 8, "5": 16, "8": 32, "13": 56 },
+  "capacityDefaults": { "frontDevs": 2, "backDevs": 3, "sprintDays": 10, "frontBugPercent": 20, "backBugPercent": 20 }
+}

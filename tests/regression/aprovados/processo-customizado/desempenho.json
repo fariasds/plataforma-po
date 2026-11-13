@@ -1,0 +1,234 @@
+{
+  "operacoes": {
+    "bugStateMonthSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "states": {
+          "Aberto": 1,
+          "Corrigindo": 14
+        }
+      },
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "states": {
+          "Aberto": 1,
+          "Corrigindo": 12
+        }
+      }
+    ],
+    "bugStateOrder": [
+      "Aberto",
+      "Corrigindo",
+      "Corrigido"
+    ],
+    "bugStateSprintSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Ciclo 8",
+        "states": {
+          "Aberto": 1,
+          "Corrigindo": 14
+        }
+      },
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Ciclo 9",
+        "states": {
+          "Aberto": 1,
+          "Corrigindo": 12
+        }
+      }
+    ],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": 100,
+        "devHours": 29,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 29
+      },
+      {
+        "devFocusPercent": 88,
+        "devHours": 93,
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "totalHours": 106
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Ciclo 7",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 29,
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Ciclo 8",
+        "totalHours": 29
+      },
+      {
+        "devFocusPercent": 88,
+        "devHours": 93,
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Ciclo 9",
+        "totalHours": 106
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  },
+  "portal": {
+    "bugStateMonthSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "states": {
+          "Aberto": 1,
+          "Corrigindo": 12
+        }
+      }
+    ],
+    "bugStateOrder": [
+      "Aberto",
+      "Corrigindo",
+      "Corrigido"
+    ],
+    "bugStateSprintSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Ciclo 9",
+        "states": {
+          "Aberto": 1,
+          "Corrigindo": 12
+        }
+      }
+    ],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": 100,
+        "devHours": 29,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 29
+      },
+      {
+        "devFocusPercent": 88,
+        "devHours": 93,
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "totalHours": 106
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Ciclo 7",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 29,
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Ciclo 8",
+        "totalHours": 29
+      },
+      {
+        "devFocusPercent": 88,
+        "devHours": 93,
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Ciclo 9",
+        "totalHours": 106
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  },
+  "suporte": {
+    "bugStateMonthSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "states": {
+          "Aberto": 1,
+          "Corrigindo": 14
+        }
+      }
+    ],
+    "bugStateOrder": [
+      "Aberto",
+      "Corrigindo",
+      "Corrigido"
+    ],
+    "bugStateSprintSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Ciclo 8",
+        "states": {
+          "Aberto": 1,
+          "Corrigindo": 14
+        }
+      }
+    ],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [],
+    "devFocusSprintSlots": [],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "loja": {
+    "currentDay": 4,
+    "holidayDays": [
+      6
+    ],
+    "inProgressCount": 1,
+    "items": [
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Bruno Lima",
+          "uniqueName": "bruno.lima@contoso.example"
+        },
+        "consumedDays": 5,
+        "doneDay": 1,
+        "estimateDays": 1.3,
+        "id": 3001,
+        "product": "loja",
+        "projectedEndDay": 2,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 1,
+        "state": "Done",
+        "status": "done",
+        "storyPoints": 3,
+        "tasks": [],
+        "title": "Lista de desejos",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Diego Rocha",
+          "uniqueName": "diego.rocha@contoso.example"
+        },
+        "consumedDays": 3,
+        "doneDay": null,
+        "estimateDays": 1.3,
+        "id": 3006,
+        "product": "loja",
+        "projectedEndDay": 3,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 2,
+        "state": "Committed",
+        "status": "in-progress",
+        "storyPoints": 3,
+        "tasks": [],
+        "title": "Avaliação de produto",
+        "type": "Product Backlog Item"
+      }
+    ],
+    "remainingDays": 6,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 9
+  }
+}

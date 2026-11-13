@@ -1,0 +1,21 @@
+node_modules
+dist
+out
+.DS_Store
+.eslintcache
+*.log*
+
+# Nada com forma de credencial entra no versionamento. O PAT real vive
+# criptografado em %APPDATA%\plataforma-po-desktop\pat.bin, fora do projeto —
+# estas linhas cobrem cópia acidental para dentro dele.
+.env
+.env.*
+pat.bin
+*.pat
+
+# Backups e configuração local de ferramentas
+*.zip
+.claude/settings.local.json
+
+# Capturas e arquivos que o Claude gera durante o trabalho
+Claude outputs/

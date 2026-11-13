@@ -1,0 +1,14 @@
+{
+  "loja": {
+    "currentDay": 4,
+    "holidayDays": [
+      6
+    ],
+    "inProgressCount": 0,
+    "items": [],
+    "remainingDays": 6,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 9
+  }
+}

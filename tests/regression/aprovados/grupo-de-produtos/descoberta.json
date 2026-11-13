@@ -1,0 +1,305 @@
+{
+  "Contoso": {
+    "areas": {
+      "children": [
+        {
+          "children": [],
+          "name": "Loja",
+          "path": "Contoso\\Loja"
+        },
+        {
+          "children": [],
+          "name": "Institucional",
+          "path": "Contoso\\Institucional"
+        }
+      ],
+      "name": "Contoso",
+      "path": "Contoso"
+    },
+    "campos": [],
+    "processo": {
+      "categories": {
+        "bug": "Bug",
+        "requirement": [
+          "Product Backlog Item"
+        ],
+        "task": "Task"
+      },
+      "workItemTypes": [
+        {
+          "estimateField": "Microsoft.VSTS.Scheduling.Effort",
+          "name": "Product Backlog Item",
+          "referenceName": "Microsoft.VSTS.WorkItemTypes.ProductBacklogItem",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "New"
+            },
+            {
+              "category": "Proposed",
+              "name": "Approved"
+            },
+            {
+              "category": "InProgress",
+              "name": "Committed"
+            },
+            {
+              "category": "Completed",
+              "name": "Done"
+            },
+            {
+              "category": "Removed",
+              "name": "Removed"
+            }
+          ]
+        },
+        {
+          "estimateField": "Microsoft.VSTS.Scheduling.Effort",
+          "name": "Bug",
+          "referenceName": "Microsoft.VSTS.WorkItemTypes.Bug",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "New"
+            },
+            {
+              "category": "Proposed",
+              "name": "Approved"
+            },
+            {
+              "category": "InProgress",
+              "name": "Committed"
+            },
+            {
+              "category": "Completed",
+              "name": "Done"
+            },
+            {
+              "category": "Removed",
+              "name": "Removed"
+            }
+          ]
+        },
+        {
+          "estimateField": null,
+          "name": "Task",
+          "referenceName": "Microsoft.VSTS.WorkItemTypes.Task",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "To Do"
+            },
+            {
+              "category": "InProgress",
+              "name": "In Progress"
+            },
+            {
+              "category": "Completed",
+              "name": "Done"
+            },
+            {
+              "category": "Removed",
+              "name": "Removed"
+            }
+          ]
+        }
+      ]
+    },
+    "sugestao": {
+      "bugStateOrder": [
+        "New",
+        "Approved",
+        "Committed",
+        "Done"
+      ],
+      "bugType": "Bug",
+      "deliveredStates": [
+        "Done"
+      ],
+      "devDoneState": null,
+      "developmentTypes": [
+        "Product Backlog Item"
+      ],
+      "estimateField": "Microsoft.VSTS.Scheduling.Effort",
+      "inProgressState": "Committed",
+      "plannableTypes": [
+        "Product Backlog Item"
+      ],
+      "removedStates": [
+        "Removed"
+      ],
+      "taskType": "Task",
+      "terminalStates": [
+        "Done",
+        "Removed"
+      ],
+      "testingState": null,
+      "workItemTypes": [
+        "Product Backlog Item",
+        "Bug"
+      ]
+    },
+    "times": [
+      {
+        "id": "team-inst",
+        "name": "Institucional"
+      },
+      {
+        "id": "team-loja",
+        "name": "Loja Team"
+      }
+    ]
+  },
+  "Mobile": {
+    "areas": {
+      "children": [
+        {
+          "children": [],
+          "name": "App",
+          "path": "Mobile\\App"
+        }
+      ],
+      "name": "Mobile",
+      "path": "Mobile"
+    },
+    "campos": [],
+    "processo": {
+      "categories": {
+        "bug": "Bug",
+        "requirement": [
+          "User Story"
+        ],
+        "task": "Task"
+      },
+      "workItemTypes": [
+        {
+          "estimateField": "Microsoft.VSTS.Scheduling.StoryPoints",
+          "name": "User Story",
+          "referenceName": "Microsoft.VSTS.WorkItemTypes.UserStory",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "New"
+            },
+            {
+              "category": "InProgress",
+              "name": "Active"
+            },
+            {
+              "category": "Resolved",
+              "name": "Resolved"
+            },
+            {
+              "category": "Completed",
+              "name": "Closed"
+            },
+            {
+              "category": "Removed",
+              "name": "Removed"
+            }
+          ]
+        },
+        {
+          "estimateField": null,
+          "name": "Bug",
+          "referenceName": "Microsoft.VSTS.WorkItemTypes.Bug",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "New"
+            },
+            {
+              "category": "InProgress",
+              "name": "Active"
+            },
+            {
+              "category": "Resolved",
+              "name": "Resolved"
+            },
+            {
+              "category": "Completed",
+              "name": "Closed"
+            }
+          ]
+        },
+        {
+          "estimateField": null,
+          "name": "Task",
+          "referenceName": "Microsoft.VSTS.WorkItemTypes.Task",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "New"
+            },
+            {
+              "category": "InProgress",
+              "name": "Active"
+            },
+            {
+              "category": "Completed",
+              "name": "Closed"
+            },
+            {
+              "category": "Removed",
+              "name": "Removed"
+            }
+          ]
+        }
+      ]
+    },
+    "sugestao": {
+      "bugStateOrder": [
+        "New",
+        "Active",
+        "Resolved",
+        "Closed"
+      ],
+      "bugType": "Bug",
+      "deliveredStates": [
+        "Closed"
+      ],
+      "devDoneState": "Resolved",
+      "developmentTypes": [
+        "User Story"
+      ],
+      "estimateField": "Microsoft.VSTS.Scheduling.StoryPoints",
+      "inProgressState": "Active",
+      "plannableTypes": [
+        "User Story"
+      ],
+      "removedStates": [
+        "Removed"
+      ],
+      "taskType": "Task",
+      "terminalStates": [
+        "Closed",
+        "Removed"
+      ],
+      "testingState": null,
+      "workItemTypes": [
+        "User Story",
+        "Bug"
+      ]
+    },
+    "times": [
+      {
+        "id": "team-app",
+        "name": "App Team"
+      }
+    ]
+  },
+  "projetos": [
+    {
+      "defaultTeam": "Loja Team",
+      "id": "00000000-0000-4000-9000-000000000001",
+      "name": "Contoso",
+      "process": "Scrum"
+    },
+    {
+      "defaultTeam": "App Team",
+      "id": "00000000-0000-4000-9000-000000000002",
+      "name": "Mobile",
+      "process": "Agile"
+    }
+  ]
+}

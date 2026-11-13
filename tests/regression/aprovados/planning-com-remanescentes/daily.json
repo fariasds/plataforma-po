@@ -1,0 +1,49 @@
+{
+  "loja": {
+    "currentDay": 10,
+    "holidayDays": [],
+    "inProgressCount": 2,
+    "items": [
+      {
+        "assignee": null,
+        "consumedDays": 9,
+        "doneDay": null,
+        "estimateDays": 5.3,
+        "id": 7101,
+        "product": "loja",
+        "projectedEndDay": 7,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 2,
+        "state": "Committed",
+        "status": "in-progress",
+        "storyPoints": 8,
+        "tasks": [],
+        "title": "Recomendação de produtos",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": null,
+        "consumedDays": 8,
+        "doneDay": null,
+        "estimateDays": 3.6,
+        "id": 7102,
+        "product": "loja",
+        "projectedEndDay": 6,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 3,
+        "state": "Committed",
+        "status": "in-progress",
+        "storyPoints": 6,
+        "tasks": [],
+        "title": "Histórico de pedidos",
+        "type": "Product Backlog Item"
+      }
+    ],
+    "remainingDays": 1,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 10
+  }
+}

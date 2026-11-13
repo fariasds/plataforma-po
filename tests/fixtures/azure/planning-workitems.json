@@ -1,0 +1,60 @@
+{
+  "count": 4,
+  "value": [
+    {
+      "id": 301,
+      "fields": {
+        "System.Id": 301,
+        "System.Title": "Carrinho salva cupom",
+        "System.State": "Committed",
+        "System.TeamProject": "Contoso",
+        "System.AreaPath": "Contoso\\Loja",
+        "Contoso.Frontend": 3,
+        "Contoso.Backend": 5,
+        "Contoso.Qa": 2,
+        "Microsoft.VSTS.Scheduling.Effort": 8,
+        "Microsoft.VSTS.Common.Priority": 1
+      }
+    },
+    {
+      "id": 302,
+      "fields": {
+        "System.Id": 302,
+        "System.Title": "Filtro por categoria",
+        "System.State": "Approved",
+        "System.TeamProject": "Contoso",
+        "System.AreaPath": "Contoso\\Loja\\Busca",
+        "Contoso.Frontend": 2,
+        "Microsoft.VSTS.Scheduling.Effort": 3,
+        "Microsoft.VSTS.Common.Priority": 2
+      }
+    },
+    {
+      "id": 401,
+      "fields": {
+        "System.Id": 401,
+        "System.Title": "Login por biometria",
+        "System.State": "New",
+        "System.TeamProject": "Contoso",
+        "System.AreaPath": "Contoso\\App",
+        "Contoso.Frontend": 5,
+        "Contoso.Backend": 3,
+        "Contoso.Qa": 3,
+        "Microsoft.VSTS.Scheduling.Effort": 13,
+        "Microsoft.VSTS.Common.Priority": 2
+      }
+    },
+    {
+      "id": 501,
+      "fields": {
+        "System.Id": 501,
+        "System.Title": "Roteiro de regressão",
+        "System.State": "Committed",
+        "System.TeamProject": "Contoso",
+        "System.AreaPath": "Contoso\\Loja\\QA",
+        "Contoso.Qa": 5,
+        "Microsoft.VSTS.Common.Priority": 3
+      }
+    }
+  ]
+}

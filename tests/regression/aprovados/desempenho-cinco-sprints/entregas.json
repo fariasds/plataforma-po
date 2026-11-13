@@ -1,0 +1,192 @@
+{
+  "loja": {
+    "2026-10-19_2026-10-30": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-10-27T16:00:00",
+          "devTimeInSprintHours": 38,
+          "leadTimeHours": 38,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-10-12T09:00:00",
+              "System.Id": 8052,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 5",
+              "System.State": "Done",
+              "System.Title": "Melhoria 5.3",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 8052,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-10-26T16:00:00",
+          "devTimeInSprintHours": 38,
+          "leadTimeHours": 38,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-10-12T09:00:00",
+              "System.Id": 8051,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 5",
+              "System.State": "Done",
+              "System.Title": "Melhoria 5.2",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 8051,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-10-26T15:00:00",
+          "devTimeInSprintHours": 36,
+          "leadTimeHours": 36,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-10-20T09:00:00",
+              "System.Id": 8056,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 5",
+              "System.State": "Done",
+              "System.Title": "Defeito 5.2",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 8056,
+            "rev": 3
+          }
+        },
+        {
+          "closedAt": "2026-10-22T16:00:00",
+          "devTimeInSprintHours": 30,
+          "leadTimeHours": 30,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-10-12T09:00:00",
+              "System.Id": 8050,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 5",
+              "System.State": "Done",
+              "System.Title": "Melhoria 5.1",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 8050,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-10-21T15:00:00",
+          "devTimeInSprintHours": 12,
+          "leadTimeHours": 12,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-10-20T09:00:00",
+              "System.Id": 8055,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 5",
+              "System.State": "Done",
+              "System.Title": "Defeito 5.1",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 8055,
+            "rev": 3
+          }
+        }
+      ],
+      "scopeInjectedCount": 2,
+      "totalInSprint": 5,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 106
+        },
+        {
+          "name": "Bug",
+          "value": 48
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 106
+        },
+        {
+          "name": "Bug",
+          "value": 48
+        }
+      ]
+    },
+    "2026-11-02_2026-11-13": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-11-09T16:00:00",
+          "devTimeInSprintHours": 38,
+          "leadTimeHours": 38,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-10-26T09:00:00",
+              "System.Id": 8061,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 6",
+              "System.State": "Done",
+              "System.Title": "Melhoria 6.2",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 8061,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-11-05T16:00:00",
+          "devTimeInSprintHours": 23,
+          "leadTimeHours": 23,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-10-26T09:00:00",
+              "System.Id": 8060,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 6",
+              "System.State": "Done",
+              "System.Title": "Melhoria 6.1",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 8060,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-11-04T15:00:00",
+          "devTimeInSprintHours": 12,
+          "leadTimeHours": 12,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-11-03T09:00:00",
+              "System.Id": 8065,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 6",
+              "System.State": "Done",
+              "System.Title": "Defeito 6.1",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 8065,
+            "rev": 3
+          }
+        }
+      ],
+      "scopeInjectedCount": 2,
+      "totalInSprint": 5,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 61
+        },
+        {
+          "name": "Bug",
+          "value": 12
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 61
+        },
+        {
+          "name": "Bug",
+          "value": 12
+        }
+      ]
+    }
+  }
+}

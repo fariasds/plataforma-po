@@ -1,0 +1,67 @@
+{
+  "Contoso": {
+    "historical": { "workItems": [{ "id": 201 }, { "id": 202 }] },
+    "active": { "workItems": [{ "id": 202 }] },
+    "workitems": {
+      "value": [
+        {
+          "id": 201,
+          "fields": {
+            "System.Id": 201,
+            "System.Title": "Pagamento recusado sem mensagem [VOLTOU]",
+            "System.State": "Encerrado",
+            "System.CreatedDate": "2026-09-04T08:00:00",
+            "System.IterationPath": "Contoso\\Sprint 12",
+            "Microsoft.VSTS.Common.ClosedDate": "2026-09-08T12:00:00",
+            "Microsoft.VSTS.Scheduling.DueDate": "2026-09-08T17:00:00",
+            "Contoso.GravidadeAntiga": "crítica (8h)"
+          }
+        },
+        {
+          "id": 202,
+          "fields": {
+            "System.Id": 202,
+            "System.Title": "Busca ignora acentos",
+            "System.State": "Em correção",
+            "System.CreatedDate": "2026-09-04T08:00:00",
+            "System.IterationPath": "Contoso\\Sprint 12",
+            "Contoso.Gravidade": "Leve"
+          }
+        }
+      ]
+    }
+  },
+  "Contoso Mobile": {
+    "historical": { "workItems": [{ "id": 301 }] },
+    "active": { "workItems": [{ "id": 301 }] },
+    "workitems": {
+      "value": [
+        {
+          "id": 301,
+          "fields": {
+            "System.Id": 301,
+            "System.Title": "Tela branca ao abrir notificação",
+            "System.State": "Em validação",
+            "System.CreatedDate": "2026-09-05T08:00:00",
+            "System.IterationPath": "Contoso Mobile\\Sprint 12"
+          }
+        }
+      ]
+    }
+  },
+  "updates": {
+    "201": [
+      { "id": 1, "revisedDate": "2026-09-04T12:00:00", "fields": {} },
+      {
+        "id": 2,
+        "revisedDate": "2026-09-08T08:00:00",
+        "fields": { "System.State": { "oldValue": "Triagem", "newValue": "Em correção" } }
+      },
+      {
+        "id": 3,
+        "revisedDate": "9999-01-01T00:00:00",
+        "fields": { "System.State": { "oldValue": "Em correção", "newValue": "Encerrado" } }
+      }
+    ]
+  }
+}

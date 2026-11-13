@@ -1,0 +1,60 @@
+# Mesmo valor de APP_ID em src/shared/app-info.ts (o yml não importa TS).
+appId: io.github.fariasds.plataforma-po
+# APP_NAME em src/shared/app-info.ts.
+productName: Plataforma do PO
+directories:
+  buildResources: build
+# Allowlist by exclusion: only the built output in out/ plus runtime deps ship.
+# Source, configs and anything env-shaped stay out of the package.
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  # Documentação e ferramentas de desenvolvimento. O instalador é público
+  # (RN-SEC-15): regras de negócio, caminhos de área do Azure e práticas do time
+  # não têm por que viajar dentro dele.
+  - '!docs'
+  - '!.githooks'
+  - '!CLAUDE.md'
+  # Pego no aceite da v0.2.0 (RN-SEC-13): worktrees de agente em `.claude/`
+  # levavam cópias inteiras do projeto, e a pasta de dados privados ia junto.
+  - '!.claude'
+  - '!perfis-privados'
+  # Capturas de tela geradas durante o desenvolvimento.
+  - '!Claude outputs'
+  - '!{tests,scripts,examples,.github}'
+  - '!{vitest.config.ts,CONTEXT.md,CONTRIBUTING.md,SECURITY.md,README.en.md}'
+asarUnpack:
+  - resources/**
+win:
+  executableName: plataforma-po-desktop
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+mac:
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    - NSCameraUsageDescription: Application requests access to the device's camera.
+    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  notarize: false
+dmg:
+  artifactName: ${name}-${version}.${ext}
+linux:
+  target:
+    - AppImage
+    - snap
+    - deb
+  maintainer: Daniel Farias
+  category: Utility
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false
+# No `publish` block on purpose: auto-update is Fase 7. The scaffold shipped a
+# placeholder pointing at example.com, which would only fail confusingly.

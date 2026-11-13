@@ -1,0 +1,104 @@
+{
+  "planejamento": [
+    {
+      "finishDate": "2026-10-02T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-app-12",
+          "name": "Iteração 12",
+          "path": "Mobile\\App\\Iteração 12"
+        },
+        "loja": {
+          "id": "it-loja-3",
+          "name": "Sprint 3",
+          "path": "Contoso\\Loja\\Sprint 3"
+        }
+      },
+      "key": "2026-09-21_2026-10-02",
+      "label": "21 de set. → 02 de out.",
+      "startDate": "2026-09-21T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-10-09T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-app-estabilizacao",
+          "name": "Estabilização",
+          "path": "Mobile\\App\\Estabilização"
+        }
+      },
+      "key": "2026-10-05_2026-10-09",
+      "label": "05 de out. → 09 de out.",
+      "startDate": "2026-10-05T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-10-16T00:00:00Z",
+      "iterations": {
+        "loja": {
+          "id": "it-loja-4",
+          "name": "Sprint 4",
+          "path": "Contoso\\Loja\\Sprint 4"
+        }
+      },
+      "key": "2026-10-05_2026-10-16",
+      "label": "05 de out. → 16 de out.",
+      "startDate": "2026-10-05T00:00:00Z"
+    }
+  ],
+  "revisao": [
+    {
+      "finishDate": "2026-10-02T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-app-12",
+          "name": "Iteração 12",
+          "path": "Mobile\\App\\Iteração 12"
+        },
+        "loja": {
+          "id": "it-loja-3",
+          "name": "Sprint 3",
+          "path": "Contoso\\Loja\\Sprint 3"
+        }
+      },
+      "key": "2026-09-21_2026-10-02",
+      "label": "21 de set. → 02 de out.",
+      "startDate": "2026-09-21T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-09-18T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-app-11",
+          "name": "Iteração 11",
+          "path": "Mobile\\App\\Iteração 11"
+        },
+        "loja": {
+          "id": "it-loja-2",
+          "name": "Sprint 2",
+          "path": "Contoso\\Loja\\Sprint 2"
+        }
+      },
+      "key": "2026-09-07_2026-09-18",
+      "label": "07 de set. → 18 de set.",
+      "startDate": "2026-09-07T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-09-04T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-app-10",
+          "name": "Iteração 10",
+          "path": "Mobile\\App\\Iteração 10"
+        },
+        "loja": {
+          "id": "it-loja-1",
+          "name": "Sprint 1",
+          "path": "Contoso\\Loja\\Sprint 1"
+        }
+      },
+      "key": "2026-08-24_2026-09-04",
+      "label": "24 de ago. → 04 de set.",
+      "startDate": "2026-08-24T00:00:00Z"
+    }
+  ]
+}

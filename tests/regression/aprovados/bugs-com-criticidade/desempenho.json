@@ -1,0 +1,443 @@
+{
+  "loja": {
+    "bugStateMonthSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Baixa": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 9,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "states": {
+          "Committed": 9,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 3,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 3,
+            "states": {
+              "Approved": 4.7,
+              "Committed": 14.3,
+              "New": 1
+            }
+          },
+          "Baixa": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Média": {
+            "bugCount": 0,
+            "states": {}
+          }
+        },
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "states": {
+          "Approved": 4.7,
+          "Committed": 14.3,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 2,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Baixa": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 32,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "states": {
+          "Committed": 32,
+          "New": 1
+        }
+      }
+    ],
+    "bugStateOrder": [
+      "New",
+      "Approved",
+      "Committed",
+      "Done"
+    ],
+    "bugStateSprintSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Baixa": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 9,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "states": {
+          "Committed": 9,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 1,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 17,
+              "New": 1
+            }
+          },
+          "Baixa": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Média": {
+            "bugCount": 0,
+            "states": {}
+          }
+        },
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "states": {
+          "Committed": 17,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 3,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 2,
+            "states": {
+              "Approved": 7,
+              "Committed": 13,
+              "New": 1
+            }
+          },
+          "Baixa": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Média": {
+            "bugCount": 0,
+            "states": {}
+          }
+        },
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "states": {
+          "Approved": 4.7,
+          "Committed": 19.3,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 1,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Baixa": {
+            "bugCount": 0,
+            "states": {}
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 32,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Sprint 4",
+        "states": {
+          "Committed": 32,
+          "New": 1
+        }
+      }
+    ],
+    "criticalityLevels": [
+      {
+        "color": "#d92d20",
+        "name": "Alta"
+      },
+      {
+        "color": "#f79009",
+        "name": "Média"
+      },
+      {
+        "color": "#12b76a",
+        "name": "Baixa"
+      }
+    ],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": 0,
+        "devHours": 0,
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "totalHours": 9
+      },
+      {
+        "devFocusPercent": 0,
+        "devHours": 0,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 126
+      },
+      {
+        "devFocusPercent": 0,
+        "devHours": 0,
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "totalHours": 48
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": 0,
+        "devHours": 0,
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "totalHours": 9
+      },
+      {
+        "devFocusPercent": 0,
+        "devHours": 0,
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "totalHours": 17
+      },
+      {
+        "devFocusPercent": 0,
+        "devHours": 0,
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "totalHours": 109
+      },
+      {
+        "devFocusPercent": 0,
+        "devHours": 0,
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Sprint 4",
+        "totalHours": 48
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [
+      {
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "levels": {
+          "Alta": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Baixa": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Média": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          }
+        }
+      },
+      {
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "levels": {
+          "Alta": {
+            "percent": 33,
+            "total": 3,
+            "within": 1
+          },
+          "Baixa": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Média": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          }
+        }
+      },
+      {
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "levels": {
+          "Alta": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Baixa": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Média": {
+            "percent": 0,
+            "total": 1,
+            "within": 0
+          }
+        }
+      }
+    ],
+    "slaSprintStats": [
+      {
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "levels": {
+          "Alta": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Baixa": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Média": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          }
+        }
+      },
+      {
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "levels": {
+          "Alta": {
+            "percent": 0,
+            "total": 1,
+            "within": 0
+          },
+          "Baixa": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Média": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          }
+        }
+      },
+      {
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "levels": {
+          "Alta": {
+            "percent": 50,
+            "total": 2,
+            "within": 1
+          },
+          "Baixa": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Média": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          }
+        }
+      },
+      {
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Sprint 4",
+        "levels": {
+          "Alta": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Baixa": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          },
+          "Média": {
+            "percent": 0,
+            "total": 1,
+            "within": 0
+          }
+        }
+      }
+    ]
+  }
+}

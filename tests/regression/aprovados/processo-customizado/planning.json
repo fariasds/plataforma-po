@@ -1,0 +1,112 @@
+{
+  "operacoes": {
+    "dados": {
+      "items": [
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 9002,
+          "priority": 1,
+          "product": "portal",
+          "qa": null,
+          "state": "Em teste",
+          "title": "Cadastro de dependentes",
+          "total": 8
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 9003,
+          "priority": 2,
+          "product": "portal",
+          "qa": null,
+          "state": "Fazendo",
+          "title": "Histórico de atendimentos",
+          "total": 2
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 9004,
+          "priority": 3,
+          "product": "portal",
+          "qa": null,
+          "state": "Pronta",
+          "title": "Termos de uso novos",
+          "total": 1
+        }
+      ],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 11,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 05 de out. → 16 de out.\n\nOperações · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **11** |\n\n| Produto | Total | % da sprint |\n| --- | --- | --- |\n| Portal do Cliente | 11 | 100% |\n| Suporte | 0 | 0% |\n\n## Itens da sprint\n\n| ID | Título | Produto | Prioridade | Total |\n| --- | --- | --- | --- | --- |\n| [#9002](https://dev.azure.com/contoso/_workitems/edit/9002) | Cadastro de dependentes | Portal do Cliente | P1 | **8** |\n| [#9003](https://dev.azure.com/contoso/_workitems/edit/9003) | Histórico de atendimentos | Portal do Cliente | P2 | **2** |\n| [#9004](https://dev.azure.com/contoso/_workitems/edit/9004) | Termos de uso novos | Portal do Cliente | P3 | **1** |\n| **Total** | 3 itens |  |  | **11** |\n",
+    "sprint": "2026-10-05_2026-10-16"
+  },
+  "portal": {
+    "dados": {
+      "items": [
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 9002,
+          "priority": 1,
+          "product": "portal",
+          "qa": null,
+          "state": "Em teste",
+          "title": "Cadastro de dependentes",
+          "total": 8
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 9003,
+          "priority": 2,
+          "product": "portal",
+          "qa": null,
+          "state": "Fazendo",
+          "title": "Histórico de atendimentos",
+          "total": 2
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 9004,
+          "priority": 3,
+          "product": "portal",
+          "qa": null,
+          "state": "Pronta",
+          "title": "Termos de uso novos",
+          "total": 1
+        }
+      ],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 11,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 05 de out. → 16 de out.\n\nPortal do Cliente · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **11** |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Total |\n| --- | --- | --- | --- |\n| [#9002](https://dev.azure.com/contoso/_workitems/edit/9002) | Cadastro de dependentes | P1 | **8** |\n| [#9003](https://dev.azure.com/contoso/_workitems/edit/9003) | Histórico de atendimentos | P2 | **2** |\n| [#9004](https://dev.azure.com/contoso/_workitems/edit/9004) | Termos de uso novos | P3 | **1** |\n| **Total** | 3 itens |  | **11** |\n",
+    "sprint": "2026-10-05_2026-10-16"
+  },
+  "suporte": {
+    "dados": {
+      "items": [],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 0,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 05 de out. → 16 de out.\n\nSuporte · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **0** |\n\n## Itens da sprint\n\nNenhum item marcado para esta sprint.\n",
+    "sprint": "2026-10-05_2026-10-16"
+  }
+}

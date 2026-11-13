@@ -1,0 +1,194 @@
+# Instalador público a partir de uma tag v*, com SHA-256 no corpo da Release
+# (RN-SEC-22). A Release nasce em RASCUNHO: quem publica é o mantenedor, à mão.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Constrói sem permissão de escrita: o npm ci roda scripts de dependências, e
+  # nada que roda aqui deve conseguir mexer no repositório.
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    outputs:
+      installer: ${{ steps.hash.outputs.installer }}
+      sha256: ${{ steps.hash.outputs.sha256 }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+
+      # A tag precisa bater com a versão do package.json; senão o nome do
+      # instalador e a Release contam histórias diferentes.
+      - name: Tag confere com a versão
+        shell: pwsh
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          if ($env:TAG -ne "v$version") {
+            Write-Error "A tag $env:TAG não corresponde à versão v$version do package.json."
+            exit 1
+          }
+
+      - run: npm ci
+
+      - run: npm run check
+
+      # --publish never: sem isso o electron-builder tenta publicar sozinho ao ver
+      # uma tag em CI. Quem cria a Release é o job abaixo, em rascunho.
+      - run: npm run build:win -- --publish never
+
+      # Laudo de segurança desta versão (RN-SEC-30): sai da mesma esteira e do
+      # mesmo commit que o instalador, e vai anexado à Release.
+      - name: Laudo de segurança
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist/laudo | Out-Null
+          # O que vai dentro do instalador: só as dependências de execução.
+          npx --yes @cyclonedx/cyclonedx-npm@6.0.1 --omit dev --output-format JSON --output-file dist/laudo/sbom.cdx.json
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          node scripts/verify-electron.mjs --sarif dist/laudo/electronegativity.sarif
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          npx vitest run tests/security --reporter=default --reporter=junit --outputFile.junit=dist/laudo/verify-security.junit.xml
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          # O audit sai com erro quando há aviso; o laudo registra o aviso em vez
+          # de esconder a versão. Quem decide publicar lê o arquivo.
+          npm audit --omit=dev --json | Out-File -Encoding utf8 dist/laudo/npm-audit.json
+          $global:LASTEXITCODE = 0
+          Get-ChildItem dist/laudo -File | ForEach-Object {
+            "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
+          } | Out-File -Encoding ascii dist/laudo/laudo.sha256
+
+      - name: SHA-256 do instalador
+        id: hash
+        shell: pwsh
+        run: |
+          $installers = @(Get-ChildItem dist -Filter '*-setup.exe')
+          if ($installers.Count -ne 1) {
+            Write-Error "Esperava um instalador em dist/, achei $($installers.Count)."
+            exit 1
+          }
+          $file = $installers[0]
+          $sha = (Get-FileHash $file.FullName -Algorithm SHA256).Hash.ToLower()
+          "$sha  $($file.Name)" | Out-File -Encoding ascii "dist/$($file.Name).sha256"
+          "installer=$($file.Name)" >> $env:GITHUB_OUTPUT
+          "sha256=$sha" >> $env:GITHUB_OUTPUT
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: installer
+          path: |
+            dist/*-setup.exe
+            dist/*-setup.exe.sha256
+            dist/laudo/
+          if-no-files-found: error
+          retention-days: 7
+
+  # Atestado de proveniência: assina que o instalador saiu deste commit, por este
+  # workflow. Job separado porque precisa de id-token, e o build roda scripts de
+  # dependências que não devem conseguir emitir essa identidade.
+  attest:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: installer
+          path: dist
+
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: dist/*-setup.exe
+
+  # Único job com escrita, e ele não roda código do projeto: só baixa o
+  # artefato e cria o rascunho.
+  draft-release:
+    needs: [build, attest]
+    runs-on: windows-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: installer
+          path: dist
+
+      - name: Criar Release em rascunho
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+          INSTALLER: ${{ needs.build.outputs.installer }}
+          SHA256: ${{ needs.build.outputs.sha256 }}
+        run: |
+          $notes = @"
+          ## Instalador
+
+          ``$env:INSTALLER``
+
+          **SHA-256:** ``$env:SHA256``
+
+          Confira depois de baixar, no PowerShell:
+
+          ``````powershell
+          (Get-FileHash .\$env:INSTALLER -Algorithm SHA256).Hash.ToLower()
+          ``````
+
+          O resultado precisa ser idêntico ao valor acima. Este instalador foi
+          construído pelo GitHub Actions a partir da tag ``$env:TAG``.
+
+          **Proveniência:** o instalador tem atestado assinado pela esteira. Com o
+          GitHub CLI:
+
+          ``````powershell
+          gh attestation verify .\$env:INSTALLER --repo $env:GH_REPO
+          ``````
+
+          ## Laudo de segurança
+
+          Gerado pela mesma esteira, no mesmo commit. O que cada arquivo é está em
+          ``docs/seguranca.md``.
+
+          | Arquivo | O que é |
+          |---|---|
+          | ``verify-security.junit.xml`` | Resultado dos testes de segurança (``tests/security/``) |
+          | ``electronegativity.sarif`` | Varredura do Electron (RN-SEC-30) |
+          | ``sbom.cdx.json`` | Lista das dependências dentro do instalador (CycloneDX) |
+          | ``npm-audit.json`` | Avisos de vulnerabilidade conhecida nessas dependências |
+          | ``laudo.sha256`` | SHA-256 de cada arquivo do laudo |
+          "@
+          $notes | Out-File -Encoding utf8 release-notes.md
+          gh release create $env:TAG `
+            "dist/$env:INSTALLER" `
+            "dist/$env:INSTALLER.sha256" `
+            dist/laudo/verify-security.junit.xml `
+            dist/laudo/electronegativity.sarif `
+            dist/laudo/sbom.cdx.json `
+            dist/laudo/npm-audit.json `
+            dist/laudo/laudo.sha256 `
+            --draft `
+            --verify-tag `
+            --title $env:TAG `
+            --notes-file release-notes.md

@@ -1,0 +1,675 @@
+{
+  "loja": {
+    "bugStateMonthSlots": [
+      {
+        "bugCount": 2,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 28,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "states": {
+          "Committed": 20,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 4,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 2,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 2,
+            "states": {
+              "Committed": 29,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "states": {
+          "Committed": 20.5,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 4,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 2,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 2,
+            "states": {
+              "Committed": 33,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "states": {
+          "Committed": 22.5,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 1,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 0,
+            "states": {}
+          }
+        },
+        "fullLabel": "Novembro de 2026",
+        "key": "2026-11",
+        "label": "Nov/26",
+        "states": {
+          "Committed": 12,
+          "New": 1
+        }
+      }
+    ],
+    "bugStateOrder": [
+      "New",
+      "Approved",
+      "Committed",
+      "Done"
+    ],
+    "bugStateSprintSlots": [
+      {
+        "bugCount": 2,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 28,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "states": {
+          "Committed": 20,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 2,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 28,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "states": {
+          "Committed": 20,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 2,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 30,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "states": {
+          "Committed": 21,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 2,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 30,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Sprint 4",
+        "states": {
+          "Committed": 21,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 2,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 36,
+              "New": 1
+            }
+          }
+        },
+        "fullLabel": "19 de out. → 30 de out.",
+        "key": "2026-10-19_2026-10-30",
+        "label": "Sprint 5",
+        "states": {
+          "Committed": 24,
+          "New": 1
+        }
+      },
+      {
+        "bugCount": 1,
+        "byCategory": {
+          "Alta": {
+            "bugCount": 1,
+            "states": {
+              "Committed": 12,
+              "New": 1
+            }
+          },
+          "Média": {
+            "bugCount": 0,
+            "states": {}
+          }
+        },
+        "fullLabel": "02 de nov. → 13 de nov.",
+        "key": "2026-11-02_2026-11-13",
+        "label": "Sprint 6",
+        "states": {
+          "Committed": 12,
+          "New": 1
+        }
+      }
+    ],
+    "criticalityLevels": [
+      {
+        "color": "#d92d20",
+        "name": "Alta"
+      },
+      {
+        "color": "#f79009",
+        "name": "Média"
+      }
+    ],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": 73,
+        "devHours": 106,
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "totalHours": 146
+      },
+      {
+        "devFocusPercent": 71,
+        "devHours": 205,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 287
+      },
+      {
+        "devFocusPercent": 69,
+        "devHours": 197,
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "totalHours": 287
+      },
+      {
+        "devFocusPercent": 64,
+        "devHours": 94,
+        "fullLabel": "Novembro de 2026",
+        "key": "2026-11",
+        "label": "Nov/26",
+        "totalHours": 146
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": 73,
+        "devHours": 106,
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "totalHours": 146
+      },
+      {
+        "devFocusPercent": 71,
+        "devHours": 99,
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "totalHours": 139
+      },
+      {
+        "devFocusPercent": 72,
+        "devHours": 106,
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "totalHours": 148
+      },
+      {
+        "devFocusPercent": 68,
+        "devHours": 91,
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Sprint 4",
+        "totalHours": 133
+      },
+      {
+        "devFocusPercent": 69,
+        "devHours": 106,
+        "fullLabel": "19 de out. → 30 de out.",
+        "key": "2026-10-19_2026-10-30",
+        "label": "Sprint 5",
+        "totalHours": 154
+      },
+      {
+        "devFocusPercent": 64,
+        "devHours": 94,
+        "fullLabel": "02 de nov. → 13 de nov.",
+        "key": "2026-11-02_2026-11-13",
+        "label": "Sprint 6",
+        "totalHours": 146
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [
+      {
+        "breakdown": [
+          {
+            "count": 1,
+            "times": 2
+          },
+          {
+            "count": 1,
+            "times": 1
+          }
+        ],
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "reworkCount": 2,
+        "reworkRate": 50,
+        "total": 4
+      },
+      {
+        "breakdown": [
+          {
+            "count": 2,
+            "times": 1
+          }
+        ],
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "reworkCount": 2,
+        "reworkRate": 18,
+        "total": 11
+      },
+      {
+        "breakdown": [
+          {
+            "count": 1,
+            "times": 1
+          }
+        ],
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "reworkCount": 1,
+        "reworkRate": 10,
+        "total": 10
+      },
+      {
+        "breakdown": [],
+        "fullLabel": "Novembro de 2026",
+        "key": "2026-11",
+        "label": "Nov/26",
+        "reworkCount": 0,
+        "reworkRate": 0,
+        "total": 3
+      }
+    ],
+    "reworkSprintSlots": [
+      {
+        "breakdown": [
+          {
+            "count": 1,
+            "times": 2
+          },
+          {
+            "count": 1,
+            "times": 1
+          }
+        ],
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "reworkCount": 2,
+        "reworkRate": 40,
+        "total": 5
+      },
+      {
+        "breakdown": [
+          {
+            "count": 1,
+            "times": 1
+          }
+        ],
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "reworkCount": 1,
+        "reworkRate": 20,
+        "total": 5
+      },
+      {
+        "breakdown": [
+          {
+            "count": 1,
+            "times": 1
+          }
+        ],
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "reworkCount": 1,
+        "reworkRate": 20,
+        "total": 5
+      },
+      {
+        "breakdown": [],
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Sprint 4",
+        "reworkCount": 0,
+        "reworkRate": 0,
+        "total": 5
+      },
+      {
+        "breakdown": [
+          {
+            "count": 1,
+            "times": 1
+          }
+        ],
+        "fullLabel": "19 de out. → 30 de out.",
+        "key": "2026-10-19_2026-10-30",
+        "label": "Sprint 5",
+        "reworkCount": 1,
+        "reworkRate": 20,
+        "total": 5
+      },
+      {
+        "breakdown": [],
+        "fullLabel": "02 de nov. → 13 de nov.",
+        "key": "2026-11-02_2026-11-13",
+        "label": "Sprint 6",
+        "reworkCount": 0,
+        "reworkRate": 0,
+        "total": 3
+      }
+    ],
+    "reworkUnavailable": null,
+    "slaMonthStats": [
+      {
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          },
+          "Média": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          }
+        }
+      },
+      {
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 2,
+            "within": 2
+          },
+          "Média": {
+            "percent": 50,
+            "total": 2,
+            "within": 1
+          }
+        }
+      },
+      {
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 2,
+            "within": 2
+          },
+          "Média": {
+            "percent": 0,
+            "total": 2,
+            "within": 0
+          }
+        }
+      },
+      {
+        "fullLabel": "Novembro de 2026",
+        "key": "2026-11",
+        "label": "Nov/26",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          },
+          "Média": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          }
+        }
+      }
+    ],
+    "slaSprintStats": [
+      {
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          },
+          "Média": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          }
+        }
+      },
+      {
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          },
+          "Média": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          }
+        }
+      },
+      {
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          },
+          "Média": {
+            "percent": 0,
+            "total": 1,
+            "within": 0
+          }
+        }
+      },
+      {
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Sprint 4",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          },
+          "Média": {
+            "percent": 0,
+            "total": 1,
+            "within": 0
+          }
+        }
+      },
+      {
+        "fullLabel": "19 de out. → 30 de out.",
+        "key": "2026-10-19_2026-10-30",
+        "label": "Sprint 5",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          },
+          "Média": {
+            "percent": 0,
+            "total": 1,
+            "within": 0
+          }
+        }
+      },
+      {
+        "fullLabel": "02 de nov. → 13 de nov.",
+        "key": "2026-11-02_2026-11-13",
+        "label": "Sprint 6",
+        "levels": {
+          "Alta": {
+            "percent": 100,
+            "total": 1,
+            "within": 1
+          },
+          "Média": {
+            "percent": null,
+            "total": 0,
+            "within": 0
+          }
+        }
+      }
+    ]
+  }
+}

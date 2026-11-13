@@ -1,0 +1,135 @@
+{
+  "app": {
+    "dados": {
+      "items": [
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 2101,
+          "priority": 1,
+          "product": "app",
+          "qa": null,
+          "state": "Closed",
+          "title": "Login com biometria",
+          "total": 5
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 2102,
+          "priority": 2,
+          "product": "app",
+          "qa": null,
+          "state": "Active",
+          "title": "Notificação de pedido enviado",
+          "total": 3
+        }
+      ],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 8,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 21 de set. → 02 de out.\n\nApp Mobile · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **8** |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Total |\n| --- | --- | --- | --- |\n| [#2101](https://dev.azure.com/contoso/_workitems/edit/2101) | Login com biometria | P1 | **5** |\n| [#2102](https://dev.azure.com/contoso/_workitems/edit/2102) | Notificação de pedido enviado | P2 | **3** |\n| **Total** | 2 itens |  | **8** |\n",
+    "sprint": "2026-09-21_2026-10-02"
+  },
+  "digital": {
+    "dados": {
+      "items": [
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 2001,
+          "priority": 1,
+          "product": "loja",
+          "qa": null,
+          "state": "Done",
+          "title": "Vitrine personalizada",
+          "total": 3
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 2002,
+          "priority": 1,
+          "product": "loja",
+          "qa": null,
+          "state": "Committed",
+          "title": "Checkout em uma página",
+          "total": 8
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 2101,
+          "priority": 1,
+          "product": "app",
+          "qa": null,
+          "state": "Closed",
+          "title": "Login com biometria",
+          "total": 5
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 2102,
+          "priority": 2,
+          "product": "app",
+          "qa": null,
+          "state": "Active",
+          "title": "Notificação de pedido enviado",
+          "total": 3
+        }
+      ],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 19,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 21 de set. → 02 de out.\n\nDigital · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **19** |\n\n| Produto | Total | % da sprint |\n| --- | --- | --- |\n| Loja Online | 11 | 58% |\n| App Mobile | 8 | 42% |\n\n## Itens da sprint\n\n| ID | Título | Produto | Prioridade | Total |\n| --- | --- | --- | --- | --- |\n| [#2002](https://dev.azure.com/contoso/_workitems/edit/2002) | Checkout em uma página | Loja Online | P1 | **8** |\n| [#2101](https://dev.azure.com/contoso/_workitems/edit/2101) | Login com biometria | App Mobile | P1 | **5** |\n| [#2001](https://dev.azure.com/contoso/_workitems/edit/2001) | Vitrine personalizada | Loja Online | P1 | **3** |\n| [#2102](https://dev.azure.com/contoso/_workitems/edit/2102) | Notificação de pedido enviado | App Mobile | P2 | **3** |\n| **Total** | 4 itens |  |  | **19** |\n",
+    "sprint": "2026-09-21_2026-10-02"
+  },
+  "loja": {
+    "dados": {
+      "items": [
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 2001,
+          "priority": 1,
+          "product": "loja",
+          "qa": null,
+          "state": "Done",
+          "title": "Vitrine personalizada",
+          "total": 3
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 2002,
+          "priority": 1,
+          "product": "loja",
+          "qa": null,
+          "state": "Committed",
+          "title": "Checkout em uma página",
+          "total": 8
+        }
+      ],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 11,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 21 de set. → 02 de out.\n\nLoja Online · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **11** |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Total |\n| --- | --- | --- | --- |\n| [#2002](https://dev.azure.com/contoso/_workitems/edit/2002) | Checkout em uma página | P1 | **8** |\n| [#2001](https://dev.azure.com/contoso/_workitems/edit/2001) | Vitrine personalizada | P1 | **3** |\n| **Total** | 2 itens |  | **11** |\n",
+    "sprint": "2026-09-21_2026-10-02"
+  }
+}

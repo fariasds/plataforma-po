@@ -1,0 +1,11 @@
+{
+  "count": 1,
+  "value": [
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "name": "Loja Online",
+      "url": "https://dev.azure.com/contoso/_apis/projects/00000000-0000-0000-0000-000000000001",
+      "state": "wellFormed"
+    }
+  ]
+}

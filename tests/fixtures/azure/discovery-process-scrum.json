@@ -1,0 +1,102 @@
+{
+  "workitemtypes": {
+    "count": 6,
+    "value": [
+      {
+        "name": "Product Backlog Item",
+        "referenceName": "Microsoft.VSTS.WorkItemTypes.ProductBacklogItem",
+        "isDisabled": false,
+        "fields": [
+          { "referenceName": "System.Title" },
+          { "referenceName": "Microsoft.VSTS.Scheduling.Effort" }
+        ]
+      },
+      {
+        "name": "Bug",
+        "referenceName": "Microsoft.VSTS.WorkItemTypes.Bug",
+        "isDisabled": false,
+        "fields": [
+          { "referenceName": "System.Title" },
+          { "referenceName": "Microsoft.VSTS.Scheduling.Effort" }
+        ]
+      },
+      {
+        "name": "Task",
+        "referenceName": "Microsoft.VSTS.WorkItemTypes.Task",
+        "isDisabled": false,
+        "fields": []
+      },
+      {
+        "name": "Epic",
+        "referenceName": "Microsoft.VSTS.WorkItemTypes.Epic",
+        "isDisabled": false,
+        "fields": []
+      },
+      {
+        "name": "Test Plan",
+        "referenceName": "Microsoft.VSTS.WorkItemTypes.TestPlan",
+        "isDisabled": false,
+        "fields": []
+      },
+      {
+        "name": "Impediment",
+        "referenceName": "Microsoft.VSTS.WorkItemTypes.Impediment",
+        "isDisabled": true,
+        "fields": []
+      }
+    ]
+  },
+  "workitemtypecategories": {
+    "count": 4,
+    "value": [
+      {
+        "referenceName": "Microsoft.RequirementCategory",
+        "defaultWorkItemType": { "name": "Product Backlog Item" },
+        "workItemTypes": [{ "name": "Product Backlog Item" }]
+      },
+      {
+        "referenceName": "Microsoft.BugCategory",
+        "defaultWorkItemType": { "name": "Bug" },
+        "workItemTypes": [{ "name": "Bug" }]
+      },
+      {
+        "referenceName": "Microsoft.TaskCategory",
+        "defaultWorkItemType": { "name": "Task" },
+        "workItemTypes": [{ "name": "Task" }]
+      },
+      {
+        "referenceName": "Microsoft.HiddenCategory",
+        "defaultWorkItemType": { "name": "Test Plan" },
+        "workItemTypes": [{ "name": "Test Plan" }]
+      }
+    ]
+  },
+  "states": {
+    "Product Backlog Item": [
+      { "name": "New", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "Approved", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "Committed", "color": "007acc", "category": "InProgress" },
+      { "name": "Done", "color": "339933", "category": "Completed" },
+      { "name": "Removed", "color": "ffffff", "category": "Removed" }
+    ],
+    "Bug": [
+      { "name": "New", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "Approved", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "Committed", "color": "007acc", "category": "InProgress" },
+      { "name": "Done", "color": "339933", "category": "Completed" },
+      { "name": "Removed", "color": "ffffff", "category": "Removed" }
+    ],
+    "Task": [
+      { "name": "To Do", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "In Progress", "color": "007acc", "category": "InProgress" },
+      { "name": "Done", "color": "339933", "category": "Completed" },
+      { "name": "Removed", "color": "ffffff", "category": "Removed" }
+    ],
+    "Epic": [
+      { "name": "New", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "In Progress", "color": "007acc", "category": "InProgress" },
+      { "name": "Done", "color": "339933", "category": "Completed" },
+      { "name": "Removed", "color": "ffffff", "category": "Removed" }
+    ]
+  }
+}

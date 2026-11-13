@@ -1,0 +1,588 @@
+{
+  "title": "Configuração da Plataforma do PO",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "description": "Caminho do JSON Schema, para o editor oferecer autocompletar.",
+      "type": "string"
+    },
+    "version": {
+      "type": "number",
+      "const": 1,
+      "description": "Versão do formato da Configuração."
+    },
+    "organization": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,49}$",
+      "description": "Nome da organização no Azure DevOps, nunca uma URL. O app sempre fala com \"dev.azure.com/<organização>\"."
+    },
+    "appearance": {
+      "type": "object",
+      "properties": {
+        "accentColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Cor de destaque da interface."
+        }
+      },
+      "required": [
+        "accentColor"
+      ],
+      "additionalProperties": false
+    },
+    "processProfiles": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,31}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "workItemTypes": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Tipos de work item que contam nas métricas. Os nomes precisam bater exatamente com os do Azure. Tipo fora desta lista é ignorado."
+          },
+          "plannableTypes": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Tipos que o time planeja e estima (Planning e Daily). Subconjunto de \"workItemTypes\"."
+          },
+          "developmentTypes": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Tipos que contam como construção de produto no indicador de foco em desenvolvimento. Subconjunto de \"workItemTypes\"."
+          },
+          "bugType": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Tipo que representa um bug. Precisa estar em \"workItemTypes\"."
+          },
+          "taskType": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Tipo das tarefas filhas, mostradas na Daily."
+          },
+          "estimateField": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$",
+            "description": "Campo numérico com a estimativa do item. Scrum usa \"Microsoft.VSTS.Scheduling.Effort\"; Agile usa \"Microsoft.VSTS.Scheduling.StoryPoints\"."
+          },
+          "deliveredStates": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Estados que significam \"entregue\". Vale a primeira vez que o item entrou em qualquer um deles."
+          },
+          "terminalStates": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Estados em que o item deixou de estar ativo: entregue, fechado ou removido. Deve conter todos os \"deliveredStates\"."
+          },
+          "removedStates": {
+            "default": [],
+            "description": "Estados de item descartado, excluídos de todas as contagens.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "inProgressState": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Estado em que o desenvolvimento está acontecendo. O tempo de desenvolvimento é medido nele."
+          },
+          "devDoneState": {
+            "default": null,
+            "description": "Estado que encerra o desenvolvimento antes da entrega (ex.: \"Tested\", \"Resolved\"). Sem ele, o desenvolvimento termina na entrega.",
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "testingState": {
+            "default": null,
+            "description": "Estado em que o item está só aguardando teste. Na Daily, item nele não é tratado como estouro de sprint.",
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bugStateOrder": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Estados do bug na ordem do fluxo, para o gráfico de tempo por estado. O primeiro é o estado em que o bug nasce."
+          }
+        },
+        "required": [
+          "workItemTypes",
+          "plannableTypes",
+          "developmentTypes",
+          "bugType",
+          "taskType",
+          "estimateField",
+          "deliveredStates",
+          "terminalStates",
+          "inProgressState",
+          "bugStateOrder"
+        ],
+        "additionalProperties": false,
+        "description": "Regras de um processo de trabalho: quais tipos contam e o que cada estado significa."
+      },
+      "description": "Perfis de processo, indexados pelo ID."
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,31}$",
+            "description": "ID de Produto. Imutável depois de criado: os Dados de trabalho são guardados por ele."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Nome exibido nas telas."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "Cor no formato hexadecimal \"#RRGGBB\"."
+          },
+          "project": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Nome do projeto no Azure DevOps onde os itens do Produto vivem."
+          },
+          "team": {
+            "description": "Time do Azure que fornece as iterações. Sem ele, valem todas as iterações com datas cadastradas no projeto.",
+            "type": "string",
+            "minLength": 1
+          },
+          "areaPaths": {
+            "default": [],
+            "description": "Area paths incluídos, com os filhos. Vazio significa o projeto inteiro. Use \"\\\\\" como separador no JSON.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "excludedAreaPaths": {
+            "default": [],
+            "description": "Area paths excluídos, com os filhos (ex.: time de teste interno ou suporte). Medem-se só os itens do time de desenvolvimento.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "processProfile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "ID de um Perfil de processo definido em \"processProfiles\"."
+          },
+          "cadence": {
+            "default": "sprints",
+            "description": "\"sprints\": o Produto tem iterações próprias no Azure. \"continuous\": fluxo sem iterações; os indicadores o medem pela janela de datas da Sprint unificada dos demais Produtos, e ele não aparece no Planning nem na Daily.",
+            "type": "string",
+            "enum": [
+              "sprints",
+              "continuous"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "color",
+          "project",
+          "processProfile"
+        ],
+        "additionalProperties": false,
+        "description": "Unidade que o PO acompanha."
+      },
+      "description": "Os Produtos acompanhados. Um Perfil recém-criado começa com a lista vazia."
+    },
+    "groups": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,31}$",
+            "description": "ID de Grupo. Imutável depois de criado: os Dados de trabalho são guardados por ele."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Nome exibido no filtro de produto."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "Cor no formato hexadecimal \"#RRGGBB\"."
+          },
+          "products": {
+            "minItems": 2,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "IDs dos Produtos somados pelo Grupo."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "products"
+        ],
+        "additionalProperties": false,
+        "description": "Soma nomeada de Produtos, vista como um todo nos indicadores."
+      }
+    },
+    "customFields": {
+      "default": {
+        "reworkCount": null,
+        "effortFrontend": null,
+        "effortBackend": null,
+        "effortQa": null,
+        "criticality": null
+      },
+      "description": "Campos customizados do Azure. Cada um é opcional: sem ele, o indicador que depende dele mostra um estado vazio dizendo o que configurar.",
+      "type": "object",
+      "properties": {
+        "reworkCount": {
+          "default": null,
+          "description": "Campo numérico com quantas vezes o item voltou para retrabalho.",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "effortFrontend": {
+          "default": null,
+          "description": "Campo numérico com a estimativa de frontend, somada no Planning.",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "effortBackend": {
+          "default": null,
+          "description": "Campo numérico com a estimativa de backend, somada no Planning.",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "effortQa": {
+          "default": null,
+          "description": "Campo numérico com a estimativa de QA, somada no Planning.",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "criticality": {
+          "default": null,
+          "description": "Campo de texto com a criticidade do bug. Uma lista é lida em ordem: vale o primeiro campo preenchido.",
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$"
+                },
+                {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "criticality": {
+      "default": [],
+      "description": "Níveis de criticidade de bug, do mais para o menos grave. O prazo de SLA vem do \"Due Date\" de cada bug no Azure, não daqui.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Nome do nível exibido nas telas (ex.: \"Alta\")."
+          },
+          "matches": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Prefixos do valor do campo de criticidade que caem neste nível, sem diferenciar maiúsculas (ex.: \"alta\" casa \"Alta SLA - 16h\")."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "Cor no formato hexadecimal \"#RRGGBB\"."
+          }
+        },
+        "required": [
+          "name",
+          "matches"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "recurrentBugTag": {
+      "default": null,
+      "description": "Marcador no título que identifica bug reincidente (ex.: \"[reincidente]\"), sem diferenciar maiúsculas. Sem ele, a reincidência não é medida.",
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "calendar": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "description": "País cujos feriados nacionais são calculados pelo app. Por enquanto só \"BR\". Para outro país, omita e liste os feriados nacionais em \"extraHolidays\".",
+          "type": "string",
+          "enum": [
+            "BR"
+          ]
+        },
+        "extraHolidays": {
+          "default": [],
+          "description": "Feriados além dos nacionais: estaduais, municipais e emendas.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "date",
+                  "name"
+                ],
+                "additionalProperties": false,
+                "description": "Feriado de data única (ex.: emenda)."
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "monthDay": {
+                    "type": "string",
+                    "pattern": "^(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$"
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "monthDay",
+                  "name"
+                ],
+                "additionalProperties": false,
+                "description": "Feriado que se repete todo ano na mesma data (ex.: municipal)."
+              }
+            ]
+          }
+        },
+        "workingHours": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              },
+              "end": {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Faixas do expediente, em ordem e sem sobreposição. O intervalo de almoço fica de fora. Toda duração é medida em horas úteis dentro destas faixas."
+        },
+        "productiveHoursPerDay": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 24,
+          "description": "Horas de trabalho efetivo por pessoa por dia, usadas para converter estimativa em dias. Menor ou igual à soma do expediente."
+        }
+      },
+      "required": [
+        "workingHours",
+        "productiveHoursPerDay"
+      ],
+      "additionalProperties": false,
+      "description": "Calendário de trabalho: feriados e expediente."
+    },
+    "storyPoints": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^\\d+(\\.\\d+)?$"
+      },
+      "additionalProperties": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "description": "Conversão de pontos de complexidade em horas. Valores fora da tabela são interpolados entre os vizinhos ou extrapolados pelo último trecho."
+    },
+    "capacityDefaults": {
+      "description": "Valores iniciais do painel de capacidade do Planning.",
+      "type": "object",
+      "properties": {
+        "frontDevs": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Pessoas de frontend (aceita fração)."
+        },
+        "backDevs": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Pessoas de backend (aceita fração)."
+        },
+        "sprintDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "description": "Dias úteis de uma sprint."
+        },
+        "frontBugPercent": {
+          "description": "Percentual da capacidade de frontend reservado para bugs.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "backBugPercent": {
+          "description": "Percentual da capacidade de backend reservado para bugs.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "bugPercent": {
+          "description": "Formato antigo: percentual único para as duas disciplinas. Vale só para a que não tiver o próprio campo; prefira frontBugPercent e backBugPercent.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "frontDevs",
+        "backDevs",
+        "sprintDays"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "version",
+    "organization",
+    "processProfiles",
+    "products",
+    "calendar",
+    "storyPoints",
+    "capacityDefaults"
+  ],
+  "additionalProperties": false,
+  "description": "Configuração de um Perfil da Plataforma do PO. Nunca contém o PAT: ele é guardado cifrado, fora desta pasta."
+}

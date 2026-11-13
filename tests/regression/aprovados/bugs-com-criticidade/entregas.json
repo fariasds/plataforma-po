@@ -1,0 +1,97 @@
+{
+  "loja": {
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-30T15:00:00",
+          "devTimeInSprintHours": 20,
+          "leadTimeHours": 20,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-28T09:00:00",
+              "System.Id": 5003,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Nota fiscal com CNPJ errado",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 5003,
+            "rev": 5
+          }
+        },
+        {
+          "closedAt": "2026-10-01T10:00:00",
+          "devTimeInSprintHours": 32,
+          "leadTimeHours": 32,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-25T09:00:00",
+              "System.Id": 5008,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Lentidão na busca",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 5008,
+            "rev": 3
+          }
+        },
+        {
+          "closedAt": "2026-09-29T16:00:00",
+          "devTimeInSprintHours": 14,
+          "leadTimeHours": 14,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-24T10:00:00",
+              "System.Id": 5002,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Estoque negativo após cancelamento",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 5002,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-09-23T15:00:00",
+          "devTimeInSprintHours": 12,
+          "leadTimeHours": 12,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-22T09:00:00",
+              "System.Id": 5001,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Pagamento recusado com cartão válido",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 5001,
+            "rev": 3
+          }
+        }
+      ],
+      "scopeInjectedCount": 5,
+      "totalInSprint": 5,
+      "typeDistribution": [
+        {
+          "name": "Bug",
+          "value": 78
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Bug",
+          "value": 78
+        }
+      ]
+    },
+    "2026-10-05_2026-10-16": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 2,
+      "totalInSprint": 2,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    }
+  }
+}

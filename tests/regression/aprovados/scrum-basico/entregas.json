@@ -1,0 +1,99 @@
+{
+  "loja": {
+    "2026-09-07_2026-09-18": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-15T17:00:00",
+          "devTimeInSprintHours": 47,
+          "leadTimeHours": 47,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-08-31T09:00:00",
+              "System.Id": 1007,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 2",
+              "System.State": "Done",
+              "System.Title": "Página de produto",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 1007,
+            "rev": 4
+          }
+        }
+      ],
+      "scopeInjectedCount": 1,
+      "totalInSprint": 2,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 47
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 47
+        }
+      ]
+    },
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-24T16:00:00",
+          "devTimeInSprintHours": 30,
+          "leadTimeHours": 30,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-10T09:00:00",
+              "System.Id": 1001,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Busca por categoria",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 1001,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-09-23T15:00:00",
+          "devTimeInSprintHours": 12,
+          "leadTimeHours": 12,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-22T09:00:00",
+              "System.Id": 1005,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Frete calculado em dobro",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 1005,
+            "rev": 3
+          }
+        }
+      ],
+      "scopeInjectedCount": 2,
+      "totalInSprint": 5,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 30
+        },
+        {
+          "name": "Bug",
+          "value": 12
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 30
+        },
+        {
+          "name": "Bug",
+          "value": 12
+        }
+      ]
+    }
+  }
+}

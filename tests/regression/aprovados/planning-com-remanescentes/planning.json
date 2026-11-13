@@ -1,0 +1,93 @@
+{
+  "loja": {
+    "dados": {
+      "items": [
+        {
+          "backend": 2,
+          "frontend": 3,
+          "id": 7001,
+          "priority": 1,
+          "product": "loja",
+          "qa": 1,
+          "state": "Approved",
+          "title": "Status do pedido na página",
+          "total": 6
+        },
+        {
+          "backend": 3,
+          "frontend": 1,
+          "id": 7002,
+          "priority": 2,
+          "product": "loja",
+          "qa": 1,
+          "state": "Approved",
+          "title": "Notificar atraso na entrega",
+          "total": 5
+        },
+        {
+          "backend": null,
+          "frontend": 2,
+          "id": 7003,
+          "priority": 2,
+          "product": "loja",
+          "qa": 0.5,
+          "state": "Approved",
+          "title": "Ajuste de layout do rastreio",
+          "total": 2.5
+        },
+        {
+          "backend": 5,
+          "frontend": 5,
+          "id": 7004,
+          "priority": 3,
+          "product": "loja",
+          "qa": 2,
+          "state": "Approved",
+          "title": "Mapa da rota de entrega",
+          "total": 12
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 7005,
+          "priority": null,
+          "product": "loja",
+          "qa": null,
+          "state": "Approved",
+          "title": "Pesquisa de satisfação pós-entrega",
+          "total": null
+        }
+      ],
+      "totals": {
+        "backend": 10,
+        "frontend": 11,
+        "geral": 25.5,
+        "qa": 4.5
+      }
+    },
+    "remanescentes": [
+      {
+        "backend": 4,
+        "frontend": 3,
+        "id": 7101,
+        "priority": 1,
+        "product": "loja",
+        "qa": 1,
+        "state": "Committed",
+        "title": "Recomendação de produtos"
+      },
+      {
+        "backend": 3,
+        "frontend": 2,
+        "id": 7102,
+        "priority": 2,
+        "product": "loja",
+        "qa": 1,
+        "state": "Committed",
+        "title": "Histórico de pedidos"
+      }
+    ],
+    "resumo": "# Planning · 05 de out. → 16 de out.\n\nLoja Online · gerado em (data da geração)\n\n## Objetivo da sprint\n\n**Objetivo:** Permitir que o cliente acompanhe o pedido sem falar com o suporte\n\n**Impacto:** menos chamados sobre entrega\n\n**Como saberemos:**\n\n- o status aparece na página do pedido\n\n## Resumo geral\n\n| Disciplina | Pontos | Uso da capacidade | Situação |\n| --- | --- | --- | --- |\n| Front | 8 | 30% | 🟢 Dentro da capacidade |\n| Back | 9 | 30% | 🟢 Dentro da capacidade |\n| QA | 4,5 | — | — |\n| **Total geral** | **21,5** | 30% | 🟢 Dentro da capacidade |\n\n## Capacidade da sprint\n\n9 dias de sprint · 6h produtivas por dia\n\n|  | Front | Back |\n| --- | --- | --- |\n| Devs | 1,5 | 2 |\n| Reserva a bugs | 25% | 25% |\n| Capacidade | 60,8h | 81h |\n| Alocado | 18h | 24h |\n| Saldo | 42,8h | 57h |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Front | Back | QA | Total |\n| --- | --- | --- | --- | --- | --- | --- |\n| [#7101](https://dev.azure.com/contoso/_workitems/edit/7101) | Recomendação de produtos **\\[Remanescente\\]** | P1 | 1,5 | 4 | 1 | **6,5** |\n| [#7001](https://dev.azure.com/contoso/_workitems/edit/7001) | Status do pedido na página | P1 | 3 | 2 | 1 | **6** |\n| [#7002](https://dev.azure.com/contoso/_workitems/edit/7002) | Notificar atraso na entrega | P2 | 1 | 3 | 1 | **5** |\n| [#7003](https://dev.azure.com/contoso/_workitems/edit/7003) | Ajuste de layout do rastreio | P2 | 2 | — | 0,5 | **2,5** |\n| [#7102](https://dev.azure.com/contoso/_workitems/edit/7102) | Histórico de pedidos **\\[Remanescente\\]** | P2 | 0,5 | 0 | 1 | **1,5** |\n| [#7005](https://dev.azure.com/contoso/_workitems/edit/7005) | Pesquisa de satisfação pós-entrega | — | — | — | — | **—** |\n| **Total** | 6 itens |  | **8** | **9** | **4,5** | **21,5** |\n\n## Ficaram fora da sprint\n\nAvaliados no Planning e desmarcados. Não entram na soma de pontos nem na capacidade.\n\n| ID | Título | Prioridade | Front | Back | QA | Total |\n| --- | --- | --- | --- | --- | --- | --- |\n| [#7004](https://dev.azure.com/contoso/_workitems/edit/7004) | Mapa da rota de entrega | P3 | 5 | 5 | 2 | **12** |\n| **Total** | 1 item |  | **5** | **5** | **2** | **12** |\n",
+    "sprint": "2026-10-05_2026-10-16"
+  }
+}

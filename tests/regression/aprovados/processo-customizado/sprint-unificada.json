@@ -1,0 +1,58 @@
+{
+  "planejamento": [
+    {
+      "finishDate": "2026-10-16T00:00:00Z",
+      "iterations": {
+        "portal": {
+          "id": "it-portal-9",
+          "name": "Ciclo 9",
+          "path": "Operacoes\\Portal\\Ciclo 9"
+        }
+      },
+      "key": "2026-10-05_2026-10-16",
+      "label": "05 de out. → 16 de out.",
+      "startDate": "2026-10-05T00:00:00Z"
+    }
+  ],
+  "revisao": [
+    {
+      "finishDate": "2026-10-16T00:00:00Z",
+      "iterations": {
+        "portal": {
+          "id": "it-portal-9",
+          "name": "Ciclo 9",
+          "path": "Operacoes\\Portal\\Ciclo 9"
+        }
+      },
+      "key": "2026-10-05_2026-10-16",
+      "label": "05 de out. → 16 de out.",
+      "startDate": "2026-10-05T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-10-02T00:00:00Z",
+      "iterations": {
+        "portal": {
+          "id": "it-portal-8",
+          "name": "Ciclo 8",
+          "path": "Operacoes\\Portal\\Ciclo 8"
+        }
+      },
+      "key": "2026-09-21_2026-10-02",
+      "label": "21 de set. → 02 de out.",
+      "startDate": "2026-09-21T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-09-18T00:00:00Z",
+      "iterations": {
+        "portal": {
+          "id": "it-portal-7",
+          "name": "Ciclo 7",
+          "path": "Operacoes\\Portal\\Ciclo 7"
+        }
+      },
+      "key": "2026-09-07_2026-09-18",
+      "label": "07 de set. → 18 de set.",
+      "startDate": "2026-09-07T00:00:00Z"
+    }
+  ]
+}

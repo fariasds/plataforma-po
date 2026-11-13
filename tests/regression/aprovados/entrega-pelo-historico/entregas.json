@@ -1,0 +1,108 @@
+{
+  "loja": {
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-30T15:00:00",
+          "devTimeInSprintHours": 53,
+          "leadTimeHours": 53,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-10T09:00:00",
+              "System.Id": 3003,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Cálculo de frete por CEP",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 3003,
+            "rev": 6
+          }
+        },
+        {
+          "closedAt": "2026-09-29T11:00:00",
+          "devTimeInSprintHours": 9,
+          "leadTimeHours": 9,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-28T09:00:00",
+              "System.Id": 3004,
+              "System.IterationPath": "Contoso",
+              "System.State": "Done",
+              "System.Title": "Corrigir ortografia no checkout",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 3004,
+            "rev": 3
+          }
+        },
+        {
+          "closedAt": "2026-09-25T16:00:00",
+          "devTimeInSprintHours": 38,
+          "leadTimeHours": 38,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-10T09:00:00",
+              "System.Id": 3001,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 4",
+              "System.State": "Done",
+              "System.Title": "Lista de desejos",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 3001,
+            "rev": 5
+          }
+        }
+      ],
+      "scopeInjectedCount": 1,
+      "totalInSprint": 2,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 100
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 100
+        }
+      ]
+    },
+    "2026-10-05_2026-10-16": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-10-07T12:00:00",
+          "devTimeInSprintHours": 19,
+          "leadTimeHours": 19,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-10-01T09:00:00",
+              "System.Id": 3005,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 4",
+              "System.State": "Done",
+              "System.Title": "Pedido duplicado ao clicar duas vezes",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 3005,
+            "rev": 4
+          }
+        }
+      ],
+      "scopeInjectedCount": 1,
+      "totalInSprint": 3,
+      "typeDistribution": [
+        {
+          "name": "Bug",
+          "value": 19
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Bug",
+          "value": 19
+        }
+      ]
+    }
+  }
+}

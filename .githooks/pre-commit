@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# Ultima barreira antes do historico. O .gitignore evita o acidente comum;
+# este hook pega o acidente incomum: um token colado dentro de um arquivo de
+# codigo, que nenhum padrao de nome de arquivo cobriria.
+#
+# A varredura mora em scripts/scan-secrets.mjs (RN-SEC-28), a mesma que o CI
+# roda em todos os arquivos de todo PR. Aqui ela olha so as linhas adicionadas.
+#
+# Ativado por: git config core.hooksPath .githooks
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "ERRO: o Node nao foi encontrado, e sem ele a varredura de credenciais nao roda."
+  echo "Commit abortado. Instale o Node ou ajuste o PATH."
+  exit 1
+fi
+
+# O script e o que esta ao lado do hook, nao o da pasta atual: com core.hooksPath
+# absoluto, todas as worktrees usam este hook, inclusive as de branches que ainda
+# nao tem o script. O stage varrido e sempre o da pasta atual.
+scan="$(cd "$(dirname "$0")/.." && pwd)/scripts/scan-secrets.mjs"
+
+if ! node "$scan" --staged; then
+  echo ""
+  echo "Commit abortado. Se for falso positivo, revise e use --no-verify"
+  echo "conscientemente: o CI roda a mesma varredura e vai barrar o PR."
+  exit 1
+fi
+
+exit 0

@@ -1,0 +1,19 @@
+# Avisa de dependência com vulnerabilidade conhecida e abre PR de atualização.
+# Os PRs passam pelos mesmos portões do CI; nada é integrado sozinho.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Atualizações pequenas juntas, para não virar um PR por pacote.
+      menores:
+        update-types: [minor, patch]
+
+  # As actions estão fixadas por SHA; sem isto elas envelheceriam sem aviso.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

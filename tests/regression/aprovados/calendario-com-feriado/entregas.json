@@ -1,0 +1,46 @@
+{
+  "loja": {
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-10-05_2026-10-16": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-10-13T12:00:00",
+          "devTimeInSprintHours": 8.5,
+          "leadTimeHours": 8.5,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-28T09:00:00",
+              "System.Id": 6001,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 4",
+              "System.State": "Done",
+              "System.Title": "Retirada na loja física",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 6001,
+            "rev": 4
+          }
+        }
+      ],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 4,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 8.5
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 8.5
+        }
+      ]
+    }
+  }
+}

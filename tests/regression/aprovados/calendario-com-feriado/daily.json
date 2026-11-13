@@ -1,0 +1,120 @@
+{
+  "loja": {
+    "currentDay": 8,
+    "holidayDays": [
+      6,
+      9
+    ],
+    "inProgressCount": 1,
+    "items": [
+      {
+        "assignee": null,
+        "consumedDays": null,
+        "doneDay": null,
+        "estimateDays": 4.9,
+        "id": 6003,
+        "product": "loja",
+        "projectedEndDay": 13,
+        "reworkTimes": 0,
+        "risk": "over-sprint",
+        "startDay": null,
+        "state": "New",
+        "status": "not-started",
+        "storyPoints": 8,
+        "tasks": [],
+        "title": "Rastreamento em tempo real",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Carla Dias",
+          "uniqueName": "carla.dias@contoso.example"
+        },
+        "consumedDays": 4,
+        "doneDay": null,
+        "estimateDays": 2.5,
+        "id": 6002,
+        "product": "loja",
+        "projectedEndDay": 7,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 4,
+        "state": "Committed",
+        "status": "in-progress",
+        "storyPoints": 5,
+        "tasks": [
+          {
+            "assignee": {
+              "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+              "displayName": "Carla Dias",
+              "uniqueName": "carla.dias@contoso.example"
+            },
+            "done": false,
+            "id": 6101,
+            "state": "In Progress",
+            "title": "Calendário de janelas de entrega"
+          }
+        ],
+        "title": "Agendamento de entrega",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Bruno Lima",
+          "uniqueName": "bruno.lima@contoso.example"
+        },
+        "consumedDays": 1,
+        "doneDay": 7,
+        "estimateDays": 1.2,
+        "id": 6001,
+        "product": "loja",
+        "projectedEndDay": 7,
+        "reworkTimes": 0,
+        "risk": "on-track",
+        "startDay": 5,
+        "state": "Done",
+        "status": "done",
+        "storyPoints": 3,
+        "tasks": [
+          {
+            "assignee": {
+              "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+              "displayName": "Bruno Lima",
+              "uniqueName": "bruno.lima@contoso.example"
+            },
+            "done": true,
+            "id": 6102,
+            "state": "Done",
+            "title": "Integração com o estoque da loja"
+          }
+        ],
+        "title": "Retirada na loja física",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": null,
+        "consumedDays": null,
+        "doneDay": null,
+        "estimateDays": 0.3,
+        "id": 6004,
+        "product": "loja",
+        "projectedEndDay": 8,
+        "reworkTimes": 0,
+        "risk": "on-track",
+        "startDay": null,
+        "state": "New",
+        "status": "not-started",
+        "storyPoints": 1,
+        "tasks": [],
+        "title": "Aviso de horário de retirada",
+        "type": "Product Backlog Item"
+      }
+    ],
+    "remainingDays": 2,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 8
+  }
+}

@@ -1,0 +1,11 @@
+# Tudo em LF, em qualquer máquina. O Git para Windows vem com `autocrlf=true` e
+# escreveria CRLF no checkout: o prettier acusa cada linha e o Vitest não importa
+# os scripts .mjs com shebang (o teste da RN-SEC-30 quebra). O runner da Release é
+# Windows, então isto vale também para a esteira.
+* text=auto eol=lf
+
+# Binários: nunca converter.
+*.png binary
+*.ico binary
+*.icns binary
+*.woff2 binary

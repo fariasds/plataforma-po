@@ -1,0 +1,150 @@
+{
+  "planejamento": [
+    {
+      "finishDate": "2026-11-13T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-loja-6",
+          "name": "Sprint 6",
+          "path": "Contoso\\Loja\\Sprint 6"
+        },
+        "loja": {
+          "id": "it-loja-6",
+          "name": "Sprint 6",
+          "path": "Contoso\\Loja\\Sprint 6"
+        }
+      },
+      "key": "2026-11-02_2026-11-13",
+      "label": "02 de nov. → 13 de nov.",
+      "startDate": "2026-11-02T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-11-27T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-loja-7",
+          "name": "Sprint 7",
+          "path": "Contoso\\Loja\\Sprint 7"
+        },
+        "loja": {
+          "id": "it-loja-7",
+          "name": "Sprint 7",
+          "path": "Contoso\\Loja\\Sprint 7"
+        }
+      },
+      "key": "2026-11-16_2026-11-27",
+      "label": "16 de nov. → 27 de nov.",
+      "startDate": "2026-11-16T00:00:00Z"
+    }
+  ],
+  "revisao": [
+    {
+      "finishDate": "2026-11-13T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-loja-6",
+          "name": "Sprint 6",
+          "path": "Contoso\\Loja\\Sprint 6"
+        },
+        "loja": {
+          "id": "it-loja-6",
+          "name": "Sprint 6",
+          "path": "Contoso\\Loja\\Sprint 6"
+        }
+      },
+      "key": "2026-11-02_2026-11-13",
+      "label": "02 de nov. → 13 de nov.",
+      "startDate": "2026-11-02T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-10-30T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-loja-5",
+          "name": "Sprint 5",
+          "path": "Contoso\\Loja\\Sprint 5"
+        },
+        "loja": {
+          "id": "it-loja-5",
+          "name": "Sprint 5",
+          "path": "Contoso\\Loja\\Sprint 5"
+        }
+      },
+      "key": "2026-10-19_2026-10-30",
+      "label": "19 de out. → 30 de out.",
+      "startDate": "2026-10-19T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-10-16T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-loja-4",
+          "name": "Sprint 4",
+          "path": "Contoso\\Loja\\Sprint 4"
+        },
+        "loja": {
+          "id": "it-loja-4",
+          "name": "Sprint 4",
+          "path": "Contoso\\Loja\\Sprint 4"
+        }
+      },
+      "key": "2026-10-05_2026-10-16",
+      "label": "05 de out. → 16 de out.",
+      "startDate": "2026-10-05T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-10-02T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-loja-3",
+          "name": "Sprint 3",
+          "path": "Contoso\\Loja\\Sprint 3"
+        },
+        "loja": {
+          "id": "it-loja-3",
+          "name": "Sprint 3",
+          "path": "Contoso\\Loja\\Sprint 3"
+        }
+      },
+      "key": "2026-09-21_2026-10-02",
+      "label": "21 de set. → 02 de out.",
+      "startDate": "2026-09-21T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-09-18T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-loja-2",
+          "name": "Sprint 2",
+          "path": "Contoso\\Loja\\Sprint 2"
+        },
+        "loja": {
+          "id": "it-loja-2",
+          "name": "Sprint 2",
+          "path": "Contoso\\Loja\\Sprint 2"
+        }
+      },
+      "key": "2026-09-07_2026-09-18",
+      "label": "07 de set. → 18 de set.",
+      "startDate": "2026-09-07T00:00:00Z"
+    },
+    {
+      "finishDate": "2026-09-04T00:00:00Z",
+      "iterations": {
+        "app": {
+          "id": "it-loja-1",
+          "name": "Sprint 1",
+          "path": "Contoso\\Loja\\Sprint 1"
+        },
+        "loja": {
+          "id": "it-loja-1",
+          "name": "Sprint 1",
+          "path": "Contoso\\Loja\\Sprint 1"
+        }
+      },
+      "key": "2026-08-24_2026-09-04",
+      "label": "24 de ago. → 04 de set.",
+      "startDate": "2026-08-24T00:00:00Z"
+    }
+  ]
+}

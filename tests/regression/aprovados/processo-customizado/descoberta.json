@@ -1,0 +1,164 @@
+{
+  "Operacoes": {
+    "areas": {
+      "children": [
+        {
+          "children": [],
+          "name": "Portal",
+          "path": "Operacoes\\Portal"
+        },
+        {
+          "children": [],
+          "name": "Suporte",
+          "path": "Operacoes\\Suporte"
+        }
+      ],
+      "name": "Operacoes",
+      "path": "Operacoes"
+    },
+    "campos": [],
+    "processo": {
+      "categories": {
+        "bug": "Defeito",
+        "requirement": [
+          "Demanda"
+        ],
+        "task": "Atividade"
+      },
+      "workItemTypes": [
+        {
+          "estimateField": "Microsoft.VSTS.Scheduling.Size",
+          "name": "Demanda",
+          "referenceName": "Contoso.Demanda",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "Triagem"
+            },
+            {
+              "category": "Proposed",
+              "name": "Pronta"
+            },
+            {
+              "category": "InProgress",
+              "name": "Fazendo"
+            },
+            {
+              "category": "InProgress",
+              "name": "Em teste"
+            },
+            {
+              "category": "Resolved",
+              "name": "Validando"
+            },
+            {
+              "category": "Completed",
+              "name": "Entregue"
+            },
+            {
+              "category": "Removed",
+              "name": "Cancelada"
+            }
+          ]
+        },
+        {
+          "estimateField": null,
+          "name": "Defeito",
+          "referenceName": "Contoso.Defeito",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "Aberto"
+            },
+            {
+              "category": "InProgress",
+              "name": "Corrigindo"
+            },
+            {
+              "category": "Completed",
+              "name": "Corrigido"
+            },
+            {
+              "category": "Removed",
+              "name": "Descartado"
+            }
+          ]
+        },
+        {
+          "estimateField": null,
+          "name": "Atividade",
+          "referenceName": "Contoso.Atividade",
+          "states": [
+            {
+              "category": "Proposed",
+              "name": "Pendente"
+            },
+            {
+              "category": "InProgress",
+              "name": "Executando"
+            },
+            {
+              "category": "Completed",
+              "name": "Concluída"
+            }
+          ]
+        }
+      ]
+    },
+    "sugestao": {
+      "bugStateOrder": [
+        "Aberto",
+        "Corrigindo",
+        "Corrigido"
+      ],
+      "bugType": "Defeito",
+      "deliveredStates": [
+        "Entregue",
+        "Corrigido"
+      ],
+      "devDoneState": "Validando",
+      "developmentTypes": [
+        "Demanda"
+      ],
+      "estimateField": "Microsoft.VSTS.Scheduling.Size",
+      "inProgressState": "Fazendo",
+      "plannableTypes": [
+        "Demanda"
+      ],
+      "removedStates": [
+        "Cancelada",
+        "Descartado"
+      ],
+      "taskType": "Atividade",
+      "terminalStates": [
+        "Entregue",
+        "Corrigido",
+        "Cancelada",
+        "Descartado"
+      ],
+      "testingState": null,
+      "workItemTypes": [
+        "Demanda",
+        "Defeito"
+      ]
+    },
+    "times": [
+      {
+        "id": "team-portal",
+        "name": "Portal"
+      },
+      {
+        "id": "team-suporte",
+        "name": "Suporte"
+      }
+    ]
+  },
+  "projetos": [
+    {
+      "defaultTeam": "Portal",
+      "id": "00000000-0000-4000-9000-000000000003",
+      "name": "Operacoes",
+      "process": "Contoso Kanban"
+    }
+  ]
+}

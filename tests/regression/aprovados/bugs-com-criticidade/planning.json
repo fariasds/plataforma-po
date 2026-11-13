@@ -1,0 +1,16 @@
+{
+  "loja": {
+    "dados": {
+      "items": [],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 0,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 05 de out. → 16 de out.\n\nLoja Online · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **0** |\n\n## Itens da sprint\n\nNenhum item marcado para esta sprint.\n",
+    "sprint": "2026-10-05_2026-10-16"
+  }
+}

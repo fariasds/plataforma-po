@@ -1,0 +1,251 @@
+{
+  "app": {
+    "2026-09-07_2026-09-18": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-28T15:00:00",
+          "devTimeInSprintHours": 18,
+          "leadTimeHours": 18,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-22T14:00:00",
+              "System.Id": 2103,
+              "System.IterationPath": "Mobile\\App\\Iteração 12",
+              "System.State": "Closed",
+              "System.Title": "App fecha ao girar a tela",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 2103,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-09-28T10:00:00",
+          "devTimeInSprintHours": 27,
+          "leadTimeHours": 27,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-09T09:00:00",
+              "System.Id": 2101,
+              "System.IterationPath": "Mobile\\App\\Iteração 12",
+              "System.State": "Closed",
+              "System.Title": "Login com biometria",
+              "System.WorkItemType": "User Story"
+            },
+            "id": 2101,
+            "rev": 5
+          }
+        }
+      ],
+      "scopeInjectedCount": 2,
+      "totalInSprint": 3,
+      "typeDistribution": [
+        {
+          "name": "Bug",
+          "value": 18
+        },
+        {
+          "name": "User Story",
+          "value": 27
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Bug",
+          "value": 18
+        },
+        {
+          "name": "User Story",
+          "value": 27
+        }
+      ]
+    }
+  },
+  "digital": {
+    "2026-09-07_2026-09-18": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-25T17:00:00",
+          "devTimeInSprintHours": 39,
+          "leadTimeHours": 39,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-08T09:00:00",
+              "System.Id": 2001,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Vitrine personalizada",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 2001,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-09-24T16:00:00",
+          "devTimeInSprintHours": 12,
+          "leadTimeHours": 12,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-23T10:00:00",
+              "System.Id": 2003,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Preço sem desconto no carrinho",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 2003,
+            "rev": 3
+          }
+        },
+        {
+          "closedAt": "2026-09-28T15:00:00",
+          "devTimeInSprintHours": 18,
+          "leadTimeHours": 18,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-22T14:00:00",
+              "System.Id": 2103,
+              "System.IterationPath": "Mobile\\App\\Iteração 12",
+              "System.State": "Closed",
+              "System.Title": "App fecha ao girar a tela",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 2103,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-09-28T10:00:00",
+          "devTimeInSprintHours": 27,
+          "leadTimeHours": 27,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-09T09:00:00",
+              "System.Id": 2101,
+              "System.IterationPath": "Mobile\\App\\Iteração 12",
+              "System.State": "Closed",
+              "System.Title": "Login com biometria",
+              "System.WorkItemType": "User Story"
+            },
+            "id": 2101,
+            "rev": 5
+          }
+        }
+      ],
+      "scopeInjectedCount": 3,
+      "totalInSprint": 6,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 39
+        },
+        {
+          "name": "Bug",
+          "value": 30
+        },
+        {
+          "name": "User Story",
+          "value": 27
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 39
+        },
+        {
+          "name": "Bug",
+          "value": 30
+        },
+        {
+          "name": "User Story",
+          "value": 27
+        }
+      ]
+    }
+  },
+  "loja": {
+    "2026-09-07_2026-09-18": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-25T17:00:00",
+          "devTimeInSprintHours": 39,
+          "leadTimeHours": 39,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-08T09:00:00",
+              "System.Id": 2001,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Vitrine personalizada",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 2001,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-09-24T16:00:00",
+          "devTimeInSprintHours": 12,
+          "leadTimeHours": 12,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-23T10:00:00",
+              "System.Id": 2003,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Preço sem desconto no carrinho",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 2003,
+            "rev": 3
+          }
+        }
+      ],
+      "scopeInjectedCount": 1,
+      "totalInSprint": 3,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 39
+        },
+        {
+          "name": "Bug",
+          "value": 12
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 39
+        },
+        {
+          "name": "Bug",
+          "value": 12
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "loja": {
+    "dados": {
+      "items": [
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 3001,
+          "priority": null,
+          "product": "loja",
+          "qa": null,
+          "state": "Done",
+          "title": "Lista de desejos",
+          "total": 3
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 3006,
+          "priority": null,
+          "product": "loja",
+          "qa": null,
+          "state": "Committed",
+          "title": "Avaliação de produto",
+          "total": 3
+        }
+      ],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 6,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 05 de out. → 16 de out.\n\nLoja Online · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **6** |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Total |\n| --- | --- | --- | --- |\n| [#3001](https://dev.azure.com/contoso/_workitems/edit/3001) | Lista de desejos | — | **3** |\n| [#3006](https://dev.azure.com/contoso/_workitems/edit/3006) | Avaliação de produto | — | **3** |\n| **Total** | 2 itens |  | **6** |\n",
+    "sprint": "2026-10-05_2026-10-16"
+  }
+}

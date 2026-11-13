@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "organization": "contoso",
+  "processProfiles": {
+    "scrum": {
+      "workItemTypes": ["Product Backlog Item", "Bug"],
+      "plannableTypes": ["Product Backlog Item"],
+      "developmentTypes": ["Product Backlog Item"],
+      "bugType": "Bug",
+      "taskType": "Task",
+      "estimateField": "Microsoft.VSTS.Scheduling.Effort",
+      "deliveredStates": ["Done"],
+      "terminalStates": ["Done", "Removed"],
+      "removedStates": ["Removed"],
+      "inProgressState": "Committed",
+      "devDoneState": null,
+      "testingState": null,
+      "bugStateOrder": ["New", "Approved", "Committed", "Done"]
+    },
+    "fluxo": {
+      "workItemTypes": ["Feature", "Chore", "Defeito"],
+      "plannableTypes": ["Feature"],
+      "developmentTypes": ["Feature"],
+      "bugType": "Defeito",
+      "taskType": "Task",
+      "estimateField": "Microsoft.VSTS.Scheduling.StoryPoints",
+      "deliveredStates": ["Entregue"],
+      "terminalStates": ["Entregue"],
+      "inProgressState": "Fazendo",
+      "bugStateOrder": ["Aberto", "Fazendo", "Validando", "Entregue"]
+    }
+  },
+  "products": [
+    {
+      "id": "loja",
+      "name": "Loja Online",
+      "color": "#7B61FF",
+      "project": "Contoso",
+      "areaPaths": ["Contoso\\Loja"],
+      "processProfile": "scrum"
+    },
+    {
+      "id": "app",
+      "name": "App Mobile",
+      "color": "#00A58E",
+      "project": "ContosoApp",
+      "areaPaths": ["ContosoApp"],
+      "processProfile": "fluxo"
+    },
+    {
+      "id": "suporte",
+      "name": "Suporte",
+      "color": "#E5484D",
+      "project": "Contoso",
+      "areaPaths": ["Contoso\\Suporte"],
+      "processProfile": "scrum",
+      "cadence": "continuous"
+    }
+  ],
+  "groups": [{ "id": "digital", "name": "Digital", "products": ["loja", "app"] }],
+  "customFields": { "criticality": "Custom.Severidade" },
+  "criticality": [
+    { "name": "Crítica", "matches": ["crít", "crit"], "color": "#AA0000" },
+    { "name": "Normal", "matches": ["normal"] },
+    { "name": "Menor", "matches": ["menor"] }
+  ],
+  "calendar": {
+    "country": "BR",
+    "workingHours": [
+      { "start": "09:00", "end": "12:00" },
+      { "start": "13:00", "end": "18:00" }
+    ],
+    "productiveHoursPerDay": 6
+  },
+  "storyPoints": { "1": 2, "2": 4, "3": 8 },
+  "capacityDefaults": { "frontDevs": 2, "backDevs": 3, "sprintDays": 10, "frontBugPercent": 20, "backBugPercent": 20 }
+}

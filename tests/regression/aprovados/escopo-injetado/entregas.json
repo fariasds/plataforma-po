@@ -1,0 +1,88 @@
+{
+  "loja": {
+    "2026-09-07_2026-09-18": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-28T17:00:00",
+          "devTimeInSprintHours": 47,
+          "leadTimeHours": 47,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-08T09:00:00",
+              "System.Id": 4001,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Rastreio de pedido",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 4001,
+            "rev": 4
+          }
+        },
+        {
+          "closedAt": "2026-09-25T16:00:00",
+          "devTimeInSprintHours": 21,
+          "leadTimeHours": 21,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-23T09:00:00",
+              "System.Id": 4006,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Cupom aceito depois de vencido",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 4006,
+            "rev": 3
+          }
+        },
+        {
+          "closedAt": "2026-09-22T16:00:00",
+          "devTimeInSprintHours": 12,
+          "leadTimeHours": 12,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-15T09:00:00",
+              "System.Id": 4003,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Selo de compra segura",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 4003,
+            "rev": 4
+          }
+        }
+      ],
+      "scopeInjectedCount": 4,
+      "totalInSprint": 6,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 59
+        },
+        {
+          "name": "Bug",
+          "value": 21
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 59
+        },
+        {
+          "name": "Bug",
+          "value": 21
+        }
+      ]
+    }
+  }
+}

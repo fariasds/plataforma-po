@@ -1,0 +1,262 @@
+{
+  "loja": {
+    "activeBugItems": [
+      {
+        "createdDate": "2026-10-06T09:00:00",
+        "criticality": "baixa",
+        "dueDate": "2026-10-07T17:00:00",
+        "id": 5005,
+        "isRecurrent": true,
+        "monthKey": "2026-10",
+        "monthLabel": "Out/26",
+        "productId": "loja",
+        "sprintKey": "2026-10-05_2026-10-16",
+        "sprintLabel": "05 de out. → 16 de out.",
+        "sprintName": "Sprint 4",
+        "state": "Committed",
+        "title": "[reincidente] Cache do catálogo desatualizado"
+      },
+      {
+        "createdDate": "2026-10-05T10:00:00",
+        "criticality": "Não informado",
+        "id": 5004,
+        "isRecurrent": false,
+        "monthKey": "2026-10",
+        "monthLabel": "Out/26",
+        "productId": "loja",
+        "sprintKey": "2026-10-05_2026-10-16",
+        "sprintLabel": "05 de out. → 16 de out.",
+        "sprintName": "Sprint 4",
+        "state": "Approved",
+        "title": "Ícone desalinhado no menu"
+      }
+    ],
+    "activeBugsByState": [
+      {
+        "name": "Committed",
+        "value": 1
+      },
+      {
+        "name": "Approved",
+        "value": 1
+      }
+    ],
+    "activeBugsCount": 2,
+    "allBugs": [
+      {
+        "createdDate": "2026-10-06T09:00:00",
+        "criticality": "baixa",
+        "dueDate": "2026-10-07T17:00:00",
+        "id": 5005,
+        "isRecurrent": true,
+        "monthKey": "2026-10",
+        "monthLabel": "Out/26",
+        "productId": "loja",
+        "sprintKey": "2026-10-05_2026-10-16",
+        "sprintLabel": "05 de out. → 16 de out.",
+        "sprintName": "Sprint 4",
+        "state": "Committed",
+        "title": "[reincidente] Cache do catálogo desatualizado"
+      },
+      {
+        "createdDate": "2026-10-05T10:00:00",
+        "criticality": "Não informado",
+        "id": 5004,
+        "isRecurrent": false,
+        "monthKey": "2026-10",
+        "monthLabel": "Out/26",
+        "productId": "loja",
+        "sprintKey": "2026-10-05_2026-10-16",
+        "sprintLabel": "05 de out. → 16 de out.",
+        "sprintName": "Sprint 4",
+        "state": "Approved",
+        "title": "Ícone desalinhado no menu"
+      },
+      {
+        "closedDate": "2026-10-06T14:00:00",
+        "closedSprintKey": "2026-10-05_2026-10-16",
+        "createdDate": "2026-09-28T09:00:00",
+        "criticality": "Média - SLA 40h",
+        "dueDate": "2026-10-02T17:00:00",
+        "id": 5003,
+        "isRecurrent": false,
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "productId": "loja",
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "state": "Done",
+        "title": "Nota fiscal com CNPJ errado"
+      },
+      {
+        "closedDate": "2026-10-01T10:00:00",
+        "closedSprintKey": "2026-09-21_2026-10-02",
+        "createdDate": "2026-09-25T09:00:00",
+        "criticality": "Crítica - SLA 8h",
+        "dueDate": "2026-09-25T17:00:00",
+        "id": 5008,
+        "isRecurrent": false,
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "productId": "loja",
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "state": "Done",
+        "title": "Lentidão na busca"
+      },
+      {
+        "closedDate": "2026-09-29T16:00:00",
+        "closedSprintKey": "2026-09-21_2026-10-02",
+        "createdDate": "2026-09-24T10:00:00",
+        "criticality": "ALTA - SLA 16h",
+        "dueDate": "2026-09-25T12:00:00",
+        "id": 5002,
+        "isRecurrent": false,
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "productId": "loja",
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "state": "Done",
+        "title": "Estoque negativo após cancelamento"
+      },
+      {
+        "closedDate": "2026-09-23T15:00:00",
+        "closedSprintKey": "2026-09-21_2026-10-02",
+        "createdDate": "2026-09-22T09:00:00",
+        "criticality": "Alta - SLA 16h",
+        "dueDate": "2026-09-23T17:00:00",
+        "id": 5001,
+        "isRecurrent": false,
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "productId": "loja",
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "state": "Done",
+        "title": "Pagamento recusado com cartão válido"
+      },
+      {
+        "closedDate": "2026-09-10T11:00:00",
+        "closedSprintKey": "2026-09-07_2026-09-18",
+        "createdDate": "2026-09-08T09:00:00",
+        "criticality": "Alta - SLA 16h",
+        "dueDate": "2026-09-09T17:00:00",
+        "id": 5006,
+        "isRecurrent": true,
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "productId": "loja",
+        "sprintKey": "2026-09-07_2026-09-18",
+        "sprintLabel": "07 de set. → 18 de set.",
+        "sprintName": "Sprint 2",
+        "state": "Done",
+        "title": "[Reincidente] Timeout no pagamento"
+      },
+      {
+        "closedDate": "2026-08-27T11:00:00",
+        "closedSprintKey": "2026-08-24_2026-09-04",
+        "createdDate": "2026-08-26T09:00:00",
+        "criticality": "Média",
+        "dueDate": "2026-08-28T17:00:00",
+        "id": 5009,
+        "isRecurrent": false,
+        "monthKey": "2026-08",
+        "monthLabel": "Ago/26",
+        "productId": "loja",
+        "sprintKey": "2026-08-24_2026-09-04",
+        "sprintLabel": "24 de ago. → 04 de set.",
+        "sprintName": "Sprint 1",
+        "state": "Done",
+        "title": "Carrinho vazio após login"
+      }
+    ],
+    "criticalityBreakdown": [
+      {
+        "name": "baixa",
+        "value": 1
+      },
+      {
+        "name": "Não informado",
+        "value": 1
+      }
+    ],
+    "criticalityConfigured": true,
+    "monthStats": [
+      {
+        "monthKey": "2026-08",
+        "monthLabel": "Ago/26",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "total": 1
+      },
+      {
+        "monthKey": "2026-09",
+        "monthLabel": "Set/26",
+        "recurrenceRate": 20,
+        "recurrentCount": 1,
+        "total": 5
+      },
+      {
+        "monthKey": "2026-10",
+        "monthLabel": "Out/26",
+        "recurrenceRate": 50,
+        "recurrentCount": 1,
+        "total": 2
+      }
+    ],
+    "recurrenceConfigured": true,
+    "sprintStats": [
+      {
+        "finishDate": "2026-09-04T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-08-24_2026-09-04",
+        "sprintLabel": "24 de ago. → 04 de set.",
+        "sprintName": "Sprint 1",
+        "startDate": "2026-08-24T00:00:00Z",
+        "total": 1
+      },
+      {
+        "finishDate": "2026-09-18T00:00:00Z",
+        "recurrenceRate": 100,
+        "recurrentCount": 1,
+        "sprintKey": "2026-09-07_2026-09-18",
+        "sprintLabel": "07 de set. → 18 de set.",
+        "sprintName": "Sprint 2",
+        "startDate": "2026-09-07T00:00:00Z",
+        "total": 1
+      },
+      {
+        "finishDate": "2026-10-02T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "startDate": "2026-09-21T00:00:00Z",
+        "total": 4
+      },
+      {
+        "finishDate": "2026-10-16T00:00:00Z",
+        "recurrenceRate": 50,
+        "recurrentCount": 1,
+        "sprintKey": "2026-10-05_2026-10-16",
+        "sprintLabel": "05 de out. → 16 de out.",
+        "sprintName": "Sprint 4",
+        "startDate": "2026-10-05T00:00:00Z",
+        "total": 2
+      }
+    ],
+    "stateOrder": [
+      "New",
+      "Approved",
+      "Committed",
+      "Done"
+    ]
+  }
+}

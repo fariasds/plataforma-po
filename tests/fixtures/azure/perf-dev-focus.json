@@ -1,0 +1,32 @@
+{
+  "_comment": "Sprint 13/04/2026 a 24/04/2026. Tiradentes (21/04) cai no meio. Expediente 09-12 e 13-18 (8h por dia). Horários sem fuso: são locais, como o app lê o Azure.",
+  "iterations": {
+    "Contoso\\Loja\\Sprint 8": [101, 102],
+    "ContosoApp\\Sprint 8": [201, 202]
+  },
+  "items": {
+    "101": { "System.WorkItemType": "Product Backlog Item", "System.CreatedDate": "2026-04-13T09:00:00", "Microsoft.VSTS.Common.ClosedDate": "2026-04-22T09:00:00" },
+    "102": { "System.WorkItemType": "Bug", "System.CreatedDate": "2026-04-22T09:00:00", "Microsoft.VSTS.Common.ClosedDate": "2026-04-22T17:00:00" },
+    "201": { "System.WorkItemType": "Feature", "System.CreatedDate": "2026-04-23T09:00:00", "Microsoft.VSTS.Common.ClosedDate": "2026-04-23T13:00:00" },
+    "202": { "System.WorkItemType": "Chore", "System.CreatedDate": "2026-04-14T09:00:00", "Microsoft.VSTS.Common.ClosedDate": "2026-04-15T18:00:00" }
+  },
+  "updates": {
+    "101": [
+      { "id": 1, "revisedDate": "2026-04-20T09:00:00", "fields": { "System.State": { "newValue": "New" } } },
+      { "id": 2, "revisedDate": "2026-04-22T09:00:00", "fields": { "System.State": { "oldValue": "New", "newValue": "Committed" } } },
+      { "id": 3, "revisedDate": "9999-01-01T00:00:00", "fields": { "System.State": { "oldValue": "Committed", "newValue": "Done" } } }
+    ],
+    "102": [
+      { "id": 1, "revisedDate": "2026-04-22T09:00:00", "fields": { "System.State": { "newValue": "New" } } },
+      { "id": 2, "revisedDate": "2026-04-22T17:00:00", "fields": { "System.State": { "oldValue": "New", "newValue": "Committed" } } },
+      { "id": 3, "revisedDate": "9999-01-01T00:00:00", "fields": { "System.State": { "oldValue": "Committed", "newValue": "Done" } } }
+    ],
+    "201": [],
+    "202": [
+      { "id": 1, "revisedDate": "2026-04-14T09:00:00", "fields": { "System.State": { "newValue": "Aberto" } } },
+      { "id": 2, "revisedDate": "2026-04-14T12:00:00", "fields": { "System.State": { "oldValue": "Aberto", "newValue": "Fazendo" } } },
+      { "id": 3, "revisedDate": "2026-04-15T09:00:00", "fields": { "System.State": { "oldValue": "Fazendo", "newValue": "Validando" } } },
+      { "id": 4, "revisedDate": "9999-01-01T00:00:00", "fields": { "System.State": { "oldValue": "Validando", "newValue": "Entregue" } } }
+    ]
+  }
+}

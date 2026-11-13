@@ -1,0 +1,31 @@
+name: Sugestão / Feature request
+description: Um indicador, uma tela ou um ajuste que ajudaria no seu trabalho de PO / An indicator, screen or tweak that would help your PO work
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Comece pela pergunta que você precisa responder, não pela solução. Todo indicador do app existe para responder uma pergunta.
+        Start with the question you need answered, not the solution. Every indicator in the app exists to answer a question.
+  - type: textarea
+    id: question
+    attributes:
+      label: Que pergunta você quer responder? / What question do you want answered?
+      placeholder: "Ex.: quantos itens entram na sprint depois do Planning? / E.g.: how many items join the sprint after Planning?"
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: Como você responde hoje / How you answer it today
+      description: Consulta no Azure, planilha, contagem manual... / Azure query, spreadsheet, manual count...
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposta / Proposal
+      description: Opcional. Como você imagina a resposta na tela. / Optional. How you picture the answer on screen.
+  - type: textarea
+    id: process
+    attributes:
+      label: Processo do time / Team process
+      description: Scrum, Kanban, Basic, processo customizado? Estados que importam? / Scrum, Kanban, Basic, custom process? Which states matter?

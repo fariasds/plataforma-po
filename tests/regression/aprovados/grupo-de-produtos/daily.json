@@ -1,0 +1,211 @@
+{
+  "app": {
+    "currentDay": 7,
+    "holidayDays": [],
+    "inProgressCount": 1,
+    "items": [
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Diego Rocha",
+          "uniqueName": "diego.rocha@contoso.example"
+        },
+        "consumedDays": 4,
+        "doneDay": 4,
+        "estimateDays": 2.7,
+        "id": 2101,
+        "product": "app",
+        "projectedEndDay": 3,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 1,
+        "state": "Closed",
+        "status": "done",
+        "storyPoints": 5,
+        "tasks": [],
+        "title": "Login com biometria",
+        "type": "User Story"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Ana Souza",
+          "uniqueName": "ana.souza@contoso.example"
+        },
+        "consumedDays": 2,
+        "doneDay": null,
+        "estimateDays": 1.3,
+        "id": 2102,
+        "product": "app",
+        "projectedEndDay": 7,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 6,
+        "state": "Active",
+        "status": "in-progress",
+        "storyPoints": 3,
+        "tasks": [],
+        "title": "Notificação de pedido enviado",
+        "type": "User Story"
+      }
+    ],
+    "remainingDays": 4,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 10
+  },
+  "digital": {
+    "currentDay": 7,
+    "holidayDays": [],
+    "inProgressCount": 2,
+    "items": [
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Carla Dias",
+          "uniqueName": "carla.dias@contoso.example"
+        },
+        "consumedDays": 6,
+        "doneDay": null,
+        "estimateDays": 5.3,
+        "id": 2002,
+        "product": "loja",
+        "projectedEndDay": 7,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 2,
+        "state": "Committed",
+        "status": "in-progress",
+        "storyPoints": 8,
+        "tasks": [],
+        "title": "Checkout em uma página",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Diego Rocha",
+          "uniqueName": "diego.rocha@contoso.example"
+        },
+        "consumedDays": 4,
+        "doneDay": 4,
+        "estimateDays": 2.7,
+        "id": 2101,
+        "product": "app",
+        "projectedEndDay": 3,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 1,
+        "state": "Closed",
+        "status": "done",
+        "storyPoints": 5,
+        "tasks": [],
+        "title": "Login com biometria",
+        "type": "User Story"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Bruno Lima",
+          "uniqueName": "bruno.lima@contoso.example"
+        },
+        "consumedDays": 5,
+        "doneDay": 5,
+        "estimateDays": 1.3,
+        "id": 2001,
+        "product": "loja",
+        "projectedEndDay": 2,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 1,
+        "state": "Done",
+        "status": "done",
+        "storyPoints": 3,
+        "tasks": [],
+        "title": "Vitrine personalizada",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Ana Souza",
+          "uniqueName": "ana.souza@contoso.example"
+        },
+        "consumedDays": 2,
+        "doneDay": null,
+        "estimateDays": 1.3,
+        "id": 2102,
+        "product": "app",
+        "projectedEndDay": 7,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 6,
+        "state": "Active",
+        "status": "in-progress",
+        "storyPoints": 3,
+        "tasks": [],
+        "title": "Notificação de pedido enviado",
+        "type": "User Story"
+      }
+    ],
+    "remainingDays": 4,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 10
+  },
+  "loja": {
+    "currentDay": 7,
+    "holidayDays": [],
+    "inProgressCount": 1,
+    "items": [
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Carla Dias",
+          "uniqueName": "carla.dias@contoso.example"
+        },
+        "consumedDays": 6,
+        "doneDay": null,
+        "estimateDays": 5.3,
+        "id": 2002,
+        "product": "loja",
+        "projectedEndDay": 7,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 2,
+        "state": "Committed",
+        "status": "in-progress",
+        "storyPoints": 8,
+        "tasks": [],
+        "title": "Checkout em uma página",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Bruno Lima",
+          "uniqueName": "bruno.lima@contoso.example"
+        },
+        "consumedDays": 5,
+        "doneDay": 5,
+        "estimateDays": 1.3,
+        "id": 2001,
+        "product": "loja",
+        "projectedEndDay": 2,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 1,
+        "state": "Done",
+        "status": "done",
+        "storyPoints": 3,
+        "tasks": [],
+        "title": "Vitrine personalizada",
+        "type": "Product Backlog Item"
+      }
+    ],
+    "remainingDays": 4,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 10
+  }
+}

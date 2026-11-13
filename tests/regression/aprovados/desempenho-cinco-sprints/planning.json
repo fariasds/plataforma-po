@@ -1,0 +1,50 @@
+{
+  "loja": {
+    "dados": {
+      "items": [
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 8060,
+          "priority": null,
+          "product": "loja",
+          "qa": null,
+          "state": "Done",
+          "title": "Melhoria 6.1",
+          "total": 2
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 8061,
+          "priority": null,
+          "product": "loja",
+          "qa": null,
+          "state": "Done",
+          "title": "Melhoria 6.2",
+          "total": 3
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 8062,
+          "priority": null,
+          "product": "loja",
+          "qa": null,
+          "state": "Committed",
+          "title": "Melhoria 6.3",
+          "total": 4
+        }
+      ],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 9,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 02 de nov. → 13 de nov.\n\nLoja Online · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **9** |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Total |\n| --- | --- | --- | --- |\n| [#8062](https://dev.azure.com/contoso/_workitems/edit/8062) | Melhoria 6.3 | — | **4** |\n| [#8061](https://dev.azure.com/contoso/_workitems/edit/8061) | Melhoria 6.2 | — | **3** |\n| [#8060](https://dev.azure.com/contoso/_workitems/edit/8060) | Melhoria 6.1 | — | **2** |\n| **Total** | 3 itens |  | **9** |\n",
+    "sprint": "2026-11-02_2026-11-13"
+  }
+}

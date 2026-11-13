@@ -1,0 +1,60 @@
+{
+  "loja": {
+    "activeBugItems": [],
+    "activeBugsByState": [],
+    "activeBugsCount": 0,
+    "allBugs": [],
+    "criticalityBreakdown": [],
+    "criticalityConfigured": false,
+    "monthStats": [],
+    "recurrenceConfigured": false,
+    "sprintStats": [
+      {
+        "finishDate": "2026-09-04T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-08-24_2026-09-04",
+        "sprintLabel": "24 de ago. → 04 de set.",
+        "sprintName": "Sprint 1",
+        "startDate": "2026-08-24T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-09-18T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-09-07_2026-09-18",
+        "sprintLabel": "07 de set. → 18 de set.",
+        "sprintName": "Sprint 2",
+        "startDate": "2026-09-07T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-10-02T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "startDate": "2026-09-21T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-10-16T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-10-05_2026-10-16",
+        "sprintLabel": "05 de out. → 16 de out.",
+        "sprintName": "Sprint 4",
+        "startDate": "2026-10-05T00:00:00Z",
+        "total": 0
+      }
+    ],
+    "stateOrder": [
+      "New",
+      "Approved",
+      "Committed",
+      "Done"
+    ]
+  }
+}

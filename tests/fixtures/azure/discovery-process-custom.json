@@ -1,0 +1,83 @@
+{
+  "workitemtypes": {
+    "count": 4,
+    "value": [
+      {
+        "name": "História",
+        "referenceName": "VarejoAgil.Historia",
+        "isDisabled": false,
+        "fields": [
+          { "referenceName": "System.Title" },
+          { "referenceName": "Microsoft.VSTS.Scheduling.StoryPoints" }
+        ]
+      },
+      {
+        "name": "Melhoria",
+        "referenceName": "VarejoAgil.Melhoria",
+        "isDisabled": false,
+        "fields": [{ "referenceName": "Microsoft.VSTS.Scheduling.StoryPoints" }]
+      },
+      {
+        "name": "Defeito",
+        "referenceName": "VarejoAgil.Defeito",
+        "isDisabled": false,
+        "fields": []
+      },
+      {
+        "name": "Atividade",
+        "referenceName": "VarejoAgil.Atividade",
+        "isDisabled": false,
+        "fields": []
+      }
+    ]
+  },
+  "workitemtypecategories": {
+    "count": 3,
+    "value": [
+      {
+        "referenceName": "Microsoft.RequirementCategory",
+        "defaultWorkItemType": { "name": "História" },
+        "workItemTypes": [{ "name": "História" }, { "name": "Melhoria" }]
+      },
+      {
+        "referenceName": "Microsoft.BugCategory",
+        "defaultWorkItemType": { "name": "Defeito" },
+        "workItemTypes": [{ "name": "Defeito" }]
+      },
+      {
+        "referenceName": "Microsoft.TaskCategory",
+        "defaultWorkItemType": { "name": "Atividade" },
+        "workItemTypes": [{ "name": "Atividade" }]
+      }
+    ]
+  },
+  "states": {
+    "História": [
+      { "name": "Nova", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "Refinada", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "Em desenvolvimento", "color": "007acc", "category": "InProgress" },
+      { "name": "Em teste", "color": "007acc", "category": "InProgress" },
+      { "name": "Homologada", "color": "ff9d00", "category": "Resolved" },
+      { "name": "Entregue", "color": "339933", "category": "Completed" },
+      { "name": "Cancelada", "color": "ffffff", "category": "Removed" }
+    ],
+    "Melhoria": [
+      { "name": "Nova", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "Em desenvolvimento", "color": "007acc", "category": "InProgress" },
+      { "name": "Publicada", "color": "339933", "category": "Completed" },
+      { "name": "Cancelada", "color": "ffffff", "category": "Removed" }
+    ],
+    "Defeito": [
+      { "name": "Aberto", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "Em análise", "color": "007acc", "category": "InProgress" },
+      { "name": "Corrigido", "color": "ff9d00", "category": "Resolved" },
+      { "name": "Fechado", "color": "339933", "category": "Completed" },
+      { "name": "Descartado", "color": "ffffff", "category": "Removed" }
+    ],
+    "Atividade": [
+      { "name": "A fazer", "color": "b2b2b2", "category": "Proposed" },
+      { "name": "Fazendo", "color": "007acc", "category": "InProgress" },
+      { "name": "Feita", "color": "339933", "category": "Completed" }
+    ]
+  }
+}

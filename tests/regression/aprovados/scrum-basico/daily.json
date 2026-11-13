@@ -1,0 +1,128 @@
+{
+  "loja": {
+    "currentDay": 7,
+    "holidayDays": [],
+    "inProgressCount": 2,
+    "items": [
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Carla Dias",
+          "uniqueName": "carla.dias@contoso.example"
+        },
+        "consumedDays": 5,
+        "doneDay": null,
+        "estimateDays": 2.7,
+        "id": 1002,
+        "product": "loja",
+        "projectedEndDay": 5,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 3,
+        "state": "Committed",
+        "status": "in-progress",
+        "storyPoints": 5,
+        "tasks": [
+          {
+            "assignee": {
+              "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+              "displayName": "Carla Dias",
+              "uniqueName": "carla.dias@contoso.example"
+            },
+            "done": false,
+            "id": 1101,
+            "state": "In Progress",
+            "title": "Persistir carrinho"
+          },
+          {
+            "assignee": null,
+            "done": false,
+            "id": 1102,
+            "state": "To Do",
+            "title": "Teste de regressão do carrinho"
+          }
+        ],
+        "title": "Carrinho salvo entre sessões",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Bruno Lima",
+          "uniqueName": "bruno.lima@contoso.example"
+        },
+        "consumedDays": 4,
+        "doneDay": 4,
+        "estimateDays": 1.3,
+        "id": 1001,
+        "product": "loja",
+        "projectedEndDay": 2,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 1,
+        "state": "Done",
+        "status": "done",
+        "storyPoints": 3,
+        "tasks": [
+          {
+            "assignee": {
+              "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+              "displayName": "Bruno Lima",
+              "uniqueName": "bruno.lima@contoso.example"
+            },
+            "done": true,
+            "id": 1103,
+            "state": "Done",
+            "title": "Índice de categoria"
+          }
+        ],
+        "title": "Busca por categoria",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": null,
+        "consumedDays": null,
+        "doneDay": null,
+        "estimateDays": 0.7,
+        "id": 1003,
+        "product": "loja",
+        "projectedEndDay": 7,
+        "reworkTimes": 0,
+        "risk": "on-track",
+        "startDay": null,
+        "state": "Approved",
+        "status": "not-started",
+        "storyPoints": 2,
+        "tasks": [],
+        "title": "Cupom de primeira compra",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Diego Rocha",
+          "uniqueName": "diego.rocha@contoso.example"
+        },
+        "consumedDays": 1,
+        "doneDay": null,
+        "estimateDays": null,
+        "id": 1004,
+        "product": "loja",
+        "projectedEndDay": null,
+        "reworkTimes": 0,
+        "risk": "unknown",
+        "startDay": 6,
+        "state": "Committed",
+        "status": "in-progress",
+        "storyPoints": null,
+        "tasks": [],
+        "title": "Ajustar texto do rodapé",
+        "type": "Product Backlog Item"
+      }
+    ],
+    "remainingDays": 4,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 10
+  }
+}

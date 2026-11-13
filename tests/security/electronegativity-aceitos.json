@@ -1,0 +1,25 @@
+{
+  "$comment": "RN-SEC-30. Cada apontamento do Electronegativity que o verify:electron aceita, com o motivo. A chave é check + arquivo, sem linha, para o aceite não quebrar quando o código acima muda. Aceite que deixou de aparecer reprova o portão: apague-o.",
+  "aceitos": [
+    {
+      "check": "CSP_GLOBAL_CHECK",
+      "arquivo": "src/renderer/index.html",
+      "tipo": "risco aceito",
+      "motivo": "style-src 'unsafe-inline' é exigido pelo CSS-in-JS do Ant Design, que injeta <style> em tempo de execução. script-src 'self' continua fechado: estilo injetado não executa código. connect-src 'self' e o bloqueio de rede da janela (RN-SEC-18) impedem que um estilo vaze dado por url()."
+    },
+    {
+      "check": "AUXCLICK_JS_CHECK",
+      "arquivo": "src/main/index.ts",
+      "tipo": "coberto",
+      "regra": "RN-SEC-21",
+      "motivo": "O clique do meio abre janela nova pelo mesmo caminho do target=_blank, e o setWindowOpenHandler nega toda janela nova. O link só vai ao navegador se for da organização no Azure."
+    },
+    {
+      "check": "PRELOAD_JS_CHECK",
+      "arquivo": "src/main/index.ts",
+      "tipo": "revisado",
+      "regra": "RN-SEC-29",
+      "motivo": "O check só pede revisão do preload. Revisado em 2026-11-13: expõe apenas o objeto api, com os métodos do contrato de IPC; nunca o ipcRenderer. O teste rn-sec-29 barra qualquer outra exposição."
+    }
+  ]
+}

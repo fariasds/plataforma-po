@@ -1,0 +1,72 @@
+{
+  "loja": {
+    "dados": {
+      "items": [
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 4001,
+          "priority": 1,
+          "product": "loja",
+          "qa": null,
+          "state": "Done",
+          "title": "Rastreio de pedido",
+          "total": 5
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 4002,
+          "priority": 2,
+          "product": "loja",
+          "qa": null,
+          "state": "Committed",
+          "title": "Troca de endereço de entrega",
+          "total": 3
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 4003,
+          "priority": 3,
+          "product": "loja",
+          "qa": null,
+          "state": "Done",
+          "title": "Selo de compra segura",
+          "total": 1
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 4004,
+          "priority": 1,
+          "product": "loja",
+          "qa": null,
+          "state": "Committed",
+          "title": "Banner da campanha de outubro",
+          "total": 2
+        },
+        {
+          "backend": null,
+          "frontend": null,
+          "id": 4005,
+          "priority": 2,
+          "product": "loja",
+          "qa": null,
+          "state": "New",
+          "title": "Parcelamento sem juros",
+          "total": 3
+        }
+      ],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 14,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 21 de set. → 02 de out.\n\nLoja Online · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **14** |\n\n## Itens da sprint\n\n| ID | Título | Prioridade | Total |\n| --- | --- | --- | --- |\n| [#4001](https://dev.azure.com/contoso/_workitems/edit/4001) | Rastreio de pedido | P1 | **5** |\n| [#4004](https://dev.azure.com/contoso/_workitems/edit/4004) | Banner da campanha de outubro | P1 | **2** |\n| [#4002](https://dev.azure.com/contoso/_workitems/edit/4002) | Troca de endereço de entrega | P2 | **3** |\n| [#4005](https://dev.azure.com/contoso/_workitems/edit/4005) | Parcelamento sem juros | P2 | **3** |\n| [#4003](https://dev.azure.com/contoso/_workitems/edit/4003) | Selo de compra segura | P3 | **1** |\n| **Total** | 5 itens |  | **14** |\n",
+    "sprint": "2026-09-21_2026-10-02"
+  }
+}

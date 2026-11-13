@@ -1,0 +1,74 @@
+{
+  "loja": {
+    "bugStateMonthSlots": [],
+    "bugStateOrder": [],
+    "bugStateSprintSlots": [],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 155.5,
+        "fullLabel": "Outubro de 2026",
+        "key": "2026-10",
+        "label": "Out/26",
+        "totalHours": 155.5
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 155.5,
+        "fullLabel": "05 de out. → 16 de out.",
+        "key": "2026-10-05_2026-10-16",
+        "label": "Sprint 4",
+        "totalHours": 155.5
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  }
+}

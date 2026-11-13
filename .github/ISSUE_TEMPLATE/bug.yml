@@ -1,0 +1,68 @@
+name: Bug
+description: Algo não funciona como deveria / Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Nunca cole um PAT**, nem já revogado, nem dados da sua organização que não possam ser públicos.
+        **Never paste a PAT**, not even a revoked one, nor organization data that cannot be public.
+
+        Falha de segurança? Não abra issue: veja SECURITY.md. / Security issue? See SECURITY.md instead.
+  - type: input
+    id: version
+    attributes:
+      label: Versão do app / App version
+      description: Aparece no menu do usuário. / Shown in the user menu.
+      placeholder: 0.3.0
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Sistema operacional / Operating system
+      placeholder: Windows 11 23H2
+    validations:
+      required: true
+  - type: dropdown
+    id: screen
+    attributes:
+      label: Tela / Screen
+      options:
+        - Planning
+        - Daily
+        - Entregas da Sprint
+        - Análise de Bugs
+        - Desempenho da Equipe
+        - Configuração / Perfil
+        - Instalação / Installation
+        - Outra / Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: O que aconteceu / What happened
+      description: Inclua a mensagem de erro, se houver. / Include the error message, if any.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: O que você esperava / What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para reproduzir / Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+  - type: textarea
+    id: config
+    attributes:
+      label: Trecho da Configuração / Configuration excerpt
+      description: Se ajudar, cole a parte relevante do configuracao.json. Troque nomes reais por fictícios. / If useful, paste the relevant part of configuracao.json with real names replaced.
+      render: json

@@ -1,0 +1,81 @@
+{
+  "loja": {
+    "currentDay": 7,
+    "holidayDays": [
+      1
+    ],
+    "inProgressCount": 1,
+    "items": [
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Diego Rocha",
+          "uniqueName": "diego.rocha@contoso.example"
+        },
+        "consumedDays": 5,
+        "doneDay": null,
+        "estimateDays": 2,
+        "id": 8062,
+        "product": "loja",
+        "projectedEndDay": 4,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 3,
+        "state": "Committed",
+        "status": "in-progress",
+        "storyPoints": 4,
+        "tasks": [],
+        "title": "Melhoria 6.3",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Carla Dias",
+          "uniqueName": "carla.dias@contoso.example"
+        },
+        "consumedDays": 5,
+        "doneDay": 6,
+        "estimateDays": 1.3,
+        "id": 8061,
+        "product": "loja",
+        "projectedEndDay": 3,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 2,
+        "state": "Done",
+        "status": "done",
+        "storyPoints": 3,
+        "tasks": [],
+        "title": "Melhoria 6.2",
+        "type": "Product Backlog Item"
+      },
+      {
+        "assignee": {
+          "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+          "displayName": "Bruno Lima",
+          "uniqueName": "bruno.lima@contoso.example"
+        },
+        "consumedDays": 3,
+        "doneDay": 4,
+        "estimateDays": 0.7,
+        "id": 8060,
+        "product": "loja",
+        "projectedEndDay": 2,
+        "reworkTimes": 0,
+        "risk": "over-estimate",
+        "startDay": 1,
+        "state": "Done",
+        "status": "done",
+        "storyPoints": 2,
+        "tasks": [],
+        "title": "Melhoria 6.1",
+        "type": "Product Backlog Item"
+      }
+    ],
+    "remainingDays": 4,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 9
+  }
+}
