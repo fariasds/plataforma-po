@@ -3,8 +3,9 @@ import type { Configuration, ProcessProfile, Product } from '@shared/config/sche
 import { getActiveConfig } from '../../profile/config-loader'
 
 /**
- * Tradução da seleção do usuário — o ID de um Produto ou de um Grupo — para o que
- * os serviços consultam no Azure (RN-GLB-01, RN-GLB-02).
+ * Tradução da seleção do usuário — o ID de um Produto, de um Grupo ou de uma
+ * Squad inteira — para o que os serviços consultam no Azure (RN-GLB-01,
+ * RN-GLB-02, RN-GLB-17).
  *
  * Nenhum serviço conhece Produto pelo nome: tudo passa por aqui, lido da
  * Configuração ativa.
@@ -58,8 +59,8 @@ function resolveProduct(product: Product, config: Configuration): ResolvedProduc
 }
 
 /**
- * Um Produto vira ele mesmo; um Grupo vira a lista dos seus Produtos, na ordem em
- * que o Grupo os cita. ID desconhecido é erro, nunca escopo vazio: o renderer pode
+ * Um Produto vira ele mesmo; um Grupo ou uma Squad vira a lista dos seus
+ * Produtos, na ordem em que os cita. ID desconhecido é erro, nunca escopo vazio: o renderer pode
  * estar com uma seleção de antes da Configuração mudar.
  */
 export function resolveScope(selectionId: string, config: Configuration): ResolvedScope {
@@ -78,9 +79,21 @@ export function resolveScope(selectionId: string, config: Configuration): Resolv
     }
   }
 
+  const squad = config.squads.find((s) => s.id === selectionId)
+  if (squad) {
+    return {
+      products: squad.products.map((id) =>
+        resolveProduct(
+          config.products.find((p) => p.id === id)!,
+          config
+        )
+      )
+    }
+  }
+
   throw new AppError(
     'SELECTION_UNKNOWN',
-    `"${String(selectionId)}" não é um Produto nem um Grupo da Configuração em uso.`
+    `"${String(selectionId)}" não é um Produto, Grupo ou Squad da Configuração em uso.`
   )
 }
 
@@ -102,9 +115,27 @@ export function activeProduct(productId: string): ResolvedProduct {
   return resolveProduct(product, config)
 }
 
-/** Produtos com iterações próprias: os únicos que formam a Sprint unificada (RN-GLB-04). */
-export function sprintProducts(config: Configuration): ResolvedProduct[] {
-  return config.products
-    .filter((p) => p.cadence === 'sprints')
-    .map((p) => resolveProduct(p, config))
+/**
+ * Produtos com iterações próprias: os únicos que formam a Sprint unificada
+ * (RN-GLB-04). Com uma Squad, só os dela (RN-GLB-17) — a não ser que nenhum dela
+ * tenha sprint: uma Squad só de fluxo contínuo é medida pela janela dos demais,
+ * como o Produto contínuo sempre foi.
+ */
+export function sprintProducts(
+  config: Configuration,
+  squadId: string | null = null
+): ResolvedProduct[] {
+  const all = config.products.filter((p) => p.cadence === 'sprints')
+  if (squadId === null) return all.map((p) => resolveProduct(p, config))
+
+  const squad = config.squads.find((s) => s.id === squadId)
+  if (!squad) {
+    throw new AppError(
+      'SELECTION_UNKNOWN',
+      `"${String(squadId)}" não é uma Squad da Configuração em uso.`
+    )
+  }
+  const members = new Set(squad.products)
+  const own = all.filter((p) => members.has(p.id))
+  return (own.length > 0 ? own : all).map((p) => resolveProduct(p, config))
 }

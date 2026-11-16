@@ -4,6 +4,7 @@ import { formatHours, t } from '../../i18n'
 import { STATUS } from '../../theme'
 import { capacityHours, capacityRatio, capacityStatus } from './planning-rules'
 import { useCapacity } from './planning-work-data'
+import { useActiveSquad } from '../../ipc/useActiveSquad'
 
 const { Text } = Typography
 
@@ -67,11 +68,17 @@ export function CapacityPanel({
   showBack
 }: Props): React.JSX.Element {
   const { config, productiveHours, update } = useCapacity()
+  const squad = useActiveSquad()
 
   const { frontend: frontCapacity, backend: backCapacity } = capacityHours(config, productiveHours)
 
   return (
-    <Card title={t('planning.capacityTitle')} extra={<HelpTip rule="RN-PLN-15" />}>
+    <Card
+      title={
+        squad ? t('planning.capacityTitleSquad', { name: squad.name }) : t('planning.capacityTitle')
+      }
+      extra={<HelpTip rule="RN-PLN-15" />}
+    >
       <Flex vertical gap={20}>
         <Row gutter={[16, 20]}>
           {showFront && (

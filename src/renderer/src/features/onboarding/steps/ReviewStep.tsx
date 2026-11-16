@@ -19,8 +19,10 @@ export function ReviewStep({
   const built = buildConfiguration(draft)
   const result = validateConfiguration(built)
   const removed =
-    result.ok && previous ? removedIds(previous, result.config) : { products: [], groups: [] }
-  const lost = [...removed.products, ...removed.groups]
+    result.ok && previous
+      ? removedIds(previous, result.config)
+      : { products: [], groups: [], squads: [] }
+  const lost = [...removed.products, ...removed.groups, ...removed.squads]
 
   return (
     <>
@@ -65,6 +67,11 @@ export function ReviewStep({
             key: 'groups',
             label: t('common.groups'),
             children: built.groups?.length ? built.groups.map((g) => g.name).join(', ') : '—'
+          },
+          {
+            key: 'squads',
+            label: t('common.squads'),
+            children: built.squads?.length ? built.squads.map((s) => s.name).join(', ') : '—'
           },
           {
             key: 'process',

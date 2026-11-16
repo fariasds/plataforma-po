@@ -51,7 +51,7 @@ function ProjectOrigins({
             key: newKey('p'),
             id: idFromName(
               name,
-              [...d.products, ...d.groups].map((item) => item.id)
+              [...d.products, ...d.groups, ...d.squads].map((item) => item.id)
             ),
             idTouched: false,
             idLocked: false,
@@ -71,7 +71,8 @@ function ProjectOrigins({
     update((d) => ({
       ...d,
       products: d.products.filter((p) => p.key !== key),
-      groups: d.groups.map((g) => ({ ...g, products: g.products.filter((k) => k !== key) }))
+      groups: d.groups.map((g) => ({ ...g, products: g.products.filter((k) => k !== key) })),
+      squads: d.squads.map((s) => ({ ...s, products: s.products.filter((k) => k !== key) }))
     }))
 
   return (
