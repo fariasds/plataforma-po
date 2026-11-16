@@ -30,7 +30,8 @@ export const ipc: IpcApi = {
   restoreDemo: () => unwrap(window.api.restoreDemo()),
   leaveDemo: () => unwrap(window.api.leaveDemo()),
 
-  getSprints: (limit, preferFuture) => unwrap(window.api.getSprints(limit, preferFuture)),
+  getSprints: (limit, preferFuture, squadId) =>
+    unwrap(window.api.getSprints(limit, preferFuture, squadId)),
   getSprintDelivery: (project, sprint) => unwrap(window.api.getSprintDelivery(project, sprint)),
   getTeamPerformance: (project, sprints) => unwrap(window.api.getTeamPerformance(project, sprints)),
   getBugAnalysis: (project, sprints, selectedSprint) =>

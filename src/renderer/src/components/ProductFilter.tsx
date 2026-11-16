@@ -70,10 +70,35 @@ export function ProductFilter({ options, value, onChange }: Props): React.JSX.El
               boxShadow: isActive ? '0 1px 2px rgba(16, 24, 40, 0.12)' : 'none'
             }}
           >
-            <span
-              aria-hidden="true"
-              style={{ width: 8, height: 8, borderRadius: '50%', background: color, flex: 'none' }}
-            />
+            {option.memberColors ? (
+              // A Squad inteira mostra as cores dos Produtos dela, sobrepostas.
+              <span aria-hidden="true" style={{ display: 'inline-flex', flex: 'none' }}>
+                {option.memberColors.map((member, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: member,
+                      marginInlineStart: i === 0 ? 0 : -3,
+                      boxShadow: `0 0 0 1.5px ${isActive ? '#FFFFFF' : NEUTRA[100]}`
+                    }}
+                  />
+                ))}
+              </span>
+            ) : (
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  background: color,
+                  flex: 'none'
+                }}
+              />
+            )}
             {option.name}
           </button>
         )

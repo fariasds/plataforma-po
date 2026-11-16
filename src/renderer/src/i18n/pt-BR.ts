@@ -22,6 +22,7 @@ export const ptBR = {
     project: 'Projeto',
     organization: 'Organização',
     groups: 'Grupos',
+    squads: 'Squads',
     processProfiles: 'Perfis de processo',
     sprint: 'Sprint',
     month: 'Mês',
@@ -61,6 +62,14 @@ export const ptBR = {
     security: 'Segurança',
     sprintDelivery: 'Entregas da Sprint',
     bugAnalysis: 'Análise de Bugs'
+  },
+
+  squads: {
+    tabsLabel: 'Squads',
+    tabLabel: 'Squad {name}',
+    whole: 'Squad inteira',
+    productCount: { one: '{count} produto', other: '{count} produtos' },
+    create: 'Criar Squad na Configuração'
   },
 
   userMenu: {
@@ -201,6 +210,12 @@ export const ptBR = {
         text:
           'Os dados de exemplo foram gravados numa data fixa e andam em semanas inteiras até a sprint corrente ser a desta semana. ' +
           'Por isso as datas não batem com as do Cenário, mas o dia da semana e o horário de cada mudança são os mesmos.'
+      },
+      'RN-GLB-17': {
+        title: 'Sprints da Squad',
+        text:
+          'A lista mostra só as sprints dos Produtos desta Squad. Outra Squad pode ter sprints em datas diferentes e as vê na própria aba. ' +
+          'Uma Squad só com Produtos de fluxo contínuo usa as sprints de todos os Produtos.'
       },
       // ─── Home ───────────────────────────────────────────────────────────────
       'RN-HOM-02': {
@@ -436,6 +451,8 @@ export const ptBR = {
         productName: 'Todo Produto precisa de nome.',
         invalidId: 'Há ID inválido ou repetido.',
         groupIncomplete: 'Todo Grupo precisa de nome e de pelo menos dois Produtos.',
+        squadIncomplete: 'Toda Squad precisa de nome e de pelo menos um Produto.',
+        productWithoutSquad: 'Com Squads, todo Produto precisa estar em uma Squad.',
         noProcess: 'Escolha um Perfil de processo para cada projeto.'
       },
       refused: 'O app recusou a Configuração',
@@ -520,7 +537,17 @@ export const ptBR = {
       groupNamePlaceholder: 'Nome do Grupo',
       groupProductsPlaceholder: 'Pelo menos dois Produtos',
       removeGroup: 'Remover Grupo',
-      addGroup: 'Adicionar Grupo'
+      addGroup: 'Adicionar Grupo',
+      squadsTitle: 'Squads (opcional)',
+      squadsIntro:
+        'Uma Squad reúne os Produtos com que um time trabalha. Cada Squad vira uma aba no topo do app, e cada Produto fica numa Squad só. Sem Squads, todos os Produtos aparecem juntos.',
+      squadDefaultName: 'Squad {number}',
+      squadNamePlaceholder: 'Nome da Squad',
+      squadColor: 'Cor da Squad',
+      squadProductsPlaceholder: 'Produtos da Squad',
+      removeSquad: 'Remover Squad',
+      addSquad: 'Adicionar Squad',
+      withoutSquad: 'Ainda sem Squad: {names}'
     },
 
     process: {
@@ -737,6 +764,7 @@ export const ptBR = {
     addLeftover: 'Adicionar item remanescente',
     itemIdPlaceholder: 'ID do item',
     capacityTitle: 'Capacidade da sprint',
+    capacityTitleSquad: 'Capacidade da sprint · Squad {name}',
     capacityWithin: 'Dentro da capacidade',
     capacityAtLimit: 'No limite',
     capacityOver: 'Acima da capacidade',

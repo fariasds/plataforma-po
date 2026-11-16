@@ -282,6 +282,92 @@
         "description": "Soma nomeada de Produtos, vista como um todo nos indicadores."
       }
     },
+    "squads": {
+      "description": "As Squads do Perfil, na ordem das abas. Vazio: o app não mostra abas e todos os Produtos aparecem juntos. Com Squads, todo Produto precisa estar em exatamente uma.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,31}$",
+            "description": "ID de Squad. Imutável depois de criado: os Dados de trabalho são guardados por ele."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Nome exibido na aba da Squad."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "Cor no formato hexadecimal \"#RRGGBB\"."
+          },
+          "products": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "IDs dos Produtos com que a Squad trabalha. Cada Produto pertence a uma Squad só. Com dois ou mais, as telas oferecem também a visão \"Squad inteira\"."
+          },
+          "capacityDefaults": {
+            "description": "Valores iniciais do painel de capacidade do Planning para esta Squad. Sem eles, valem os \"capacityDefaults\" gerais.",
+            "type": "object",
+            "properties": {
+              "frontDevs": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Pessoas de frontend (aceita fração)."
+              },
+              "backDevs": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Pessoas de backend (aceita fração)."
+              },
+              "sprintDays": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991,
+                "description": "Dias úteis de uma sprint."
+              },
+              "frontBugPercent": {
+                "description": "Percentual da capacidade de frontend reservado para bugs.",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "backBugPercent": {
+                "description": "Percentual da capacidade de backend reservado para bugs.",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "bugPercent": {
+                "description": "Formato antigo: percentual único para as duas disciplinas. Vale só para a que não tiver o próprio campo; prefira frontBugPercent e backBugPercent.",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "frontDevs",
+              "backDevs",
+              "sprintDays"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "products"
+        ],
+        "additionalProperties": false,
+        "description": "Pessoas que trabalham juntas num conjunto de Produtos. Cada Squad vira uma aba no topo do app, e as telas mostram só os Produtos dela."
+      }
+    },
     "customFields": {
       "default": {
         "reworkCount": null,

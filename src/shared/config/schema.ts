@@ -20,7 +20,7 @@ import { z } from 'zod'
 /** Organização do Azure DevOps: um nome, nunca uma URL (RN-CFG-04). */
 export const ORGANIZATION_PATTERN = /^[A-Za-z0-9][A-Za-z0-9-]{0,49}$/
 
-/** IDs de Produto, Grupo e Perfil de processo. Imutáveis depois de criados (RN-CFG-02). */
+/** IDs de Produto, Grupo, Squad e Perfil de processo. Imutáveis depois de criados (RN-CFG-02). */
 const ID_PATTERN = /^[A-Za-z][A-Za-z0-9_-]{0,31}$/
 
 /**
@@ -322,6 +322,29 @@ const capacityDefaultsSchema = z
   }))
   .describe('Valores iniciais do painel de capacidade do Planning.')
 
+// ─── Squad ───────────────────────────────────────────────────────────────────
+
+export const squadSchema = z
+  .strictObject({
+    id: id('Squad'),
+    name: nonEmpty.describe('Nome exibido na aba da Squad.'),
+    color: color.optional(),
+    products: z
+      .array(nonEmpty)
+      .min(1, 'Uma Squad tem pelo menos um Produto.')
+      .describe(
+        'IDs dos Produtos com que a Squad trabalha. Cada Produto pertence a uma Squad só. Com dois ou mais, as telas oferecem também a visão "Squad inteira".'
+      ),
+    capacityDefaults: capacityDefaultsSchema
+      .optional()
+      .describe(
+        'Valores iniciais do painel de capacidade do Planning para esta Squad. Sem eles, valem os "capacityDefaults" gerais.'
+      )
+  })
+  .describe(
+    'Pessoas que trabalham juntas num conjunto de Produtos. Cada Squad vira uma aba no topo do app, e as telas mostram só os Produtos dela.'
+  )
+
 // ─── Configuração ────────────────────────────────────────────────────────────
 
 const configurationShape = z.strictObject({
@@ -358,6 +381,12 @@ const configurationShape = z.strictObject({
     .array(productSchema)
     .describe('Os Produtos acompanhados. Um Perfil recém-criado começa com a lista vazia.'),
   groups: z.array(groupSchema).default([]),
+  squads: z
+    .array(squadSchema)
+    .default([])
+    .describe(
+      'As Squads do Perfil, na ordem das abas. Vazio: o app não mostra abas e todos os Produtos aparecem juntos. Com Squads, todo Produto precisa estar em exatamente uma.'
+    ),
   customFields: customFieldsSchema,
   criticality: z
     .array(criticalityLevelSchema)
@@ -415,6 +444,8 @@ function checkReferences(config: ConfigurationShape, ctx: z.RefinementCtx): void
       issue(['groups', i, 'products'], 'O Grupo cita o mesmo Produto mais de uma vez.')
     }
   })
+
+  checkSquads(config, productIds, groupIds, issue)
 
   for (const [profileId, profile] of Object.entries(config.processProfiles)) {
     const base = ['processProfiles', profileId]
@@ -475,6 +506,64 @@ function checkReferences(config: ConfigurationShape, ctx: z.RefinementCtx): void
   }
 }
 
+/** RN-GLB-17: cada Produto mora numa Squad só, e Grupo não atravessa Squads. */
+function checkSquads(
+  config: ConfigurationShape,
+  productIds: Set<string>,
+  groupIds: Set<string>,
+  issue: (path: PropertyKey[], message: string) => void
+): void {
+  if (config.squads.length === 0) return
+
+  const squadOf = new Map<string, string>()
+  const squadIds = new Set<string>()
+  config.squads.forEach((squad, i) => {
+    if (squadIds.has(squad.id) || productIds.has(squad.id) || groupIds.has(squad.id)) {
+      issue(
+        ['squads', i, 'id'],
+        `ID de Squad repetido ou igual ao de um Produto ou Grupo: "${squad.id}". A visão "Squad inteira" usa o mesmo filtro.`
+      )
+    }
+    squadIds.add(squad.id)
+    if (new Set(squad.products).size !== squad.products.length) {
+      issue(['squads', i, 'products'], 'A Squad cita o mesmo Produto mais de uma vez.')
+    }
+    squad.products.forEach((ref, j) => {
+      if (!productIds.has(ref)) {
+        issue(['squads', i, 'products', j], `A Squad cita o Produto "${ref}", que não existe.`)
+        return
+      }
+      const owner = squadOf.get(ref)
+      if (owner !== undefined && owner !== squad.id) {
+        issue(
+          ['squads', i, 'products', j],
+          `O Produto "${ref}" já está na Squad "${owner}". Cada Produto pertence a uma Squad só.`
+        )
+      }
+      if (owner === undefined) squadOf.set(ref, squad.id)
+    })
+  })
+
+  config.products.forEach((product, i) => {
+    if (!squadOf.has(product.id)) {
+      issue(
+        ['products', i, 'id'],
+        `O Produto "${product.id}" não está em nenhuma Squad. Com Squads configuradas, todo Produto precisa estar em uma, senão não aparece em tela nenhuma.`
+      )
+    }
+  })
+
+  config.groups.forEach((group, i) => {
+    const owners = new Set(group.products.map((ref) => squadOf.get(ref)).filter(Boolean))
+    if (owners.size > 1) {
+      issue(
+        ['groups', i, 'products'],
+        `O Grupo "${group.id}" soma Produtos de Squads diferentes. Um Grupo precisa caber numa Squad só, porque aparece dentro da aba dela.`
+      )
+    }
+  })
+}
+
 export const configurationSchema = configurationShape
   .superRefine(checkReferences)
   .describe(
@@ -488,6 +577,7 @@ export type ConfigurationInput = z.input<typeof configurationSchema>
 export type ProcessProfile = z.output<typeof processProfileSchema>
 export type Product = z.output<typeof productSchema>
 export type ProductGroup = z.output<typeof groupSchema>
+export type Squad = z.output<typeof squadSchema>
 
 /**
  * JSON Schema publicado na pasta do Perfil, já serializado. O script de geração

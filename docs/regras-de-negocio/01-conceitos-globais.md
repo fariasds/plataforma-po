@@ -54,8 +54,14 @@ Não existe planejamento de fluxo contínuo: sem iteração, não há sprint a p
 Se a Configuração muda e a opção escolhida deixa de existir, a tela volta para o
 primeiro Produto.
 
+**Com Squads** (`RN-GLB-17`), o filtro mostra só o que é da Squad aberta, nesta
+ordem: **"Squad inteira"** (quando a Squad tem dois ou mais Produtos), os Produtos
+dela e os Grupos dela. A tela abre na primeira opção. A Squad inteira se comporta
+como um Grupo: soma os Produtos da Squad e, no Planning e na Daily, só aparece se
+todos eles tiverem `cadence: "sprints"`. Squad com um Produto só mostra só ele.
+
 **Implementado em:** `src/renderer/src/components/ProductFilter.tsx` e
-`src/renderer/src/ipc/useAzure.ts` (`useSelection`)
+`src/renderer/src/ipc/useAzure.ts` (`useSelection`, `selectionOptions`)
 
 ### RN-GLB-03 · Áreas excluídas das métricas
 
@@ -94,6 +100,9 @@ cabe um nome curto (eixo de gráfico), vale o do primeiro Produto que tem itera�
 
 Produto de fluxo contínuo não entra no agrupamento: ele é medido pela janela de
 datas das Sprints unificadas dos demais.
+
+**Com Squads** (`RN-GLB-17`), a Sprint unificada de cada aba junta só as iterações
+dos Produtos daquela Squad. Duas Squads com calendários diferentes não se misturam.
 
 **Implementado em:** `src/main/lib/sprint-utils.ts` e
 `src/main/services/azure/unified-sprints.ts`
@@ -333,3 +342,39 @@ regressão das telas (`npm run test:regression`) **não desloca nada**: roda na 
 de referência.
 
 **Implementado em:** `src/main/demo/demo-profile.ts` (`shiftWeeks`, `shiftAzureState`)
+
+### RN-GLB-17 · Squads
+
+Uma **Squad** (`squads` na Configuração) reúne os Produtos com que um time trabalha.
+Cada Squad vira uma **aba no topo da janela**, como a aba de um navegador, e as telas
+mostram só o que é dela.
+
+- **Cada Produto pertence a uma Squad só.** Quando há Squads, todo Produto precisa
+  estar em uma; um Produto fora de todas é erro de validação, porque não apareceria
+  em tela nenhuma (`RN-CFG-03`).
+- **Um Grupo cabe numa Squad só** e aparece dentro da aba dela. Grupo que soma
+  Produtos de Squads diferentes é erro.
+- **A aba é uma só para o app inteiro.** Com a aba de uma Squad aberta, Home,
+  Planning, Daily, Entregas e Bugs mostram aquela Squad; trocar de menu não troca de
+  Squad. A Configuração e a Segurança são do Perfil e não mudam com a aba. O app
+  lembra a última aba nesta máquina; se ela sumiu da Configuração, abre a primeira.
+- **As sprints de cada aba vêm só dos Produtos da Squad** (`RN-GLB-04`). Uma Squad
+  só com Produtos de fluxo contínuo é medida pela janela de todos os Produtos com
+  sprint, como o Produto contínuo sempre foi.
+- **A Home segue a aba:** o momento da sprint é o da Squad aberta.
+- **A capacidade do Planning é de cada Squad** (`RN-PLN-22`).
+- **Nome, cor e Produtos de cada Squad** se escolhem no assistente de configuração
+  ou no arquivo. A cor é opcional: sem ela, a aba usa um cinza neutro. Ela é
+  identidade, como a do Produto, nunca situação.
+- **Sem Squads** (`squads` vazio ou ausente), não há abas e tudo funciona como antes:
+  todos os Produtos e Grupos no filtro, Sprint unificada de todos.
+
+O ID da Squad é imutável (`RN-CFG-02`) e não pode repetir o de um Produto ou Grupo:
+a visão "Squad inteira" usa o ID da Squad no mesmo filtro, e a capacidade é guardada
+por ele (`RN-CFG-08`).
+
+**Implementado em:** `src/shared/config/schema.ts` (`checkSquads`) ·
+`src/shared/squads.ts` · `src/main/services/azure/scope.ts` (`sprintProducts`) ·
+`src/renderer/src/ipc/useActiveSquad.ts` · `src/renderer/src/components/SquadTabs.tsx`
+
+**Cenário:** `squads`

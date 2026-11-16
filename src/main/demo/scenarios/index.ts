@@ -9,6 +9,7 @@ import { planningComRemanescentes } from './planning-com-remanescentes'
 import { processoCustomizado } from './processo-customizado'
 import { scrumBasico } from './scrum-basico'
 import { sprintVazia } from './sprint-vazia'
+import { squads } from './squads'
 import { vitrine } from './vitrine'
 
 /**
@@ -18,6 +19,7 @@ import { vitrine } from './vitrine'
 export const SCENARIOS: readonly Scenario[] = [
   scrumBasico,
   grupoDeProdutos,
+  squads,
   entregaPeloHistorico,
   escopoInjetado,
   bugsComCriticidade,

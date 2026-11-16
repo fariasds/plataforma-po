@@ -63,6 +63,23 @@ export function resolveCapacity(defaults: CapacityConfig, saved: StoredCapacity)
   }
 }
 
+/**
+ * Capacidade de uma Squad (RN-PLN-22). O que a Squad gravou vale primeiro.
+ * Sem isso, a capacidade única de antes das Squads continua valendo — a não ser
+ * que a Configuração dê à Squad valores próprios, que então são o ponto de
+ * partida dela.
+ */
+export function resolveSquadCapacity(
+  defaults: CapacityConfig,
+  squadDefaults: CapacityConfig | undefined,
+  savedSquad: StoredCapacity | null,
+  savedProfile: StoredCapacity | null
+): CapacityConfig {
+  if (savedSquad) return resolveCapacity(squadDefaults ?? defaults, savedSquad)
+  if (squadDefaults) return squadDefaults
+  return resolveCapacity(defaults, savedProfile ?? {})
+}
+
 /** Horas que cada disciplina tem na sprint (RN-PLN-15). */
 export function capacityHours(
   config: CapacityConfig,

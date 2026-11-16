@@ -18,6 +18,7 @@ import {
 import { DeleteOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { useWorkItemHref } from '../../components/useWorkItemHref'
 import type { PlanningItem } from '@shared/dashboards'
+import { isAggregateSelection, selectionProductIds } from '@shared/squads'
 import { spToHours } from '@shared/story-points'
 import { ErrorState } from '../../components/ErrorState'
 import { HelpTip } from '../../components/HelpTip'
@@ -26,6 +27,7 @@ import { ProductFilter } from '../../components/ProductFilter'
 import { StateTag } from '../../components/StateTag'
 import { DISCIPLINE_COLORS, MONO_FONT, NEUTRA, SIDER, STATUS } from '../../theme'
 import { useConfiguration, usePlanning, useSelection, useSprints } from '../../ipc/useAzure'
+import { useActiveSquad } from '../../ipc/useActiveSquad'
 import { AddManualItemForm, type EffortAvailability } from './AddManualItemForm'
 import { CapacityPanel } from './CapacityPanel'
 import { comparePlanningItems } from './planning-rules'
@@ -68,7 +70,9 @@ type EffortKey = 'frontend' | 'backend' | 'qa'
 const PLANNABLE_SPRINTS = 5
 
 export function PlanningScreen(): React.JSX.Element {
-  const { products, groups, customFields, storyPoints } = useConfiguration()
+  const config = useConfiguration()
+  const { products, customFields, storyPoints } = config
+  const squad = useActiveSquad()
   const workItemHref = useWorkItemHref()
   const selection = useSelection('planning')
   const product = selection.value
@@ -91,9 +95,9 @@ export function PlanningScreen(): React.JSX.Element {
   const planning = usePlanning(product, sprint)
   const items = useMemo(() => planning.data?.items ?? [], [planning.data])
 
-  // Produtos da seleção: o próprio, ou os do Grupo na ordem da Configuração.
-  const group = groups.find((g) => g.id === product)
-  const scopeIds = group ? group.products : [product]
+  // Produtos da seleção: o próprio, ou os do Grupo ou da Squad inteira, na ordem citada.
+  const isAggregate = isAggregateSelection(config, product)
+  const scopeIds = useMemo(() => selectionProductIds(config, product), [config, product])
   const scopeProducts = scopeIds.map((id) => ({
     id,
     name: products.find((p) => p.id === id)?.name ?? id
@@ -136,10 +140,10 @@ export function PlanningScreen(): React.JSX.Element {
 
   // Split per product behind each KPI — only meaningful in a group view.
   const breakdown = useMemo(() => {
-    if (!group) return null
+    if (!isAggregate) return null
     const sum = (id: string, key: 'frontend' | 'backend' | 'qa' | 'total'): number =>
       checkedItems.filter((i) => i.product === id).reduce((s, i) => s + (i[key] ?? 0), 0)
-    const members = group.products.map((id) => {
+    const members = scopeIds.map((id) => {
       const member = products.find((p) => p.id === id)
       return { id, name: member?.name ?? id, color: member?.color ?? NEUTRA[500] }
     })
@@ -151,7 +155,7 @@ export function PlanningScreen(): React.JSX.Element {
       qa: split('qa'),
       geral: split('total')
     }
-  }, [checkedItems, group, products])
+  }, [checkedItems, isAggregate, scopeIds, products])
 
   const allocatedFrontHours = checkedItems.reduce(
     (sum, i) => sum + spToHours(i.frontend, storyPoints),
@@ -210,6 +214,8 @@ export function PlanningScreen(): React.JSX.Element {
             options={sprints.data.map((s) => ({ value: s.key, label: s.label }))}
           />
         )}
+        {/* Com Squads, a lista de sprints muda de uma aba para outra. */}
+        {squad && sprints.data && <HelpTip rule="RN-GLB-17" />}
         {/* O resumo sai do que está na tela: sem os dados carregados não há o que copiar. */}
         <Button
           icon={<ShareAltOutlined />}
@@ -226,7 +232,11 @@ export function PlanningScreen(): React.JSX.Element {
           onClose={() => setSharing(false)}
           selectionId={product}
           sprint={sprint}
-          selectionName={selection.selected?.name ?? product}
+          selectionName={
+            squad && product === squad.id
+              ? t('squads.tabLabel', { name: squad.name })
+              : (selection.selected?.name ?? product)
+          }
           sprintLabel={sprintLabel}
           products={scopeProducts}
           isGroup={showProduct}

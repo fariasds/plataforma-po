@@ -1,8 +1,16 @@
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
 import { describe, expect, it } from 'vitest'
 import { SCRUM_PRESET } from '@shared/config/presets'
 import type { Configuration } from '@shared/config/schema'
 import { validateConfiguration } from '@shared/config/validate'
-import { buildConfiguration, draftFromConfig, idFromName, type WizardDraft } from './draft'
+import {
+  buildConfiguration,
+  draftFromConfig,
+  idFromName,
+  productsWithoutSquad,
+  type WizardDraft
+} from './draft'
 import { parseOrganizationInput } from './organization'
 
 describe('parseOrganizationInput (RN-CFG-04)', () => {
@@ -129,5 +137,39 @@ describe('rascunho ↔ Configuração', () => {
     const draft = draftFromConfig(CONFIG)
     draft.products[0] = { ...draft.products[0], id: 'loja-nova', idLocked: false }
     expect(buildConfiguration(draft).groups?.[0].products).toEqual(['loja-nova', 'app'])
+  })
+})
+
+describe('rascunho ↔ Configuração com Squads (RN-GLB-17)', () => {
+  const squads: Configuration = (() => {
+    const raw = JSON.parse(readFileSync(resolve('examples/exemplo-squads.json'), 'utf8'))
+    const result = validateConfiguration(raw)
+    if (!result.ok) throw new Error(JSON.stringify(result.issues))
+    return result.config
+  })()
+
+  it('ida e volta preserva as Squads, com a cor e a capacidade que o assistente não edita', () => {
+    const rebuilt = validateConfiguration(buildConfiguration(draftFromConfig(squads)))
+    expect(rebuilt.ok && rebuilt.config.squads).toEqual(squads.squads)
+  })
+
+  it('a cor escolhida no assistente vai para o arquivo, e sem cor a chave some', () => {
+    const draft = draftFromConfig(squads)
+    draft.squads[0] = { ...draft.squads[0], color: '#2F6FED' }
+    draft.squads[1] = { ...draft.squads[1], color: undefined }
+    const built = buildConfiguration(draft)
+    expect(built.squads?.[0].color).toBe('#2F6FED')
+    expect(built.squads?.[1]).not.toHaveProperty('color')
+  })
+
+  it('sem Squads, a chave não aparece no arquivo', () => {
+    expect('squads' in buildConfiguration(draftFromConfig(CONFIG))).toBe(false)
+  })
+
+  it('aponta o Produto que ficou sem Squad', () => {
+    const draft = draftFromConfig(squads)
+    draft.squads = draft.squads.filter((s) => s.id !== 'squad-interno')
+    expect(productsWithoutSquad(draft).map((p) => p.id)).toEqual(['backoffice'])
+    expect(productsWithoutSquad(draftFromConfig(CONFIG))).toEqual([])
   })
 })

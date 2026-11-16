@@ -76,7 +76,7 @@ export interface CreateProfileRequest {
 }
 
 export type ImportConfigResult =
-  | { saved: true; removed: { products: string[]; groups: string[] } }
+  | { saved: true; removed: { products: string[]; groups: string[]; squads: string[] } }
   | { saved: false; issues: ConfigurationIssue[] }
 
 /**
@@ -127,11 +127,19 @@ export interface IpcApi {
 
   // --- Dashboards: one call per screen ------------------------------------
   //
-  // `selectionId` é o ID de um Produto ou de um Grupo da Configuração em uso. ID
-  // que não existe nela resolve com o erro `SELECTION_UNKNOWN`.
+  // `selectionId` é o ID de um Produto, de um Grupo ou de uma Squad (a visão
+  // "Squad inteira") da Configuração em uso. ID que não existe nela resolve com o
+  // erro `SELECTION_UNKNOWN`.
 
-  /** Sprints unificadas de todos os Produtos com cadência por sprint, mais nova primeiro. */
-  getSprints(limit?: number, preferFuture?: boolean): Promise<UnifiedSprint[]>
+  /**
+   * Sprints unificadas dos Produtos com cadência por sprint, mais nova primeiro.
+   * Com `squadId`, só os Produtos da Squad (RN-GLB-17).
+   */
+  getSprints(
+    limit?: number,
+    preferFuture?: boolean,
+    squadId?: string | null
+  ): Promise<UnifiedSprint[]>
   getSprintDelivery(selectionId: string, sprint: UnifiedSprint): Promise<SprintDeliveryResult>
   getTeamPerformance(selectionId: string, sprints: UnifiedSprint[]): Promise<TeamPerformanceResult>
   getBugAnalysis(

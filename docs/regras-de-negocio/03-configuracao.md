@@ -34,10 +34,10 @@ e o JSON Schema gravado na pasta do Perfil (`configuracao.schema.json`).
 **Casos de borda:** regras que cruzam campos (RN-CFG-03) não cabem no JSON Schema;
 o editor não as acusa, só o app ao validar.
 
-### RN-CFG-02 · IDs de Produto e Grupo são imutáveis
+### RN-CFG-02 · IDs de Produto, Grupo e Squad são imutáveis
 
 Os Dados de trabalho (itens manuais do Planning, capacidade, planejamento) são
-guardados pelo ID do Produto ou do Grupo. **Mudar o ID órfã esses dados**, mesmo
+guardados pelo ID do Produto, do Grupo ou da Squad. **Mudar o ID órfã esses dados**, mesmo
 que o nome continue igual.
 
 - ID começa com letra e usa só letras, números, `_` ou `-`, com até 32 caracteres.
@@ -55,6 +55,11 @@ A Configuração só é aceita se tudo o que ela cita existe:
 | IDs de Produto únicos | o Produto repetido |
 | ID de Grupo único e diferente de todo ID de Produto (os dois dividem o mesmo filtro) | o Grupo |
 | Grupo cita só Produtos existentes, sem repetir | o item da lista |
+| ID de Squad único e diferente de todo ID de Produto e de Grupo | a Squad |
+| Squad cita só Produtos existentes, sem repetir, e pelo menos um | o item da lista |
+| Cada Produto está em uma Squad só | o item da segunda Squad |
+| Com Squads, todo Produto está em alguma (`RN-GLB-17`) | o Produto |
+| Com Squads, cada Grupo cabe numa Squad só | o Grupo |
 | Produto cita um Perfil de processo existente | `processProfile` |
 | `plannableTypes` e `developmentTypes` ⊆ `workItemTypes`; `bugType` ∈ `workItemTypes` | o tipo que sobra |
 | `deliveredStates` ⊆ `terminalStates` (entregue é, por definição, terminal) | o estado |
@@ -170,8 +175,9 @@ Os Dados de trabalho ficam em `dados/`, um arquivo JSON por chave.
 - A chave usa só `a-z`, `0-9`, `:`, `_` e `-`, com até 120 caracteres. Qualquer
   outra coisa é recusada (`WORK_DATA_INVALID_KEY`) — `../x`, barra e letra de
   unidade incluídos —, porque a chave vira nome de arquivo.
-- Dado que pertence a um Produto ou Grupo usa o **ID** dele na chave
-  (`<escopo>:<id>`), nunca o nome. O nome o PO troca à vontade; o ID é imutável
+- Dado que pertence a um Produto, Grupo ou Squad usa o **ID** dele na chave
+  (`<escopo>:<id>`), nunca o nome. A capacidade de uma Squad, por exemplo, fica em
+  `planning:capacity:<id da Squad>` (`RN-PLN-22`). O nome o PO troca à vontade; o ID é imutável
   (`RN-CFG-02`).
 - Cada valor tem no máximo **1 MB** e é gravado de forma atômica (arquivo
   temporário + troca), para uma queda no meio não deixar um arquivo pela metade.
