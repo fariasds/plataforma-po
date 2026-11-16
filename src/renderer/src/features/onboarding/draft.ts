@@ -1,4 +1,9 @@
-import type { Configuration, ConfigurationInput, ProcessProfile } from '@shared/config/schema'
+import type {
+  Configuration,
+  ConfigurationInput,
+  ProcessProfile,
+  Squad
+} from '@shared/config/schema'
 
 /**
  * O rascunho que o assistente edita passo a passo e, no fim, vira a
@@ -32,11 +37,26 @@ export interface GroupDraft {
   products: string[]
 }
 
+/** RN-GLB-17. A capacidade própria atravessa intacta: o assistente não a edita. */
+export interface SquadDraft {
+  key: string
+  id: string
+  idTouched: boolean
+  idLocked: boolean
+  name: string
+  /** Chaves de `ProductDraft`. Cada Produto fica numa Squad só. */
+  products: string[]
+  /** Opcional na Configuração: sem ela, a aba usa um cinza neutro. */
+  color: string | undefined
+  kept: Pick<Squad, 'capacityDefaults'>
+}
+
 export interface WizardDraft {
   organization: string
   projects: string[]
   products: ProductDraft[]
   groups: GroupDraft[]
+  squads: SquadDraft[]
   processProfiles: Record<string, ProcessProfile>
   /** Projeto → ID do Perfil de processo que os Produtos dele usam. */
   projectProcess: Record<string, string>
@@ -132,6 +152,16 @@ export function draftFromConfig(config: Configuration): WizardDraft {
       name: group.name,
       products: group.products.flatMap((id) => keyById.get(id) ?? [])
     })),
+    squads: config.squads.map((squad) => ({
+      key: newKey('s'),
+      id: squad.id,
+      idTouched: true,
+      idLocked: true,
+      name: squad.name,
+      products: squad.products.flatMap((id) => keyById.get(id) ?? []),
+      color: squad.color,
+      kept: { capacityDefaults: squad.capacityDefaults }
+    })),
     processProfiles: config.processProfiles,
     projectProcess,
     customFields: config.customFields,
@@ -181,6 +211,18 @@ export function buildConfiguration(draft: WizardDraft): ConfigurationInput {
       name: g.name.trim(),
       products: g.products.flatMap((key) => idByKey.get(key) ?? [])
     })),
+    // Sem Squads, a chave fica de fora: o arquivo de quem não as usa não muda.
+    ...(draft.squads.length > 0
+      ? {
+          squads: draft.squads.map((s) => ({
+            id: s.id,
+            name: s.name.trim(),
+            ...(s.color ? { color: s.color } : {}),
+            products: s.products.flatMap((key) => idByKey.get(key) ?? []),
+            ...(s.kept.capacityDefaults ? { capacityDefaults: s.kept.capacityDefaults } : {})
+          }))
+        }
+      : {}),
     customFields: draft.customFields,
     criticality: draft.kept.criticality,
     recurrentBugTag: draft.recurrentBugTag?.trim() || null,
@@ -190,11 +232,18 @@ export function buildConfiguration(draft: WizardDraft): ConfigurationInput {
   }
 }
 
-/** IDs em uso por outro item que não `key`: Produtos e Grupos dividem o mesmo filtro. */
+/** IDs em uso por outro item que não `key`: Produtos, Grupos e Squads dividem o mesmo filtro. */
 export function idsExcept(draft: WizardDraft, key: string): string[] {
-  return [...activeProducts(draft), ...draft.groups]
+  return [...activeProducts(draft), ...draft.groups, ...draft.squads]
     .filter((item) => item.key !== key)
     .map((item) => item.id)
+}
+
+/** RN-GLB-17: com Squads, os Produtos ativos que ainda não estão em nenhuma. */
+export function productsWithoutSquad(draft: WizardDraft): ProductDraft[] {
+  if (draft.squads.length === 0) return []
+  const placed = new Set(draft.squads.flatMap((s) => s.products))
+  return activeProducts(draft).filter((p) => !placed.has(p.key))
 }
 
 export function activeProducts(draft: WizardDraft): ProductDraft[] {
@@ -205,6 +254,7 @@ export function activeProducts(draft: WizardDraft): ProductDraft[] {
 /** Problema do ID digitado, ou `null`. Mostrado na hora, antes da revisão. */
 export function idProblem(draft: WizardDraft, key: string, id: string): string | null {
   if (!ID_PATTERN.test(id)) return 'Começa com letra; só letras, números, "_" ou "-"; até 32.'
-  if (idsExcept(draft, key).includes(id)) return 'Já existe outro Produto ou Grupo com este ID.'
+  if (idsExcept(draft, key).includes(id))
+    return 'Já existe outro Produto, Grupo ou Squad com este ID.'
   return null
 }

@@ -30,7 +30,8 @@ const api: IpcBridge = {
   restoreDemo: () => invoke(IPC_CHANNELS.restoreDemo),
   leaveDemo: () => invoke(IPC_CHANNELS.leaveDemo),
 
-  getSprints: (limit, preferFuture) => invoke(IPC_CHANNELS.getSprints, limit, preferFuture),
+  getSprints: (limit, preferFuture, squadId) =>
+    invoke(IPC_CHANNELS.getSprints, limit, preferFuture, squadId),
   getSprintDelivery: (project, sprint) => invoke(IPC_CHANNELS.getSprintDelivery, project, sprint),
   getTeamPerformance: (project, sprints) =>
     invoke(IPC_CHANNELS.getTeamPerformance, project, sprints),

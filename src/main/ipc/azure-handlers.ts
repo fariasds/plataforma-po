@@ -18,7 +18,9 @@ import { handle } from './registry'
  * não está na Configuração em uso resolve com `SELECTION_UNKNOWN`.
  */
 export function registerAzureHandlers(): void {
-  handle('getSprints', (limit, preferFuture) => getUnifiedSprints(limit, preferFuture))
+  handle('getSprints', (limit, preferFuture, squadId) =>
+    getUnifiedSprints(limit, preferFuture, squadId ?? null)
+  )
 
   handle('getSprintDelivery', (selectionId, sprint) => {
     activeScope(selectionId)
