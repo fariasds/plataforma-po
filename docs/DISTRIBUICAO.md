@@ -84,6 +84,13 @@ passo é o que confirma que cobriu (`RN-SEC-13`).
 Com tudo conferido, publicar o rascunho pela interface do GitHub. É a única etapa
 manual, de propósito: quem publica é uma pessoa, depois de olhar.
 
+Publicar é também o que avisa quem usa: a partir daí, todo app que abrir com versão
+mais antiga mostra a faixa de versão nova, com o botão que abre este instalador no
+navegador (`RN-GLB-18`). O app lê `releases/latest`, então a Release precisa sair
+como a mais recente (o padrão do GitHub) e **não** como pré-lançamento, e o
+instalador anexado precisa manter o nome `plataforma-po-desktop-<versão>-setup.exe`.
+Sem o instalador, a faixa oferece só a página da Release.
+
 ### 7. Conferir de fora
 
 Baixar o arquivo da Release publicada numa pasta limpa e conferir o hash no
@@ -120,8 +127,9 @@ operacional e guardado fora da pasta do Perfil (`RN-SEC-09`, `RN-CFG-06`).
 - **Sem assinatura de código.** O Windows exibe o aviso do SmartScreen ("editor
   desconhecido"). Esperado nesta fase (`RN-SEC-14`); o SHA-256 da Release é o que
   permite conferir o arquivo.
-- **Sem auto-update.** Versão nova significa baixar e instalar de novo. Não há
-  bloco `publish` no `electron-builder.yml`, e a esteira passa `--publish never`.
+- **Sem auto-update.** O app avisa da versão nova e abre o download no navegador,
+  mas quem instala é a pessoa (ADR 0008). Não há bloco `publish` no
+  `electron-builder.yml`, e a esteira passa `--publish never`.
 - **Só Windows** é publicado hoje, embora o `electron-builder.yml` tenha alvos
   para macOS e Linux.
 - **`dist/` nunca é versionado.** O instalador tem ~130 MB e estoura o limite de

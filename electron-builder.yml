@@ -56,5 +56,5 @@ linux:
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
-# No `publish` block on purpose: auto-update is Fase 7. The scaffold shipped a
-# placeholder pointing at example.com, which would only fail confusingly.
+# Sem bloco `publish` de propósito: não há atualização automática (ADR 0008). O
+# app só avisa da versão nova e abre o download no navegador (RN-GLB-18).

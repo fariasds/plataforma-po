@@ -48,7 +48,10 @@ export const ipc: IpcApi = {
   discoverFields: (project) => unwrap(window.api.discoverFields(project)),
 
   buildSprintGoalRequest: (selection, sprint, itemIds) =>
-    unwrap(window.api.buildSprintGoalRequest(selection, sprint, itemIds))
+    unwrap(window.api.buildSprintGoalRequest(selection, sprint, itemIds)),
+
+  checkForUpdate: () => unwrap(window.api.checkForUpdate()),
+  openUpdateLink: (link) => unwrap(window.api.openUpdateLink(link))
 }
 
 /** Avisos do main. Como `ipc`, só os hooks em `ipc/` deveriam assinar. */

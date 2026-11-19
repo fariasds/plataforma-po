@@ -6,7 +6,8 @@ DevOps sem que o token saia da máquina de quem o usa?
 **Implementado em:**
 `src/main/security/pat-store.ts` · `src/main/security/network-guard.ts` ·
 `src/main/security/redact.ts` · `src/main/services/azure/client.ts` ·
-`src/main/services/azure/directory.ts` · `src/renderer/src/auth/` ·
+`src/main/services/azure/directory.ts` · `src/main/services/update/release-check.ts` ·
+`src/renderer/src/auth/` ·
 `src/main/services/ai/` · `src/shared/ai.ts` · `scripts/scan-secrets.mjs`
 
 **Provado por:** `tests/security/` — cada arquivo começa com o ID da regra que prova.
@@ -41,10 +42,10 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-15 | Fonte privado, binário público | Revogada (substituída pela RN-SEC-22) |
 | RN-SEC-16 | Dono do PAT, visto pelo Azure | Sem teste automático |
 | RN-SEC-17 | Autenticação da versão interna | Revogada (ADR 0002) |
-| RN-SEC-18 | O main só fala com o Azure | `tests/security/rn-sec-18-fronteira-de-rede.test.ts` |
+| RN-SEC-18 | O main só fala com o Azure e com a consulta de versão | `tests/security/rn-sec-18-fronteira-de-rede.test.ts` |
 | RN-SEC-19 | O PAT é apagado de log e erro | `tests/security/rn-sec-19-redacao.test.ts` |
 | RN-SEC-20 | Somente leitura no Azure | `tests/security/rn-sec-20-somente-leitura.test.ts` |
-| RN-SEC-21 | Link externo só para a organização | `tests/security/rn-sec-21-links-externos.test.ts` |
+| RN-SEC-21 | Link externo só para a organização e para a Release | `tests/security/rn-sec-21-links-externos.test.ts` |
 | RN-SEC-22 | Instalador público pela esteira, com hash | `.github/workflows/release.yml` |
 | RN-SEC-23 | O app não inicia processo | `tests/security/rn-sec-23-fronteira-de-processo.test.ts` |
 | RN-SEC-24 | Só campos permitidos vão no pedido, redigidos e com prévia | `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts` |
@@ -56,6 +57,7 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-30 | Varredura do Electron sem apontamento novo | `npm run verify:electron` · `tests/security/electronegativity-aceitos.json` |
 | RN-SEC-31 | A tela Segurança só promete o que é provado | `src/renderer/src/features/security/guarantees.test.ts` |
 | RN-SEC-32 | Para o GitHub só sai o que já é público | `tests/security/rn-sec-32-publicacao-so-da-historia-publica.test.ts` · hook de `pre-push` |
+| RN-SEC-33 | Consulta de versão nova sem token, num endereço só | `tests/security/rn-sec-33-consulta-de-versao.test.ts` |
 
 As regras da Configuração que protegem o PAT (`RN-CFG-04`, `05` e `06`) estão em
 [03-configuracao.md](03-configuracao.md), cada uma com o seu teste.
@@ -190,11 +192,14 @@ carrega o PAT — é coberto pela `RN-SEC-10`.
 
 ## Fronteira de rede
 
-As quatro regras abaixo fecham os caminhos por onde o token sairia do lugar certo.
+As regras abaixo fecham os caminhos por onde o token sairia do lugar certo.
 Cada uma é uma barreira no código **e** um teste que já falhou com a barreira
 desligada.
 
 ### RN-SEC-18 · O processo principal só fala com o Azure
+
+*Ampliada em 2026-11-19 (ADR 0008): a consulta de versão nova da `RN-SEC-33` é a
+única outra saída, e não leva o token.*
 
 Toda requisição com o token sai de **um único `fetch`**, em
 `src/main/services/azure/client.ts`, logo depois de `assertAllowedAzureUrl`. A URL
@@ -208,7 +213,9 @@ que o próprio work item traz: ela vem de resposta do Azure e é seguida com o t
 
 O `fetch` do Node **não passa** pelo `session` do Electron — por isso a barreira é o
 `client.ts`, e um teste estático garante que nenhum outro arquivo de `src/main`
-abre conexão (`fetch`, `net`, `http.request`, `undici`). A janela, por sua vez, tem
+abre conexão (`fetch`, `net`, `http.request`, `undici`). A exceção é
+`src/main/services/update/release-check.ts`, a consulta de versão da `RN-SEC-33`:
+também com um `fetch` só, logo depois da checagem dela, e sem acesso ao token. A janela, por sua vez, tem
 toda requisição de rede cancelada: só carrega arquivos do pacote, DevTools, `data:`
 e `blob:`, e em desenvolvimento o servidor do Vite. É defesa em profundidade atrás
 da CSP.
@@ -247,6 +254,8 @@ pelo app.
 
 ### RN-SEC-21 · Link externo só para a organização
 
+*Ampliada em 2026-11-19 (ADR 0008): a página e o instalador da versão nova.*
+
 A janela nunca abre outra janela. Um link — de `target="_blank"` ou de navegação
 da própria janela — só vai para o navegador se for `https://dev.azure.com/<organização>/…`.
 O resto, inclusive `javascript:`, `file:` e outra organização, é negado e registrado
@@ -254,7 +263,49 @@ no log (já redigido).
 
 Isso protege contra link injetado em título ou descrição de work item.
 
+**Exceção: a versão nova (`RN-GLB-18`).** O aviso de versão abre no navegador dois
+endereços, e só eles, no repositório público:
+
+- a página da Release: `https://github.com/<repositório>/releases/tag/v<versão>`;
+- o instalador: `https://github.com/<repositório>/releases/download/v<versão>/plataforma-po-desktop-<versão>-setup.exe`.
+
+A janela **não manda URL**: ela pede "a página" ou "o instalador", e o main monta o
+endereço a partir da versão que a consulta da `RN-SEC-33` validou. Antes de abrir,
+o endereço montado passa por uma checagem própria (host exato `github.com`, caminho
+exato, sem usuário, porta, consulta ou fragmento). Um link desse formato vindo de
+work item continua negado: o caminho dos links de work item só aceita o Azure.
+
 **Provado por:** `tests/security/rn-sec-21-links-externos.test.ts`.
+
+### RN-SEC-33 · Consulta de versão nova sem token, num endereço só
+
+*Nova em 2026-11-19 (ADR 0008).*
+
+Ao abrir, o app pergunta ao GitHub qual é a última versão publicada, para o aviso da
+`RN-GLB-18`. A consulta é cercada assim:
+
+1. **Um endereço só, exato:** `GET https://api.github.com/repos/<repositório>/releases/latest`,
+   com o repositório público fixo no código (`PUBLIC_REPOSITORY`, em
+   `src/shared/app-info.ts`). Não vem da Configuração nem da janela.
+2. **Um `fetch` só**, em `src/main/services/update/release-check.ts`, logo depois da
+   checagem do endereço. Só `GET`, com `redirect: 'error'`: um redirecionamento não
+   leva a consulta a outro host.
+3. **Sem token e sem dado do PO.** O arquivo não importa o guardião do PAT nem o
+   cliente do Azure; o pedido leva só `Accept` e um `User-Agent` genérico. O GitHub
+   vê o IP e mais nada.
+4. **A resposta é dado, não instrução.** Do corpo, o app lê só o número da versão
+   (`v<maior>.<menor>.<correção>`, nada além) e se o instalador daquela versão está
+   anexado. Nenhum link da resposta é seguido: os endereços que vão ao navegador são
+   montados pelo main (`RN-SEC-21`).
+5. **Na demonstração não roda** (`RN-SEC-27`): com o Perfil de demonstração ativo, a
+   consulta não sai.
+6. **Falha em silêncio.** Sem rede, com limite de uso do GitHub ou com resposta fora
+   do formato, não há aviso e o app segue normal. A falha só vai para o log.
+
+Uma consulta por abertura do app: o resultado fica guardado enquanto ele estiver
+aberto.
+
+**Provado por:** `tests/security/rn-sec-33-consulta-de-versao.test.ts`.
 
 ### RN-SEC-27 · Perfil de demonstração sem rede e sem PAT
 
@@ -334,9 +385,7 @@ para cada garantia mostra a regra e o arquivo que a prova. Mostra também a vers
 instalada, como conferir o instalador e os testes, e o que o app **não** protege.
 
 A tela não roda teste nenhum e não acessa a rede: ela aponta para a prova pública.
-Um link para a Release fica para quando o endereço do repositório público for
-fixado (T-21), porque hoje a RN-SEC-21 só deixa ir ao navegador o Azure da
-organização.
+O único link para a Release é o do aviso de versão nova (`RN-GLB-18`, `RN-SEC-21`).
 
 Toda regra que a tela cita precisa existir aqui e não estar revogada, todo arquivo
 de prova precisa existir no repositório, e toda regra da tela precisa estar também
