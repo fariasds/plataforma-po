@@ -1,4 +1,5 @@
 import type { SprintGoalRequest } from './ai'
+import type { UpdateCheck, UpdateLink } from './update'
 import type { SerializedError } from './errors'
 import type { Configuration } from './config/schema'
 import type { ConfigurationIssue } from './config/validate'
@@ -185,6 +186,20 @@ export interface IpcApi {
     sprint: UnifiedSprint,
     itemIds: number[]
   ): Promise<SprintGoalRequest>
+
+  // --- Versão nova (RN-GLB-18, ADR 0008) ----------------------------------
+
+  /**
+   * A última Release publicada é mais nova que a instalada? Uma consulta por
+   * abertura do app, sem token (RN-SEC-33). Nunca rejeita por falta de rede:
+   * sem resposta, `unknown`.
+   */
+  checkForUpdate(): Promise<UpdateCheck>
+  /**
+   * Abre no navegador a página da Release ou o instalador da versão nova. A
+   * janela não manda URL: o main a monta a partir da versão consultada (RN-SEC-21).
+   */
+  openUpdateLink(link: UpdateLink): Promise<void>
 }
 
 /**
@@ -225,7 +240,9 @@ export const IPC_CHANNELS = {
   discoverAreas: 'discovery:areas',
   discoverProcess: 'discovery:process',
   discoverFields: 'discovery:fields',
-  buildSprintGoalRequest: 'ai:sprint-goal-request'
+  buildSprintGoalRequest: 'ai:sprint-goal-request',
+  checkForUpdate: 'update:check',
+  openUpdateLink: 'update:open-link'
 } as const satisfies Record<keyof IpcApi, string>
 
 // --- Events (main → renderer) --------------------------------------------

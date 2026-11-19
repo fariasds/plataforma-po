@@ -66,6 +66,9 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   writeWorkData: ['planning:loja', { items: [] }],
   // A IA entra para provar que o caminho dela também não devolve o PAT.
   buildSprintGoalRequest: ['loja', sprint, [101]],
+  // A consulta de versão não leva o PAT (RN-SEC-33); o envelope dela também não.
+  checkForUpdate: [],
+  openUpdateLink: ['installer'],
   clearPat: [],
   // A demonstração por último: ela troca o Perfil ativo (RN-SEC-27).
   startDemo: [],

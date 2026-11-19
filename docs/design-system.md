@@ -117,6 +117,7 @@ Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
 | `ErrorState`          | Falha ao carregar                                                                                                                                |
 | `UserMenu`            | Cartão da conta no pé do menu lateral                                                                                                            |
 | `DemoBanner`          | Faixa do Perfil de demonstração, presa ao topo com o cabeçalho. Fundo `colorPrimaryBg`, nunca `STATUS`: não é alerta nem situação (RN-GLB-15)    |
+| `UpdateBanner`        | Faixa de versão nova, acima da `DemoBanner`. Fundo neutro (`colorBgContainer`); o destaque fica só no botão de baixar, a ação principal (RN-GLB-18) |
 
 ## Menu lateral
 

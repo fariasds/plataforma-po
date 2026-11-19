@@ -168,6 +168,15 @@ export const ptBR = {
     openFolder: 'Abrir pasta'
   },
 
+  update: {
+    title: 'Versão nova disponível:',
+    installed: 'Você usa a',
+    releaseNotes: 'Ver novidades',
+    download: 'Baixar a versão {version}',
+    afterDownload:
+      'O download abriu no navegador. Abra o instalador: ele atualiza por cima e mantém seus Perfis e o token.',
+    dismiss: 'Agora não'
+  },
   demo: {
     bannerTitle: 'Dados fictícios de demonstração',
     bannerText: 'Nada aqui vem de um Azure DevOps de verdade, e nada sai deste computador.',
@@ -962,13 +971,14 @@ export const ptBR = {
       ai: 'O que a sua IA faz com o que você cola nela: o app mostra o pedido, mas não controla o que o fornecedor guarda.',
       signing:
         'O instalador não tem assinatura de código: o Windows avisa "editor desconhecido". A integridade se confere pelo SHA-256.',
-      updates: 'Não há atualização automática: versão nova é instalador novo.'
+      updates:
+        'Não há atualização automática: o app avisa quando sai versão nova, e quem baixa e instala é você.'
     },
     guarantees: {
       network: {
         title: 'Seu token só sai da sua máquina para o Azure DevOps',
         detail:
-          'Por HTTPS, para a sua organização. Nenhum outro servidor, nem do autor do app. A janela não acessa a rede.'
+          'Por HTTPS, para a sua organização. Nenhum outro servidor, nem do autor do app. A única outra consulta é a de versão nova no GitHub público, sem token e sem dado seu. A janela não acessa a rede.'
       },
       encryption: {
         title: 'Seu token fica cifrado pelo Windows',
@@ -995,7 +1005,8 @@ export const ptBR = {
       },
       links: {
         title: 'Link de work item não abre nada perigoso',
-        detail: 'Só páginas da sua organização no Azure DevOps vão para o navegador.'
+        detail:
+          'Só páginas da sua organização no Azure DevOps vão para o navegador, e o aviso de versão nova abre só a página e o instalador da Release.'
       },
       noProcess: {
         title: 'O app não executa programa nenhum',

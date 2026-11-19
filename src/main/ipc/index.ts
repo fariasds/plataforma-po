@@ -4,6 +4,7 @@ import { registerDemoHandlers } from './demo-handlers'
 import { registerDiscoveryHandlers } from './discovery-handlers'
 import { registerPatHandlers } from './pat-handlers'
 import { registerProfileHandlers } from './profile-handlers'
+import { registerUpdateHandlers } from './update-handlers'
 
 /**
  * Single entry point for IPC registration, called once on app ready.
@@ -16,4 +17,5 @@ export function registerIpcHandlers(): void {
   registerAzureHandlers()
   registerDiscoveryHandlers()
   registerAiHandlers()
+  registerUpdateHandlers()
 }
