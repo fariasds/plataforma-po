@@ -378,3 +378,35 @@ por ele (`RN-CFG-08`).
 `src/renderer/src/ipc/useActiveSquad.ts` · `src/renderer/src/components/SquadTabs.tsx`
 
 **Cenário:** `squads`
+
+---
+
+## Versão do app
+
+### RN-GLB-18 · Aviso de versão nova
+
+Ao abrir, o app confere se há versão mais nova publicada nas Releases do repositório
+público (`RN-SEC-33`). Se houver, uma faixa no topo da janela diz qual é a nova e
+qual está instalada, e oferece:
+
+- **Baixar a versão nova:** abre no navegador o instalador daquela versão. Quem abre
+  o arquivo e instala é o PO; o app não baixa nem executa nada (ADR 0008). O
+  instalador atualiza por cima e mantém Perfis, Configuração, Dados de trabalho e
+  PAT, que moram fora da pasta do programa.
+- **Ver novidades:** abre a página da Release, com as notas e o SHA-256 do instalador.
+- **Agora não:** esconde a faixa até a próxima vez que o app abrir.
+
+Se a Release não tiver o instalador anexado, a faixa oferece só a página da Release.
+
+**Mais nova** é comparação de número, parte por parte (`1.10.0` é mais nova que
+`1.9.3`). Versão igual ou mais antiga não gera aviso: quem testa uma versão de
+desenvolvimento à frente da publicada não é convidado a voltar.
+
+**Sem aviso, sem erro.** Sem rede, com o GitHub fora do ar ou na demonstração, a
+faixa simplesmente não aparece; o app nunca mostra erro por causa dessa consulta.
+
+Rascunho de Release não conta: o aviso só aparece depois que o mantenedor publica
+(`docs/DISTRIBUICAO.md`).
+
+**Implementado em:** `src/shared/update.ts` · `src/main/services/update/release-check.ts` ·
+`src/main/ipc/update-handlers.ts` · `src/renderer/src/components/UpdateBanner.tsx`

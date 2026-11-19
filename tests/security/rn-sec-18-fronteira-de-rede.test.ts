@@ -21,6 +21,9 @@ vi.mock('@shared/azure', async (importOriginal) => ({
 const ORG = 'contoso'
 const ROOT = resolve(__dirname, '../..')
 const CLIENT = 'src/main/services/azure/client.ts'
+// A única outra saída: a consulta de versão, sem o PAT (RN-SEC-33). O que ela
+// pode e não pode fazer está em rn-sec-33-consulta-de-versao.test.ts.
+const RELEASE_CHECK = 'src/main/services/update/release-check.ts'
 const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.mjs', '.cjs'])
 
 /** Toda forma de abrir conexão de rede a partir do Node ou do Electron. */
@@ -72,10 +75,10 @@ describe('RN-SEC-18: fronteira de rede do main', () => {
     expect(rejects(url)).toBe(true)
   })
 
-  it('nenhum arquivo de src/main fora do client.ts abre conexão de rede', () => {
+  it('nenhum arquivo de src/main fora do client.ts e da consulta de versão abre conexão', () => {
     const offenders = sourceFiles(join(ROOT, 'src/main'))
       .map((file) => relative(ROOT, file).replace(/\\/g, '/'))
-      .filter((file) => file !== CLIENT)
+      .filter((file) => file !== CLIENT && file !== RELEASE_CHECK)
       .filter((file) => NETWORK_CALL.test(readFileSync(join(ROOT, file), 'utf8')))
     expect(offenders).toEqual([])
   })

@@ -51,6 +51,9 @@ const api: IpcBridge = {
   buildSprintGoalRequest: (selection, sprint, itemIds) =>
     invoke(IPC_CHANNELS.buildSprintGoalRequest, selection, sprint, itemIds),
 
+  checkForUpdate: () => invoke(IPC_CHANNELS.checkForUpdate),
+  openUpdateLink: (link) => invoke(IPC_CHANNELS.openUpdateLink, link),
+
   // O listener recebe só o estado, nunca o `event` do Electron: ele carrega o
   // `sender`, que daria à janela um caminho de volta ao ipcRenderer.
   onProfileStateChanged: (listener) => {
