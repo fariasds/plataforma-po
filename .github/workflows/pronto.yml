@@ -1,0 +1,84 @@
+# A parte da definição de pronto que o `npm run check` não vê: regra de negócio,
+# resultado aprovado, Cenário, prova do teste de segurança e versão
+# (scripts/verify-pronto.mjs). O resultado vira um comentário fixo no PR, que se
+# atualiza a cada push e a cada edição do texto do PR.
+name: Pronto
+
+on:
+  pull_request:
+    # edited: marcar uma caixa do template muda o veredito sem push novo.
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pronto-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pronto:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # A história inteira: o diff é contra o ponto onde o PR saiu da main.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      # Sem npm ci: o script só usa o Node e o git, e nenhuma dependência roda aqui.
+      # O texto do PR entra por variável de ambiente, nunca interpolado no comando:
+      # ele é escrito por quem abre o PR.
+      - name: Definição de pronto
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          node scripts/verify-pronto.mjs --base "$BASE_SHA" --summary pronto.md
+          status=$?
+          cat pronto.md >> "$GITHUB_STEP_SUMMARY"
+          exit $status
+        shell: bash {0}
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: pronto
+          path: pronto.md
+          if-no-files-found: ignore
+          retention-days: 3
+
+  # Único job com escrita, e ele não roda código do projeto: só lê o relatório e
+  # publica o comentário. Em PR de fork o token não tem escrita; o relatório fica
+  # no resumo do job acima.
+  comentario:
+    needs: pronto
+    if: always() && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: pronto
+
+      - name: Comentário fixo no PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          [ -f pronto.md ] || exit 0
+          existing=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+            --jq '[.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- pronto -->")))][0].id // empty')
+          if [ -n "$existing" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$existing" -F body=@pronto.md > /dev/null
+          else
+            gh api -X POST "repos/$REPO/issues/$PR/comments" -F body=@pronto.md > /dev/null
+          fi
