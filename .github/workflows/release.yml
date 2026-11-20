@@ -358,7 +358,10 @@ jobs:
           echo "$SHA256  $INSTALLER" | sha256sum -c -
           sha256sum -c "$INSTALLER.sha256"
           gh attestation verify "$INSTALLER" --repo "$GH_REPO"
-          latest=$(curl -fsSL -H 'Accept: application/vnd.github+json' "https://api.github.com/repos/$GH_REPO/releases/latest" | jq -r .tag_name)
+          # O mesmo endpoint que o app consulta (RN-SEC-33), mas com o token do job:
+          # sem login, o limite da API é por IP, e os runners compartilham IPs, então a
+          # consulta anônima voltava 403 sem relação com a versão.
+          latest=$(gh api "repos/$GH_REPO/releases/latest" --jq .tag_name)
           if [ "$latest" != "$TAG" ]; then
             echo "releases/latest devolve $latest, não $TAG: o aviso de versão nova não vai aparecer." >&2
             exit 1
