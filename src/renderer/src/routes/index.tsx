@@ -4,6 +4,7 @@ import { BugAnalysisScreen } from '../features/bug-analysis/BugAnalysisScreen'
 import { DailyScreen } from '../features/daily/DailyScreen'
 import { HomeScreen } from '../features/home/HomeScreen'
 import { PlanningScreen } from '../features/planning/PlanningScreen'
+import { ReleaseNotesScreen } from '../features/release-notes/ReleaseNotesScreen'
 import { SecurityScreen } from '../features/security/SecurityScreen'
 import { RedoWizardScreen } from '../features/settings/RedoWizardScreen'
 import { SettingsScreen } from '../features/settings/SettingsScreen'
@@ -34,6 +35,8 @@ export const router = createHashRouter([
       { path: 'configuracao', element: <SettingsScreen /> },
       { path: 'configuracao/assistente', element: <RedoWizardScreen /> },
       { path: 'seguranca', element: <SecurityScreen /> },
+      // Histórico de novidades (RN-HOM-05): fora do menu, aberto pela Home.
+      { path: 'novidades', element: <ReleaseNotesScreen /> },
       { path: '*', element: <Navigate to="/home" replace /> }
     ]
   }

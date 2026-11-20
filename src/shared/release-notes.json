@@ -1,0 +1,115 @@
+[
+  {
+    "version": "1.4.0",
+    "date": "2026-11-20",
+    "items": [
+      {
+        "type": "new",
+        "highlight": true,
+        "title": "Novidades da versão",
+        "text": "Depois de atualizar, a Home mostra o que mudou no app, uma vez por versão. O bloco de novidades fica na Home para consultar depois.",
+        "details": "A partir desta versão, sempre que o app for atualizado a Home mostra o que mudou, uma vez só. As novidades da versão instalada ficam num bloco da Home, e a etiqueta da versão no cabeçalho abre o histórico completo."
+      },
+      {
+        "type": "new",
+        "title": "Histórico de novidades",
+        "text": "Todas as versões numa tela só, com busca por tela, recurso ou número da versão e filtro por Novo, Melhoria e Correção. Abre pela etiqueta da versão na Home."
+      }
+    ]
+  },
+  {
+    "version": "1.3.0",
+    "date": "2026-11-20",
+    "items": [
+      {
+        "type": "new",
+        "highlight": true,
+        "title": "Desenvolvimento antecipado no Planning",
+        "text": "Marque quanto de um item o time já adiantou numa sprint anterior. A parte feita não consome a capacidade desta sprint.",
+        "details": "Quando o time já adiantou parte de um item numa sprint anterior, marque no botão » quanto do frontend e do backend já foi feito. A parte feita sai da capacidade desta sprint, e o resumo do Planning mostra o que foi descontado.",
+        "screen": "planning"
+      },
+      {
+        "type": "new",
+        "title": "Botão Atualizar e F5",
+        "text": "Planning, Daily, Entregas e Bugs buscam de novo no Azure sem fechar o app. Itens desmarcados, objetivo e capacidade continuam como estavam."
+      },
+      {
+        "type": "improvement",
+        "title": "Home sem abas de Squad",
+        "text": "A Home mostra o momento da sprint de todos os Produtos. As abas voltam ao abrir outra tela, na mesma Squad de antes."
+      }
+    ]
+  },
+  {
+    "version": "1.2.1",
+    "date": "2026-11-19",
+    "items": [
+      {
+        "type": "improvement",
+        "title": "Instalador conferido antes de chegar a você",
+        "text": "Cada versão passa por aprovação e pela conferência do SHA-256 antes de ser publicada. Nada muda nas telas."
+      }
+    ]
+  },
+  {
+    "version": "1.2.0",
+    "date": "2026-11-19",
+    "items": [
+      {
+        "type": "new",
+        "highlight": true,
+        "title": "Aviso de versão nova",
+        "text": "Uma faixa no topo avisa quando há versão nova e abre o download no navegador. Perfis, Configuração e token continuam depois de instalar."
+      }
+    ]
+  },
+  {
+    "version": "1.1.0",
+    "date": "2026-11-16",
+    "items": [
+      {
+        "type": "new",
+        "highlight": true,
+        "title": "Squads",
+        "text": "Cada Squad vira uma aba, e as telas mostram só os Produtos dela. A capacidade do Planning passa a ser de cada Squad.",
+        "screen": "settings"
+      },
+      {
+        "type": "fix",
+        "title": "Alertas de segurança das dependências",
+        "text": "Bibliotecas atualizadas para fechar os alertas apontados na varredura."
+      }
+    ]
+  },
+  {
+    "version": "1.0.0",
+    "date": "2026-11-13",
+    "items": [
+      {
+        "type": "new",
+        "highlight": true,
+        "title": "Planning com capacidade por disciplina",
+        "text": "Monte o escopo da sprint, confira frontend, backend e QA contra a capacidade do time e gere o resumo.",
+        "screen": "planning"
+      },
+      {
+        "type": "new",
+        "title": "Daily",
+        "text": "Linha do tempo dos itens da sprint: o que andou, o que travou e o que não cabe mais.",
+        "screen": "daily"
+      },
+      {
+        "type": "new",
+        "title": "Entregas e Análise de Bugs",
+        "text": "O que foi concluído na sprint, e a criticidade e o tempo de cada bug em cada estado.",
+        "screen": "sprint-delivery"
+      },
+      {
+        "type": "new",
+        "title": "Modo demonstração",
+        "text": "Explore todas as telas com dados fictícios, sem conectar ao Azure DevOps."
+      }
+    ]
+  }
+]

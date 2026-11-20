@@ -57,7 +57,7 @@ definição de pronto que compilar e testar não provam, e comenta o resultado n
 |---|---|---|
 | Regra de negócio | O código do app (`src/`, fora testes e Cenários) mudou | Uma regra de `docs/regras-de-negocio/` mudou junto, ou a caixa "Sem mudança de regra de negócio" |
 | Resultado aprovado | Um arquivo de `tests/regression/aprovados/` mudou | O PR ou um commit cita uma regra que mudou junto |
-| Cenário | Telas ou os serviços que as alimentam mudaram | Um Cenário ou aprovado mudou, ou a caixa "Sem mudança no que as telas mostram" |
+| Cenário | Telas ou os serviços que as alimentam mudaram | Um Cenário ou aprovado mudou; ou a caixa "Sem mudança no que as telas mostram"; ou, quando o que a tela mostra não vem do Azure e é igual em todo Cenário, a caixa "A tela mudou, mas não depende de Cenário; a lógica é provada por teste" com um teste em `src/` mudando no PR |
 | Prova do teste de segurança | Um teste novo em `tests/security/` | A caixa "O teste de segurança novo falhou com a barreira desligada" |
 | Versão | A `version` do `package.json` mudou | Maior que a anterior, e o `package-lock.json` alinhado |
 

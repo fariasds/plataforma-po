@@ -26,6 +26,11 @@ Subir a `version` no `package.json` (e no `package-lock.json`, com `npm install`
 e que o lock acompanha. Subir a versão é decidir publicar: o PR que não muda a
 `version` integra sem gerar versão nova.
 
+No mesmo PR, escreva as **novidades** da versão no topo de
+`src/shared/release-notes.json`, para quem usa o app (`RN-HOM-04`). É o que a Home
+mostra e o que vira a seção "Novidades" da Release. Sem a entrada, o `npm run test`
+barra.
+
 O número entra no nome do instalador, `plataforma-po-desktop-<versão>-setup.exe`, e
 o app monta o link do download com ele (`RN-GLB-18`). A esteira recusa outro nome.
 
@@ -46,7 +51,8 @@ O push na `main` dispara `.github/workflows/release.yml`:
 3. **`attest`**, o único com `id-token: write`: o atestado de proveniência.
 4. **`rascunho`**, com escrita e sem rodar código do projeto: confere que o ambiente
    `producao` exige aprovação, e cria a Release em rascunho com o instalador, o
-   `.sha256`, o laudo e as novidades (os PRs desde a última versão publicada).
+   `.sha256`, o laudo e as novidades (de `src/shared/release-notes.json`, com os PRs
+   desde a última versão publicada recolhidos em "Mudanças técnicas").
 5. **`publicar`**, no ambiente `producao`: espera a sua aprovação.
 6. **`conferir`**: baixa o instalador da Release publicada, confere o hash e o
    atestado, e confere que `releases/latest` devolve a versão nova.

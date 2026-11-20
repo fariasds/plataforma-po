@@ -111,7 +111,10 @@ E a regressão das telas (`docs/cenarios.md`) segura o que já funciona:
   e a regra foi atualizada na documentação na mesma tarefa. Aprovado que mudou sem
   regra que mudou é regressão: **corrija o código, não o aprovado.** Nunca rode
   `npm run test:regression -- -u` para fazer o teste passar.
-- **Funcionalidade nova numa tela entra num Cenário**, novo ou existente.
+- **Funcionalidade nova numa tela entra num Cenário**, novo ou existente. A exceção
+  é o que não vem do Azure e é igual em todo Cenário (as novidades da versão, a tela
+  Segurança): a prova é um teste da lógica no mesmo PR, e o PR marca a caixa "A tela
+  mudou, mas não depende de Cenário". Tela que lê o Azure nunca entra nessa exceção.
 
 O critério do item 3 é: o nome do indicador já explica o número? Então não precisa de
 ajuda. Ícone que aparece em tudo vira mobília e ninguém clica.
@@ -131,7 +134,7 @@ O ID liga os três lugares — documentação, texto de ajuda e código do cálc
 | `npm run verify:electron` | Electronegativity sobre `src/`: todo apontamento tem aceite com motivo (`RN-SEC-30`) |
 | `npm run verify:neutral` | Conta termos de uma lista privada e os marcadores de transição. Só informa |
 | `npm run check` | Todos acima, mais o build. É o que o CI roda em todo PR |
-| check **pronto** (só no PR) | A definição de pronto que o `check` não vê: código do app mudou → regra mudou; aprovado mudou → o PR cita a regra que mudou; tela mudou → Cenário mudou; teste de segurança novo → prova de falha; versão subiu → maior e com o lock alinhado. `scripts/verify-pronto.mjs`, comentário fixo no PR |
+| check **pronto** (só no PR) | A definição de pronto que o `check` não vê: código do app mudou → regra mudou; aprovado mudou → o PR cita a regra que mudou; tela mudou → Cenário mudou (ou a tela não depende de Cenário e um teste em `src/` mudou); teste de segurança novo → prova de falha; versão subiu → maior e com o lock alinhado. `scripts/verify-pronto.mjs`, comentário fixo no PR |
 
 O `npm run test` também confere que toda regra citada no código, nos testes e nos
 scripts existe em `docs/regras-de-negocio/` e não está revogada

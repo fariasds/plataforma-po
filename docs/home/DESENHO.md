@@ -11,8 +11,14 @@
 > A-03 decidido: `localStorage` por Perfil. A-05 parcial: o link do card do ciclo é
 > "Rever primeiros passos", que reabre o quadro B.
 >
-> **Fase 2 (pendente):** bloco e modal de novidades (D-05, A-02, `changelog.json`);
-> "O que vem por aí" (A-04, `roadmap.json`); card Ajuda, "Ajuda e atalhos" e links
+> **Fase 2 (parcial, 20/11/2026):** feito o bloco e o modal de novidades (D-05),
+> mais o histórico com busca (`RN-HOM-04`, `RN-HOM-05`). A-02 decidido pela opção
+> (a): `src/shared/release-notes.json`, que também monta as notas da Release. A
+> imagem do destaque no modal ficou de fora por ora. O bloco ocupa a largura toda
+> enquanto não existe o "O que vem por aí". Protótipo do fluxo validado:
+> <https://claude.ai/artifact/CEbypTpMM2CMKwMUAmXfkZ>.
+>
+> **Fase 2 (pendente):** "O que vem por aí" (A-04, `roadmap.json`); card Ajuda, "Ajuda e atalhos" e links
 > de notas e sugestões, que dependem de revisar a `RN-SEC-21` (hoje o app só abre
 > links de `dev.azure.com`); tour com `Tour` do Ant Design; sugestão com dados do
 > Azure (A-01, opção b).

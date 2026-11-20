@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Dropdown, Flex, Layout, Tag, Tooltip, Typography, theme } from 'antd'
+import { Button, Dropdown, Flex, Layout, Tooltip, Typography, theme } from 'antd'
 import {
   BugOutlined,
   CalendarOutlined,
@@ -79,7 +79,18 @@ const SECURITY: NavEntry = {
   label: t('nav.security')
 }
 
-const ALL = [...MAIN, ...REVIEW, SETTINGS, SECURITY]
+/**
+ * Histórico de novidades (RN-HOM-05). Tem cabeçalho próprio, mas não entra no
+ * menu: é consulta eventual, e chega-se a ele pela Home.
+ */
+const RELEASE_NOTES_ENTRY: NavEntry = {
+  key: '/novidades',
+  icon: null,
+  label: t('nav.releaseNotes'),
+  group: t('nav.home')
+}
+
+const ALL = [...MAIN, ...REVIEW, SETTINGS, SECURITY, RELEASE_NOTES_ENTRY]
 
 /**
  * Preferência de interface desta máquina, não do Perfil: é o tamanho da tela de
@@ -420,15 +431,21 @@ export function AppLayout(): React.JSX.Element {
                   {current.label}
                 </Title>
               </Flex>
-              {/* A versão aparece só na Home, que é onde o PO olha o que mudou no app. */}
+              {/* A versão aparece só na Home, que é onde o PO olha o que mudou no app,
+                  e abre o histórico de novidades (RN-HOM-05). */}
               {current === HOME && (
-                <Tag
-                  bordered={false}
-                  style={{ fontFamily: MONO_FONT, marginInlineEnd: 0 }}
-                  aria-label={t('home.versionLabel', { version: __APP_VERSION__ })}
+                <Button
+                  size="small"
+                  color="default"
+                  variant="filled"
+                  shape="round"
+                  onClick={() => navigate(RELEASE_NOTES_ENTRY.key)}
+                  style={{ fontFamily: MONO_FONT, fontSize: 12.5 }}
+                  aria-label={t('releaseNotes.versionButton', { version: __APP_VERSION__ })}
+                  title={t('releaseNotes.versionButton', { version: __APP_VERSION__ })}
                 >
                   {t('home.version', { version: __APP_VERSION__ })}
-                </Tag>
+                </Button>
               )}
               {current.refresh && <RefreshButton />}
             </Flex>

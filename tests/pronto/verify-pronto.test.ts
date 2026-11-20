@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import {
   changedRuleIds,
@@ -107,6 +108,34 @@ describe('Cenário', () => {
     expect(verdict({ files: [screen], body: checked(WAIVERS.scenario) })['Cenário'].status).toBe(
       'ok'
     )
+  })
+
+  it('tela que não depende de Cenário passa com a caixa e um teste no PR', () => {
+    const body = checked(WAIVERS.scenarioIndependent)
+    const test = { status: 'A', path: 'src/shared/release-notes.test.ts' }
+    expect(verdict({ files: [screen, test], body })['Cenário']).toMatchObject({
+      status: 'ok',
+      detail: expect.stringContaining('src/shared/release-notes.test.ts')
+    })
+  })
+
+  it('a caixa de tela sem Cenário não basta sem teste em src/', () => {
+    const body = checked(WAIVERS.scenarioIndependent)
+    const outside = { status: 'M', path: 'tests/esteira/release-notes.test.ts' }
+    expect(verdict({ files: [screen], body })['Cenário'].status).toBe('fail')
+    expect(verdict({ files: [screen, outside], body })['Cenário'].status).toBe('fail')
+  })
+})
+
+describe('template do PR', () => {
+  // O script procura as caixas pelo texto: se o template mudar sozinho, a dispensa
+  // marcada deixa de ser reconhecida.
+  it('tem uma caixa para cada dispensa', () => {
+    const template = readFileSync(
+      new URL('../../.github/pull_request_template.md', import.meta.url),
+      'utf8'
+    )
+    for (const label of Object.values(WAIVERS)) expect(template).toContain(`- [ ] ${label}`)
   })
 })
 

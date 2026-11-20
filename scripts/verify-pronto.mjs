@@ -30,6 +30,7 @@ export const RULES_DIR = 'docs/regras-de-negocio/'
 export const WAIVERS = {
   rules: 'Sem mudança de regra de negócio',
   scenario: 'Sem mudança no que as telas mostram',
+  scenarioIndependent: 'A tela mudou, mas não depende de Cenário; a lógica é provada por teste',
   securityProof: 'O teste de segurança novo falhou com a barreira desligada'
 }
 
@@ -200,11 +201,29 @@ export function evaluate({ files, changedRules, citedRules, body, version }) {
     })
   } else if (isChecked(body, WAIVERS.scenario)) {
     items.push({ step: 'Cenário', status: 'ok', detail: `declarado no PR: "${WAIVERS.scenario}"` })
+  } else if (isChecked(body, WAIVERS.scenarioIndependent)) {
+    // O que a tela mostra não vem do Azure (as novidades do arquivo embarcado, a
+    // tela Segurança): todo Cenário daria o mesmo resultado. A prova é um teste da
+    // lógica, e ele tem de estar no PR — a caixa sozinha não basta.
+    const tests = paths.filter((path) => path.startsWith('src/') && isTest(path))
+    items.push(
+      tests.length > 0
+        ? {
+            step: 'Cenário',
+            status: 'ok',
+            detail: `declarado no PR: "${WAIVERS.scenarioIndependent}". Testes: ${tests.join(', ')}`
+          }
+        : {
+            step: 'Cenário',
+            status: 'fail',
+            detail: `marcado "${WAIVERS.scenarioIndependent}", mas nenhum teste em src/ mudou. Prove a lógica da tela num teste`
+          }
+    )
   } else {
     items.push({
       step: 'Cenário',
       status: 'fail',
-      detail: `telas ou serviços mudaram e nenhum Cenário (src/main/demo/scenarios/) nem aprovado mudou. Cubra a mudança num Cenário ou marque "${WAIVERS.scenario}"`
+      detail: `telas ou serviços mudaram e nenhum Cenário (src/main/demo/scenarios/) nem aprovado mudou. Cubra a mudança num Cenário ou marque "${WAIVERS.scenario}" (ou, se a tela não depende de Cenário, "${WAIVERS.scenarioIndependent}")`
     })
   }
 

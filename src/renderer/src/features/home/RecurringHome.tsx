@@ -14,6 +14,7 @@ import { useConfiguration, useCurrentUser, useSprints } from '../../ipc/useAzure
 import { t } from '../../i18n'
 import { tRich } from '../../i18n/rich'
 import { accentTones, MONO_FONT, NEUTRA, SIDER } from '../../theme'
+import { ReleaseNotesCard } from '../release-notes/ReleaseNotesCard'
 import { PHASE_ROUTE, PHASES } from './phase'
 
 const { Title, Text, Paragraph } = Typography
@@ -285,6 +286,8 @@ export function RecurringHome({
           </div>
         </Flex>
       </Card>
+
+      <ReleaseNotesCard version={__APP_VERSION__} />
 
       <Flex vertical gap={12} component="section" aria-labelledby="home-tips">
         <Title id="home-tips" level={2} style={{ margin: 0, fontSize: 15 }}>
