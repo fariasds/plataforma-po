@@ -1,22 +1,63 @@
-# Instalador público a partir de uma tag v*, com SHA-256 no corpo da Release
-# (RN-SEC-22). A Release nasce em RASCUNHO: quem publica é o mantenedor, à mão.
+# Publica uma versão quando a `version` do package.json chega à main sem Release
+# publicada (RN-SEC-22, ADR 0009). O caminho inteiro é este arquivo:
+#
+#   versao → build → atestado → rascunho → [aprovação do mantenedor] → publicar → conferir
+#
+# A única etapa humana é a aprovação do ambiente `producao`, antes de publicar: é
+# o momento em que a versão chega a todo app instalado (RN-GLB-18). Recusar a
+# aprovação deixa o rascunho para conferência; a próxima execução o refaz.
 name: Release
 
 on:
+  # Todo push na main, e não só os que mudam o package.json: uma correção de
+  # esteira depois de um build vermelho precisa poder tentar de novo.
   push:
-    tags: ['v*']
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release
   cancel-in-progress: false
 
 jobs:
+  # Decide se há o que publicar: a versão do package.json ainda sem Release publicada.
+  versao:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      tag: ${{ steps.v.outputs.tag }}
+      publish: ${{ steps.v.outputs.publish }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - id: v
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          tag="v$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if gh release view "$tag" --json isDraft --jq '.isDraft' 2>/dev/null | grep -qx false; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "**$tag já está publicada.** Nada a fazer: este push integra sem gerar versão nova." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "**$tag ainda não foi publicada.** A esteira segue até a aprovação." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
   # Constrói sem permissão de escrita: o npm ci roda scripts de dependências, e
   # nada que roda aqui deve conseguir mexer no repositório.
   build:
+    needs: versao
+    if: needs.versao.outputs.publish == 'true'
     runs-on: windows-latest
     timeout-minutes: 45
     outputs:
@@ -32,26 +73,20 @@ jobs:
           node-version: 24
           cache: npm
 
-      # A tag precisa bater com a versão do package.json; senão o nome do
-      # instalador e a Release contam histórias diferentes.
-      - name: Tag confere com a versão
-        shell: pwsh
-        env:
-          TAG: ${{ github.ref_name }}
-        run: |
-          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
-          if ($env:TAG -ne "v$version") {
-            Write-Error "A tag $env:TAG não corresponde à versão v$version do package.json."
-            exit 1
-          }
+      - name: Varredura de credenciais
+        run: node scripts/scan-secrets.mjs
 
       - run: npm ci
 
       - run: npm run check
 
-      # --publish never: sem isso o electron-builder tenta publicar sozinho ao ver
-      # uma tag em CI. Quem cria a Release é o job abaixo, em rascunho.
+      # --publish never: sem isso o electron-builder tenta publicar sozinho em CI.
+      # Quem cria a Release é o job de rascunho, que não roda código do projeto.
       - run: npm run build:win -- --publish never
+
+      # RN-SEC-13: o pacote que vai ser publicado, contra a lista do que pode entrar.
+      - name: Auditoria do pacote
+        run: node scripts/audit-package.mjs dist/win-unpacked/resources
 
       # Laudo de segurança desta versão (RN-SEC-30): sai da mesma esteira e do
       # mesmo commit que o instalador, e vai anexado à Release.
@@ -67,7 +102,7 @@ jobs:
           npx vitest run tests/security --reporter=default --reporter=junit --outputFile.junit=dist/laudo/verify-security.junit.xml
           if ($LASTEXITCODE -ne 0) { exit 1 }
           # O audit sai com erro quando há aviso; o laudo registra o aviso em vez
-          # de esconder a versão. Quem decide publicar lê o arquivo.
+          # de esconder a versão. Quem aprova a publicação lê o arquivo.
           npm audit --omit=dev --json | Out-File -Encoding utf8 dist/laudo/npm-audit.json
           $global:LASTEXITCODE = 0
           # A lista vai para uma variável antes de gravar: num pipeline direto, o
@@ -83,6 +118,8 @@ jobs:
       - name: SHA-256 do instalador
         id: hash
         shell: pwsh
+        env:
+          VERSION: ${{ needs.versao.outputs.version }}
         run: |
           $installers = @(Get-ChildItem dist -Filter '*-setup.exe')
           if ($installers.Count -ne 1) {
@@ -90,6 +127,11 @@ jobs:
             exit 1
           }
           $file = $installers[0]
+          # O app monta o link do download com este nome (RN-SEC-21, RN-GLB-18).
+          if ($file.Name -ne "plataforma-po-desktop-$env:VERSION-setup.exe") {
+            Write-Error "O instalador se chama $($file.Name), e o app espera plataforma-po-desktop-$env:VERSION-setup.exe."
+            exit 1
+          }
           $sha = (Get-FileHash $file.FullName -Algorithm SHA256).Hash.ToLower()
           "$sha  $($file.Name)" | Out-File -Encoding ascii "dist/$($file.Name).sha256"
           "installer=$($file.Name)" >> $env:GITHUB_OUTPUT
@@ -126,29 +168,62 @@ jobs:
         with:
           subject-path: dist/*-setup.exe
 
-  # Único job com escrita, e ele não roda código do projeto: só baixa o
-  # artefato e cria o rascunho.
-  draft-release:
-    needs: [build, attest]
+  # Escrita, sem rodar código do projeto: só baixa o artefato e cria o rascunho.
+  # O rascunho existe para ser conferido durante a aprovação.
+  rascunho:
+    needs: [versao, build, attest]
     runs-on: windows-latest
     timeout-minutes: 10
     permissions:
       contents: write
+    outputs:
+      url: ${{ steps.create.outputs.url }}
     steps:
+      # Um ambiente que não existe é criado pelo GitHub na hora, sem proteção, e a
+      # versão sairia sem ninguém aprovar. Sem revisor obrigatório, nada segue.
+      - name: Ambiente producao exige aprovação
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          reviewers=$(gh api "repos/$GH_REPO/environments/producao" \
+            --jq '[.protection_rules[]? | select(.type == "required_reviewers")] | length' 2>/dev/null || echo 0)
+          if [ "$reviewers" = "0" ]; then
+            echo "O ambiente producao não existe ou não exige aprovação. Crie em Settings → Environments, com o mantenedor como revisor obrigatório (docs/ESTEIRA.md)." >&2
+            exit 1
+          fi
+
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: installer
           path: dist
 
       - name: Criar Release em rascunho
+        id: create
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ needs.versao.outputs.tag }}
+          TARGET: ${{ github.sha }}
           INSTALLER: ${{ needs.build.outputs.installer }}
           SHA256: ${{ needs.build.outputs.sha256 }}
         run: |
+          # Um rascunho anterior desta versão (aprovação recusada, build refeito)
+          # sai antes: rascunho não tem tag, e dois com o mesmo nome confundiriam.
+          $drafts = gh release list --limit 50 --json tagName,isDraft | ConvertFrom-Json |
+            Where-Object { $_.isDraft -and $_.tagName -eq $env:TAG }
+          foreach ($draft in $drafts) { gh release delete $env:TAG --yes }
+
+          # Novidades: os PRs integrados desde a última versão publicada.
+          $previous = gh release view --json tagName --jq .tagName 2>$null
+          $notesArgs = @("repos/$env:GH_REPO/releases/generate-notes", '-f', "tag_name=$env:TAG", '-f', "target_commitish=$env:TARGET")
+          if ($previous) { $notesArgs += @('-f', "previous_tag_name=$previous") }
+          $novidades = gh api -X POST @notesArgs --jq .body
+          if ($LASTEXITCODE -ne 0) { $novidades = '' }
+          $global:LASTEXITCODE = 0
+
           # O link direto vem primeiro: a lista de Assets fica no fim da página e
           # mistura o instalador com o laudo, e quem só quer instalar se perde.
           $download = "https://github.com/$env:GH_REPO/releases/download/$env:TAG/$env:INSTALLER"
@@ -166,6 +241,10 @@ jobs:
           informações → Executar assim mesmo**. O passo a passo está no
           [README](https://github.com/$env:GH_REPO#instalar).
 
+          ## Novidades
+
+          $novidades
+
           ## Conferir o instalador
 
           **SHA-256:** ``$env:SHA256``
@@ -177,7 +256,8 @@ jobs:
           ``````
 
           O resultado precisa ser idêntico ao valor acima. Este instalador foi
-          construído pelo GitHub Actions a partir da tag ``$env:TAG``.
+          construído pelo GitHub Actions a partir do commit ``$env:TARGET``, que
+          a tag ``$env:TAG`` marca.
 
           **Proveniência:** o instalador tem atestado assinado pela esteira. Com o
           GitHub CLI:
@@ -200,7 +280,8 @@ jobs:
           | ``laudo.sha256`` | SHA-256 de cada arquivo do laudo |
           "@
           $notes | Out-File -Encoding utf8 release-notes.md
-          gh release create $env:TAG `
+          # Sem tag ainda: ela nasce no commit alvo quando o rascunho é publicado.
+          $url = gh release create $env:TAG `
             "dist/$env:INSTALLER" `
             "dist/$env:INSTALLER.sha256" `
             dist/laudo/verify-security.junit.xml `
@@ -209,6 +290,88 @@ jobs:
             dist/laudo/npm-audit.json `
             dist/laudo/laudo.sha256 `
             --draft `
-            --verify-tag `
+            --target $env:TARGET `
             --title $env:TAG `
             --notes-file release-notes.md
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          "url=$url" >> $env:GITHUB_OUTPUT
+
+          @"
+          ## Pronto para aprovar: $env:TAG
+
+          | | Etapa |
+          |---|---|
+          | ✅ | Varredura de credenciais e ``npm run check`` neste commit |
+          | ✅ | Instalador construído: ``$env:INSTALLER`` |
+          | ✅ | Pacote auditado (RN-SEC-13) |
+          | ✅ | Laudo de segurança gerado e anexado |
+          | ✅ | Atestado de proveniência assinado |
+          | ✅ | [Rascunho da Release]($url) com o instalador e o hash |
+          | ⏳ | **Sua aprovação** no ambiente ``producao`` |
+          | ⏳ | Publicar e conferir de fora |
+
+          Antes de aprovar, leia o ``npm-audit.json`` do rascunho: aviso nele não
+          barra a versão, quem decide é você.
+          "@ | Out-File -Append -Encoding utf8 $env:GITHUB_STEP_SUMMARY
+
+  # A única etapa humana: o ambiente `producao` exige a aprovação do mantenedor
+  # (Settings → Environments). Escrita, sem rodar código do projeto.
+  publicar:
+    needs: [versao, rascunho]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: producao
+      url: ${{ needs.rascunho.outputs.url }}
+    permissions:
+      contents: write
+    steps:
+      # --latest: o app lê releases/latest (RN-GLB-18); a versão nova precisa ser a
+      # mais recente, e não pré-lançamento.
+      - name: Publicar a Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.versao.outputs.tag }}
+        run: gh release edit "$TAG" --draft=false --prerelease=false --latest
+
+  # O passo 7 da DISTRIBUICAO, sem mão: baixa o que foi publicado, como quem usa.
+  conferir:
+    needs: [versao, build, publicar]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      attestations: read
+    steps:
+      - name: Conferir de fora
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.versao.outputs.tag }}
+          INSTALLER: ${{ needs.build.outputs.installer }}
+          SHA256: ${{ needs.build.outputs.sha256 }}
+        run: |
+          set -euo pipefail
+          mkdir conferencia && cd conferencia
+          gh release download "$TAG" --pattern "$INSTALLER" --pattern "$INSTALLER.sha256"
+          echo "$SHA256  $INSTALLER" | sha256sum -c -
+          sha256sum -c "$INSTALLER.sha256"
+          gh attestation verify "$INSTALLER" --repo "$GH_REPO"
+          latest=$(curl -fsSL -H 'Accept: application/vnd.github+json' "https://api.github.com/repos/$GH_REPO/releases/latest" | jq -r .tag_name)
+          if [ "$latest" != "$TAG" ]; then
+            echo "releases/latest devolve $latest, não $TAG: o aviso de versão nova não vai aparecer." >&2
+            exit 1
+          fi
+          {
+            echo "## $TAG publicada e conferida"
+            echo ''
+            echo '| | Etapa |'
+            echo '|---|---|'
+            echo '| ✅ | Aprovada e publicada |'
+            echo '| ✅ | Instalador baixado da Release com o hash do build |'
+            echo '| ✅ | Atestado de proveniência conferido |'
+            echo "| ✅ | \`releases/latest\` devolve $TAG: todo app instalado vai mostrar o aviso |"
+            echo ''
+            echo 'Falta só o que nenhuma esteira faz: instalar e abrir. O app tem de abrir sem nenhum Perfil.'
+          } >> "$GITHUB_STEP_SUMMARY"

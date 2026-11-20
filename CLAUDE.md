@@ -221,6 +221,7 @@ de criar ou mudar uma tela.** O essencial:
 | Regras de negócio | `docs/regras-de-negocio/` |
 | Design system (tokens, componentes, padrões de tela) | `docs/design-system.md` |
 | Decisões de arquitetura | `docs/adr/` |
+| O caminho de uma mudança, do PR à versão publicada | `docs/ESTEIRA.md` |
 | Como publicar uma versão do instalador | `docs/DISTRIBUICAO.md` |
 | Como contribuir | `CONTRIBUTING.md` |
 | Como relatar falha de segurança | `SECURITY.md` |
