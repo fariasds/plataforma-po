@@ -1,26 +1,8 @@
 {
-  "squad-digital": {
-    "momento": {
-      "day": 7,
-      "phase": "daily",
-      "totalDays": 10
-    },
-    "sprint": "2026-09-21_2026-10-02"
+  "momento": {
+    "day": 2,
+    "phase": "daily",
+    "totalDays": 10
   },
-  "squad-interno": {
-    "momento": {
-      "day": 2,
-      "phase": "daily",
-      "totalDays": 10
-    },
-    "sprint": "2026-09-28_2026-10-09"
-  },
-  "squad-parceiros": {
-    "momento": {
-      "day": 2,
-      "phase": "daily",
-      "totalDays": 10
-    },
-    "sprint": "2026-09-28_2026-10-09"
-  }
+  "sprint": "2026-09-28_2026-10-09"
 }

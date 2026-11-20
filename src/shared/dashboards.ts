@@ -333,6 +333,21 @@ export interface PlanningLookupItem {
   priority: number | null
 }
 
+/**
+ * Desenvolvimento antecipado de um item do Azure (RN-PLN-23). Guarda só o
+ * percentual já feito: os pontos vêm do Azure a cada leitura, então o desconto
+ * acompanha uma mudança de estimativa.
+ */
+export interface AnticipatedShare {
+  id: number
+  /** ID do Produto do item, que escolhe a lista em que ele é guardado (RN-PLN-26). */
+  product: string
+  /** Percentual do frontend já feito (0 | 25 | 50 | 75 | 100). */
+  frontendPercent: number
+  /** Percentual do backend já feito (0 | 25 | 50 | 75 | 100). */
+  backendPercent: number
+}
+
 /** Item adicionado manualmente pelo PO (remanescente de sprint anterior). */
 export interface ManualPlanningItem extends PlanningItem {
   /** Percentual aplicado ao frontend original (0 | 25 | 50 | 75 | 100). */

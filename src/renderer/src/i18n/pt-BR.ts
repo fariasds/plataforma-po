@@ -38,8 +38,17 @@ export const ptBR = {
     next: 'Próximo',
     add: 'Adicionar',
     cancel: 'Cancelar',
+    save: 'Salvar',
     retry: 'Tentar de novo',
     backToStart: 'Voltar ao início'
+  },
+
+  refresh: {
+    button: 'Atualizar',
+    buttonBusy: 'Atualizando…',
+    fetching: 'Buscando no Azure…',
+    updatedAt: 'Atualizado às',
+    hint: 'Busca de novo no Azure o que esta tela mostra (F5)'
   },
 
   disciplines: {
@@ -360,6 +369,12 @@ export const ptBR = {
           'Itens sem prioridade vão para o fim — senão subiriam junto com os mais urgentes.'
       },
 
+      'RN-PLN-24': {
+        title: 'Desenvolvimento antecipado',
+        text:
+          'O percentual é quanto de frontend e de backend o time já fez numa sprint anterior. Fica nesta sprint o restante, arredondado; QA entra sempre integral. ' +
+          'O total é a soma das partes. O app guarda só o percentual: se a estimativa mudar no Azure, o desconto acompanha ao atualizar.'
+      },
       'RN-PLN-09': {
         title: 'Itens remanescentes',
         text:
@@ -799,6 +814,24 @@ export const ptBR = {
     priorityShort: 'P{priority}',
     frontShare: 'Front {percent}%',
     backShare: 'Back {percent}%',
+    anticipation: {
+      title: 'Desenvolvimento antecipado',
+      mark: 'Marcar desenvolvimento antecipado',
+      edit: 'Editar desenvolvimento antecipado',
+      question:
+        'Quanto deste item o time já fez numa sprint anterior? Esses pontos saem do planejamento desta sprint.',
+      frontDone: 'Front já feito',
+      backDone: 'Back já feito',
+      inAzure: '· {points} SP no Azure',
+      qaWhole: 'QA entra inteiro nesta sprint.',
+      remains: 'Fica nesta sprint:',
+      totalChange: 'Total {from} → {to} SP',
+      remove: 'Remover antecipação',
+      tag: 'Antecipado',
+      doneLabel: '{parts} adiantado',
+      ofOriginal: '/{points}',
+      discounted: '−{points} antecipados descontados'
+    },
     goal: {
       title: 'Objetivo da sprint',
       placeholder:
@@ -846,6 +879,14 @@ export const ptBR = {
       docTitle: 'Planning · {sprint}',
       generatedAt: 'gerado em {date}',
       overview: 'Resumo geral',
+      anticipatedNote: {
+        one: 'O total já desconta {points} pontos de {count} item antecipado, feitos numa sprint anterior.',
+        other:
+          'O total já desconta {points} pontos de {count} itens antecipados, feitos numa sprint anterior.'
+      },
+      anticipatedTag: 'Antecipado · {parts} feito',
+      leftoverTag: 'Remanescente · {parts} restante',
+      ofOriginal: '{points} (de {original})',
       discipline: 'Disciplina',
       points: 'Pontos',
       usage: 'Uso da capacidade',

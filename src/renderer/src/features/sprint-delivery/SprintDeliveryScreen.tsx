@@ -74,7 +74,7 @@ export function SprintDeliveryScreen(): React.JSX.Element {
       {sprints.isError && <ErrorState error={sprints.error} onRetry={() => sprints.refetch()} />}
       {delivery.isError && <ErrorState error={delivery.error} onRetry={() => delivery.refetch()} />}
 
-      {delivery.isPending || delivery.isFetching ? (
+      {delivery.isPending ? (
         <Skeleton active paragraph={{ rows: 8 }} />
       ) : (
         <>

@@ -158,6 +158,17 @@ percentuais de **0, 25, 50, 75 ou 100%**.
 É esse rateio que produz complexidades fora da escala Fibonacci, e é por isso que a
 conversão em horas precisa interpolar (`RN-GLB-13`).
 
+**Os pontos acompanham o Azure.** O remanescente é guardado com os pontos do momento
+em que foi adicionado, mas a tela relê o item pelo ID ao abrir e a cada **Atualizar**
+(`RN-GLB-19`) e reaplica o mesmo percentual sobre a estimativa de agora. Título,
+estado e prioridade também vêm da releitura. Se o item não puder ser relido (foi
+excluído, ou o Azure falhou), valem os pontos guardados.
+
+**Implementado em:** `applyLeftover` e `buildPlanningRows`, em
+`src/renderer/src/features/planning/planning-rules.ts` · `useLiveLeftovers`, em
+`planning-work-data.ts` · teste em `planning-rules.test.ts` e no Cenário
+`planning-com-remanescentes`.
+
 ### RN-PLN-10 · Validação ao adicionar
 
 - ID precisa ser numérico e positivo.
@@ -176,7 +187,11 @@ Item remanescente aparece na tabela com etiqueta **"Remanescente"** em amarelo a
 lado do título, seguida dos percentuais aplicados (`Front 50% · Back 25%`).
 
 Só linhas remanescentes têm **botão de exclusão** — itens vindos do Azure pertencem
-à sprint e não se apagam pela tela.
+à sprint e não se apagam pela tela. No lugar dele, o item do Azure tem o botão de
+desenvolvimento antecipado (`RN-PLN-23`).
+
+No resumo compartilhado, a etiqueta leva os percentuais e a palavra "restante":
+**[Remanescente · Front 50% · Back 25% restante]** (`RN-PLN-19`).
 
 ### RN-PLN-12 · Guardados por produto e sprint
 
@@ -187,6 +202,67 @@ sprint>`. A chave usa o **ID** do Produto, nunca o nome (`RN-CFG-08`).
 No **Grupo**, a leitura **mescla** as listas dos seus Produtos, e a gravação
 **separa de volta** conforme o Produto de origem de cada item. Assim a visão do
 Grupo e a de cada Produto permanecem coerentes entre si.
+
+---
+
+## Desenvolvimento antecipado
+
+### RN-PLN-23 · O que é
+
+O inverso do remanescente: um item **planejado para esta sprint** de que o time já
+fez uma parte numa sprint anterior — o backend adiantou metade, por exemplo. A
+parte feita não consome a capacidade desta sprint e sai do planejamento.
+
+O PO marca pelo botão **»** no fim da linha do item. Só itens que vieram do Azure
+têm o botão: o remanescente já tem o próprio rateio (`RN-PLN-09`) e não pode ser
+antecipado. O botão só aparece quando a Configuração tem esforço de frontend ou de
+backend (`RN-PLN-03`).
+
+### RN-PLN-24 · Rateio do que já foi feito
+
+No painel, informa-se **quanto já foi feito** de frontend e de backend, em 0, 25,
+50, 75 ou 100%. Antes de salvar, o painel mostra o que fica nesta sprint.
+
+- Fica nesta sprint o **complemento**: pontos do Azure × (100% − feito),
+  arredondados. Back de 13 com 50% feito fica com 7.
+- **QA entra sempre integral**, como no remanescente.
+- O total é a soma das três partes, **não** o do Azure.
+- 0% nas duas disciplinas, ou **Remover antecipação**, tira a marca.
+
+**Implementado em:** `applyAnticipation` e `buildPlanningRows`, em
+`src/renderer/src/features/planning/planning-rules.ts` · `AnticipationButton.tsx` ·
+teste em `planning-rules.test.ts`.
+
+### RN-PLN-25 · Identificação visual
+
+O item aparece com a etiqueta **"Antecipado"** em azul ao lado do título, seguida
+do que já foi feito (`Back 50% adiantado`). As colunas de frontend, backend e total
+mostram o que fica e, ao lado, o valor do Azure (`7 /13`). O botão **»** fica
+destacado.
+
+Os cards de Frontend e Backend dizem quantos pontos antecipados foram descontados
+dos itens marcados (`−6 antecipados descontados`). A capacidade em horas usa o que
+fica.
+
+No resumo compartilhado (`RN-PLN-19`), a etiqueta é
+**[Antecipado · Front 25% · Back 50% feito]**, só com as disciplinas que têm algo
+feito; os pontos saem como `6 (de 8)`; e o Resumo geral ganha uma linha com o total
+descontado. O pedido para a IA do PO não muda: ele não leva pontos (`RN-PLN-21`).
+
+### RN-PLN-26 · Guardados por produto e sprint
+
+Os antecipados ficam nos **Dados de trabalho** do Perfil, por Produto e por Sprint
+unificada, na chave `planning:anticipated:<ID do Produto>:<chave da sprint>`, com o
+**ID** do Produto (`RN-CFG-08`). No Grupo, a leitura mescla as listas dos seus
+Produtos e a gravação separa de volta, como os remanescentes (`RN-PLN-12`).
+
+Guarda-se **só o percentual**, nunca os pontos: eles vêm do Azure a cada leitura, e
+uma mudança de estimativa aparece no desconto ao atualizar (`RN-GLB-19`).
+
+**Implementado em:** `useAnticipations`, em
+`src/renderer/src/features/planning/planning-work-data.ts` · `src/shared/planning-keys.ts`
+
+**Cenário:** `planning-com-remanescentes`
 
 ---
 
@@ -333,7 +409,7 @@ seções, nesta ordem:
 2. **Capacidade da sprint** — os parâmetros comuns (`RN-PLN-16`) e, por disciplina,
    devs, reserva a bugs, capacidade, alocado e saldo. O saldo fica negativo quando o alocado passa.
 3. **Itens da sprint** — ID com link para o work item, título com a etiqueta de
-   remanescente (`RN-PLN-11`), Produto (só no Grupo), prioridade, pontos por
+   remanescente (`RN-PLN-11`) ou de antecipado (`RN-PLN-25`), Produto (só no Grupo), prioridade, pontos por
    disciplina e total, com uma linha de total no fim.
 
 Disciplina sem campo de esforço na Configuração some do resumo como some da tela
@@ -352,6 +428,16 @@ saem do mesmo resumo montado e dizem a mesma coisa.
 
 A situação leva um símbolo (🟢 🟡 🔴) em vez de cor de fundo, que o destino pode
 descartar ao colar.
+
+O rateio vai escrito, porque quem lê o resumo não vê a tela:
+
+- Remanescente: **[Remanescente · Front 50% · Back 25% restante]** — o que falta.
+- Antecipado: **[Antecipado · Front 25% · Back 50% feito]** — o que já foi feito, só
+  das disciplinas com algo feito. Os pontos saem como `6 (de 8)`, o que fica e o
+  valor do Azure, e o Resumo geral diz quantos pontos foram descontados.
+
+Os dois verbos são diferentes de propósito: "restante" e "feito" não deixam confundir
+um rateio com o outro.
 
 O título do item vem do Azure e nunca é tratado como marcação: é escapado no HTML
 — que também é a prévia mostrada na janela — e no Markdown, onde uma barra

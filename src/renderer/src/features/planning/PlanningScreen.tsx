@@ -17,7 +17,6 @@ import {
 } from 'antd'
 import { DeleteOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { useWorkItemHref } from '../../components/useWorkItemHref'
-import type { PlanningItem } from '@shared/dashboards'
 import { isAggregateSelection, selectionProductIds } from '@shared/squads'
 import { spToHours } from '@shared/story-points'
 import { ErrorState } from '../../components/ErrorState'
@@ -29,9 +28,16 @@ import { DISCIPLINE_COLORS, MONO_FONT, NEUTRA, SIDER, STATUS } from '../../theme
 import { useConfiguration, usePlanning, useSelection, useSprints } from '../../ipc/useAzure'
 import { useActiveSquad } from '../../ipc/useActiveSquad'
 import { AddManualItemForm, type EffortAvailability } from './AddManualItemForm'
+import { AnticipationButton } from './AnticipationButton'
 import { CapacityPanel } from './CapacityPanel'
-import { comparePlanningItems } from './planning-rules'
-import { planningKeys, useManualItems, useStoredValues } from './planning-work-data'
+import { anticipatedDiscount, buildPlanningRows, type PlanningRow } from './planning-rules'
+import {
+  planningKeys,
+  useAnticipations,
+  useLiveLeftovers,
+  useManualItems,
+  useStoredValues
+} from './planning-work-data'
 import { ShareSummaryModal } from './ShareSummaryModal'
 
 const { Text } = Typography
@@ -65,6 +71,43 @@ function fmtComplexity(value: number | null): string {
 }
 
 type EffortKey = 'frontend' | 'backend' | 'qa'
+
+/** O que fica na sprint e, quando houve antecipação, o valor do Azure (RN-PLN-25). */
+function Discounted({
+  value,
+  original
+}: {
+  value: number | null
+  original: number | null | undefined
+}): React.JSX.Element {
+  if (original === undefined || original === value) return <>{fmtComplexity(value)}</>
+  return (
+    <>
+      {fmtComplexity(value)}
+      <Text type="secondary" style={{ fontSize: 11, fontWeight: 400 }}>
+        {' '}
+        {t('planning.anticipation.ofOriginal', { points: fmtComplexity(original) })}
+      </Text>
+    </>
+  )
+}
+
+/** "Front 25% · Back 50%": só as disciplinas ligadas e com algo já feito. */
+function anticipatedParts(
+  share: { frontendPercent: number; backendPercent: number },
+  effort: EffortAvailability
+): string {
+  return [
+    effort.frontend &&
+      share.frontendPercent > 0 &&
+      t('planning.frontShare', { percent: share.frontendPercent }),
+    effort.backend &&
+      share.backendPercent > 0 &&
+      t('planning.backShare', { percent: share.backendPercent })
+  ]
+    .filter(Boolean)
+    .join(' · ')
+}
 
 /** A sprint da âncora e as quatro seguintes (RN-PLN-01). */
 const PLANNABLE_SPRINTS = 5
@@ -117,6 +160,8 @@ export function PlanningScreen(): React.JSX.Element {
 
   const manual = useManualItems(scopeIds, sprint?.key)
   const manualItems = manual.items
+  const liveLeftovers = useLiveLeftovers(manualItems.map((i) => i.id))
+  const anticipations = useAnticipations(scopeIds, sprint?.key)
 
   function toggleItem(id: number): void {
     const next = new Set(uncheckedIds)
@@ -125,12 +170,15 @@ export function PlanningScreen(): React.JSX.Element {
     uncheckedStore.save([[...next]])
   }
 
-  const workDataError = uncheckedStore.error ?? manual.error
+  const workDataError = uncheckedStore.error ?? manual.error ?? anticipations.error
 
-  const allItems = useMemo<PlanningItem[]>(
-    () => [...items, ...manualItems].sort(comparePlanningItems),
-    [items, manualItems]
+  // Remanescentes relidos do Azure e antecipados já descontados (RN-PLN-09, RN-PLN-24).
+  const allItems = useMemo<PlanningRow[]>(
+    () => buildPlanningRows(items, manualItems, anticipations.items, liveLeftovers),
+    [items, manualItems, anticipations.items, liveLeftovers]
   )
+  const azureById = useMemo(() => new Map(items.map((i) => [i.id, i])), [items])
+  const anticipatedById = new Map(anticipations.items.map((a) => [a.id, a]))
 
   // Only checked items feed the effort and capacity numbers.
   const checkedItems = useMemo(
@@ -166,6 +214,12 @@ export function PlanningScreen(): React.JSX.Element {
     0
   )
 
+  const discount = anticipatedDiscount(checkedItems)
+  const discountOf: Partial<Record<string, number>> = {
+    frontend: discount.frontend,
+    backend: discount.backend
+  }
+
   const totals = {
     frontend: checkedItems.reduce((s, i) => s + (i.frontend ?? 0), 0),
     backend: checkedItems.reduce((s, i) => s + (i.backend ?? 0), 0),
@@ -186,17 +240,23 @@ export function PlanningScreen(): React.JSX.Element {
       title,
       width: 80,
       align: 'center' as const,
-      render: (_: unknown, item: PlanningItem) => fmtComplexity(item[key])
+      render: (_: unknown, item: PlanningRow) => (
+        <Discounted
+          value={item[key]}
+          original={key === 'qa' ? undefined : item.anticipated?.original[key]}
+        />
+      )
     }))
 
   const showProduct = selection.selected?.isGroup ?? false
   // Only manually added rows can be removed; Azure items come from the sprint.
   const manualIds = new Set(manualItems.map((i) => i.id))
-  const manualPercents = new Map(manualItems.map((i) => [i.id, i]))
 
   const [sharing, setSharing] = useState(false)
+  // Ao atualizar, os dados de antes ficam na tela, esmaecidos (RN-GLB-19).
   const loading =
-    planning.isPending || planning.isFetching || uncheckedStore.isPending || manual.isPending
+    planning.isPending || uncheckedStore.isPending || manual.isPending || anticipations.isPending
+  const refreshing = planning.isFetching && !planning.isPending
 
   return (
     <Space orientation="vertical" size="large" style={{ width: '100%' }}>
@@ -330,6 +390,18 @@ export function PlanningScreen(): React.JSX.Element {
                     <Text type="secondary" style={{ color: dark ? SIDER.subtle : undefined }}>
                       {t('planning.complexityPoints')}
                     </Text>
+                    {(discountOf[key] ?? 0) > 0 && (
+                      <Text
+                        style={{
+                          display: 'block',
+                          marginTop: 8,
+                          fontSize: 12,
+                          color: STATUS.info.text
+                        }}
+                      >
+                        {t('planning.anticipation.discounted', { points: discountOf[key] ?? 0 })}
+                      </Text>
+                    )}
 
                     {split && total > 0 && (
                       <>
@@ -364,6 +436,7 @@ export function PlanningScreen(): React.JSX.Element {
           </Row>
 
           <Card
+            style={{ opacity: refreshing ? 0.55 : 1, transition: 'opacity 0.2s' }}
             title={t('planning.sprintItems')}
             extra={
               <Flex align="center" gap={8}>
@@ -387,7 +460,7 @@ export function PlanningScreen(): React.JSX.Element {
               <HelpTip rule="RN-PLN-09" />
             </Flex>
 
-            <Table<PlanningItem>
+            <Table<PlanningRow>
               size="small"
               rowKey="id"
               dataSource={allItems}
@@ -423,25 +496,44 @@ export function PlanningScreen(): React.JSX.Element {
                   render: (_, item) => (
                     <Flex align="center" gap={8} wrap>
                       <span>{item.title}</span>
-                      {manualIds.has(item.id) && (
+                      {item.leftover && (
                         <Tag color="warning" style={{ marginInlineEnd: 0 }}>
                           {t('planning.leftover')}
                         </Tag>
                       )}
-                      {manualPercents.get(item.id) && (effort.frontend || effort.backend) && (
+                      {item.leftover && (effort.frontend || effort.backend) && (
                         <Text type="secondary" style={{ fontSize: 11 }}>
                           {[
                             effort.frontend &&
                               t('planning.frontShare', {
-                                percent: manualPercents.get(item.id)?.frontendPercent ?? 0
+                                percent: item.leftover.frontendPercent
                               }),
                             effort.backend &&
                               t('planning.backShare', {
-                                percent: manualPercents.get(item.id)?.backendPercent ?? 0
+                                percent: item.leftover.backendPercent
                               })
                           ]
                             .filter(Boolean)
                             .join(' · ')}
+                        </Text>
+                      )}
+                      {item.anticipated && (
+                        <Tag
+                          variant="filled"
+                          style={{
+                            marginInlineEnd: 0,
+                            background: STATUS.info.bg,
+                            color: STATUS.info.text
+                          }}
+                        >
+                          {t('planning.anticipation.tag')}
+                        </Tag>
+                      )}
+                      {item.anticipated && (
+                        <Text type="secondary" style={{ fontSize: 11 }}>
+                          {t('planning.anticipation.doneLabel', {
+                            parts: anticipatedParts(item.anticipated, effort)
+                          })}
                         </Text>
                       )}
                     </Flex>
@@ -452,7 +544,7 @@ export function PlanningScreen(): React.JSX.Element {
                       {
                         title: t('common.product'),
                         width: 100,
-                        render: (_: unknown, item: PlanningItem) => (
+                        render: (_: unknown, item: PlanningRow) => (
                           <Flex align="center" gap={7}>
                             <span
                               style={{
@@ -504,7 +596,11 @@ export function PlanningScreen(): React.JSX.Element {
                   title: t('common.total'),
                   width: 80,
                   align: 'center',
-                  render: (_, item) => <Text strong>{fmtComplexity(item.total)}</Text>
+                  render: (_, item) => (
+                    <Text strong>
+                      <Discounted value={item.total} original={item.anticipated?.original.total} />
+                    </Text>
+                  )
                 },
                 {
                   title: '',
@@ -517,6 +613,14 @@ export function PlanningScreen(): React.JSX.Element {
                         size="small"
                         icon={<DeleteOutlined />}
                         onClick={() => manual.save(manualItems.filter((i) => i.id !== item.id))}
+                      />
+                    ) : azureById.has(item.id) && (effort.frontend || effort.backend) ? (
+                      <AnticipationButton
+                        item={azureById.get(item.id)!}
+                        current={anticipatedById.get(item.id)}
+                        effort={effort}
+                        onSave={anticipations.set}
+                        onRemove={() => anticipations.remove(item.id)}
                       />
                     ) : null
                 }

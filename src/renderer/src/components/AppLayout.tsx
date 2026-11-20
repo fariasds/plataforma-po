@@ -19,6 +19,7 @@ import { t } from '../i18n'
 import { accentTones, MONO_FONT, SIDER, SIDER_COLLAPSED_WIDTH, SIDER_WIDTH } from '../theme'
 import { AppLogo, AppMark } from './AppLogo'
 import { DemoBanner } from './DemoBanner'
+import { RefreshButton } from './RefreshButton'
 import { SquadTabs } from './SquadTabs'
 import { UpdateBanner } from './UpdateBanner'
 import { UserMenu } from './UserMenu'
@@ -32,14 +33,16 @@ interface NavEntry {
   label: string
   /** Rótulo do grupo, mostrado acima do título da tela. */
   group?: string
+  /** A tela lê o Azure e ganha o botão Atualizar no cabeçalho (RN-GLB-19). */
+  refresh?: boolean
 }
 
 const HOME: NavEntry = { key: '/home', icon: <HomeOutlined />, label: t('nav.home') }
 
 const MAIN: NavEntry[] = [
   HOME,
-  { key: '/planning', icon: <CalendarOutlined />, label: t('nav.planning') },
-  { key: '/daily', icon: <FieldTimeOutlined />, label: t('nav.daily') }
+  { key: '/planning', icon: <CalendarOutlined />, label: t('nav.planning'), refresh: true },
+  { key: '/daily', icon: <FieldTimeOutlined />, label: t('nav.daily'), refresh: true }
 ]
 
 /**
@@ -51,13 +54,15 @@ const REVIEW: NavEntry[] = [
     key: '/dashboard/sprint-delivery',
     icon: <CheckCircleOutlined />,
     label: t('nav.sprintDelivery'),
-    group: t('nav.review')
+    group: t('nav.review'),
+    refresh: true
   },
   {
     key: '/dashboard/bug-analysis',
     icon: <BugOutlined />,
     label: t('nav.bugAnalysis'),
-    group: t('nav.review')
+    group: t('nav.review'),
+    refresh: true
   }
 ]
 
@@ -393,7 +398,8 @@ export function AppLayout(): React.JSX.Element {
         <div style={{ position: 'sticky', top: 0, zIndex: 10, flex: '0 0 auto' }}>
           <UpdateBanner />
           <DemoBanner />
-          <SquadTabs />
+          {/* A Home não mostra dado de Squad, então não tem abas (RN-GLB-17). */}
+          {current !== HOME && <SquadTabs />}
           <Header
             style={{
               borderBottom: `1px solid ${token.colorBorder}`,
@@ -424,6 +430,7 @@ export function AppLayout(): React.JSX.Element {
                   {t('home.version', { version: __APP_VERSION__ })}
                 </Tag>
               )}
+              {current.refresh && <RefreshButton />}
             </Flex>
           </Header>
         </div>

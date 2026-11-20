@@ -63,7 +63,8 @@ export const planningComRemanescentes: Scenario = {
   prova:
     'No sábado entre duas sprints, o Planning abre a próxima. Somam-se os itens do Azure e os ' +
     'remanescentes que o PO puxou da sprint anterior, com o percentual que sobrou de cada ' +
-    'disciplina; o item desmarcado sai das somas e aparece à parte no resumo; a capacidade ' +
+    'disciplina reaplicado sobre os pontos de agora; dois itens com desenvolvimento antecipado ' +
+    'descontam a parte já feita; o item desmarcado sai das somas e aparece à parte no resumo; a capacidade ' +
     'desconta a reserva de bugs, aqui gravada no formato antigo de percentual único; o item ' +
     'removido e o bug não entram. O pedido à IA leva só os campos permitidos, com a descrição ' +
     'em texto e o token fictício redigido.',
@@ -72,14 +73,20 @@ export const planningComRemanescentes: Scenario = {
     'RN-PLN-02',
     'RN-PLN-03',
     'RN-PLN-04',
+    'RN-PLN-09',
     'RN-PLN-10',
     'RN-PLN-12',
     'RN-PLN-15',
     'RN-PLN-16',
     'RN-PLN-17',
     'RN-PLN-18',
+    'RN-PLN-19',
     'RN-PLN-20',
     'RN-PLN-21',
+    'RN-PLN-23',
+    'RN-PLN-24',
+    'RN-PLN-25',
+    'RN-PLN-26',
     'RN-SEC-24'
   ],
   telas: ['planning', 'pedido-ia', 'sprint-unificada'],
@@ -117,6 +124,12 @@ export const planningComRemanescentes: Scenario = {
         frontendPercent: 25,
         backendPercent: 0
       }
+    ],
+    // Antecipados: parte já feita na sprint 3 sai das somas; QA entra inteiro.
+    // 7001: 25% do front feito, fica round(3 × 75%) = 2. 7002: 50% do back, fica round(1,5) = 2.
+    [planningKeys.anticipated('loja', S4_KEY)]: [
+      { id: 7001, product: 'loja', frontendPercent: 25, backendPercent: 0 },
+      { id: 7002, product: 'loja', frontendPercent: 0, backendPercent: 50 }
     ],
     [planningKeys.unchecked(S4_KEY)]: [7004],
     [planningKeys.capacity]: { frontDevs: 1.5, sprintDays: 9, bugPercent: 25 },

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
-import type { ManualPlanningItem } from '@shared/dashboards'
+import type { AnticipatedShare, ManualPlanningItem, PlanningLookupItem } from '@shared/dashboards'
 import { planningKeys } from '@shared/planning-keys'
 import { ipc } from '../../ipc/client'
 import { useConfiguration } from '../../ipc/useAzure'
@@ -98,6 +98,61 @@ export function useManualItems(productIds: string[], sprintKey: string | undefin
     isPending: stored.isPending,
     error: stored.error,
     save: (items) => stored.save(productIds.map((id) => items.filter((i) => i.product === id)))
+  }
+}
+
+/**
+ * Os remanescentes relidos do Azure, pelo ID (RN-PLN-09). Assim o percentual é
+ * reaplicado sobre a estimativa de agora, e o botão Atualizar alcança também
+ * esses itens (RN-GLB-19). Item que não se consegue reler fica com os pontos
+ * guardados.
+ */
+export function useLiveLeftovers(ids: number[]): ReadonlyMap<number, PlanningLookupItem> {
+  const results = useQueries({
+    queries: ids.map((id) => ({
+      queryKey: ['planning-item', id],
+      queryFn: () => ipc.getPlanningItem(id)
+    }))
+  })
+  const live = new Map<number, PlanningLookupItem>()
+  for (const result of results) if (result.data) live.set(result.data.id, result.data)
+  return live
+}
+
+// ─── Desenvolvimento antecipado ──────────────────────────────────────────────
+
+interface Anticipations {
+  items: AnticipatedShare[]
+  isPending: boolean
+  error: Error | null
+  /** Grava ou troca o antecipado de um item; 0% nas duas disciplinas tira a marca. */
+  set: (share: AnticipatedShare) => void
+  remove: (id: number) => void
+}
+
+/**
+ * Antecipados da seleção (RN-PLN-26). Como os remanescentes, cada Produto guarda
+ * a sua lista e o Grupo lê e grava as dos seus Produtos.
+ */
+export function useAnticipations(
+  productIds: string[],
+  sprintKey: string | undefined
+): Anticipations {
+  const keys = sprintKey ? productIds.map((id) => planningKeys.anticipated(id, sprintKey)) : []
+  const stored = useStoredValues<AnticipatedShare[]>(keys, sprintKey !== undefined)
+  const items = stored.values.flatMap((list) => list ?? [])
+  const save = (next: AnticipatedShare[]): void =>
+    stored.save(productIds.map((id) => next.filter((a) => a.product === id)))
+
+  return {
+    items,
+    isPending: stored.isPending,
+    error: stored.error,
+    set: (share) => {
+      const others = items.filter((a) => a.id !== share.id)
+      save(share.frontendPercent === 0 && share.backendPercent === 0 ? others : [...others, share])
+    },
+    remove: (id) => save(items.filter((a) => a.id !== id))
   }
 }
 
