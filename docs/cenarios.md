@@ -27,6 +27,10 @@ A tela **Segurança** fica fora da regressão por Cenário porque não depende d
 dado nenhum: o conteúdo é o mesmo em todo Cenário. O que ela promete é conferido
 por `src/renderer/src/features/security/guarantees.test.ts` (`RN-SEC-31`).
 
+As **novidades da versão** (`RN-HOM-04`, `RN-HOM-05`) também ficam fora: o conteúdo
+vem de `src/shared/release-notes.json`, igual em todo Cenário. Quando o modal abre e
+a busca do histórico são provados por `src/shared/release-notes.test.ts`.
+
 O **aviso de versão nova** (`RN-GLB-18`) também fica fora: ele depende da Release
 publicada no GitHub, não do Cenário. A comparação de versões é provada por
 `src/shared/update.test.ts`, e a consulta e os links por

@@ -84,6 +84,14 @@ jobs:
       # Quem cria a Release é o job de rascunho, que não roda código do projeto.
       - run: npm run build:win -- --publish never
 
+      # As novidades da Release saem do mesmo arquivo que o app mostra na Home
+      # (RN-HOM-04). Sai aqui, onde há código; o job do rascunho só lê o arquivo.
+      - name: Novidades da versão
+        shell: pwsh
+        env:
+          VERSION: ${{ needs.versao.outputs.version }}
+        run: node scripts/release-notes.mjs "$env:VERSION" dist/novidades.md
+
       # RN-SEC-13: o pacote que vai ser publicado, contra a lista do que pode entrar.
       - name: Auditoria do pacote
         run: node scripts/audit-package.mjs dist/win-unpacked/resources
@@ -143,6 +151,7 @@ jobs:
           path: |
             dist/*-setup.exe
             dist/*-setup.exe.sha256
+            dist/novidades.md
             dist/laudo/
           if-no-files-found: error
           retention-days: 7
@@ -216,12 +225,17 @@ jobs:
             Where-Object { $_.isDraft -and $_.tagName -eq $env:TAG }
           foreach ($draft in $drafts) { gh release delete $env:TAG --yes }
 
-          # Novidades: os PRs integrados desde a última versão publicada.
+          # Novidades: escritas para quem usa o app, em src/shared/release-notes.json.
+          $novidades = Get-Content -Raw -Encoding utf8 dist/novidades.md
+
+          # Mudanças técnicas: os PRs integrados desde a última versão publicada.
+          # O gh devolve uma linha por item; sem o -join, o texto entra no
+          # here-string com as linhas unidas por espaço e o Markdown quebra.
           $previous = gh release view --json tagName --jq .tagName 2>$null
           $notesArgs = @("repos/$env:GH_REPO/releases/generate-notes", '-f', "tag_name=$env:TAG", '-f', "target_commitish=$env:TARGET")
           if ($previous) { $notesArgs += @('-f', "previous_tag_name=$previous") }
-          $novidades = gh api -X POST @notesArgs --jq .body
-          if ($LASTEXITCODE -ne 0) { $novidades = '' }
+          $tecnicas = (gh api -X POST @notesArgs --jq .body) -join "`n"
+          if ($LASTEXITCODE -ne 0) { $tecnicas = '' }
           $global:LASTEXITCODE = 0
 
           # O link direto vem primeiro: a lista de Assets fica no fim da página e
@@ -244,6 +258,13 @@ jobs:
           ## Novidades
 
           $novidades
+
+          <details>
+          <summary>Mudanças técnicas desta versão</summary>
+
+          $tecnicas
+
+          </details>
 
           ## Conferir o instalador
 

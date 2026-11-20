@@ -7,8 +7,8 @@ A Home é **instrutiva**, não um dashboard: ela aponta para a tela de cada mome
 do ciclo (Planning, Daily, Review) e, no primeiro acesso, ensina o caminho. Números
 de capacidade, entregas e bugs continuam nas telas de cada momento.
 
-O desenho completo, com o que ainda não foi implementado (novidades da versão,
-roadmap, ajuda com links externos, tour guiado), está em `docs/home/DESENHO.md`.
+O desenho completo, com o que ainda não foi implementado (roadmap, ajuda com links
+externos, tour guiado), está em `docs/home/DESENHO.md`.
 
 **Implementado em:**
 `src/shared/home.ts` · `src/renderer/src/features/home/`
@@ -89,3 +89,77 @@ lembra.
 **Implementado em:** `src/shared/home.ts` (`firstStepsState`, `stepForPath`) ·
 `src/renderer/src/features/home/first-steps-storage.ts` ·
 `src/renderer/src/features/home/FirstAccessHome.tsx`
+
+### RN-HOM-04 · Novidades da versão
+
+*Nova em 2026-11-20.*
+
+O que mudou em cada versão é escrito para quem usa o app, em
+`src/shared/release-notes.json`, no mesmo PR que sobe a `version`. Os títulos de PR
+não servem para isso ("Bump @electron/asar…"). Cada item tem tipo (**Novo**,
+**Melhoria** ou **Correção**), título, uma linha de explicação e, opcionalmente, a
+tela para onde leva. A tela é uma chave de uma lista fixa, nunca um endereço: o
+arquivo não tem como abrir nada fora do app (`RN-SEC-21`). Um item por versão pode
+ser o **destaque**, com um parágrafo mais longo para o modal.
+
+O arquivo vai dentro do app: as novidades aparecem sem rede e sem consultar o GitHub.
+O mesmo arquivo monta a seção "Novidades" da página da Release; a lista de PRs fica
+recolhida embaixo, como "Mudanças técnicas".
+
+**Na Home, em dois lugares:**
+
+- **Bloco "Novidades da vX.Y.Z"**, sempre à vista na Home recorrente, com os itens
+  da versão instalada.
+- **Modal**, uma vez por versão, ao abrir a Home depois de atualizar. Mostra o
+  destaque, os outros itens e o botão que leva à tela do destaque. Fechar por
+  qualquer caminho (botão, Esc, clique fora) marca a versão como vista.
+
+**Quando o modal abre:**
+
+- **Atualizou:** a versão instalada é mais nova que a última vista. Abre com ela.
+- **Pulou versões** (da 1.1.0 para a 1.3.0): abre com a instalada no topo e as
+  anteriores desde a última vista recolhidas em "Também desde a sua última versão".
+- **Instalação nova:** nada guardado nesta máquina, nem os primeiros passos
+  (`RN-HOM-03`). Não abre: tudo é novidade, e a Home de primeiro acesso já ensina o
+  caminho. A instalada passa a ser a vista.
+- **Usava o app antes desta regra existir:** sem versão vista, mas com primeiros
+  passos guardados. Abre só com a instalada.
+- **Versão só de bastidor:** nenhuma das versões pendentes tem destaque. Não abre;
+  a versão aparece no histórico (`RN-HOM-05`).
+- **Demonstração** (`RN-GLB-15`): não abre e não marca como vista.
+
+**Onde fica guardado.** A última versão vista é preferência desta máquina
+(`localStorage`), como o menu recolhido, e sem o ID do Perfil: quem atualizou foi o
+app da máquina. Sem armazenamento, o modal não abre.
+
+**Garantido por teste:** `npm run test` confere o formato do arquivo, a ordem das
+versões (da mais nova para a mais antiga) e que a `version` do `package.json` tem
+entrada, no topo. Subir a versão sem escrever as novidades barra o `check`.
+
+**Implementado em:** `src/shared/release-notes.ts` (`releaseModalDecision`) ·
+`src/shared/release-notes.json` · `src/renderer/src/features/release-notes/` ·
+`src/renderer/src/features/home/HomeScreen.tsx` · `scripts/release-notes.mjs`
+
+**Testado em:** `src/shared/release-notes.test.ts` ·
+`tests/esteira/release-notes.test.ts`
+
+### RN-HOM-05 · Histórico de novidades
+
+*Nova em 2026-11-20.*
+
+A tela **Novidades** lista todas as versões, da mais nova para a mais antiga, com a
+data e a etiqueta "Instalada" na versão em uso. Não está no menu lateral: abre pela
+etiqueta da versão no cabeçalho da Home, pelo link "Todas as notas de versão" do
+bloco e pelo "Ver todas as notas" do modal.
+
+- **Busca** no título e na explicação de cada item, sem diferenciar acento nem
+  maiúscula ("analise" acha "Análise"), e pelo número da versão, com ou sem `v`
+  ("1.2" acha a 1.2.0 e a 1.2.1). O trecho encontrado fica realçado.
+- **Filtro por tipo:** Todos, Novo, Melhoria, Correção.
+- Versão sem item que passe na busca e no filtro some da lista. Sem resultado, a
+  tela diz que nada foi encontrado e oferece limpar a busca.
+
+**Implementado em:** `src/shared/release-notes.ts` (`searchReleaseNotes`) ·
+`src/renderer/src/features/release-notes/ReleaseNotesScreen.tsx`
+
+**Testado em:** `src/shared/release-notes.test.ts`

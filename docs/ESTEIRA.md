@@ -22,7 +22,7 @@ O resto é da esteira, e cada etapa deixa marcado o que já passou.
 | Refinamento | você e o Claude | O que muda para quem usa, as regras (`RN-...`) que nascem ou mudam |
 | Código | Claude | Numa branch a partir da `main`, no clone público. Código, regra em `docs/regras-de-negocio/`, Cenário, `HelpTip` se o cálculo contraria a intuição |
 | Portões locais | Claude | `npm run check`. No commit, a varredura de credenciais (`pre-commit`); no push, a verificação de publicação (`pre-push`, `RN-SEC-32`) e a guarda do Claude |
-| PR | Claude | Com o template preenchido. **Subir a `version` no mesmo PR é decidir publicar** |
+| PR | Claude | Com o template preenchido. **Subir a `version` no mesmo PR é decidir publicar**, e as novidades dela entram em `src/shared/release-notes.json` (`RN-HOM-04`) |
 
 ## 2. Checks do PR
 
@@ -61,7 +61,7 @@ publicada. `.github/workflows/release.yml`:
 | versão | esteira | Decide se há o que publicar |
 | build | esteira | Varredura de credenciais, `npm run check`, instalador, auditoria do pacote, laudo de segurança, SHA-256 |
 | atestado | esteira | Atestado de proveniência assinado |
-| rascunho | esteira | Confere que o ambiente `producao` exige aprovação. Cria a Release em rascunho, com as novidades (PRs desde a última versão) e a lista do que já passou |
+| rascunho | esteira | Confere que o ambiente `producao` exige aprovação. Cria a Release em rascunho, com as novidades (`src/shared/release-notes.json`, mais os PRs desde a última versão como "Mudanças técnicas") e a lista do que já passou |
 | **aprovação** | **você** | O GitHub avisa (e-mail, app do celular). Abra o run, leia a lista e o `npm-audit.json` do rascunho, e aprove em **Review deployments** |
 | publicar | esteira | Publica como a mais recente; a tag `v<versão>` nasce aqui |
 | conferir | esteira | Baixa da Release, confere hash, atestado e `releases/latest` |

@@ -70,7 +70,8 @@ export const ptBR = {
     settings: 'Configuração',
     security: 'Segurança',
     sprintDelivery: 'Entregas da Sprint',
-    bugAnalysis: 'Análise de Bugs'
+    bugAnalysis: 'Análise de Bugs',
+    releaseNotes: 'Novidades'
   },
 
   squads: {
@@ -91,7 +92,6 @@ export const ptBR = {
 
   home: {
     version: 'v{version}',
-    versionLabel: 'Versão {version}',
     greeting: {
       morning: 'Bom dia',
       afternoon: 'Boa tarde',
@@ -164,6 +164,49 @@ export const ptBR = {
       title: 'Quer só explorar antes?',
       text: 'A demonstração preenche todas as telas com uma sprint fictícia. Nada toca no seu Azure DevOps.',
       action: 'Abrir demonstração'
+    }
+  },
+
+  releaseNotes: {
+    types: {
+      new: 'Novo',
+      improvement: 'Melhoria',
+      fix: 'Correção'
+    },
+    allTypes: 'Todos',
+    cardTitle: 'Novidades da {version}',
+    allNotes: 'Todas as notas de versão',
+    open: 'Abrir {screen}',
+    installed: 'Instalada',
+    versionButton: 'Versão {version}. Ver o histórico de novidades',
+    modal: {
+      title: 'Novidades da {version}',
+      earlier: 'Também desde a sua última versão: {versions}',
+      allNotes: 'Ver todas as notas',
+      notNow: 'Agora não',
+      gotIt: 'Entendi',
+      itemTitle: '{title}.',
+      // Uma frase por tela por causa do artigo: "no Planning", "na Daily".
+      try: {
+        home: 'Ir para a Home',
+        planning: 'Experimentar no Planning',
+        daily: 'Experimentar na Daily',
+        'sprint-delivery': 'Ver nas Entregas da Sprint',
+        'bug-analysis': 'Ver na Análise de Bugs',
+        settings: 'Abrir a Configuração',
+        security: 'Abrir a Segurança'
+      }
+    },
+    history: {
+      search: 'Buscar por tela, recurso ou versão',
+      searchPlaceholder: 'Buscar por tela, recurso ou versão (ex.: Squad, capacidade, 1.2)',
+      typeFilter: 'Tipo de novidade',
+      count: '{items} em {versions}',
+      items: { one: '{count} novidade', other: '{count} novidades' },
+      versions: { one: '{count} versão', other: '{count} versões' },
+      empty: 'Nenhuma novidade com “{query}”.',
+      emptyType: 'Nenhuma novidade deste tipo.',
+      clear: 'Limpar a busca'
     }
   },
 
