@@ -34,6 +34,13 @@ Aparecem na lista de checks do PR. Os obrigatórios barram o merge.
 | `pronto` | A definição de pronto que compilar não prova: regra, aprovado, Cenário, prova do teste de segurança, versão. Comenta uma tabela fixa no PR |
 | `analyze` (CodeQL) | Análise estática de segurança do TypeScript |
 
+**A lista de termos protegidos não vai para o CI, de propósito.** Ela é conferida só
+na máquina de quem publica: no `pre-push` (`RN-SEC-32`) e na guarda do Claude. Levá-la
+ao GitHub como secret foi considerado e recusado. A lista é o resumo exato do que não
+pode vazar, e o ganho seria pequeno: quando o CI roda, o PR já está público, então
+ele só avisaria depois. A prevenção é o `pre-push`, antes de qualquer coisa sair da
+máquina.
+
 ## 3. Teste e merge
 
 1. **Baixe o instalador do PR:** no run do `check`, em **Artifacts**, o
