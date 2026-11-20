@@ -262,6 +262,11 @@ export function evaluate({ files, changedRules, citedRules, body, version }) {
 
 const ICON = { ok: '✅', fail: '❌', na: '➖' }
 
+/** A barra invertida primeiro: senão um `\|` do texto viraria `\\|` e quebraria a célula. */
+export function tableCell(text) {
+  return text.replace(/\\/g, '\\\\').replace(/\|/g, '\\|')
+}
+
 export function report(items) {
   const failed = items.some((item) => item.status === 'fail')
   const lines = [
@@ -274,9 +279,7 @@ export function report(items) {
     '',
     '| | Etapa | Detalhe |',
     '|---|---|---|',
-    ...items.map(
-      (item) => `| ${ICON[item.status]} | ${item.step} | ${item.detail.replace(/\|/g, '\\|')} |`
-    ),
+    ...items.map((item) => `| ${ICON[item.status]} | ${item.step} | ${tableCell(item.detail)} |`),
     '',
     'Os portões técnicos (compilação, testes, segurança, credenciais, build) são o check `check`, na lista de checks do PR.'
   ]

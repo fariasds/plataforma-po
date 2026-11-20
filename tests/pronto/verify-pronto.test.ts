@@ -4,6 +4,7 @@ import {
   evaluate,
   isChecked,
   report,
+  tableCell,
   WAIVERS
 } from '../../scripts/verify-pronto.mjs'
 
@@ -177,6 +178,11 @@ describe('caixas e relatório', () => {
   it('reconhece a caixa com x maiúsculo e com asterisco', () => {
     expect(isChecked(`* [X] ${WAIVERS.rules}`, WAIVERS.rules)).toBe(true)
     expect(isChecked(`- [ ] ${WAIVERS.rules}`, WAIVERS.rules)).toBe(false)
+  })
+
+  it('a célula da tabela escapa a barra invertida antes do separador', () => {
+    expect(tableCell('a|b')).toBe('a\\|b')
+    expect(tableCell('a\\|b')).toBe('a\\\\\\|b')
   })
 
   it('o relatório leva o marcador do comentário fixo e uma linha por etapa', () => {

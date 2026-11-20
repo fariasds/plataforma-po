@@ -27,11 +27,10 @@ const defined = new Set(ruleDocs.flatMap((text) => text.match(RULE_ID) ?? []))
 
 // Formatos de revogação de docs/regras-de-negocio/README.md: "- RN-XXX-NN — revogada"
 // na lista de revogadas, ou o ID riscado.
+const REVOKED_FORMATS = [/^- (RN-[A-Z]{3}-\d{2}) — revogada/gm, /~~(RN-[A-Z]{3}-\d{2})~~/g]
 const revoked = new Set(
   ruleDocs.flatMap((text) =>
-    [...text.matchAll(/^- (RN-[A-Z]{3}-\d{2}) — revogada|~~(RN-[A-Z]{3}-\d{2})~~/gm)].map(
-      (match) => match[1] ?? match[2]
-    )
+    REVOKED_FORMATS.flatMap((format) => [...text.matchAll(format)].map((match) => match[1]))
   )
 )
 
