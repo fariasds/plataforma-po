@@ -94,7 +94,10 @@ function check(
   })
 }
 
-describe('RN-SEC-32: publicação só da história pública', () => {
+// Cada caso cria repositórios git de verdade e, no último, faz um push com o hook.
+// Isso passa dos 5 s padrão do Vitest quando o CI roda os arquivos em paralelo, e
+// o teste falhava por tempo, não por barreira.
+describe('RN-SEC-32: publicação só da história pública', { timeout: 60_000 }, () => {
   it('commit limpo, de autor noreply, passa', () => {
     const clone = publicClone()
     commit(clone.cwd, { 'src/loja.ts': 'export const nome = "Loja Online"\n' }, 'Loja: nome')
