@@ -23,6 +23,13 @@ updates:
       # Node 24). A major sobe à mão, junto com a do Electron.
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
+      # ESLint 10 ainda não: o eslint-plugin-react 7.37.5 (última versão, nov/2026)
+      # declara peer eslint ^9.7 e quebra na 10 (context.getFilename e
+      # sourceCode.getAllComments saíram da API). Rever quando sair uma versão dele com
+      # eslint ^10 no peerDependencies (jsx-eslint/eslint-plugin-react#3977, PR #4022);
+      # aí remova este ignore e atualize os dois juntos.
+      - dependency-name: 'eslint'
+        update-types: ['version-update:semver-major']
     groups:
       # O Vite empacota no app tudo o que o código importa, inclusive o que está em
       # devDependencies (electron, react, react-dom); a cadeia de build escreve o
