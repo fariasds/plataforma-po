@@ -37,3 +37,35 @@ jobs:
       - run: npm ci
 
       - run: npm run check
+
+      # Só no PR: o instalador exato que vai ser aprovado, para o mantenedor testar
+      # antes do merge. O check acima já compilou out/; aqui só empacota.
+      - name: Instalador do PR
+        if: github.event_name == 'pull_request'
+        run: npx electron-builder --win --publish never
+
+      # RN-SEC-13: o que entrou no pacote, contra a lista do que pode entrar.
+      - name: Auditoria do pacote
+        if: github.event_name == 'pull_request'
+        run: node scripts/audit-package.mjs dist/win-unpacked/resources
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: github.event_name == 'pull_request'
+        with:
+          name: instalador-pr-${{ github.event.pull_request.number }}
+          path: dist/*-setup.exe
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Onde baixar o instalador
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          {
+            echo '## Instalador deste PR'
+            echo ''
+            echo "Em **Artifacts**, no fim [desta página]($RUN_URL), o arquivo \`instalador-pr-*\`."
+            echo 'É um .zip com o instalador dentro. Fica disponível por 7 dias.'
+          } >> "$GITHUB_STEP_SUMMARY"
