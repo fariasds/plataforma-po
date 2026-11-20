@@ -47,7 +47,21 @@ As áreas e o formato estão em
 | `npm run verify:neutral` | Informa ocorrências de termos de uma lista privada. Sem a lista, não há o que contar |
 | `npm run check` | Todos acima, mais o build |
 
-O CI roda `npm run check` em todo PR, no Windows.
+O CI roda `npm run check` em todo PR, no Windows. O `npm run test` inclui a
+conferência de que toda regra citada no código existe e não está revogada.
+
+Além dele, o check **pronto** (`scripts/verify-pronto.mjs`) confere a parte da
+definição de pronto que compilar e testar não provam, e comenta o resultado no PR:
+
+| Etapa | Quando se aplica | O que exige |
+|---|---|---|
+| Regra de negócio | O código do app (`src/`, fora testes e Cenários) mudou | Uma regra de `docs/regras-de-negocio/` mudou junto, ou a caixa "Sem mudança de regra de negócio" |
+| Resultado aprovado | Um arquivo de `tests/regression/aprovados/` mudou | O PR ou um commit cita uma regra que mudou junto |
+| Cenário | Telas ou os serviços que as alimentam mudaram | Um Cenário ou aprovado mudou, ou a caixa "Sem mudança no que as telas mostram" |
+| Prova do teste de segurança | Um teste novo em `tests/security/` | A caixa "O teste de segurança novo falhou com a barreira desligada" |
+| Versão | A `version` do `package.json` mudou | Maior que a anterior, e o `package-lock.json` alinhado |
+
+As caixas estão no template do PR. Marcá-las é uma afirmação sua para quem revisa.
 
 ### Testes de segurança
 
@@ -119,12 +133,13 @@ padrão.
 2. Crie uma branch a partir da `main`.
 3. Commits pequenos, com mensagem que diga **por que**.
 4. Rode `npm run check` localmente.
-5. No PR, descreva:
+5. Preencha o template do PR:
    - o que muda para quem usa;
    - as regras criadas ou alteradas (IDs);
    - para barreira de segurança nova, a prova de falha;
    - para mudança visual, um print.
-6. O CI precisa estar verde. A revisão olha a definição de pronto acima.
+6. Os checks `check` e **pronto** precisam estar verdes. A revisão olha a definição
+   de pronto acima.
 
 Ao contribuir, você concorda que a sua contribuição é licenciada sob a
 [GPL-3.0](LICENSE), a mesma do projeto.
