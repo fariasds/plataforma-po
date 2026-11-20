@@ -19,6 +19,8 @@ import { t } from '../i18n'
 import { accentTones, MONO_FONT, SIDER, SIDER_COLLAPSED_WIDTH, SIDER_WIDTH } from '../theme'
 import { AppLogo, AppMark } from './AppLogo'
 import { DemoBanner } from './DemoBanner'
+import { SquadTabs } from './SquadTabs'
+import { UpdateBanner } from './UpdateBanner'
 import { UserMenu } from './UserMenu'
 
 const { Header, Sider, Content } = Layout
@@ -387,9 +389,11 @@ export function AppLayout(): React.JSX.Element {
       </Sider>
 
       <Layout>
-        {/* A faixa da demonstração sobe junto com o cabeçalho: os dois ficam presos ao topo. */}
+        {/* As faixas sobem junto com o cabeçalho: ficam todos presos ao topo. */}
         <div style={{ position: 'sticky', top: 0, zIndex: 10, flex: '0 0 auto' }}>
+          <UpdateBanner />
           <DemoBanner />
+          <SquadTabs />
           <Header
             style={{
               borderBottom: `1px solid ${token.colorBorder}`,

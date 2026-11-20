@@ -109,13 +109,15 @@ Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `AppLayout`           | Moldura de toda tela autenticada: menu lateral (expansível, ver abaixo) e cabeçalho com o título. Tela nova entra no menu em `MAIN` ou num grupo |
 | `AppLogo` / `AppMark` | Marca do app. `AppMark` sozinho em espaço curto; `AppLogo` com o nome                                                                            |
-| `ProductFilter`       | Escolher Produto ou Grupo. Sempre o primeiro controle do topo da tela                                                                            |
+| `ProductFilter`       | Escolher Produto, Grupo ou a Squad inteira. Sempre o primeiro controle do topo da tela. A Squad inteira mostra os pontos dos Produtos sobrepostos |
+| `SquadTabs`           | Abas de Squad no topo da janela, acima do cabeçalho (RN-GLB-17). Só existe com Squads na Configuração; ver "Abas de Squad" abaixo                 |
 | `DashboardFilters`    | `ProductFilter` + seletor de sprint + nome da sprint em cada Produto (telas de Review)                                                           |
 | `StateTag`            | Estado de work item. Nunca uma `Tag` com cor escolhida na tela                                                                                   |
 | `HelpTip`             | Explicar um cálculo que contraria a intuição (ver Definição de pronto no `CLAUDE.md`)                                                            |
 | `ErrorState`          | Falha ao carregar                                                                                                                                |
 | `UserMenu`            | Cartão da conta no pé do menu lateral                                                                                                            |
 | `DemoBanner`          | Faixa do Perfil de demonstração, presa ao topo com o cabeçalho. Fundo `colorPrimaryBg`, nunca `STATUS`: não é alerta nem situação (RN-GLB-15)    |
+| `UpdateBanner`        | Faixa de versão nova, acima da `DemoBanner`. Fundo neutro (`colorBgContainer`); o destaque fica só no botão de baixar, a ação principal (RN-GLB-18) |
 
 ## Menu lateral
 
@@ -139,6 +141,21 @@ Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
   usam todo dia, ficam acima do `UserMenu`.
 - **Tela nova:** entre em `MAIN` se for de uso diário; num grupo se fizer parte de
   uma cerimônia já existente. Grupo novo só quando houver pelo menos duas telas.
+
+## Abas de Squad
+
+- **Como abas de navegador.** Ficam num trilho `NEUTRA[200]` acima do cabeçalho,
+  presas ao topo com ele. A aba ativa tem o fundo do cabeçalho
+  (`colorBgContainer`), cantos de cima arredondados e cantos côncavos embaixo, e
+  se funde com o cabeçalho; as outras ficam no trilho, separadas por um traço fino
+  que some ao lado da ativa.
+- **Conteúdo da aba:** ponto na cor da Squad (`NEUTRA[500]` sem cor), "Squad
+  <nome>" e, à direita, quantos Produtos ela tem em `MONO_FONT`.
+- **Uma só para o app.** A aba vale para todas as telas; trocar de menu não troca
+  de Squad. O menu lateral não muda com as Squads.
+- **O "+" no fim** leva à Configuração, onde se cria uma Squad.
+- **Sem Squads, nada aparece:** nenhum trilho vazio, nenhuma aba única.
+- **A cor da Squad é identidade, como a do Produto** — nunca situação nem destaque.
 
 ## Padrões de tela
 

@@ -1,0 +1,269 @@
+{
+  "app": {
+    "bugStateMonthSlots": [],
+    "bugStateOrder": [],
+    "bugStateSprintSlots": [],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 121,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 121
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 121,
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "totalHours": 121
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  },
+  "backoffice": {
+    "bugStateMonthSlots": [],
+    "bugStateOrder": [],
+    "bugStateSprintSlots": [],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [],
+    "devFocusSprintSlots": [],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  },
+  "loja": {
+    "bugStateMonthSlots": [],
+    "bugStateOrder": [],
+    "bugStateSprintSlots": [],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 121,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 121
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 121,
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "totalHours": 121
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  },
+  "portal": {
+    "bugStateMonthSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "states": {
+          "Committed": 20,
+          "New": 1
+        }
+      }
+    ],
+    "bugStateOrder": [
+      "New",
+      "Approved",
+      "Committed",
+      "Done"
+    ],
+    "bugStateSprintSlots": [
+      {
+        "bugCount": 1,
+        "byCategory": {},
+        "fullLabel": "14 de set. → 25 de set.",
+        "key": "2026-09-14_2026-09-25",
+        "label": "Sprint 2",
+        "states": {
+          "Committed": 20,
+          "New": 1
+        }
+      }
+    ],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 39,
+        "devHours": 13,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 33
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "31 de ago. → 11 de set.",
+        "key": "2026-08-31_2026-09-11",
+        "label": "Sprint 1",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 0,
+        "devHours": 0,
+        "fullLabel": "14 de set. → 25 de set.",
+        "key": "2026-09-14_2026-09-25",
+        "label": "Sprint 2",
+        "totalHours": 20
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 13,
+        "fullLabel": "28 de set. → 09 de out.",
+        "key": "2026-09-28_2026-10-09",
+        "label": "Sprint 3",
+        "totalHours": 13
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  },
+  "squad-digital": {
+    "bugStateMonthSlots": [],
+    "bugStateOrder": [],
+    "bugStateSprintSlots": [],
+    "criticalityLevels": [],
+    "devFocusMonthSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "Agosto de 2026",
+        "key": "2026-08",
+        "label": "Ago/26",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 242,
+        "fullLabel": "Setembro de 2026",
+        "key": "2026-09",
+        "label": "Set/26",
+        "totalHours": 242
+      }
+    ],
+    "devFocusSprintSlots": [
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "24 de ago. → 04 de set.",
+        "key": "2026-08-24_2026-09-04",
+        "label": "Sprint 1",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": null,
+        "devHours": 0,
+        "fullLabel": "07 de set. → 18 de set.",
+        "key": "2026-09-07_2026-09-18",
+        "label": "Sprint 2",
+        "totalHours": 0
+      },
+      {
+        "devFocusPercent": 100,
+        "devHours": 242,
+        "fullLabel": "21 de set. → 02 de out.",
+        "key": "2026-09-21_2026-10-02",
+        "label": "Sprint 3",
+        "totalHours": 242
+      }
+    ],
+    "partialFailures": [],
+    "reworkMonthSlots": [],
+    "reworkSprintSlots": [],
+    "reworkUnavailable": "customFields.reworkCount",
+    "slaMonthStats": [],
+    "slaSprintStats": []
+  }
+}

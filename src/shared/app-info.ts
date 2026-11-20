@@ -12,3 +12,16 @@ export const APP_DESCRIPTION = 'Dashboard para Product Owners no Azure DevOps'
  * o renderer existir: com a mesma cor do layout, a janela não pisca branca ao abrir.
  */
 export const WINDOW_BACKGROUND = '#F4F5F7'
+
+/**
+ * Repositório público de onde saem as Releases (RN-SEC-22). Fixo no código, e não
+ * na Configuração, porque decide para onde vai a consulta de versão (RN-SEC-33) e
+ * que link de download abre no navegador (RN-SEC-21).
+ */
+export const PUBLIC_REPOSITORY = 'fariasds/plataforma-po'
+
+/**
+ * Começo do nome do instalador: o `name` do `package.json`, que o `artifactName`
+ * do `electron-builder.yml` usa como `${name}-${version}-setup.exe`.
+ */
+export const INSTALLER_BASENAME = 'plataforma-po-desktop'

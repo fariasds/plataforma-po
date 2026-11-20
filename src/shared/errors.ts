@@ -41,6 +41,13 @@ export type AppErrorCode =
   | 'SELECTION_UNKNOWN'
   /** Pedido do objetivo da sprint fora do formato: nenhum ID, IDs demais ou inválidos. */
   | 'AI_INVALID_REQUEST'
+  /**
+   * A consulta de versão ou o link da Release fugiriam do endereço permitido
+   * (RN-SEC-33, RN-SEC-21). Como o `AZURE_BLOCKED`, é defeito ou ataque.
+   */
+  | 'UPDATE_BLOCKED'
+  /** A janela pediu um link da versão nova sem haver versão nova conhecida. */
+  | 'UPDATE_UNAVAILABLE'
 
 export interface SerializedError {
   code: AppErrorCode

@@ -14,6 +14,7 @@ import {
   buildConfiguration,
   draftFromConfig,
   idProblem,
+  productsWithoutSquad,
   type WizardDraft
 } from './draft'
 import { parseOrganizationInput } from './organization'
@@ -57,10 +58,18 @@ function blocker(step: number, draft: WizardDraft): string | null {
       return products.length === 0 ? t('onboarding.wizard.blockers.noProduct') : null
     case 4:
       if (products.some((p) => !p.name.trim())) return t('onboarding.wizard.blockers.productName')
-      if ([...products, ...draft.groups].some((i) => !i.idLocked && idProblem(draft, i.key, i.id)))
+      if (
+        [...products, ...draft.groups, ...draft.squads].some(
+          (i) => !i.idLocked && idProblem(draft, i.key, i.id)
+        )
+      )
         return t('onboarding.wizard.blockers.invalidId')
       if (draft.groups.some((g) => !g.name.trim() || g.products.length < 2))
         return t('onboarding.wizard.blockers.groupIncomplete')
+      if (draft.squads.some((s) => !s.name.trim() || s.products.length < 1))
+        return t('onboarding.wizard.blockers.squadIncomplete')
+      if (productsWithoutSquad(draft).length > 0)
+        return t('onboarding.wizard.blockers.productWithoutSquad')
       return null
     case 5:
       return draft.projects.some((p) => !draft.projectProcess[p])

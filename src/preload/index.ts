@@ -30,7 +30,8 @@ const api: IpcBridge = {
   restoreDemo: () => invoke(IPC_CHANNELS.restoreDemo),
   leaveDemo: () => invoke(IPC_CHANNELS.leaveDemo),
 
-  getSprints: (limit, preferFuture) => invoke(IPC_CHANNELS.getSprints, limit, preferFuture),
+  getSprints: (limit, preferFuture, squadId) =>
+    invoke(IPC_CHANNELS.getSprints, limit, preferFuture, squadId),
   getSprintDelivery: (project, sprint) => invoke(IPC_CHANNELS.getSprintDelivery, project, sprint),
   getTeamPerformance: (project, sprints) =>
     invoke(IPC_CHANNELS.getTeamPerformance, project, sprints),
@@ -49,6 +50,9 @@ const api: IpcBridge = {
 
   buildSprintGoalRequest: (selection, sprint, itemIds) =>
     invoke(IPC_CHANNELS.buildSprintGoalRequest, selection, sprint, itemIds),
+
+  checkForUpdate: () => invoke(IPC_CHANNELS.checkForUpdate),
+  openUpdateLink: (link) => invoke(IPC_CHANNELS.openUpdateLink, link),
 
   // O listener recebe só o estado, nunca o `event` do Electron: ele carrega o
   // `sender`, que daria à janela um caminho de volta ao ipcRenderer.

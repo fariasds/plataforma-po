@@ -22,6 +22,7 @@ export const ptBR = {
     project: 'Projeto',
     organization: 'Organização',
     groups: 'Grupos',
+    squads: 'Squads',
     processProfiles: 'Perfis de processo',
     sprint: 'Sprint',
     month: 'Mês',
@@ -61,6 +62,14 @@ export const ptBR = {
     security: 'Segurança',
     sprintDelivery: 'Entregas da Sprint',
     bugAnalysis: 'Análise de Bugs'
+  },
+
+  squads: {
+    tabsLabel: 'Squads',
+    tabLabel: 'Squad {name}',
+    whole: 'Squad inteira',
+    productCount: { one: '{count} produto', other: '{count} produtos' },
+    create: 'Criar Squad na Configuração'
   },
 
   userMenu: {
@@ -159,6 +168,15 @@ export const ptBR = {
     openFolder: 'Abrir pasta'
   },
 
+  update: {
+    title: 'Versão nova disponível:',
+    installed: 'Você usa a',
+    releaseNotes: 'Ver novidades',
+    download: 'Baixar a versão {version}',
+    afterDownload:
+      'O download abriu no navegador. Abra o instalador: ele atualiza por cima e mantém seus Perfis e o token.',
+    dismiss: 'Agora não'
+  },
   demo: {
     bannerTitle: 'Dados fictícios de demonstração',
     bannerText: 'Nada aqui vem de um Azure DevOps de verdade, e nada sai deste computador.',
@@ -201,6 +219,12 @@ export const ptBR = {
         text:
           'Os dados de exemplo foram gravados numa data fixa e andam em semanas inteiras até a sprint corrente ser a desta semana. ' +
           'Por isso as datas não batem com as do Cenário, mas o dia da semana e o horário de cada mudança são os mesmos.'
+      },
+      'RN-GLB-17': {
+        title: 'Sprints da Squad',
+        text:
+          'A lista mostra só as sprints dos Produtos desta Squad. Outra Squad pode ter sprints em datas diferentes e as vê na própria aba. ' +
+          'Uma Squad só com Produtos de fluxo contínuo usa as sprints de todos os Produtos.'
       },
       // ─── Home ───────────────────────────────────────────────────────────────
       'RN-HOM-02': {
@@ -436,6 +460,8 @@ export const ptBR = {
         productName: 'Todo Produto precisa de nome.',
         invalidId: 'Há ID inválido ou repetido.',
         groupIncomplete: 'Todo Grupo precisa de nome e de pelo menos dois Produtos.',
+        squadIncomplete: 'Toda Squad precisa de nome e de pelo menos um Produto.',
+        productWithoutSquad: 'Com Squads, todo Produto precisa estar em uma Squad.',
         noProcess: 'Escolha um Perfil de processo para cada projeto.'
       },
       refused: 'O app recusou a Configuração',
@@ -520,7 +546,17 @@ export const ptBR = {
       groupNamePlaceholder: 'Nome do Grupo',
       groupProductsPlaceholder: 'Pelo menos dois Produtos',
       removeGroup: 'Remover Grupo',
-      addGroup: 'Adicionar Grupo'
+      addGroup: 'Adicionar Grupo',
+      squadsTitle: 'Squads (opcional)',
+      squadsIntro:
+        'Uma Squad reúne os Produtos com que um time trabalha. Cada Squad vira uma aba no topo do app, e cada Produto fica numa Squad só. Sem Squads, todos os Produtos aparecem juntos.',
+      squadDefaultName: 'Squad {number}',
+      squadNamePlaceholder: 'Nome da Squad',
+      squadColor: 'Cor da Squad',
+      squadProductsPlaceholder: 'Produtos da Squad',
+      removeSquad: 'Remover Squad',
+      addSquad: 'Adicionar Squad',
+      withoutSquad: 'Ainda sem Squad: {names}'
     },
 
     process: {
@@ -737,6 +773,7 @@ export const ptBR = {
     addLeftover: 'Adicionar item remanescente',
     itemIdPlaceholder: 'ID do item',
     capacityTitle: 'Capacidade da sprint',
+    capacityTitleSquad: 'Capacidade da sprint · Squad {name}',
     capacityWithin: 'Dentro da capacidade',
     capacityAtLimit: 'No limite',
     capacityOver: 'Acima da capacidade',
@@ -934,13 +971,14 @@ export const ptBR = {
       ai: 'O que a sua IA faz com o que você cola nela: o app mostra o pedido, mas não controla o que o fornecedor guarda.',
       signing:
         'O instalador não tem assinatura de código: o Windows avisa "editor desconhecido". A integridade se confere pelo SHA-256.',
-      updates: 'Não há atualização automática: versão nova é instalador novo.'
+      updates:
+        'Não há atualização automática: o app avisa quando sai versão nova, e quem baixa e instala é você.'
     },
     guarantees: {
       network: {
         title: 'Seu token só sai da sua máquina para o Azure DevOps',
         detail:
-          'Por HTTPS, para a sua organização. Nenhum outro servidor, nem do autor do app. A janela não acessa a rede.'
+          'Por HTTPS, para a sua organização. Nenhum outro servidor, nem do autor do app. A única outra consulta é a de versão nova no GitHub público, sem token e sem dado seu. A janela não acessa a rede.'
       },
       encryption: {
         title: 'Seu token fica cifrado pelo Windows',
@@ -967,7 +1005,8 @@ export const ptBR = {
       },
       links: {
         title: 'Link de work item não abre nada perigoso',
-        detail: 'Só páginas da sua organização no Azure DevOps vão para o navegador.'
+        detail:
+          'Só páginas da sua organização no Azure DevOps vão para o navegador, e o aviso de versão nova abre só a página e o instalador da Release.'
       },
       noProcess: {
         title: 'O app não executa programa nenhum',

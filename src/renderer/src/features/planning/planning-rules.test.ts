@@ -5,7 +5,8 @@ import {
   capacityRatio,
   capacityStatus,
   comparePlanningItems,
-  resolveCapacity
+  resolveCapacity,
+  resolveSquadCapacity
 } from './planning-rules'
 
 function item(id: number, fields: Partial<PlanningItem> = {}): PlanningItem {
@@ -165,5 +166,48 @@ describe('resolveCapacity (RN-PLN-16)', () => {
       frontBugPercent: 10,
       backBugPercent: 40
     })
+  })
+})
+
+describe('resolveSquadCapacity (RN-PLN-22)', () => {
+  const defaults = {
+    frontDevs: 2,
+    backDevs: 3,
+    sprintDays: 10,
+    frontBugPercent: 20,
+    backBugPercent: 30
+  }
+  const squadDefaults = {
+    frontDevs: 1,
+    backDevs: 1,
+    sprintDays: 10,
+    frontBugPercent: 0,
+    backBugPercent: 0
+  }
+
+  it('o que a Squad gravou vence tudo', () => {
+    expect(
+      resolveSquadCapacity(defaults, squadDefaults, { frontDevs: 4 }, { frontDevs: 9 })
+    ).toEqual({
+      ...squadDefaults,
+      frontDevs: 4
+    })
+  })
+
+  it('sem nada da Squad, a capacidade única de antes das Squads continua valendo', () => {
+    expect(resolveSquadCapacity(defaults, undefined, null, { backDevs: 5 })).toEqual({
+      ...defaults,
+      backDevs: 5
+    })
+  })
+
+  it('valores próprios da Squad na Configuração vencem a capacidade única gravada', () => {
+    expect(resolveSquadCapacity(defaults, squadDefaults, null, { backDevs: 5 })).toEqual(
+      squadDefaults
+    )
+  })
+
+  it('sem nada gravado nem valores próprios, segue a Configuração geral', () => {
+    expect(resolveSquadCapacity(defaults, undefined, null, null)).toEqual(defaults)
   })
 })

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import type { AzureUserProfile, UnifiedSprint } from '@shared/azure'
-import type { Configuration } from '@shared/config/schema'
+import type { Configuration, Squad } from '@shared/config/schema'
 import type {
   BugAnalysisResult,
   DailyResult,
@@ -9,8 +9,10 @@ import type {
   SprintDeliveryResult,
   TeamPerformanceResult
 } from '@shared/dashboards'
+import { t } from '../i18n'
 import { ipc } from './client'
 import { PROFILE_QUERY_KEY } from './useProfile'
+import { useActiveSquad } from './useActiveSquad'
 
 /**
  * A Configuração em uso, ou `null` antes de existir uma válida.
@@ -34,15 +36,18 @@ export function useConfiguration(): Configuration {
   return config
 }
 
-// ─── Seleção de Produto ou Grupo ─────────────────────────────────────────────
+// ─── Seleção de Produto, Grupo ou Squad inteira ──────────────────────────────
 
-/** Um item do filtro: um Produto ou um Grupo da Configuração. */
+/** Um item do filtro: um Produto, um Grupo ou a Squad inteira. */
 export interface SelectionOption {
   id: string
   name: string
   /** `undefined` para Grupo sem cor na Configuração. */
   color: string | undefined
+  /** Soma mais de um Produto: Grupo ou Squad inteira. */
   isGroup: boolean
+  /** Só na Squad inteira: as cores dos Produtos dela, mostradas lado a lado. */
+  memberColors?: string[]
 }
 
 /**
@@ -52,11 +57,38 @@ export interface SelectionOption {
  */
 export type SelectionKind = 'review' | 'planning'
 
-export function selectionOptions(config: Configuration, kind: SelectionKind): SelectionOption[] {
-  const products = config.products.filter((p) => kind === 'review' || p.cadence === 'sprints')
+/**
+ * Com uma Squad aberta (RN-GLB-17), só o que é dela: primeiro a Squad inteira
+ * (quando ela tem dois ou mais Produtos), depois os Produtos e os Grupos dela.
+ * A Squad inteira segue a regra do Grupo no Planning e na Daily.
+ */
+export function selectionOptions(
+  config: Configuration,
+  kind: SelectionKind,
+  squad: Squad | null = null
+): SelectionOption[] {
+  const members = squad ? new Set(squad.products) : null
+  const products = config.products.filter(
+    (p) => (kind === 'review' || p.cadence === 'sprints') && (!members || members.has(p.id))
+  )
   const ids = new Set(products.map((p) => p.id))
   const groups = config.groups.filter((g) => g.products.every((id) => ids.has(id)))
+  const whole: SelectionOption[] =
+    squad && squad.products.length > 1 && squad.products.every((id) => ids.has(id))
+      ? [
+          {
+            id: squad.id,
+            name: t('squads.whole'),
+            color: squad.color,
+            isGroup: true,
+            memberColors: squad.products.map(
+              (id) => config.products.find((p) => p.id === id)!.color
+            )
+          }
+        ]
+      : []
   return [
+    ...whole,
     ...products.map((p) => ({ id: p.id, name: p.name, color: p.color, isGroup: false })),
     ...groups.map((g) => ({
       id: g.id,
@@ -76,11 +108,11 @@ export interface Selection {
 }
 
 /**
- * Seleção de Produto ou Grupo de uma tela. Começa no primeiro Produto e, se a
- * Configuração mudar e o escolhido sumir, volta para o primeiro.
+ * Seleção de uma tela, dentro da Squad aberta. Começa na primeira opção e, se a
+ * Configuração ou a Squad mudar e o escolhido sumir, volta para a primeira.
  */
 export function useSelection(kind: SelectionKind): Selection {
-  const options = selectionOptions(useConfiguration(), kind)
+  const options = selectionOptions(useConfiguration(), kind, useActiveSquad())
   const [chosen, setChosen] = useState<string | null>(null)
   const selected = options.find((o) => o.id === chosen) ?? options[0]
   return { options, value: selected?.id ?? '', selected, onChange: setChosen }
@@ -91,13 +123,15 @@ export function useSelection(kind: SelectionKind): Selection {
  * so switching product or sprint fetches fresh data while keeping the old one cached.
  */
 
+/** Sprints da Squad aberta; sem Squads, as de todos os Produtos (RN-GLB-17). */
 export function useSprints(
   limit?: number,
   preferFuture?: boolean
 ): UseQueryResult<UnifiedSprint[], Error> {
+  const squadId = useActiveSquad()?.id ?? null
   return useQuery({
-    queryKey: ['sprints', limit, preferFuture],
-    queryFn: () => ipc.getSprints(limit, preferFuture)
+    queryKey: ['sprints', limit, preferFuture, squadId],
+    queryFn: () => ipc.getSprints(limit, preferFuture, squadId)
   })
 }
 

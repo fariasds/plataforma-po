@@ -8,6 +8,8 @@ import { createCalendar } from '@shared/calendar'
 import { validateConfiguration } from '@shared/config/validate'
 import { sprintMoment } from '@shared/home'
 import { planningKeys } from '@shared/planning-keys'
+import type { CapacityConfig } from '../../src/renderer/src/features/planning/planning-rules'
+import { isAggregateSelection, squadOfSelection } from '@shared/squads'
 import { createFakeAzure, type FakeAzure } from '../../src/main/demo/fake-azure'
 import { SCENARIOS } from '../../src/main/demo/scenarios'
 import type { Scenario } from '../../src/main/demo/types'
@@ -68,7 +70,8 @@ const { buildSprintGoalRequest } = await import('../../src/main/services/ai/spri
 const { resolveScope } = await import('../../src/main/services/azure/scope')
 const { buildPlanningSummary, summaryToMarkdown } =
   await import('../../src/renderer/src/features/planning/planning-summary')
-const { resolveCapacity } = await import('../../src/renderer/src/features/planning/planning-rules')
+const { resolveCapacity, resolveSquadCapacity } =
+  await import('../../src/renderer/src/features/planning/planning-rules')
 
 const APPROVED_DIR = join(__dirname, 'aprovados')
 
@@ -92,8 +95,39 @@ async function perSelection(
   return result
 }
 
-async function planningSprint(): Promise<UnifiedSprint | undefined> {
-  return (await getUnifiedSprints(PLANNABLE_SPRINTS, true))[0]
+/** Squad em que a tela abre a seleção; `null` sem Squads (RN-GLB-17). */
+function squadOf(selectionId: string): string | null {
+  return squadOfSelection(state.config!, selectionId)
+}
+
+/** As sprints que a tela vê: as da Squad da seleção, como na aba aberta. */
+function sprintsFor(
+  selectionId: string,
+  limit: number,
+  preferFuture = false
+): Promise<UnifiedSprint[]> {
+  return getUnifiedSprints(limit, preferFuture, squadOf(selectionId))
+}
+
+async function planningSprint(selectionId: string): Promise<UnifiedSprint | undefined> {
+  return (await sprintsFor(selectionId, PLANNABLE_SPRINTS, true))[0]
+}
+
+/** A capacidade que o painel mostra para a seleção (RN-PLN-16, RN-PLN-22). */
+function capacityFor(scenario: Scenario, selectionId: string): CapacityConfig {
+  const config = state.config!
+  const stored = (key: string): object | null =>
+    (scenario.workData?.[key] as object | undefined) ?? null
+  const squadId = squadOf(selectionId)
+  if (squadId === null) {
+    return resolveCapacity(config.capacityDefaults, stored(planningKeys.capacity) ?? {})
+  }
+  return resolveSquadCapacity(
+    config.capacityDefaults,
+    config.squads.find((s) => s.id === squadId)?.capacityDefaults,
+    stored(planningKeys.squadCapacity(squadId)),
+    stored(planningKeys.capacity)
+  )
 }
 
 function manualItems(
@@ -124,15 +158,28 @@ async function planningItems(
 }
 
 export const SCREENS: Record<string, ScreenRun> = {
-  'sprint-unificada': async () => ({
-    revisao: await getUnifiedSprints(HISTORY_SPRINTS),
-    planejamento: await getUnifiedSprints(PLANNABLE_SPRINTS, true)
-  }),
+  'sprint-unificada': async () => {
+    const all = {
+      revisao: await getUnifiedSprints(HISTORY_SPRINTS),
+      planejamento: await getUnifiedSprints(PLANNABLE_SPRINTS, true)
+    }
+    const squads = state.config!.squads
+    if (squads.length === 0) return all
+    // Cada aba de Squad tem a própria lista (RN-GLB-17).
+    const porSquad: Record<string, unknown> = {}
+    for (const squad of squads) {
+      porSquad[squad.id] = {
+        revisao: await getUnifiedSprints(HISTORY_SPRINTS, false, squad.id),
+        planejamento: await getUnifiedSprints(PLANNABLE_SPRINTS, true, squad.id)
+      }
+    }
+    return { ...all, porSquad }
+  },
 
   // A tela abre na sprint mais recente e o PO costuma olhar a anterior: as duas entram.
   entregas: async (scenario) => {
-    const sprints = (await getUnifiedSprints(DELIVERY_SPRINTS)).slice(0, 2)
     return perSelection(scenario, async (selectionId) => {
+      const sprints = (await sprintsFor(selectionId, DELIVERY_SPRINTS)).slice(0, 2)
       const bySprint: Record<string, unknown> = {}
       for (const sprint of sprints) {
         bySprint[sprint.key] = await getSprintDeliveryData(selectionId, sprint)
@@ -142,36 +189,45 @@ export const SCREENS: Record<string, ScreenRun> = {
   },
 
   bugs: async (scenario) => {
-    const sprints = await getUnifiedSprints(HISTORY_SPRINTS)
-    if (sprints.length === 0) return null
-    return perSelection(scenario, (selectionId) =>
-      getBugAnalysisData(selectionId, sprints, sprints[0])
-    )
+    if ((await getUnifiedSprints(HISTORY_SPRINTS)).length === 0) return null
+    return perSelection(scenario, async (selectionId) => {
+      const sprints = await sprintsFor(selectionId, HISTORY_SPRINTS)
+      return sprints.length === 0 ? null : getBugAnalysisData(selectionId, sprints, sprints[0])
+    })
   },
 
   desempenho: async (scenario) => {
-    const sprints = await getUnifiedSprints(HISTORY_SPRINTS)
-    if (sprints.length === 0) return null
-    return perSelection(scenario, (selectionId) => getTeamPerformanceData(selectionId, sprints))
+    if ((await getUnifiedSprints(HISTORY_SPRINTS)).length === 0) return null
+    return perSelection(scenario, async (selectionId) => {
+      const sprints = await sprintsFor(selectionId, HISTORY_SPRINTS)
+      return sprints.length === 0 ? null : getTeamPerformanceData(selectionId, sprints)
+    })
   },
 
   daily: async (scenario) => {
-    const [sprint] = await getUnifiedSprints(1)
-    if (!sprint) return null
-    return perSelection(scenario, (selectionId) => getDailyData(selectionId, sprint))
+    if ((await getUnifiedSprints(1)).length === 0) return null
+    return perSelection(scenario, async (selectionId) => {
+      const [sprint] = await sprintsFor(selectionId, 1)
+      return sprint ? getDailyData(selectionId, sprint) : null
+    })
   },
 
   planning: async (scenario) => {
-    const sprint = await planningSprint()
-    if (!sprint) return null
+    if ((await getUnifiedSprints(PLANNABLE_SPRINTS, true)).length === 0) return null
     const config = state.config!
     return perSelection(scenario, async (selectionId) => {
+      const sprint = await planningSprint(selectionId)
+      if (!sprint) return null
       const { products } = resolveScope(selectionId, config)
       const manual = manualItems(scenario, selectionId, sprint)
       const items = await planningItems(scenario, selectionId, sprint)
-      const isGroup = config.groups.some((g) => g.id === selectionId)
+      const isGroup = isAggregateSelection(config, selectionId)
+      const squad = config.squads.find((s) => s.id === selectionId)
       const selectionName =
-        config.groups.find((g) => g.id === selectionId)?.name ?? products[0]?.name ?? selectionId
+        config.groups.find((g) => g.id === selectionId)?.name ??
+        (squad ? `Squad ${squad.name}` : undefined) ??
+        products[0]?.name ??
+        selectionId
       const { effortFrontend, effortBackend, effortQa } = config.customFields
       const goal = scenario.workData?.[planningKeys.goal(selectionId, sprint.key)]
 
@@ -186,10 +242,7 @@ export const SCREENS: Record<string, ScreenRun> = {
         uncheckedIds: uncheckedIds(scenario, sprint),
         manualIds: new Set(manual.map((i) => i.id)),
         effort: { frontend: !!effortFrontend, backend: !!effortBackend, qa: !!effortQa },
-        capacity: resolveCapacity(
-          config.capacityDefaults,
-          (scenario.workData?.[planningKeys.capacity] as object | undefined) ?? {}
-        ),
+        capacity: capacityFor(scenario, selectionId),
         productiveHoursPerDay: config.calendar.productiveHoursPerDay,
         storyPoints: config.storyPoints,
         goal: typeof goal === 'string' ? goal : undefined,
@@ -229,11 +282,17 @@ export const SCREENS: Record<string, ScreenRun> = {
   // A Home lê a mesma sprint da Daily e decide o momento no renderer (RN-HOM-02);
   // o cálculo é puro, e aqui roda no "hoje" do Cenário.
   home: async () => {
-    const [sprint] = await getUnifiedSprints(1)
-    return {
-      sprint: sprint?.key ?? null,
-      momento: sprintMoment(sprint, createCalendar(state.config!.calendar), new Date())
+    const calendar = createCalendar(state.config!.calendar)
+    const moment = async (squadId: string | null): Promise<Record<string, unknown>> => {
+      const [sprint] = await getUnifiedSprints(1, false, squadId)
+      return { sprint: sprint?.key ?? null, momento: sprintMoment(sprint, calendar, new Date()) }
     }
+    const squads = state.config!.squads
+    if (squads.length === 0) return moment(null)
+    // A Home segue a aba aberta: o momento é o da sprint da Squad (RN-GLB-17).
+    const porSquad: Record<string, unknown> = {}
+    for (const squad of squads) porSquad[squad.id] = await moment(squad.id)
+    return porSquad
   }
 }
 
@@ -243,10 +302,10 @@ export const SCREENS: Record<string, ScreenRun> = {
  * Planning marcado.
  */
 async function sprintGoalRequests(scenario: Scenario): Promise<Record<string, unknown> | null> {
-  const sprint = await planningSprint()
-  if (!sprint) return null
   const result: Record<string, unknown> = {}
   for (const selectionId of scenario.selections) {
+    const sprint = await planningSprint(selectionId)
+    if (!sprint) continue
     const unchecked = uncheckedIds(scenario, sprint)
     const ids = (await planningItems(scenario, selectionId, sprint))
       .map((item) => item.id)

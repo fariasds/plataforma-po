@@ -1,0 +1,194 @@
+{
+  "app": {
+    "2026-09-07_2026-09-18": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 1,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    }
+  },
+  "backoffice": {
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-24T15:00:00",
+          "devTimeInSprintHours": 29,
+          "leadTimeHours": 29,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-14T09:00:00",
+              "System.Id": 3301,
+              "System.IterationPath": "Contoso",
+              "System.State": "Done",
+              "System.Title": "Exportar pedidos em planilha",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 3301,
+            "rev": 3
+          }
+        }
+      ],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 29
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 29
+        }
+      ]
+    },
+    "2026-09-28_2026-10-09": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    }
+  },
+  "loja": {
+    "2026-09-07_2026-09-18": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-25T17:00:00",
+          "devTimeInSprintHours": 39,
+          "leadTimeHours": 39,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-08T09:00:00",
+              "System.Id": 3001,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Cupom no checkout",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 3001,
+            "rev": 4
+          }
+        }
+      ],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 2,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 39
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 39
+        }
+      ]
+    }
+  },
+  "portal": {
+    "2026-09-14_2026-09-25": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-17T16:00:00",
+          "devTimeInSprintHours": 20,
+          "leadTimeHours": 20,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-15T10:00:00",
+              "System.Id": 3202,
+              "System.IterationPath": "Contoso\\Portal\\Sprint 2",
+              "System.State": "Done",
+              "System.Title": "Relatório de comissão sem o mês corrente",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 3202,
+            "rev": 3
+          }
+        }
+      ],
+      "scopeInjectedCount": 1,
+      "totalInSprint": 1,
+      "typeDistribution": [
+        {
+          "name": "Bug",
+          "value": 20
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Bug",
+          "value": 20
+        }
+      ]
+    },
+    "2026-09-28_2026-10-09": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 1,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    }
+  },
+  "squad-digital": {
+    "2026-09-07_2026-09-18": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-09-21_2026-10-02": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-09-25T17:00:00",
+          "devTimeInSprintHours": 39,
+          "leadTimeHours": 39,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-09-08T09:00:00",
+              "System.Id": 3001,
+              "System.IterationPath": "Contoso\\Loja\\Sprint 3",
+              "System.State": "Done",
+              "System.Title": "Cupom no checkout",
+              "System.WorkItemType": "Product Backlog Item"
+            },
+            "id": 3001,
+            "rev": 4
+          }
+        }
+      ],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 3,
+      "typeDistribution": [
+        {
+          "name": "Product Backlog Item",
+          "value": 39
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Product Backlog Item",
+          "value": 39
+        }
+      ]
+    }
+  }
+}
