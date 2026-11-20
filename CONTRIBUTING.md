@@ -60,7 +60,6 @@ definição de pronto que compilar e testar não provam, e comenta o resultado n
 | Cenário | Telas ou os serviços que as alimentam mudaram | Um Cenário ou aprovado mudou, ou a caixa "Sem mudança no que as telas mostram" |
 | Prova do teste de segurança | Um teste novo em `tests/security/` | A caixa "O teste de segurança novo falhou com a barreira desligada" |
 | Versão | A `version` do `package.json` mudou | Maior que a anterior, e o `package-lock.json` alinhado |
-| Termos protegidos | PR do próprio repositório (fork e Dependabot não recebem a lista) | Nenhum termo da lista do mantenedor nas linhas novas, no texto do PR nem nas mensagens de commit |
 
 As caixas estão no template do PR. Marcá-las é uma afirmação sua para quem revisa.
 

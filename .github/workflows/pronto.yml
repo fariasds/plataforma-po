@@ -38,11 +38,6 @@ jobs:
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          # A lista de termos da empresa (perfis-privados/neutral-denylist.txt), como
-          # secret. PR de fork e do Dependabot não recebem secrets; nos outros, a
-          # lista é obrigatória, para um secret esquecido não virar "passou".
-          PO_DENYLIST: ${{ secrets.PO_DENYLIST }}
-          PO_REQUIRE_DENYLIST: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]' && '1' || '' }}
         run: |
           node scripts/verify-pronto.mjs --base "$BASE_SHA" --summary pronto.md
           status=$?

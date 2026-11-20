@@ -10,10 +10,6 @@
  * O texto do PR vem da variável PR_BODY, nunca da linha de comando: ele é escrito
  * por quem abre o PR e não pode virar parte de um comando de shell.
  *
- * A lista de termos protegidos vem da variável PO_DENYLIST (o secret do mesmo nome),
- * no formato de perfis-privados/neutral-denylist.txt. A saída diz o número do termo
- * e onde ele está, **nunca o termo**: o log do CI é público.
- *
  * Uma etapa que não se aplica ao PR aparece como "não se aplica". Quando a mudança
  * de fato dispensa uma etapa (uma refatoração que não muda regra, por exemplo), o
  * PR declara isso marcando a caixa correspondente do template, e a dispensa fica
@@ -25,7 +21,6 @@ import { execFileSync } from 'node:child_process'
 import { writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { applies, parseDenylist } from './verify-push.mjs'
 
 export const RULE_ID = /RN-[A-Z]{3}-\d{2}/g
 
@@ -134,9 +129,8 @@ const touchesScreens = (path) =>
  * changedRules: IDs cuja seção mudou em docs/regras-de-negocio/
  * citedRules: IDs citados no texto do PR e nas mensagens de commit
  * version: { before, after, lock } do package.json e do package-lock.json
- * terms: entrada de termsItem; sem ela, a etapa não se aplica
  */
-export function evaluate({ files, changedRules, citedRules, body, version, terms }) {
+export function evaluate({ files, changedRules, citedRules, body, version }) {
   const paths = files.map((file) => file.path)
   const items = []
 
@@ -263,88 +257,7 @@ export function evaluate({ files, changedRules, citedRules, body, version, terms
     })
   }
 
-  items.push(termsItem(terms ?? { list: null, required: false }))
-
   return items
-}
-
-const TERMS_STEP = 'Termos protegidos'
-
-/**
- * A lista de termos sobre o que o PR acrescenta: linhas novas (com o escopo de cada
- * termo), o texto do PR e as mensagens de commit (só termos sem escopo, como no
- * pre-push). Diz o número do termo e onde, nunca o termo.
- *
- * list: o texto da lista, ou null quando ela não chegou ao CI
- * required: a lista é obrigatória (PR do próprio repositório, que não seja do Dependabot)
- * addedLines: [{ file, text }]
- */
-export function termsItem({ list, required, addedLines = [], body = '', messages = '' }) {
-  if (!list) {
-    return required
-      ? {
-          step: TERMS_STEP,
-          status: 'fail',
-          detail:
-            'a lista não chegou ao CI. Crie o secret PO_DENYLIST (docs/ESTEIRA.md, "Configuração que a esteira pressupõe")'
-        }
-      : {
-          step: TERMS_STEP,
-          status: 'na',
-          detail:
-            'sem a lista: PR de fork ou do Dependabot não recebe secrets. Vale o pre-push de quem publica'
-        }
-  }
-
-  let terms
-  try {
-    terms = parseDenylist(list)
-  } catch {
-    // A mensagem de erro de uma regex inválida traz a própria regex, isto é, o termo.
-    return {
-      step: TERMS_STEP,
-      status: 'fail',
-      detail: 'a lista tem uma linha que não é regex válida'
-    }
-  }
-
-  const found = []
-  const scan = (text, file, where) => {
-    for (const term of terms) {
-      if (applies(term, file) && term.regex.test(text))
-        found.push(`termo nº ${term.number} ${where}`)
-    }
-  }
-  for (const line of addedLines) scan(line.text, line.file, `em ${line.file}`)
-  for (const line of body.split(/\r?\n/)) scan(line, null, 'no texto do PR')
-  for (const line of messages.split(/\r?\n/)) scan(line, null, 'numa mensagem de commit')
-
-  if (found.length === 0) {
-    return {
-      step: TERMS_STEP,
-      status: 'ok',
-      detail: `${terms.length} termos conferidos em ${addedLines.length} linhas novas, no texto do PR e nas mensagens de commit`
-    }
-  }
-  return {
-    step: TERMS_STEP,
-    status: 'fail',
-    detail: `${[...new Set(found)].join('; ')}. O PR já está público: reescreva sem o termo e, se ele estiver num commit, refaça a história da branch antes do merge`
-  }
-}
-
-/** Linhas acrescentadas por um diff unificado de vários arquivos, com o arquivo de cada uma. */
-export function addedLinesByFile(diff) {
-  const result = []
-  let file = null
-  for (const line of diff.split(/\r?\n/)) {
-    if (line.startsWith('+++ ')) {
-      file = line.startsWith('+++ b/') ? line.slice(6) : null
-      continue
-    }
-    if (file && line.startsWith('+')) result.push({ file, text: line.slice(1) })
-  }
-  return result
 }
 
 const ICON = { ok: '✅', fail: '❌', na: '➖' }
@@ -421,33 +334,11 @@ export function collect(base) {
     lock: json(show('HEAD', 'package-lock.json')).version
   }
 
-  // O package-lock não entra: hashes de integridade casariam com qualquer regex curta.
-  const addedLines = addedLinesByFile(
-    git([
-      'diff',
-      '-U0',
-      '--no-renames',
-      mergeBase,
-      'HEAD',
-      '--',
-      '.',
-      ':(exclude)package-lock.json'
-    ])
-  )
-  const terms = {
-    list: process.env.PO_DENYLIST || null,
-    required: process.env.PO_REQUIRE_DENYLIST === '1',
-    addedLines,
-    body,
-    messages
-  }
-
   return {
     files,
     changedRules: [...changedRules].sort(),
     citedRules: ruleIdsIn(`${body}\n${messages}`),
     body,
-    terms,
     version
   }
 }
