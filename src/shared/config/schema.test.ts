@@ -13,6 +13,14 @@ const read = (path: string): Record<string, unknown> =>
 type Draft = any
 
 const example = (): Record<string, unknown> => read('examples/exemplo-scrum.json')
+const squadsExample = (): Record<string, unknown> => read('examples/exemplo-squads.json')
+
+/** Cópia do exemplo com Squads, com uma alteração aplicada. */
+function mutateSquads(change: (config: Draft) => void): unknown {
+  const config = structuredClone(squadsExample())
+  change(config)
+  return config
+}
 
 /** Cópia do exemplo com uma alteração aplicada; o original não é tocado. */
 function mutate(change: (config: Draft) => void): unknown {
@@ -204,7 +212,113 @@ describe('RN-CFG-02 — IDs de Produto e Grupo', () => {
         c.groups[0].id = 'canais'
       })
     )
-    expect(removedIds(before, after)).toEqual({ products: ['loja'], groups: ['digital'] })
+    expect(removedIds(before, after)).toEqual({
+      products: ['loja'],
+      groups: ['digital'],
+      squads: []
+    })
+  })
+})
+
+describe('RN-GLB-17 — Squads', () => {
+  it('o exemplo com Squads é válido', () => {
+    expect(issuesOf(squadsExample())).toEqual([])
+  })
+
+  it('sem a chave "squads", a lista nasce vazia', () => {
+    const result = validateConfiguration(example())
+    expect(result.ok && result.config.squads).toEqual([])
+  })
+
+  it('a capacidade própria da Squad passa pela mesma regra da geral (RN-PLN-22)', () => {
+    const result = validateConfiguration(
+      mutateSquads(
+        (c) =>
+          (c.squads[1].capacityDefaults = {
+            frontDevs: 1,
+            backDevs: 1,
+            sprintDays: 10,
+            bugPercent: 30
+          })
+      )
+    )
+    expect(result.ok && result.config.squads[1].capacityDefaults).toEqual({
+      frontDevs: 1,
+      backDevs: 1,
+      sprintDays: 10,
+      frontBugPercent: 30,
+      backBugPercent: 30
+    })
+  })
+
+  it('rejeita Squad sem Produto', () => {
+    expectIssue(
+      mutateSquads((c) => (c.squads[2].products = [])),
+      'squads[2].products',
+      /pelo menos um Produto/
+    )
+  })
+
+  it('rejeita Squad que cita Produto inexistente', () => {
+    expectIssue(
+      mutateSquads((c) => c.squads[2].products.push('site')),
+      'squads[2].products[1]',
+      /"site", que não existe/
+    )
+  })
+
+  it('rejeita Produto em duas Squads', () => {
+    expectIssue(
+      mutateSquads((c) => c.squads[2].products.push('loja')),
+      'squads[2].products[1]',
+      /já está na Squad "squad-digital"/
+    )
+  })
+
+  it('rejeita Produto fora de toda Squad quando há Squads', () => {
+    expectIssue(
+      mutateSquads((c) => ((c.squads[2].products = ['portal']), c.squads.splice(1, 1))),
+      'products[3].id',
+      /"backoffice" não está em nenhuma Squad/
+    )
+  })
+
+  it('rejeita ID de Squad igual ao de um Produto, de um Grupo ou de outra Squad', () => {
+    expectIssue(
+      mutateSquads((c) => (c.squads[2].id = 'backoffice')),
+      'squads[2].id',
+      /igual ao de um Produto ou Grupo/
+    )
+    expectIssue(
+      mutateSquads((c) => (c.squads[2].id = 'squad-digital')),
+      'squads[2].id',
+      /repetido/
+    )
+  })
+
+  it('aceita Grupo dentro de uma Squad e rejeita Grupo que atravessa Squads', () => {
+    expect(
+      issuesOf(
+        mutateSquads(
+          (c) => (c.groups = [{ id: 'digital', name: 'Digital', products: ['loja', 'app'] }])
+        )
+      )
+    ).toEqual([])
+    expectIssue(
+      mutateSquads(
+        (c) => (c.groups = [{ id: 'misto', name: 'Misto', products: ['loja', 'portal'] }])
+      ),
+      'groups[0].products',
+      /Squads diferentes/
+    )
+  })
+
+  it('aponta a Squad que sumiu entre duas versões (RN-CFG-02)', () => {
+    const before = configurationSchema.parse(squadsExample())
+    const after = configurationSchema.parse(
+      mutateSquads((c) => (c.squads[2].id = 'squad-backoffice'))
+    )
+    expect(removedIds(before, after).squads).toEqual(['squad-interno'])
   })
 })
 

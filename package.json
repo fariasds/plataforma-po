@@ -1,6 +1,6 @@
 {
   "name": "plataforma-po-desktop",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Dashboard para Product Owners no Azure DevOps",
   "main": "./out/main/index.js",
@@ -43,14 +43,14 @@
   "devDependencies": {
     "@doyensec/electronegativity": "1.10.3",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
-    "@electron-toolkit/eslint-config-ts": "^3.1.0",
+    "@electron-toolkit/eslint-config-ts": "^4.0.0",
     "@electron-toolkit/tsconfig": "^2.0.0",
     "@types/node": "^22.19.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "electron": "^45.3.2",
-    "electron-builder": "^26.0.12",
+    "electron-builder": "^26.18.0",
     "electron-vite": "^5.0.0",
     "eslint": "^9.39.1",
     "eslint-plugin-react": "^7.37.5",
@@ -61,7 +61,14 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "typescript": "^5.9.3",
-    "vite": "^7.2.6",
-    "vitest": "^5.0.2"
+    "vite": "^7.3.8",
+    "vitest": "^5.1.0"
+  },
+  "overrides": {
+    "@mapbox/node-pre-gyp": {
+      "tar": "^7.5.22"
+    },
+    "minimatch@^9.0.0": "^11.0.8",
+    "minimatch@^10.0.0": "^11.0.8"
   }
 }

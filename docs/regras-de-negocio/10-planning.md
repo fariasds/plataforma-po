@@ -237,7 +237,8 @@ campo; sem nenhum dos dois, a Configuração é recusada apontando o campo que f
 
 Devs de frontend, devs de backend, dias da sprint e o percentual reservado a bugs
 de cada disciplina são editáveis na tela e ficam nos **Dados de trabalho** do Perfil, na chave
-`planning:capacity` — uma só para o Perfil, valendo para todos os Produtos.
+`planning:capacity` — uma só para o Perfil, valendo para todos os Produtos. Com
+Squads, cada uma tem a sua (`RN-PLN-22`), e esta passa a ser só o ponto de partida.
 
 Devs aceitam **valores fracionários** (2,5 devs) — é comum alguém dividir o tempo
 entre Produtos.
@@ -246,6 +247,31 @@ Os valores iniciais vêm de `capacityDefaults` na Configuração. O que o PO nun
 editou continua seguindo a Configuração; o que editou fica com o valor dele. Um
 percentual único de bugs editado antes da separação por disciplina vale para as
 duas, até o PO editar cada uma.
+
+### RN-PLN-22 · Capacidade por Squad
+
+Cada Squad tem pessoas próprias, então a capacidade do Planning é **de cada Squad**,
+nos Dados de trabalho, na chave `planning:capacity:<id da Squad>`. O título do painel
+diz de qual Squad é a capacidade. Ela vale para todas as visões da aba: a Squad
+inteira e cada Produto dela.
+
+De onde vem o valor, em ordem:
+
+1. o que o PO editou na aba da Squad;
+2. se nada foi editado, `capacityDefaults` da própria Squad, quando a Configuração os
+   define;
+3. senão, a capacidade única gravada antes das Squads (`planning:capacity`), sobre
+   os `capacityDefaults` gerais.
+
+A primeira edição na aba grava a capacidade inteira na Squad: dali em diante ela não
+depende mais da capacidade única. Assim, ligar as Squads não apaga nada: cada Squad
+começa com o que o PO já tinha.
+
+**Implementado em:** `resolveSquadCapacity`, em
+`src/renderer/src/features/planning/planning-rules.ts` ·
+`src/renderer/src/features/planning/planning-work-data.ts` (`useCapacity`)
+
+**Cenário:** `squads`
 
 ### RN-PLN-17 · Alocado × capacidade
 

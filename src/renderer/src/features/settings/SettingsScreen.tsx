@@ -114,6 +114,19 @@ export function SettingsScreen(): React.JSX.Element {
                 children: config.groups.map((g) => g.name).join(', ') || '—'
               },
               {
+                key: 'squads',
+                label: t('common.squads'),
+                children:
+                  config.squads
+                    .map((s) => {
+                      const names = s.products.map(
+                        (id) => config.products.find((p) => p.id === id)?.name ?? id
+                      )
+                      return `${s.name} (${names.join(', ')})`
+                    })
+                    .join(' · ') || '—'
+              },
+              {
                 key: 'process',
                 label: t('common.processProfiles'),
                 children: Object.keys(config.processProfiles).join(', ')

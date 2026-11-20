@@ -14,16 +14,17 @@ este texto é a referência de intenção.
 
 Use estes termos com este sentido, na conversa e nos nomes que criar:
 
-| Termo                  | Significa                                                                                                                                                 |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Perfil**             | Uma organização do Azure DevOps, o PAT de acesso a ela e esta Configuração. Mora só na máquina do PO.                                                     |
-| **PAT**                | Token pessoal do Azure DevOps. **Nunca** faz parte da Configuração.                                                                                       |
-| **Configuração**       | Este arquivo: produtos, Perfis de processo, calendário e campos.                                                                                          |
-| **Dados de trabalho**  | O que nasce do uso do app (itens manuais do Planning, capacidade, planejamento). Ficam em `dados/`, guardados pelo ID do Produto ou Grupo. **Não edite.** |
-| **Produto**            | Unidade que o PO acompanha: um projeto do Azure, os area paths incluídos e excluídos, e o time que fornece as iterações.                                  |
-| **Grupo de produtos**  | Soma nomeada de Produtos, vista como um todo nos indicadores.                                                                                             |
-| **Sprint unificada**   | As sprints de vários Produtos que correm no mesmo período, tratadas como um ciclo só.                                                                     |
-| **Perfil de processo** | Quais tipos de work item contam e o que cada estado significa (entregue, terminal, em andamento).                                                         |
+| Termo                  | Significa                                                                                                                                                        |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Perfil**             | Uma organização do Azure DevOps, o PAT de acesso a ela e esta Configuração. Mora só na máquina do PO.                                                            |
+| **PAT**                | Token pessoal do Azure DevOps. **Nunca** faz parte da Configuração.                                                                                              |
+| **Configuração**       | Este arquivo: produtos, Perfis de processo, calendário e campos.                                                                                                 |
+| **Dados de trabalho**  | O que nasce do uso do app (itens manuais do Planning, capacidade, planejamento). Ficam em `dados/`, guardados pelo ID do Produto, Grupo ou Squad. **Não edite.** |
+| **Produto**            | Unidade que o PO acompanha: um projeto do Azure, os area paths incluídos e excluídos, e o time que fornece as iterações.                                         |
+| **Grupo de produtos**  | Soma nomeada de Produtos, vista como um todo nos indicadores.                                                                                                    |
+| **Squad**              | Os Produtos com que um time de pessoas trabalha. Cada Produto fica numa Squad só, e cada Squad vira uma aba no topo do app.                                      |
+| **Sprint unificada**   | As sprints de vários Produtos que correm no mesmo período, tratadas como um ciclo só.                                                                            |
+| **Perfil de processo** | Quais tipos de work item contam e o que cada estado significa (entregue, terminal, em andamento).                                                                |
 
 ## O que é cada seção
 
@@ -35,6 +36,7 @@ Use estes termos com este sentido, na conversa e nos nomes que criar:
 | `processProfiles`  | Perfis de processo, indexados por um ID. Cada Produto aponta para um.                                                                   |
 | `products`         | Os Produtos. `id` imutável, `name` livre, `project`, `areaPaths`, `excludedAreaPaths`, `team` (opcional), `processProfile` e `cadence`. |
 | `groups`           | Grupos de produtos: um `id`, um `name` e a lista de IDs de Produto (pelo menos dois).                                                   |
+| `squads`           | Squads, na ordem das abas: `id`, `name`, `color` (opcional), os IDs de Produto (pelo menos um) e `capacityDefaults` (opcional).         |
 | `customFields`     | Nome de referência de campos customizados do Azure (ex.: `Contoso.Retrabalho`). `null` quando o PO não usa.                             |
 | `criticality`      | Níveis de criticidade de bug e os prefixos do valor do campo que caem em cada um.                                                       |
 | `recurrentBugTag`  | Marcador no título que identifica bug reincidente, ou `null`.                                                                           |
@@ -59,7 +61,7 @@ na Daily.
    `"https://dev.azure.com/contoso"`. O app monta o endereço sozinho; aceitar URL
    permitiria mandar o PAT para outro servidor. Não existe campo para Azure DevOps
    Server (instalação local).
-3. **Nunca mude o `id` de um Produto ou Grupo existente.** Os Dados de trabalho
+3. **Nunca mude o `id` de um Produto, Grupo ou Squad existente.** Os Dados de trabalho
    estão guardados sob esse ID e ficariam órfãos. Para mudar o que aparece na tela,
    mude o `name`. Remover um Produto é legítimo, mas confirme com o PO antes.
 4. **Nunca invente nome de campo, tipo ou estado.** Os nomes precisam bater
@@ -79,8 +81,10 @@ na Daily.
   corrigido.
 - Chave desconhecida é erro, não é ignorada. Se o app acusar uma chave, confira a
   grafia no schema.
-- Algumas regras cruzam campos e só o app confere: IDs únicos, Grupo citando
-  Produto existente, Produto citando Perfil de processo existente,
+- Algumas regras cruzam campos e só o app confere: IDs únicos (Produto, Grupo e
+  Squad dividem o mesmo espaço de IDs), Grupo e Squad citando Produto existente,
+  cada Produto numa Squad só, Grupo dentro de uma Squad só, Produto citando Perfil
+  de processo existente,
   `plannableTypes` e `developmentTypes` dentro de `workItemTypes`,
   `deliveredStates` dentro de `terminalStates`.
 - Em JSON, a barra invertida dos area paths é escrita dobrada: `"Contoso\\Loja"`.
@@ -108,7 +112,37 @@ Acrescente um objeto em `products`, com um `id` novo que nunca mais vai mudar:
 
 Sem `team`, valem todas as iterações com datas do projeto. Sem `areaPaths` (ou com
 a lista vazia), vale o projeto inteiro. Se o Produto deve entrar num Grupo,
-acrescente o `id` na lista `products` do Grupo.
+acrescente o `id` na lista `products` do Grupo. **Se a Configuração tem Squads,
+acrescente o `id` também na lista `products` de uma Squad** — sem isso o app recusa
+o arquivo, porque o Produto não apareceria em tela nenhuma. Pergunte ao PO qual Squad.
+
+### Separar os Produtos por Squad
+
+Quando o PO diz que times diferentes cuidam de Produtos diferentes, crie uma Squad
+para cada time. Cada Squad vira uma aba no topo do app, e as telas mostram só os
+Produtos dela:
+
+```json
+"squads": [
+  { "id": "squad-digital", "name": "Digital", "color": "#7B61FF", "products": ["loja", "app"] },
+  { "id": "squad-portal", "name": "Portal", "products": ["portal"] },
+  { "id": "squad-interno", "name": "Interno", "products": ["backoffice"] }
+]
+```
+
+- Todo Produto entra em **exatamente uma** Squad.
+- O `id` da Squad não pode ser igual ao de um Produto ou Grupo. Use um prefixo
+  (`squad-portal`) quando a Squad tem o nome do único Produto dela.
+- Uma Squad com dois ou mais Produtos já ganha a visão "Squad inteira", que soma
+  todos. Um Grupo com os mesmos Produtos da Squad seria repetido: só crie Grupo para
+  somar **parte** dos Produtos de uma Squad.
+- Cada Squad tem a própria capacidade no Planning. Para dar a ela valores iniciais
+  diferentes dos gerais, use `capacityDefaults` dentro da Squad, com o mesmo formato
+  do `capacityDefaults` geral.
+- Para voltar a ver todos os Produtos juntos, deixe `squads` vazio. Os Dados de
+  trabalho de cada Squad ficam guardados para quando ela voltar com o mesmo `id`.
+
+O exemplo completo está em `examples/exemplo-squads.json` no repositório do app.
 
 ### Excluir uma área das métricas
 

@@ -2,6 +2,7 @@ import { Flex, Select, Tag } from 'antd'
 import { sprintIteration, type UnifiedSprint } from '@shared/azure'
 import { useConfiguration } from '../ipc/useAzure'
 import { useIsDemo } from '../ipc/useProfile'
+import { useActiveSquad } from '../ipc/useActiveSquad'
 import { MONO_FONT, productColors } from '../theme'
 import type { Selection } from '../ipc/useAzure'
 import { HelpTip } from './HelpTip'
@@ -24,6 +25,7 @@ export function DashboardFilters({
   const config = useConfiguration()
   const selectedSprint = sprints?.find((s) => s.key === selectedSprintKey)
   const isDemo = useIsDemo()
+  const squad = useActiveSquad()
 
   return (
     <Flex align="center" gap={12} wrap>
@@ -44,6 +46,9 @@ export function DashboardFilters({
 
       {/* Na demonstração as datas andam com o calendário e não batem com as do Cenário. */}
       {sprints && isDemo && <HelpTip rule="RN-GLB-16" />}
+
+      {/* Com Squads, a lista de sprints muda de uma aba para outra. */}
+      {sprints && squad && <HelpTip rule="RN-GLB-17" />}
 
       {/* Each product numbers its sprints its own way, so every name is shown
           side by side instead of buried in the option label. */}

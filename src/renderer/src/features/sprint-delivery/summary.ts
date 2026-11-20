@@ -1,13 +1,13 @@
 import type { Configuration } from '@shared/config/schema'
 import type { SprintDeliveryResult } from '@shared/dashboards'
+import { selectionProductIds } from '@shared/squads'
 
 /**
  * Tipos de desenvolvimento da seleção (RN-ENT-05): os do Perfil de processo de cada
- * Produto, somados quando é um Grupo.
+ * Produto, somados quando é um Grupo ou a Squad inteira.
  */
 export function developmentTypesOf(config: Configuration, selectionId: string): string[] {
-  const group = config.groups.find((g) => g.id === selectionId)
-  const productIds = group ? group.products : [selectionId]
+  const productIds = selectionProductIds(config, selectionId)
   const types = new Set<string>()
   for (const product of config.products) {
     if (!productIds.includes(product.id)) continue

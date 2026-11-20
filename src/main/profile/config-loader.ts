@@ -201,7 +201,9 @@ export function importConfiguration(json: string): ImportConfigResult {
   if (!result.ok) return { saved: false, issues: result.issues }
 
   const previous = getActiveConfig()
-  const removed = previous ? removedIds(previous, result.config) : { products: [], groups: [] }
+  const removed = previous
+    ? removedIds(previous, result.config)
+    : { products: [], groups: [], squads: [] }
 
   const raw = JSON.parse(json.replace(/^\uFEFF/, ''))
   writeFileAtomic(configPath(profile.id), JSON.stringify(raw, null, 2) + '\n')

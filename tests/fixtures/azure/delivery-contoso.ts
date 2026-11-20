@@ -396,8 +396,13 @@ function literals(text: string): string[] {
   return [...text.matchAll(QUOTED)].map((m) => m[1].replace(/''/g, "'"))
 }
 
+/** Todo metacaractere, não só o ponto: o nome do campo entra literal na regex. */
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function listAfter(query: string, field: string): string[] | null {
-  const match = query.match(new RegExp(`\\[${field.replace(/\./g, '\\.')}\\] IN \\(([^)]*)\\)`))
+  const match = query.match(new RegExp(`\\[${escapeRegExp(field)}\\] IN \\(([^)]*)\\)`))
   return match ? literals(match[1]) : null
 }
 

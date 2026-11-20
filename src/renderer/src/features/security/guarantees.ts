@@ -24,8 +24,11 @@ export interface Guarantee {
 export const GUARANTEES: readonly Guarantee[] = [
   {
     key: 'network',
-    rules: ['RN-SEC-18'],
-    proof: ['tests/security/rn-sec-18-fronteira-de-rede.test.ts']
+    rules: ['RN-SEC-18', 'RN-SEC-33'],
+    proof: [
+      'tests/security/rn-sec-18-fronteira-de-rede.test.ts',
+      'tests/security/rn-sec-33-consulta-de-versao.test.ts'
+    ]
   },
   {
     key: 'encryption',

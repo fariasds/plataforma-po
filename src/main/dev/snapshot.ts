@@ -44,11 +44,19 @@ interface Selections {
 
 function selectionsOf(config: Configuration): Selections {
   const sprintIds = new Set(config.products.filter((p) => p.cadence === 'sprints').map((p) => p.id))
+  // A visão "Squad inteira" só existe com dois ou mais Produtos (RN-GLB-17).
+  const squads = config.squads.filter((s) => s.products.length > 1)
   return {
-    history: [...config.products.map((p) => p.id), ...config.groups.map((g) => g.id)],
+    history: [
+      ...config.products.map((p) => p.id),
+      ...config.groups.map((g) => g.id),
+      ...squads.map((s) => s.id)
+    ],
     daily: [
       ...sprintIds,
-      ...config.groups.filter((g) => g.products.every((id) => sprintIds.has(id))).map((g) => g.id)
+      ...[...config.groups, ...squads]
+        .filter((g) => g.products.every((id) => sprintIds.has(id)))
+        .map((g) => g.id)
     ]
   }
 }

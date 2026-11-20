@@ -43,23 +43,30 @@ export function validateConfiguration(raw: unknown): ConfigurationResult {
 }
 
 /**
- * RN-CFG-02: IDs de Produto e Grupo que existiam e sumiram.
+ * RN-CFG-02: IDs de Produto, Grupo e Squad que existiam e sumiram.
  *
  * O schema não enxerga a versão anterior do arquivo, então quem salva compara as
  * duas. Um ID sumido pode ser remoção legítima ou renomeação — e a renomeação
  * órfã os Dados de trabalho guardados sob o ID antigo. Quem chama decide como
  * avisar; aqui só se aponta.
  */
+export interface RemovedIds {
+  products: string[]
+  groups: string[]
+  squads: string[]
+}
+
 export function removedIds(
-  previous: Pick<Configuration, 'products' | 'groups'>,
-  next: Pick<Configuration, 'products' | 'groups'>
-): { products: string[]; groups: string[] } {
+  previous: Pick<Configuration, 'products' | 'groups'> & Partial<Pick<Configuration, 'squads'>>,
+  next: Pick<Configuration, 'products' | 'groups'> & Partial<Pick<Configuration, 'squads'>>
+): RemovedIds {
   const gone = (before: { id: string }[], after: { id: string }[]): string[] => {
     const kept = new Set(after.map((item) => item.id))
     return before.map((item) => item.id).filter((itemId) => !kept.has(itemId))
   }
   return {
     products: gone(previous.products, next.products),
-    groups: gone(previous.groups, next.groups)
+    groups: gone(previous.groups, next.groups),
+    squads: gone(previous.squads ?? [], next.squads ?? [])
   }
 }
