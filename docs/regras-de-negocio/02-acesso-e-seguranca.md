@@ -545,8 +545,9 @@ que some no commit seguinte, o escopo dos termos, e que um `git push` real com o
 
 ### RN-SEC-13 · O pacote não carrega segredo
 
-O instalador contém apenas o código compilado, o `package.json`, o ícone e os
-modelos da pasta `resources/` (o modelo de Configuração, o schema e o `AGENTS.md`
+O instalador contém apenas o código compilado, o `package.json`, o `LICENSE` (a
+GPL pede que a licença acompanhe o programa), as dependências de execução, o ícone
+e os modelos da pasta `resources/` (o modelo de Configuração, o schema e o `AGENTS.md`
 de um Perfil novo). Ficam de fora: código-fonte, arquivos de configuração,
 **documentação** e qualquer arquivo de ambiente. **Nenhum PAT e nenhuma
 Configuração de alguém vão no pacote**: cada Perfil nasce vazio na máquina de quem
@@ -568,8 +569,17 @@ build feito na própria máquina, onde existem pastas que a esteira nunca vê.
 Daí a regra prática: **auditar o conteúdo do `app.asar` a cada versão** não é
 formalidade. É o único ponto onde esse tipo de vazamento aparece.
 
-**Garantida por:** a auditoria do pacote, em `docs/DISTRIBUICAO.md`. Não há teste
-automático.
+A auditoria é automática e funciona ao contrário da lista do `electron-builder.yml`:
+é uma lista do que **pode** estar no pacote. Na raiz do `app.asar`, só `out/`,
+`package.json`, `LICENSE`, `node_modules/` e `resources/`; fora do asar, só
+`resources/`. Em lugar nenhum, nem dentro de dependência: arquivo de ambiente,
+arquivo `.bin`, `perfis-privados/`, `.claude/`, `.git/` ou `perfis.json`. O que não
+couber é recusado, com o caminho. Ela roda no CI de todo PR, sobre o pacote montado
+ali, e na esteira de Release, sobre o pacote que vai ser publicado. Para auditar um
+build local ou uma instalação: `node scripts/audit-package.mjs <pasta resources>`.
+
+**Garantida por:** `scripts/audit-package.mjs`. **Provado por:**
+`tests/security/rn-sec-13-conteudo-do-pacote.test.ts`.
 
 ### RN-SEC-14 · Sem assinatura de código, por ora
 
