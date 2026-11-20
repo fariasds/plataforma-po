@@ -8,6 +8,7 @@ import {
   type SummaryCell,
   type SummaryTable
 } from './planning-summary'
+import { buildPlanningRows } from './planning-rules'
 
 // Resumo do Planning com dados fictícios: organização `contoso`, Grupo "Comércio"
 // com os Produtos "Loja Online" e "App Mobile".
@@ -501,5 +502,63 @@ describe('Objetivo da sprint (RN-PLN-20)', () => {
     expect(html).not.toContain('<img')
     expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;')
     expect(summaryToMarkdown(summary)).toContain('\\[clique\\](https://evil.example) \\| a')
+  })
+})
+
+describe('rateio escrito no resumo (RN-PLN-19)', () => {
+  // 101 antecipado (25% do front, 50% do back já feitos); 102 remanescente.
+  const rows = buildPlanningRows(
+    ITEMS.filter((i) => i.id !== 102 && i.product === 'loja-online'),
+    [
+      {
+        ...item(102, 'loja-online', 1, [3, 5, 2], 'Carrinho perde o cupom'),
+        frontendPercent: 50,
+        backendPercent: 25
+      }
+    ],
+    [{ id: 101, product: 'loja-online', frontendPercent: 25, backendPercent: 50 }]
+  )
+  const input = productInput({ items: rows, uncheckedIds: new Set(), manualIds: new Set([102]) })
+  const summary = buildPlanningSummary(input)
+  const items = summary.sections.find((s) => s.title === 'Itens da sprint')!.tables[0]
+  const row = (id: number): SummaryCell[] =>
+    items.rows.find((r) => (r[0] as { text: string }).text === `#${id}`)!
+
+  it('antecipado leva o que já foi feito e os pontos do Azure (RN-PLN-25)', () => {
+    expect(row(101)[1]).toEqual({
+      text: 'Checkout: pagamento via Pix',
+      tag: 'Antecipado · Front 25% · Back 50% feito'
+    })
+    expect(row(101).slice(3)).toEqual([
+      '6 (de 8)',
+      '4 (de 8)',
+      '3',
+      { text: '13 (de 19)', strong: true }
+    ])
+  })
+
+  it('remanescente leva o que falta', () => {
+    expect(row(102)[1]).toEqual({
+      text: 'Carrinho perde o cupom',
+      tag: 'Remanescente · Front 50% · Back 25% restante'
+    })
+  })
+
+  it('o Resumo geral diz quanto foi descontado', () => {
+    expect(summary.sections.find((s) => s.title === 'Resumo geral')?.note).toBe(
+      'O total já desconta 6 pontos de 1 item antecipado, feitos numa sprint anterior.'
+    )
+  })
+
+  it('antecipado só com uma disciplina feita cita só ela', () => {
+    const only = buildPlanningRows(
+      [item(101, 'loja-online', 1, [8, 8, 3])],
+      [],
+      [{ id: 101, product: 'loja-online', frontendPercent: 0, backendPercent: 50 }]
+    )
+    const [table] = sections(
+      productInput({ items: only, uncheckedIds: new Set(), manualIds: new Set() })
+    )['Itens da sprint']
+    expect(table.rows[0][1]).toEqual({ text: 'Item 101', tag: 'Antecipado · Back 50% feito' })
   })
 })

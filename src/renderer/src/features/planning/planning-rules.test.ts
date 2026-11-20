@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import type { PlanningItem } from '@shared/dashboards'
 import {
+  anticipatedDiscount,
+  applyAnticipation,
+  applyLeftover,
+  buildPlanningRows,
   capacityHours,
   capacityRatio,
   capacityStatus,
@@ -209,5 +213,126 @@ describe('resolveSquadCapacity (RN-PLN-22)', () => {
 
   it('sem nada gravado nem valores próprios, segue a Configuração geral', () => {
     expect(resolveSquadCapacity(defaults, undefined, null, null)).toEqual(defaults)
+  })
+})
+
+describe('applyLeftover (RN-PLN-09)', () => {
+  it('aplica o que falta de front e back, mantém o QA e soma as partes', () => {
+    const result = applyLeftover(item(1, { frontend: 8, backend: 13, qa: 5, total: 26 }), 50, 25)
+    expect(result).toMatchObject({ frontend: 4, backend: 3, qa: 5, total: 12 })
+    expect(result).toMatchObject({ frontendPercent: 50, backendPercent: 25 })
+  })
+})
+
+describe('applyAnticipation (RN-PLN-24)', () => {
+  it('fica o complemento do que já foi feito, arredondado; QA entra inteiro', () => {
+    const result = applyAnticipation(
+      item(1, { frontend: 8, backend: 13, qa: 5, total: 26 }),
+      25,
+      50
+    )
+    expect(result).toMatchObject({ frontend: 6, backend: 7, qa: 5, total: 18 })
+  })
+
+  it('100% feito zera a disciplina; esforço não estimado segue sem valor', () => {
+    const result = applyAnticipation(
+      item(1, { frontend: 5, backend: null, qa: null, total: 5 }),
+      100,
+      50
+    )
+    expect(result).toMatchObject({ frontend: 0, backend: null, total: 0 })
+  })
+})
+
+describe('buildPlanningRows', () => {
+  const azure = [
+    item(1, { frontend: 8, backend: 13, qa: 5, total: 26, priority: 1 }),
+    item(2, { frontend: 3, backend: 2, qa: 1, total: 6, priority: 2 })
+  ]
+  const leftover = {
+    ...item(3, { frontend: 2, backend: 1, qa: 1, total: 4, priority: 3 }),
+    frontendPercent: 50,
+    backendPercent: 25
+  }
+
+  it('desconta o antecipado e guarda os pontos do Azure (RN-PLN-25)', () => {
+    const rows = buildPlanningRows(
+      azure,
+      [],
+      [{ id: 1, product: 'loja-online', frontendPercent: 25, backendPercent: 50 }]
+    )
+    expect(rows[0]).toMatchObject({
+      id: 1,
+      frontend: 6,
+      backend: 7,
+      total: 18,
+      anticipated: {
+        frontendPercent: 25,
+        backendPercent: 50,
+        original: { frontend: 8, backend: 13, total: 26 }
+      }
+    })
+    expect(rows[1].anticipated).toBeUndefined()
+  })
+
+  it('0% nas duas disciplinas não marca o item (RN-PLN-24)', () => {
+    const rows = buildPlanningRows(
+      azure,
+      [],
+      [{ id: 1, product: 'loja-online', frontendPercent: 0, backendPercent: 0 }]
+    )
+    expect(rows[0]).toEqual(azure[0])
+  })
+
+  it('remanescente não é antecipado (RN-PLN-23)', () => {
+    const rows = buildPlanningRows(
+      [],
+      [leftover],
+      [{ id: 3, product: 'loja-online', frontendPercent: 50, backendPercent: 50 }]
+    )
+    expect(rows[0].anticipated).toBeUndefined()
+    expect(rows[0].leftover).toEqual({ frontendPercent: 50, backendPercent: 25 })
+  })
+
+  it('remanescente relido reaplica o percentual sobre os pontos de agora (RN-PLN-09)', () => {
+    const live = new Map([
+      [
+        3,
+        {
+          id: 3,
+          title: 'Novo título',
+          state: 'Active',
+          product: 'loja-online',
+          frontend: 8,
+          backend: 4,
+          qa: 2,
+          priority: 1
+        }
+      ]
+    ])
+    const [row] = buildPlanningRows([], [leftover], [], live)
+    expect(row).toMatchObject({
+      title: 'Novo título',
+      frontend: 4,
+      backend: 1,
+      qa: 2,
+      total: 7,
+      priority: 1
+    })
+  })
+
+  it('sem releitura, valem os pontos guardados', () => {
+    const [row] = buildPlanningRows([], [leftover], [])
+    expect(row).toMatchObject({ frontend: 2, backend: 1, total: 4 })
+    expect(row).not.toHaveProperty('frontendPercent')
+  })
+
+  it('soma o desconto por disciplina', () => {
+    const rows = buildPlanningRows(
+      azure,
+      [],
+      [{ id: 1, product: 'loja-online', frontendPercent: 25, backendPercent: 50 }]
+    )
+    expect(anticipatedDiscount(rows)).toEqual({ frontend: 2, backend: 6, total: 8 })
   })
 })

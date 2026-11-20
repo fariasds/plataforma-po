@@ -4,25 +4,13 @@ import { PlusOutlined } from '@ant-design/icons'
 import type { ManualPlanningItem } from '@shared/dashboards'
 import { formatPercent, t } from '../../i18n'
 import { ipc } from '../../ipc/client'
+import { applyLeftover, SHARE_PERCENTS, type SharePercent } from './planning-rules'
 
 const { Text } = Typography
 
-type Percent = 0 | 25 | 50 | 75 | 100
+type Percent = SharePercent
 
-const PERCENT_OPTIONS: Percent[] = [0, 25, 50, 75, 100]
-
-function applyPercent(value: number | null, percent: number): number | null {
-  return value !== null ? Math.round(value * (percent / 100)) : null
-}
-
-function computeTotal(
-  frontend: number | null,
-  backend: number | null,
-  qa: number | null
-): number | null {
-  if (frontend === null && backend === null && qa === null) return null
-  return (frontend ?? 0) + (backend ?? 0) + (qa ?? 0)
-}
+const PERCENT_OPTIONS = SHARE_PERCENTS
 
 /** Quais campos de esforço a Configuração tem; o que falta não é perguntado. */
 export interface EffortAvailability {
@@ -86,23 +74,7 @@ export function AddManualItemForm({
         )
         return
       }
-      const frontend = applyPercent(data.frontend, frontendPct)
-      const backend = applyPercent(data.backend, backendPct)
-      const qa = data.qa // always 100%
-
-      onAdd({
-        id: data.id,
-        title: data.title,
-        state: data.state,
-        product: data.product,
-        frontend,
-        backend,
-        qa,
-        priority: data.priority,
-        total: computeTotal(frontend, backend, qa),
-        frontendPercent: frontendPct,
-        backendPercent: backendPct
-      })
+      onAdd(applyLeftover(data, frontendPct, backendPct))
 
       reset()
       setOpen(false)

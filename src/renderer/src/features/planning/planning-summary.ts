@@ -3,12 +3,14 @@ import type { PlanningItem } from '@shared/dashboards'
 import { spToHours, type StoryPointsTable } from '@shared/story-points'
 import { formatHours, formatNumber, t, tPlural } from '../../i18n'
 import {
+  anticipatedDiscount,
   capacityHours,
   capacityRatio,
   capacityStatus,
   comparePlanningItems,
   type CapacityConfig,
-  type CapacityStatus
+  type CapacityStatus,
+  type PlanningRow
 } from './planning-rules'
 
 /**
@@ -66,8 +68,11 @@ export interface PlanningSummaryInput {
   /** Produtos da seleção, na ordem da Configuração. */
   products: Array<{ id: string; name: string }>
   isGroup: boolean
-  /** Todos os itens da tela, marcados ou não, do Azure e remanescentes. */
-  items: PlanningItem[]
+  /**
+   * Todos os itens da tela, marcados ou não, do Azure e remanescentes. Uma linha
+   * com `leftover` ou `anticipated` sai com o rateio na etiqueta (RN-PLN-19).
+   */
+  items: PlanningRow[]
   uncheckedIds: ReadonlySet<number>
   manualIds: ReadonlySet<number>
   effort: { frontend: boolean; backend: boolean; qa: boolean }
@@ -179,8 +184,19 @@ export function buildPlanningSummary(input: PlanningSummaryInput): PlanningSumma
       : [])
   ])
 
+  const discount = anticipatedDiscount(checked)
+  const anticipatedCount = checked.filter((item) => item.anticipated).length
+
   const overview: SummarySection = {
     title: t('planning.summary.overview'),
+    // Quem lê o resumo não vê a tela: o desconto precisa estar dito (RN-PLN-25).
+    ...(discount.total > 0
+      ? {
+          note: tPlural('planning.summary.anticipatedNote', anticipatedCount, {
+            points: points(discount.total)
+          })
+        }
+      : {}),
     tables: [
       {
         headers: [
@@ -258,19 +274,66 @@ export function buildPlanningSummary(input: PlanningSummaryInput): PlanningSumma
   const productName = (id: string): string =>
     input.products.find((product) => product.id === id)?.name ?? id
 
+  // "Front 50% · Back 25%", só das disciplinas ligadas na Configuração.
+  const shareText = (
+    share: { frontendPercent: number; backendPercent: number },
+    skipZero: boolean
+  ): string =>
+    [
+      effort.frontend && !(skipZero && share.frontendPercent === 0)
+        ? t('planning.frontShare', { percent: share.frontendPercent })
+        : null,
+      effort.backend && !(skipZero && share.backendPercent === 0)
+        ? t('planning.backShare', { percent: share.backendPercent })
+        : null
+    ]
+      .filter((part): part is string => part !== null)
+      .join(' · ')
+
+  // Remanescente diz o que falta; antecipado, o que já foi feito (RN-PLN-19).
+  const titleCell = (item: PlanningRow): SummaryCell => {
+    if (item.anticipated) {
+      const parts = shareText(item.anticipated, true)
+      return {
+        text: item.title,
+        tag: parts
+          ? t('planning.summary.anticipatedTag', { parts })
+          : t('planning.anticipation.tag')
+      }
+    }
+    if (item.leftover) {
+      const parts = shareText(item.leftover, false)
+      return {
+        text: item.title,
+        tag: parts ? t('planning.summary.leftoverTag', { parts }) : t('planning.leftover')
+      }
+    }
+    return input.manualIds.has(item.id)
+      ? { text: item.title, tag: t('planning.leftover') }
+      : item.title
+  }
+
+  // Antecipado mostra o que fica e o valor do Azure: "6 (de 8)" (RN-PLN-25).
+  const withOriginal = (value: number | null, original: number | null | undefined): string =>
+    original === undefined || original === value
+      ? points(value)
+      : t('planning.summary.ofOriginal', { points: points(value), original: points(original) })
+
   // Marcados e desmarcados saem na mesma tabela, para quem lê comparar as duas.
-  const itemTable = (list: PlanningItem[]): SummaryTable[] => {
+  const itemTable = (list: PlanningRow[]): SummaryTable[] => {
     if (list.length === 0) return []
     const rows: SummaryCell[][] = list.map((item) => [
       {
         text: `#${item.id}`,
         href: input.organization === null ? undefined : workItemUrl(input.organization, item.id)
       },
-      input.manualIds.has(item.id) ? { text: item.title, tag: t('planning.leftover') } : item.title,
+      titleCell(item),
       ...(input.isGroup ? [productName(item.product)] : []),
       item.priority === null ? NONE : t('planning.priorityShort', { priority: item.priority }),
-      ...disciplines.map((d) => points(item[d.key])),
-      strong(points(item.total))
+      ...disciplines.map((d) =>
+        withOriginal(item[d.key], d.key === 'qa' ? undefined : item.anticipated?.original[d.key])
+      ),
+      strong(withOriginal(item.total, item.anticipated?.original.total))
     ])
     rows.push([
       strong(t('common.total')),

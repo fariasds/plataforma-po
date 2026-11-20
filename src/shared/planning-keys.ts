@@ -1,6 +1,6 @@
 /**
  * Chaves dos Dados de trabalho do Planning (RN-PLN-07, RN-PLN-12, RN-PLN-16,
- * RN-PLN-20). Usam o ID do Produto e a chave da Sprint unificada, nunca nomes
+ * RN-PLN-20, RN-PLN-26). Usam o ID do Produto e a chave da Sprint unificada, nunca nomes
  * (RN-CFG-08). Moram no `shared` porque o main também lê os remanescentes ao
  * montar o pedido do objetivo da sprint.
  */
@@ -14,6 +14,9 @@ export const planningKeys = {
   unchecked: (sprintKey: string): string => `planning:unchecked:${keyPart(sprintKey)}`,
   manual: (productId: string, sprintKey: string): string =>
     `planning:manual:${keyPart(productId)}:${keyPart(sprintKey)}`,
+  /** Itens com desenvolvimento antecipado, por Produto e sprint (RN-PLN-26). */
+  anticipated: (productId: string, sprintKey: string): string =>
+    `planning:anticipated:${keyPart(productId)}:${keyPart(sprintKey)}`,
   /** Objetivo da sprint, por Produto ou Grupo selecionado. */
   goal: (selectionId: string, sprintKey: string): string =>
     `planning:goal:${keyPart(selectionId)}:${keyPart(sprintKey)}`,

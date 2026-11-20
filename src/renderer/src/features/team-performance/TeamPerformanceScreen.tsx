@@ -303,7 +303,7 @@ export function TeamPerformanceScreen(): React.JSX.Element {
         />
       )}
 
-      {performance.isPending || performance.isFetching ? (
+      {performance.isPending ? (
         <Skeleton active paragraph={{ rows: 12 }} />
       ) : (
         <Row gutter={[16, 16]}>

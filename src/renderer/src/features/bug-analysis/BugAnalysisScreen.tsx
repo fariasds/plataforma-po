@@ -268,7 +268,7 @@ export function BugAnalysisScreen(): React.JSX.Element {
       {sprints.isError && <ErrorState error={sprints.error} onRetry={() => sprints.refetch()} />}
       {analysis.isError && <ErrorState error={analysis.error} onRetry={() => analysis.refetch()} />}
 
-      {analysis.isPending || analysis.isFetching ? (
+      {analysis.isPending ? (
         <Skeleton active paragraph={{ rows: 10 }} />
       ) : sprintStats.length === 0 && allBugs.length === 0 ? (
         <Empty description={t('bugs.empty')} />

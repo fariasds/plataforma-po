@@ -126,9 +126,12 @@ export function useSelection(kind: SelectionKind): Selection {
 /** Sprints da Squad aberta; sem Squads, as de todos os Produtos (RN-GLB-17). */
 export function useSprints(
   limit?: number,
-  preferFuture?: boolean
+  preferFuture?: boolean,
+  /** `'all'`: Sprint unificada de todos os Produtos, ignorando a aba (a Home, RN-GLB-17). */
+  scope: 'squad' | 'all' = 'squad'
 ): UseQueryResult<UnifiedSprint[], Error> {
-  const squadId = useActiveSquad()?.id ?? null
+  const activeSquadId = useActiveSquad()?.id ?? null
+  const squadId = scope === 'all' ? null : activeSquadId
   return useQuery({
     queryKey: ['sprints', limit, preferFuture, squadId],
     queryFn: () => ipc.getSprints(limit, preferFuture, squadId)

@@ -31,6 +31,9 @@ momento. A sprint é a mesma que a Daily usa (`RN-GLB-04`): a corrente ou, entre
 duas sprints, a que acabou de terminar. **A sugestão sai só do calendário**; a Home
 não consulta os itens da sprint.
 
+Com Squads, a Home não tem abas (`RN-GLB-17`): a sprint é a Sprint unificada de
+**todos** os Produtos com sprint, não a da Squad aberta nas outras telas.
+
 - **Régua de dias:** a mesma da Daily (`RN-DLY-17`). Uma casa por dia de semana da
   janela, feriado incluído; no fim de semana vale a próxima casa. Assim o "dia N
   de M" da Home bate com o da Daily.

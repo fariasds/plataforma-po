@@ -118,6 +118,7 @@ Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
 | `UserMenu`            | Cartão da conta no pé do menu lateral                                                                                                            |
 | `DemoBanner`          | Faixa do Perfil de demonstração, presa ao topo com o cabeçalho. Fundo `colorPrimaryBg`, nunca `STATUS`: não é alerta nem situação (RN-GLB-15)    |
 | `UpdateBanner`        | Faixa de versão nova, acima da `DemoBanner`. Fundo neutro (`colorBgContainer`); o destaque fica só no botão de baixar, a ação principal (RN-GLB-18) |
+| `RefreshButton`       | Botão Atualizar do cabeçalho, com "Atualizado às HH:MM" em `MONO_FONT` à esquerda (RN-GLB-19). Entra pela flag `refresh` da entrada do menu no `AppLayout`, nunca dentro da tela |
 
 ## Menu lateral
 
@@ -174,6 +175,14 @@ Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
   comprimento compara melhor que ângulo.
 - **Tabela:** `size="small"`; ID em mono como link para o Azure (sem link no Perfil de demonstração: use `useWorkItemHref`); título com peso
   500; colunas numéricas alinhadas à direita.
+- **Atualizar sem piscar:** o esqueleto (`Skeleton`) é só do primeiro
+  carregamento (`isPending`). Numa nova busca da mesma consulta (`isFetching`), os
+  dados de antes ficam na tela; quando ajuda, esmaecidos (`opacity: 0.55`).
+- **Rateio no Planning:** item remanescente leva `Tag color="warning"`
+  "Remanescente"; item antecipado, `Tag variant="filled"` com `STATUS.info.bg` e
+  `STATUS.info.text`, "Antecipado". O percentual vai ao lado em texto secundário de
+  11 px, e o ponto descontado mostra o valor do Azure em texto secundário
+  (`7 /13`). Nas duas, a cor marca a origem do item, nunca situação.
 - **Estado vazio:** diga o que falta e onde configurar ("Defina
   `customFields.criticality` na Configuração"), nunca só "sem dados".
 

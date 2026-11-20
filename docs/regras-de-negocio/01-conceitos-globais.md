@@ -354,14 +354,16 @@ mostram só o que é dela.
   em tela nenhuma (`RN-CFG-03`).
 - **Um Grupo cabe numa Squad só** e aparece dentro da aba dela. Grupo que soma
   Produtos de Squads diferentes é erro.
-- **A aba é uma só para o app inteiro.** Com a aba de uma Squad aberta, Home,
-  Planning, Daily, Entregas e Bugs mostram aquela Squad; trocar de menu não troca de
-  Squad. A Configuração e a Segurança são do Perfil e não mudam com a aba. O app
-  lembra a última aba nesta máquina; se ela sumiu da Configuração, abre a primeira.
+- **A aba é uma só para o app inteiro.** Com a aba de uma Squad aberta, Planning,
+  Daily, Entregas e Bugs mostram aquela Squad; trocar de menu não troca de Squad. A
+  Configuração e a Segurança são do Perfil e não mudam com a aba. O app lembra a
+  última aba nesta máquina; se ela sumiu da Configuração, abre a primeira.
 - **As sprints de cada aba vêm só dos Produtos da Squad** (`RN-GLB-04`). Uma Squad
   só com Produtos de fluxo contínuo é medida pela janela de todos os Produtos com
   sprint, como o Produto contínuo sempre foi.
-- **A Home segue a aba:** o momento da sprint é o da Squad aberta.
+- **A Home não tem abas.** Ela não mostra dado de Squad, então as abas somem nela e
+  voltam ao abrir outra tela, na mesma Squad de antes. O momento da sprint da Home é
+  o da Sprint unificada de todos os Produtos, como sem Squads (`RN-HOM-02`).
 - **A capacidade do Planning é de cada Squad** (`RN-PLN-22`).
 - **Nome, cor e Produtos de cada Squad** se escolhem no assistente de configuração
   ou no arquivo. A cor é opcional: sem ela, a aba usa um cinza neutro. Ela é
@@ -411,3 +413,25 @@ pré-lançamento e deixa de gerar aviso.
 
 **Implementado em:** `src/shared/update.ts` · `src/main/services/update/release-check.ts` ·
 `src/main/ipc/update-handlers.ts` · `src/renderer/src/components/UpdateBanner.tsx`
+
+### RN-GLB-19 · Atualizar os dados do Azure
+
+As telas que leem o Azure — **Planning, Daily, Entregas e Bugs** — têm o botão
+**Atualizar** no cabeçalho, à direita do título, e o **F5** faz o mesmo. Sem ele, o
+app só buscava de novo depois de cinco minutos ou ao reabrir: quem muda uma
+prioridade ou um story point no Azure durante o Planning precisava fechar o app.
+
+- Busca de novo **só o que vem do Azure**: sprints, itens, prioridade, estimativas,
+  estados e os remanescentes, relidos pelo ID (`RN-PLN-09`).
+- **Não mexe no que é local:** itens desmarcados, objetivo, capacidade e
+  antecipados são Dados de trabalho e já estão em dia.
+- Enquanto busca, o botão gira e diz "Atualizando…"; os dados de antes **ficam na
+  tela** em vez de virar esqueleto. Ao terminar, o cabeçalho mostra "Atualizado às
+  HH:MM", a hora da busca mais recente da tela.
+- Se a busca falha, a tela mostra o erro como sempre, sem perder os dados que já
+  estavam nela.
+
+Home, Configuração e Segurança não têm o botão: não mostram dado de trabalho do Azure.
+
+**Implementado em:** `src/renderer/src/components/RefreshButton.tsx` ·
+`src/renderer/src/components/AppLayout.tsx`

@@ -499,7 +499,7 @@ export function DailyScreen(): React.JSX.Element {
       {sprints.isError && <ErrorState error={sprints.error} onRetry={() => sprints.refetch()} />}
       {daily.isError && <ErrorState error={daily.error} onRetry={() => daily.refetch()} />}
 
-      {daily.isPending || daily.isFetching ? (
+      {daily.isPending ? (
         <Skeleton active paragraph={{ rows: 12 }} />
       ) : (
         <>

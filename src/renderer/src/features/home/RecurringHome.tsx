@@ -230,7 +230,8 @@ export function RecurringHome({
   onReviewFirstSteps: () => void
 }): React.JSX.Element {
   const config = useConfiguration()
-  const sprints = useSprints(1)
+  // A Home não tem abas de Squad: o momento é o da Sprint unificada de todos (RN-GLB-17).
+  const sprints = useSprints(1, undefined, 'all')
   const user = useCurrentUser()
 
   const now = new Date()

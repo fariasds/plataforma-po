@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button, Flex, Modal, Switch, Typography } from 'antd'
 import { CopyOutlined } from '@ant-design/icons'
 import type { UnifiedSprint } from '@shared/azure'
-import type { PlanningItem } from '@shared/dashboards'
+import type { PlanningRow } from './planning-rules'
 import { HelpTip } from '../../components/HelpTip'
 import { useLinkOrganization } from '../../components/useWorkItemHref'
 import { formatDateTime, t } from '../../i18n'
@@ -23,7 +23,7 @@ interface Props {
   sprintLabel: string
   products: Array<{ id: string; name: string }>
   isGroup: boolean
-  items: PlanningItem[]
+  items: PlanningRow[]
   uncheckedIds: ReadonlySet<number>
   manualIds: ReadonlySet<number>
   effort: { frontend: boolean; backend: boolean; qa: boolean }

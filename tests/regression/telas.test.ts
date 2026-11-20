@@ -3,7 +3,7 @@ import { join } from 'path'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import type { UnifiedSprint } from '@shared/azure'
 import type { Configuration } from '@shared/config/schema'
-import type { ManualPlanningItem, PlanningItem } from '@shared/dashboards'
+import type { AnticipatedShare, ManualPlanningItem, PlanningItem } from '@shared/dashboards'
 import { createCalendar } from '@shared/calendar'
 import { validateConfiguration } from '@shared/config/validate'
 import { sprintMoment } from '@shared/home'
@@ -70,7 +70,7 @@ const { buildSprintGoalRequest } = await import('../../src/main/services/ai/spri
 const { resolveScope } = await import('../../src/main/services/azure/scope')
 const { buildPlanningSummary, summaryToMarkdown } =
   await import('../../src/renderer/src/features/planning/planning-summary')
-const { resolveCapacity, resolveSquadCapacity } =
+const { buildPlanningRows, resolveCapacity, resolveSquadCapacity } =
   await import('../../src/renderer/src/features/planning/planning-rules')
 
 const APPROVED_DIR = join(__dirname, 'aprovados')
@@ -220,7 +220,20 @@ export const SCREENS: Record<string, ScreenRun> = {
       if (!sprint) return null
       const { products } = resolveScope(selectionId, config)
       const manual = manualItems(scenario, selectionId, sprint)
-      const items = await planningItems(scenario, selectionId, sprint)
+      // O que o PO puxou de sprint anterior é buscado de novo pelo ID (RN-PLN-10) e
+      // o percentual é reaplicado sobre os pontos de agora (RN-PLN-09).
+      const remanescentes = await Promise.all(manual.map((item) => getPlanningItem(item.id)))
+      const anticipations = products.flatMap((product) => {
+        const stored = scenario.workData?.[planningKeys.anticipated(product.id, sprint.key)]
+        return Array.isArray(stored) ? (stored as AnticipatedShare[]) : []
+      })
+      // As linhas como a tela monta: remanescentes relidos e antecipados descontados (RN-PLN-24).
+      const items = buildPlanningRows(
+        (await getPlanningData(selectionId, sprint)).items,
+        manual,
+        anticipations,
+        new Map(remanescentes.map((item) => [item.id, item]))
+      )
       const isGroup = isAggregateSelection(config, selectionId)
       const squad = config.squads.find((s) => s.id === selectionId)
       const selectionName =
@@ -252,8 +265,7 @@ export const SCREENS: Record<string, ScreenRun> = {
       return {
         sprint: sprint.key,
         dados: await getPlanningData(selectionId, sprint),
-        // O que o PO puxou de sprint anterior é buscado de novo pelo ID (RN-PLN-10).
-        remanescentes: await Promise.all(manual.map((item) => getPlanningItem(item.id))),
+        remanescentes,
         resumo: summaryToMarkdown(summary)
       }
     })
@@ -283,16 +295,10 @@ export const SCREENS: Record<string, ScreenRun> = {
   // o cálculo é puro, e aqui roda no "hoje" do Cenário.
   home: async () => {
     const calendar = createCalendar(state.config!.calendar)
-    const moment = async (squadId: string | null): Promise<Record<string, unknown>> => {
-      const [sprint] = await getUnifiedSprints(1, false, squadId)
-      return { sprint: sprint?.key ?? null, momento: sprintMoment(sprint, calendar, new Date()) }
-    }
-    const squads = state.config!.squads
-    if (squads.length === 0) return moment(null)
-    // A Home segue a aba aberta: o momento é o da sprint da Squad (RN-GLB-17).
-    const porSquad: Record<string, unknown> = {}
-    for (const squad of squads) porSquad[squad.id] = await moment(squad.id)
-    return porSquad
+    // A Home não tem abas: o momento é o da Sprint unificada de todos os Produtos,
+    // mesmo com Squads (RN-GLB-17).
+    const [sprint] = await getUnifiedSprints(1, false, null)
+    return { sprint: sprint?.key ?? null, momento: sprintMoment(sprint, calendar, new Date()) }
   }
 }
 

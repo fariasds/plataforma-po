@@ -1,4 +1,9 @@
-import type { PlanningItem } from '@shared/dashboards'
+import type {
+  AnticipatedShare,
+  ManualPlanningItem,
+  PlanningItem,
+  PlanningLookupItem
+} from '@shared/dashboards'
 
 /**
  * Regras do Planning que a tela e o resumo compartilhado aplicam do mesmo jeito:
@@ -91,4 +96,136 @@ export function capacityHours(
     frontend: config.frontDevs * perDev(config.frontBugPercent),
     backend: config.backDevs * perDev(config.backBugPercent)
   }
+}
+
+// ─── Rateio por disciplina: remanescente e antecipado ───────────────────────
+
+export type SharePercent = 0 | 25 | 50 | 75 | 100
+
+export const SHARE_PERCENTS: SharePercent[] = [0, 25, 50, 75, 100]
+
+function share(value: number | null, percent: number): number | null {
+  return value !== null ? Math.round(value * (percent / 100)) : null
+}
+
+/** O total é a soma das partes, nunca o do Azure (RN-PLN-09, RN-PLN-24). */
+function sumParts(
+  frontend: number | null,
+  backend: number | null,
+  qa: number | null
+): number | null {
+  if (frontend === null && backend === null && qa === null) return null
+  return (frontend ?? 0) + (backend ?? 0) + (qa ?? 0)
+}
+
+/**
+ * Remanescente (RN-PLN-09): o percentual é o que **falta** de frontend e de
+ * backend. QA entra sempre integral.
+ */
+export function applyLeftover(
+  source: PlanningLookupItem,
+  frontendPercent: number,
+  backendPercent: number
+): ManualPlanningItem {
+  const frontend = share(source.frontend, frontendPercent)
+  const backend = share(source.backend, backendPercent)
+  return {
+    id: source.id,
+    title: source.title,
+    state: source.state,
+    product: source.product,
+    priority: source.priority,
+    frontend,
+    backend,
+    qa: source.qa,
+    total: sumParts(frontend, backend, source.qa),
+    frontendPercent,
+    backendPercent
+  }
+}
+
+/**
+ * Antecipado (RN-PLN-24): o percentual é o que **já foi feito** numa sprint
+ * anterior, e sai do planejamento desta. É o inverso do remanescente: fica o
+ * complemento, arredondado. QA entra sempre integral.
+ */
+export function applyAnticipation(
+  source: PlanningItem,
+  frontendPercent: number,
+  backendPercent: number
+): PlanningItem {
+  const frontend = share(source.frontend, 100 - frontendPercent)
+  const backend = share(source.backend, 100 - backendPercent)
+  return { ...source, frontend, backend, total: sumParts(frontend, backend, source.qa) }
+}
+
+/** Uma linha do Planning: o item como entra nas somas, e de onde veio o rateio. */
+export interface PlanningRow extends PlanningItem {
+  /** Remanescente: o percentual que falta (RN-PLN-11). */
+  leftover?: { frontendPercent: number; backendPercent: number }
+  /** Antecipado: o percentual já feito e os pontos do Azure antes do desconto (RN-PLN-25). */
+  anticipated?: {
+    frontendPercent: number
+    backendPercent: number
+    original: Pick<PlanningItem, 'frontend' | 'backend' | 'total'>
+  }
+}
+
+/**
+ * Junta os itens do Azure, os remanescentes e os antecipados na ordem do backlog.
+ *
+ * O remanescente guarda os pontos do momento em que foi adicionado; quando o
+ * item foi relido do Azure (`live`), o percentual é reaplicado sobre os pontos
+ * de agora (RN-PLN-09). O antecipado guarda só o percentual e vale para item do
+ * Azure: remanescente já tem o próprio rateio (RN-PLN-23).
+ */
+export function buildPlanningRows(
+  azureItems: PlanningItem[],
+  manualItems: ManualPlanningItem[],
+  anticipations: AnticipatedShare[],
+  live: ReadonlyMap<number, PlanningLookupItem> = new Map()
+): PlanningRow[] {
+  const manualIds = new Set(manualItems.map((item) => item.id))
+  const anticipatedById = new Map(anticipations.map((a) => [a.id, a]))
+
+  const fromAzure = azureItems.map((item): PlanningRow => {
+    const a = anticipatedById.get(item.id)
+    if (!a || manualIds.has(item.id) || (a.frontendPercent === 0 && a.backendPercent === 0)) {
+      return item
+    }
+    return {
+      ...applyAnticipation(item, a.frontendPercent, a.backendPercent),
+      anticipated: {
+        frontendPercent: a.frontendPercent,
+        backendPercent: a.backendPercent,
+        original: { frontend: item.frontend, backend: item.backend, total: item.total }
+      }
+    }
+  })
+
+  const leftovers = manualItems.map((stored): PlanningRow => {
+    const fresh = live.get(stored.id)
+    const { frontendPercent, backendPercent, ...item } = fresh
+      ? applyLeftover(fresh, stored.frontendPercent, stored.backendPercent)
+      : stored
+    return { ...item, leftover: { frontendPercent, backendPercent } }
+  })
+
+  return [...fromAzure, ...leftovers].sort(comparePlanningItems)
+}
+
+/** Pontos antecipados que saíram das somas, por disciplina (RN-PLN-25). */
+export function anticipatedDiscount(rows: PlanningRow[]): {
+  frontend: number
+  backend: number
+  total: number
+} {
+  const result = { frontend: 0, backend: 0, total: 0 }
+  for (const row of rows) {
+    if (!row.anticipated) continue
+    result.frontend += (row.anticipated.original.frontend ?? 0) - (row.frontend ?? 0)
+    result.backend += (row.anticipated.original.backend ?? 0) - (row.backend ?? 0)
+  }
+  result.total = result.frontend + result.backend
+  return result
 }
