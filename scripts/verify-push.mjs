@@ -86,8 +86,11 @@ function matchesScope(file, scope) {
   return scope.startsWith('*') ? file.endsWith(scope.slice(1)) : file.startsWith(scope)
 }
 
-/** Mesma semântica do `verify:neutral`. Mensagem de commit (`file` nulo) só vê termo sem escopo. */
-function applies(term, file) {
+/**
+ * Mesma semântica do `verify:neutral`. Mensagem de commit (`file` nulo) só vê termo sem escopo.
+ * Exportada para o check `pronto` (scripts/verify-pronto.mjs) ler a lista igual a este hook.
+ */
+export function applies(term, file) {
   if (file === null) return term.scopes.length === 0
   const included = term.scopes.filter((scope) => !scope.startsWith('!'))
   const excluded = term.scopes.filter((scope) => scope.startsWith('!')).map((s) => s.slice(1))

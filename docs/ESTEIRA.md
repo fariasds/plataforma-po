@@ -31,7 +31,13 @@ Aparecem na lista de checks do PR. Os obrigatórios barram o merge.
 | Check | O que prova |
 |---|---|
 | `check` | Varredura de credenciais, `npm run check` (tipos, lint, testes, regressão das telas, segurança, design system, Electron, build), instalador montado e auditado (`RN-SEC-13`) |
-| `pronto` | A definição de pronto que compilar não prova: regra, aprovado, Cenário, prova do teste de segurança, versão. Comenta uma tabela fixa no PR |
+| `pronto` | A definição de pronto que compilar não prova: regra, aprovado, Cenário, prova do teste de segurança, versão, e os termos protegidos da lista privada nas linhas novas, no texto do PR e nas mensagens de commit. Comenta uma tabela fixa no PR |
+
+**Sobre os termos protegidos:** quando o `pronto` roda, o PR já está público. Ele não
+impede o vazamento, que é papel do `pre-push` na máquina de quem publica; ele pega o
+que chegou por outro caminho (uma edição pela interface do GitHub, por exemplo) antes
+de entrar na `main` e numa versão. Se acusar, reescreva sem o termo e refaça a
+história da branch antes do merge.
 | `analyze` (CodeQL) | Análise estática de segurança do TypeScript |
 
 ## 3. Teste e merge
@@ -94,3 +100,9 @@ seguir sem a barreira.
 | Rules → Rulesets | `versoes`, alvo `v*`: **Restrict updates**, **Restrict deletions**, **Block force pushes** |
 | Environments | `producao`: **Required reviewers** com o mantenedor; **Deployment branches** só `main` |
 | Actions → General | Aprovação para todo contribuidor externo; actions fixadas por SHA |
+| Secrets and variables → Actions | Secret `PO_DENYLIST` com o conteúdo de `perfis-privados/neutral-denylist.txt` |
+
+**Termo novo na lista?** Acrescente em `perfis-privados/neutral-denylist.txt` (vale
+no próximo push, pelo `pre-push`) **e** atualize o secret `PO_DENYLIST` com o arquivo
+inteiro (vale no próximo PR). Nenhuma ferramenta sincroniza os dois, de propósito: a
+lista só sai da sua máquina pelas suas mãos.

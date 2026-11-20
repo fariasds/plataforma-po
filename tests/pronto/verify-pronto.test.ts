@@ -3,8 +3,10 @@ import {
   changedRuleIds,
   evaluate,
   isChecked,
+  addedLinesByFile,
   report,
   tableCell,
+  termsItem,
   WAIVERS
 } from '../../scripts/verify-pronto.mjs'
 
@@ -191,6 +193,74 @@ describe('caixas e relatório', () => {
     )
     expect(text.startsWith('<!-- pronto -->')).toBe(true)
     expect(text).toContain('**Falta etapa.**')
-    expect(text.match(/^\| (✅|❌|➖) \|/gm)).toHaveLength(5)
+    expect(text.match(/^\| (✅|❌|➖) \|/gm)).toHaveLength(6)
+  })
+})
+
+describe('termos protegidos', () => {
+  // Termos fictícios, no formato da lista: regex por linha, escopo depois de " :: ".
+  const LIST = ['# comentário', 'fabrikam', 'northwind :: src/, !src/main/demo/'].join('\n')
+
+  it('sem a lista, falha quando ela é obrigatória e não se aplica quando não é', () => {
+    expect(termsItem({ list: null, required: true }).status).toBe('fail')
+    expect(termsItem({ list: null, required: false }).status).toBe('na')
+  })
+
+  it('passa quando nenhum termo aparece, e diz quanto conferiu', () => {
+    const result = termsItem({
+      list: LIST,
+      required: true,
+      addedLines: [{ file: 'src/main/index.ts', text: 'const loja = "Loja Online"' }]
+    })
+    expect(result.status).toBe('ok')
+    expect(result.detail).toContain('2 termos')
+  })
+
+  it('acusa o número e o lugar, nunca o termo', () => {
+    const result = termsItem({
+      list: LIST,
+      required: true,
+      addedLines: [{ file: 'docs/x.md', text: 'cliente Fabrikam' }],
+      body: 'sobre a FABRIKAM',
+      messages: 'commit da fabrikam'
+    })
+    expect(result.status).toBe('fail')
+    expect(result.detail).toContain('termo nº 1 em docs/x.md')
+    expect(result.detail).toContain('termo nº 1 no texto do PR')
+    expect(result.detail).toContain('termo nº 1 numa mensagem de commit')
+    expect(result.detail.toLowerCase()).not.toContain('fabrikam')
+  })
+
+  it('respeita o escopo do termo, como o pre-push', () => {
+    const inside = { file: 'src/renderer/a.ts', text: 'northwind' }
+    const excluded = { file: 'src/main/demo/b.ts', text: 'northwind' }
+    const outside = { file: 'docs/c.md', text: 'northwind' }
+    expect(termsItem({ list: LIST, required: true, addedLines: [inside] }).status).toBe('fail')
+    expect(termsItem({ list: LIST, required: true, addedLines: [excluded] }).status).toBe('ok')
+    expect(termsItem({ list: LIST, required: true, addedLines: [outside] }).status).toBe('ok')
+    // Termo com escopo não vale para o texto do PR, que não é arquivo.
+    expect(termsItem({ list: LIST, required: true, body: 'northwind' }).status).toBe('ok')
+  })
+
+  it('lista com regex inválida falha sem mostrar a linha', () => {
+    const result = termsItem({ list: 'fabrikam(', required: true })
+    expect(result.status).toBe('fail')
+    expect(result.detail).not.toContain('fabrikam')
+  })
+
+  it('separa as linhas novas por arquivo', () => {
+    const diff = [
+      'diff --git a/src/a.ts b/src/a.ts',
+      '--- a/src/a.ts',
+      '+++ b/src/a.ts',
+      '@@ -1 +1 @@',
+      '-antes',
+      '+depois',
+      'diff --git a/apagado.ts b/apagado.ts',
+      '--- a/apagado.ts',
+      '+++ /dev/null',
+      '-linha'
+    ].join('\n')
+    expect(addedLinesByFile(diff)).toEqual([{ file: 'src/a.ts', text: 'depois' }])
   })
 })
