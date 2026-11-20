@@ -1,0 +1,34 @@
+# Liga o auto-merge nos PRs do Dependabot que não mexem no que vai para o
+# instalador: os grupos "ferramentas" (npm) e "actions" (GitHub Actions), sem
+# major. O merge só acontece quando os checks obrigatórios da main passam; o
+# resto continua esperando o mantenedor. Grupos em .github/dependabot.yml.
+name: Dependabot auto-merge
+
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  auto-merge:
+    # O autor do PR, não quem fez o último push: um push do mantenedor num PR do
+    # Dependabot não muda quem o abriu.
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'fariasds/plataforma-po'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - id: meta
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      - name: Auto-merge de ferramentas e actions
+        if: >-
+          (steps.meta.outputs.dependency-group == 'ferramentas' ||
+           steps.meta.outputs.dependency-group == 'actions') &&
+          steps.meta.outputs.update-type != 'version-update:semver-major'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge --auto --squash "$PR_URL"
