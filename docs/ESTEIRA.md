@@ -31,7 +31,7 @@ Aparecem na lista de checks do PR. Os obrigatórios barram o merge.
 | Check | O que prova |
 |---|---|
 | `check` | Varredura de credenciais, `npm run check` (tipos, lint, testes, regressão das telas, segurança, design system, Electron, build), instalador montado e auditado (`RN-SEC-13`) |
-| `pronto` | A definição de pronto que compilar não prova: regra, aprovado, Cenário, prova do teste de segurança, versão. Comenta uma tabela fixa no PR |
+| `pronto` | A definição de pronto que compilar não prova: regra, aprovado, Cenário (ou, para tela que não depende de Cenário, um teste da lógica), prova do teste de segurança, versão. Comenta uma tabela fixa no PR |
 | `analyze` (CodeQL) | Análise estática de segurança do TypeScript |
 
 **A lista de termos protegidos não vai para o CI, de propósito.** Ela é conferida só
