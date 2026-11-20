@@ -1,5 +1,14 @@
 # Avisa de dependência com vulnerabilidade conhecida e abre PR de atualização.
-# Os PRs passam pelos mesmos portões do CI; nada é integrado sozinho.
+# Os PRs passam pelos mesmos portões do CI.
+#
+# Dois grupos, porque o risco é diferente:
+#   app          o que vai dentro do instalador, ou o monta. Integra só com o mantenedor.
+#   ferramentas  lint, teste, tipos, formatação. Integra sozinho se o CI passar
+#                (.github/workflows/dependabot-auto-merge.yml).
+# Atualização major fica fora dos grupos: um PR por pacote, sempre com o mantenedor.
+#
+# cooldown: a versão nova só é proposta 7 dias depois de sair. Pacote comprometido
+# costuma ser descoberto e retirado nesse prazo. Atualização de segurança não espera.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -7,13 +16,56 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
     groups:
-      # Atualizações pequenas juntas, para não virar um PR por pacote.
-      menores:
+      # O Vite empacota no app tudo o que o código importa, inclusive o que está em
+      # devDependencies (electron, react, react-dom); a cadeia de build escreve o
+      # instalador. Os dois entram aqui. Pacote novo que o app importe entra nesta
+      # lista e no exclude-patterns abaixo (tests/esteira/dependabot-grupos.test.ts).
+      app:
         update-types: [minor, patch]
+        patterns:
+          - '@ant-design/*'
+          - '@electron-toolkit/utils'
+          - '@tanstack/*'
+          - 'antd'
+          - 'react'
+          - 'react-dom'
+          - 'react-router-dom'
+          - 'zod'
+          - 'electron'
+          - 'electron-builder'
+          - 'electron-vite'
+          - 'vite'
+          - '@vitejs/*'
+      ferramentas:
+        dependency-type: development
+        update-types: [minor, patch]
+        # Redundante com a ordem dos grupos, de propósito: um pacote do app nunca
+        # pode cair no grupo que integra sozinho.
+        exclude-patterns:
+          - '@ant-design/*'
+          - '@electron-toolkit/utils'
+          - '@tanstack/*'
+          - 'antd'
+          - 'react'
+          - 'react-dom'
+          - 'react-router-dom'
+          - 'zod'
+          - 'electron'
+          - 'electron-builder'
+          - 'electron-vite'
+          - 'vite'
+          - '@vitejs/*'
 
   # As actions estão fixadas por SHA; sem isto elas envelheceriam sem aviso.
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        update-types: [minor, patch]
