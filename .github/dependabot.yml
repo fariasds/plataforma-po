@@ -18,6 +18,11 @@ updates:
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
+    ignore:
+      # Os tipos do Node descrevem o Node que vem dentro do Electron (o 45 traz o
+      # Node 24). A major sobe à mão, junto com a do Electron.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
     groups:
       # O Vite empacota no app tudo o que o código importa, inclusive o que está em
       # devDependencies (electron, react, react-dom); a cadeia de build escreve o
