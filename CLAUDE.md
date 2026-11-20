@@ -131,6 +131,15 @@ O ID liga os três lugares — documentação, texto de ajuda e código do cálc
 | `npm run verify:electron` | Electronegativity sobre `src/`: todo apontamento tem aceite com motivo (`RN-SEC-30`) |
 | `npm run verify:neutral` | Conta termos de uma lista privada e os marcadores de transição. Só informa |
 | `npm run check` | Todos acima, mais o build. É o que o CI roda em todo PR |
+| check **pronto** (só no PR) | A definição de pronto que o `check` não vê: código do app mudou → regra mudou; aprovado mudou → o PR cita a regra que mudou; tela mudou → Cenário mudou; teste de segurança novo → prova de falha; versão subiu → maior e com o lock alinhado. `scripts/verify-pronto.mjs`, comentário fixo no PR |
+
+O `npm run test` também confere que toda regra citada no código, nos testes e nos
+scripts existe em `docs/regras-de-negocio/` e não está revogada
+(`tests/pronto/regras-citadas.test.ts`).
+
+**Ao abrir um PR, preencha o template** (`.github/pull_request_template.md`). Uma
+caixa de dispensa marcada é uma afirmação para quem revisa: marque só quando for
+verdade, e nunca para fazer o check **pronto** passar.
 
 **Teste de segurança leva o ID da regra no nome do arquivo**
 (`tests/security/rn-sec-18-fronteira-de-rede.test.ts`), e a regra, na

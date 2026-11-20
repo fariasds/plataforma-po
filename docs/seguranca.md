@@ -15,13 +15,14 @@ Para o modelo de ameaça técnico e para relatar uma falha, veja o
 | Garantia | Regra | Provado por |
 |---|---|---|
 | **Seu token só sai da sua máquina para o Azure DevOps**, por HTTPS, para a sua organização. Nenhum outro servidor, nem do autor | RN-SEC-18 | `tests/security/rn-sec-18-fronteira-de-rede.test.ts` |
+| **A única outra consulta é a de versão nova**, a um endereço só do GitHub público, sem token e sem dado seu. O app não baixa nem executa o instalador: o botão abre o download no navegador | RN-SEC-33 | `tests/security/rn-sec-33-consulta-de-versao.test.ts` |
 | **Seu token fica cifrado pelo Windows** (DPAPI). Se a cifragem não estiver disponível, o app se recusa a guardar | RN-SEC-09 | `tests/security/rn-sec-09-cifragem-obrigatoria.test.ts` |
 | **A tela do app nunca vê o seu token.** Ela só sabe se existe um | RN-SEC-10 | `tests/security/rn-sec-10-contrato-ipc.test.ts` · `rn-sec-10-envelopes-sem-pat.test.ts` |
 | **O app só lê o Azure, nunca escreve**, mesmo que o seu token permita | RN-SEC-20 | `tests/security/rn-sec-20-somente-leitura.test.ts` |
 | **O token não aparece em log nem em mensagem de erro** | RN-SEC-19 | `tests/security/rn-sec-19-redacao.test.ts` |
 | **O token nunca entra no arquivo de Configuração**, que você pode compartilhar e a sua IA pode ler | RN-CFG-05 · RN-CFG-06 | `tests/security/rn-cfg-05-sem-segredo.test.ts` · `rn-cfg-06-segredo-fora-do-perfil.test.ts` |
 | **A Configuração guarda o nome da organização, nunca um endereço.** Um arquivo importado não consegue mandar o token para outro servidor | RN-CFG-04 | `tests/security/rn-cfg-04-organizacao-por-nome.test.ts` |
-| **Link dentro de um work item não abre nada perigoso.** Só páginas da sua organização no Azure vão para o navegador | RN-SEC-21 | `tests/security/rn-sec-21-links-externos.test.ts` |
+| **Link dentro de um work item não abre nada perigoso.** Só páginas da sua organização no Azure vão para o navegador; o aviso de versão abre só a página e o instalador da Release | RN-SEC-21 | `tests/security/rn-sec-21-links-externos.test.ts` |
 | **O app não executa programa nenhum** e não fala com serviço de IA | RN-SEC-23 | `tests/security/rn-sec-23-fronteira-de-processo.test.ts` |
 | **Para a sua IA, vai só o que você vê na prévia**: campos permitidos, com credenciais apagadas. Quem cola é você | RN-SEC-24 | `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts` |
 | **A resposta da IA entra como rascunho de texto**, nunca como código, e só depois que você aceita | RN-SEC-26 | `tests/security/rn-sec-26-resposta-da-ia.test.ts` |
@@ -88,8 +89,9 @@ Mostrar o limite faz parte de ser honesto sobre segurança:
   mas não controla o que o fornecedor da IA guarda.
 - **O instalador não tem assinatura de código** (RN-SEC-14). O Windows mostra o aviso
   "editor desconhecido". A integridade se confere pelo SHA-256.
-- **Não há atualização automática.** Versão nova é instalador novo: acompanhe as
-  Releases.
+- **Não há atualização automática.** O app avisa quando sai versão nova e abre o
+  download no navegador; quem abre e instala é você, com o aviso do SmartScreen e o
+  SHA-256 da Release para conferir (ADR 0008).
 
 ### Riscos aceitos, com motivo
 
@@ -125,7 +127,7 @@ servidor, login nem sessão, por isso vários capítulos não se aplicam.
 | V9 · Tokens autocontidos | Não se aplica | Não há JWT nem token emitido pelo app |
 | V10 · OAuth e OIDC | Não se aplica | Autenticação no Azure por PAT, sem OAuth |
 | V11 · Criptografia | Atende | Sem criptografia própria: usa o `safeStorage` do sistema operacional, e recusa guardar sem ele (RN-SEC-09) |
-| V12 · Comunicação segura | Atende | Só HTTPS, só para `dev.azure.com` e `vssps.dev.azure.com` (RN-SEC-18) |
+| V12 · Comunicação segura | Atende | Só HTTPS, só para `dev.azure.com` e `vssps.dev.azure.com` (RN-SEC-18), mais a consulta de versão a um endereço exato do GitHub, sem token (RN-SEC-33) |
 | V13 · Configuração | Atende | Nenhum segredo na Configuração nem no pacote (RN-CFG-05, RN-SEC-13); nenhuma credencial no repositório (RN-SEC-28); opções do Electron varridas (RN-SEC-30) |
 | V14 · Proteção de dados | Atende | O dado mínimo vai para a IA, com prévia (RN-SEC-24); o token fica fora da pasta que a IA lê (RN-CFG-06) |
 | V15 · Código e arquitetura seguros | Atende parcialmente | Fronteiras testadas (RN-SEC-10, 18, 23, 29). **Pendente:** a versão do Electron em uso tem avisos de segurança publicados, e a atualização de versão maior está planejada |

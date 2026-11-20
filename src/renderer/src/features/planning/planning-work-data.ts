@@ -4,7 +4,13 @@ import type { ManualPlanningItem } from '@shared/dashboards'
 import { planningKeys } from '@shared/planning-keys'
 import { ipc } from '../../ipc/client'
 import { useConfiguration } from '../../ipc/useAzure'
-import { resolveCapacity, type CapacityConfig, type StoredCapacity } from './planning-rules'
+import { useActiveSquad } from '../../ipc/useActiveSquad'
+import {
+  resolveCapacity,
+  resolveSquadCapacity,
+  type CapacityConfig,
+  type StoredCapacity
+} from './planning-rules'
 
 /**
  * Dados de trabalho do Planning (RN-PLN-07, RN-PLN-12, RN-PLN-16), guardados no
@@ -97,20 +103,42 @@ export function useManualItems(productIds: string[], sprintKey: string | undefin
 
 // ─── Capacidade ──────────────────────────────────────────────────────────────
 
-/** Os valores editados ficam no Perfil; o que nunca foi editado segue a Configuração. */
+/**
+ * Os valores editados ficam no Perfil; o que nunca foi editado segue a
+ * Configuração. Com Squads, cada uma tem a sua (RN-PLN-22).
+ */
 export function useCapacity(): {
   config: CapacityConfig
   productiveHours: number
   update: (patch: Partial<CapacityConfig>) => void
 } {
   const { capacityDefaults, calendar } = useConfiguration()
-  const stored = useStoredValues<StoredCapacity>([planningKeys.capacity])
-  const saved = stored.values[0] ?? {}
-  const config = resolveCapacity(capacityDefaults, saved)
+  const squad = useActiveSquad()
+  const stored = useStoredValues<StoredCapacity>(
+    squad ? [planningKeys.squadCapacity(squad.id), planningKeys.capacity] : [planningKeys.capacity]
+  )
 
+  if (!squad) {
+    const saved = stored.values[0] ?? {}
+    return {
+      config: resolveCapacity(capacityDefaults, saved),
+      productiveHours: calendar.productiveHoursPerDay,
+      update: (patch) => stored.save([{ ...saved, ...patch }])
+    }
+  }
+
+  const [savedSquad, savedProfile] = stored.values
+  const config = resolveSquadCapacity(
+    capacityDefaults,
+    squad.capacityDefaults,
+    savedSquad,
+    savedProfile
+  )
   return {
     config,
     productiveHours: calendar.productiveHoursPerDay,
-    update: (patch) => stored.save([{ ...saved, ...patch }])
+    // A primeira edição grava a capacidade inteira na Squad: dali em diante ela
+    // não depende mais da capacidade única do Perfil.
+    update: (patch) => stored.save([{ ...(savedSquad ?? config), ...patch }, savedProfile])
   }
 }

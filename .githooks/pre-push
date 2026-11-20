@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Ultima barreira antes do GitHub (RN-SEC-32). O que passa daqui e publico e
+# permanente: um repositorio publico nao esquece nada do que um dia recebeu.
+#
+# A verificacao mora em scripts/verify-push.mjs. Ela recusa o push se este clone
+# guarda historia alem da publica, se um commit novo nao tem autor noreply, cria
+# caminho privado, ou traz credencial ou termo da lista de termos.
+#
+# Ativado por: git config core.hooksPath .githooks
+# Lista de termos: git config plataforma.denylist <caminho>
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "ERRO: o Node nao foi encontrado, e sem ele a verificacao do push nao roda."
+  echo "Push abortado. Instale o Node ou ajuste o PATH."
+  exit 1
+fi
+
+script="$(cd "$(dirname "$0")/.." && pwd)/scripts/verify-push.mjs"
+
+if [ ! -f "$script" ]; then
+  echo "ERRO: $script nao existe; sem ele o push nao e verificado."
+  exit 1
+fi
+
+# O git passa as refs na entrada padrao; o node le a mesma entrada.
+exec node "$script" "$@"

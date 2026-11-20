@@ -1,7 +1,9 @@
+import { PUBLIC_REPOSITORY } from '@shared/app-info'
 import { AppError } from '@shared/errors'
+import { installerFileName, parseVersion, RELEASE_CHECK_URL } from '@shared/update'
 
 /**
- * Fronteira de rede do processo principal (RN-SEC-18, 20 e 21).
+ * Fronteira de rede do processo principal (RN-SEC-18, 20, 21 e 33).
  *
  * O PAT viaja no cabeçalho de toda requisição do `client.ts`. Se uma URL vinda de
  * resposta do Azure, de configuração ou de bug apontasse para outro host, o token
@@ -80,6 +82,53 @@ export function openExternalIfAllowed(
 ): boolean {
   if (organization === null || !isAllowedExternalUrl(raw, organization)) {
     console.warn(`[segurança] link externo negado (RN-SEC-21): ${raw}`)
+    return false
+  }
+  void open(raw)
+  return true
+}
+
+/**
+ * RN-SEC-33: a consulta de versão vai a um endereço só, comparado por inteiro.
+ * Não há caminho, host ou parâmetro variável para checar: qualquer diferença recusa.
+ */
+export function assertAllowedReleaseCheck(raw: string, method: string | undefined): URL {
+  const url = parseUrl(raw)
+  const verb = (method ?? 'GET').toUpperCase()
+  if (!url || url.href !== RELEASE_CHECK_URL || verb !== 'GET') {
+    throw new AppError(
+      'UPDATE_BLOCKED',
+      'Consulta bloqueada: a verificação de versão só lê a última Release do repositório público.'
+    )
+  }
+  return url
+}
+
+// O nome do repositório só tem letras, hífen e a barra: nada a escapar na regex.
+const RELEASE_PATH = new RegExp(
+  `^/${PUBLIC_REPOSITORY}/releases/(?:tag/v([^/]+)|download/v([^/]+)/([^/]+))$`
+)
+
+/**
+ * RN-SEC-21, exceção da versão nova: só a página da Release ou o instalador de uma
+ * versão, no repositório público. Host exato, sem usuário, porta, consulta nem
+ * fragmento; o nome do arquivo tem de ser o instalador da mesma versão.
+ */
+export function isAllowedReleaseLink(raw: string): boolean {
+  const url = parseUrl(raw)
+  if (!url || url.protocol !== 'https:' || url.hostname !== 'github.com') return false
+  if (url.username || url.password || url.port || url.search || url.hash) return false
+  const match = RELEASE_PATH.exec(url.pathname)
+  if (!match) return false
+  const [, tagVersion, downloadVersion, file] = match
+  if (tagVersion !== undefined) return parseVersion(tagVersion) !== null
+  return parseVersion(downloadVersion) !== null && file === installerFileName(downloadVersion)
+}
+
+/** Como `openExternalIfAllowed`, para os dois links da versão nova. */
+export function openReleaseLinkIfAllowed(raw: string, open: (url: string) => unknown): boolean {
+  if (!isAllowedReleaseLink(raw)) {
+    console.warn(`[segurança] link de versão negado (RN-SEC-21): ${raw}`)
     return false
   }
   void open(raw)

@@ -24,7 +24,7 @@ function withProjects(
       key: newKey('p'),
       id: idFromName(
         project,
-        [...products, ...draft.groups].map((item) => item.id)
+        [...products, ...draft.groups, ...draft.squads].map((item) => item.id)
       ),
       idTouched: false,
       idLocked: false,

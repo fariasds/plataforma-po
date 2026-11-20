@@ -184,7 +184,7 @@ describe('config-loader', () => {
       .replace('["loja", "app"]', '["loja2", "app"]')
     const result = importConfiguration(renamed)
 
-    expect(result).toEqual({ saved: true, removed: { products: ['loja'], groups: [] } })
+    expect(result).toEqual({ saved: true, removed: { products: ['loja'], groups: [], squads: [] } })
     expect(getActiveConfig()?.products[0].id).toBe('loja2')
   })
 })

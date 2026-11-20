@@ -58,6 +58,11 @@ _Avoid_: projeto (projeto é do Azure), board, área
 Soma nomeada de Produtos, vista como um todo nos indicadores.
 _Avoid_: portfólio, "ambos"
 
+**Squad**:
+Conjunto dos Produtos com que um time de pessoas trabalha. Cada Produto pertence a
+uma Squad só, e cada Squad é uma aba do app: as telas mostram só o que é dela.
+_Avoid_: time (time é do Azure), equipe, tribo
+
 **Sprint unificada**:
 Conjunto das sprints de vários Produtos que correm no mesmo período, tratado como um
 ciclo só.

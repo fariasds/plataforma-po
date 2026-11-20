@@ -17,5 +17,8 @@ export const planningKeys = {
   /** Objetivo da sprint, por Produto ou Grupo selecionado. */
   goal: (selectionId: string, sprintKey: string): string =>
     `planning:goal:${keyPart(selectionId)}:${keyPart(sprintKey)}`,
-  capacity: 'planning:capacity'
+  /** Capacidade do Perfil inteiro: a de quem não tem Squads, e o ponto de partida de cada Squad. */
+  capacity: 'planning:capacity',
+  /** Capacidade de uma Squad (RN-PLN-22). */
+  squadCapacity: (squadId: string): string => `planning:capacity:${keyPart(squadId)}`
 }

@@ -1,4 +1,5 @@
 import type { SprintGoalRequest } from './ai'
+import type { UpdateCheck, UpdateLink } from './update'
 import type { SerializedError } from './errors'
 import type { Configuration } from './config/schema'
 import type { ConfigurationIssue } from './config/validate'
@@ -76,7 +77,7 @@ export interface CreateProfileRequest {
 }
 
 export type ImportConfigResult =
-  | { saved: true; removed: { products: string[]; groups: string[] } }
+  | { saved: true; removed: { products: string[]; groups: string[]; squads: string[] } }
   | { saved: false; issues: ConfigurationIssue[] }
 
 /**
@@ -127,11 +128,19 @@ export interface IpcApi {
 
   // --- Dashboards: one call per screen ------------------------------------
   //
-  // `selectionId` é o ID de um Produto ou de um Grupo da Configuração em uso. ID
-  // que não existe nela resolve com o erro `SELECTION_UNKNOWN`.
+  // `selectionId` é o ID de um Produto, de um Grupo ou de uma Squad (a visão
+  // "Squad inteira") da Configuração em uso. ID que não existe nela resolve com o
+  // erro `SELECTION_UNKNOWN`.
 
-  /** Sprints unificadas de todos os Produtos com cadência por sprint, mais nova primeiro. */
-  getSprints(limit?: number, preferFuture?: boolean): Promise<UnifiedSprint[]>
+  /**
+   * Sprints unificadas dos Produtos com cadência por sprint, mais nova primeiro.
+   * Com `squadId`, só os Produtos da Squad (RN-GLB-17).
+   */
+  getSprints(
+    limit?: number,
+    preferFuture?: boolean,
+    squadId?: string | null
+  ): Promise<UnifiedSprint[]>
   getSprintDelivery(selectionId: string, sprint: UnifiedSprint): Promise<SprintDeliveryResult>
   getTeamPerformance(selectionId: string, sprints: UnifiedSprint[]): Promise<TeamPerformanceResult>
   getBugAnalysis(
@@ -177,6 +186,20 @@ export interface IpcApi {
     sprint: UnifiedSprint,
     itemIds: number[]
   ): Promise<SprintGoalRequest>
+
+  // --- Versão nova (RN-GLB-18, ADR 0008) ----------------------------------
+
+  /**
+   * A última Release publicada é mais nova que a instalada? Uma consulta por
+   * abertura do app, sem token (RN-SEC-33). Nunca rejeita por falta de rede:
+   * sem resposta, `unknown`.
+   */
+  checkForUpdate(): Promise<UpdateCheck>
+  /**
+   * Abre no navegador a página da Release ou o instalador da versão nova. A
+   * janela não manda URL: o main a monta a partir da versão consultada (RN-SEC-21).
+   */
+  openUpdateLink(link: UpdateLink): Promise<void>
 }
 
 /**
@@ -217,7 +240,9 @@ export const IPC_CHANNELS = {
   discoverAreas: 'discovery:areas',
   discoverProcess: 'discovery:process',
   discoverFields: 'discovery:fields',
-  buildSprintGoalRequest: 'ai:sprint-goal-request'
+  buildSprintGoalRequest: 'ai:sprint-goal-request',
+  checkForUpdate: 'update:check',
+  openUpdateLink: 'update:open-link'
 } as const satisfies Record<keyof IpcApi, string>
 
 // --- Events (main → renderer) --------------------------------------------
