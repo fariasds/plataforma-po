@@ -37,7 +37,7 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-10 | O PAT nunca chega à interface | `tests/security/rn-sec-10-contrato-ipc.test.ts` · `rn-sec-10-envelopes-sem-pat.test.ts` |
 | RN-SEC-11 | Validação antes de guardar | Sem teste automático |
 | RN-SEC-12 | Trocar o PAT limpa o cache | Sem teste automático |
-| RN-SEC-13 | O pacote não carrega segredo | Auditoria do pacote (`docs/DISTRIBUICAO.md`) |
+| RN-SEC-13 | O pacote não carrega segredo | `tests/security/rn-sec-13-conteudo-do-pacote.test.ts` |
 | RN-SEC-14 | Sem assinatura de código | Decisão, não barreira |
 | RN-SEC-15 | Fonte privado, binário público | Revogada (substituída pela RN-SEC-22) |
 | RN-SEC-16 | Dono do PAT, visto pelo Azure | Sem teste automático |
@@ -600,13 +600,17 @@ o código passa a ser público e o instalador sai da esteira pública. Ver `RN-S
 ### RN-SEC-22 · O instalador público sai da esteira pública, com hash publicado
 
 O instalador distribuído é construído pelo **GitHub Actions** do repositório
-público, a partir de uma tag `v*` (`.github/workflows/release.yml`). Não existe
-instalador público construído em máquina de ninguém.
+público, quando a `version` do `package.json` chega à `main` sem Release publicada
+(`.github/workflows/release.yml`). Não existe instalador público construído em
+máquina de ninguém.
 
-- A tag precisa ser igual a `v<version>` do `package.json`; se não for, o build
-  para.
-- O build roda `npm ci` e `npm run check` antes de `npm run build:win`: instalador
-  com portão vermelho não sai.
+- A tag `v<version>` nasce no commit que gerou o build, no momento em que a versão
+  é publicada; antes disso não há tag para divergir da versão. O nome do instalador
+  é conferido contra a versão, porque o app monta o link do download com ele
+  (`RN-GLB-18`).
+- O build roda a varredura de credenciais, `npm ci` e `npm run check` antes de
+  `npm run build:win`, e audita o pacote depois (`RN-SEC-13`): instalador com
+  portão vermelho não sai.
 - O **SHA-256** do instalador vai no corpo da Release e em um arquivo `.sha256` ao
   lado dele.
 - O instalador tem **atestado de proveniência** assinado pela esteira
@@ -618,12 +622,21 @@ instalador público construído em máquina de ninguém.
   CycloneDX das dependências de execução, o `npm audit` dessas dependências e o
   SHA-256 de cada arquivo. O `npm audit` não barra a versão: o aviso fica registrado
   no laudo, para quem publica decidir à vista.
-- A Release nasce em **rascunho**. Quem publica é o mantenedor, à mão, depois de
-  conferir.
+- A Release nasce em **rascunho** e só é publicada com a **aprovação do
+  mantenedor** no ambiente `producao` do GitHub, que exige revisor
+  ([ADR 0009](../adr/0009-publicacao-pela-esteira-com-aprovacao.md)). A esteira
+  confere que o ambiente exige aprovação antes de criar o rascunho: um ambiente sem
+  proteção publicaria sem ninguém olhar, e ela para.
+- Depois de publicada, a própria esteira baixa o instalador da Release, confere o
+  SHA-256 e o atestado, e confere que `releases/latest` devolve a versão nova, que é
+  o que o aviso de versão nova consulta (`RN-SEC-33`).
+- Uma versão com problema é **recolhida** pelo workflow `recolher-versao.yml`, com a
+  mesma aprovação: ela vira pré-lançamento e a anterior volta a ser a mais recente.
+  A correção é sempre uma versão maior, nunca o número voltando.
 
 **Permissões mínimas.** O job que instala dependências e constrói só lê o
-repositório. O único job com `contents: write` não roda código do projeto: baixa o
-instalador pronto e cria o rascunho. As actions são fixadas por **SHA de commit**,
+repositório. Os jobs com `contents: write` não rodam código do projeto: um baixa o
+instalador pronto e cria o rascunho, o outro só muda o rascunho para publicado. As actions são fixadas por **SHA de commit**,
 não por tag, porque uma tag pode ser movida para outro código.
 
 **Por quê:** sem assinatura de código (`RN-SEC-14`), quem baixa precisa de outro
@@ -637,6 +650,8 @@ e estoura o limite de arquivo do GitHub. O binário circula pela Release, não p
 histórico do git.
 
 **Garantida por:** a própria esteira, não por teste. O procedimento está em
-`docs/DISTRIBUICAO.md`.
+`docs/DISTRIBUICAO.md`, e o caminho inteiro, do PR à versão publicada, em
+`docs/ESTEIRA.md`.
 
-**Implementado em:** `.github/workflows/release.yml` · `.github/workflows/ci.yml`
+**Implementado em:** `.github/workflows/release.yml` · `.github/workflows/ci.yml` ·
+`.github/workflows/recolher-versao.yml`

@@ -1,122 +1,108 @@
 # Distribuição
 
-Como uma versão do aplicativo chega à máquina de quem usa.
+Como uma versão do aplicativo chega à máquina de quem usa. O caminho inteiro, do PR
+à versão publicada, está em [ESTEIRA.md](ESTEIRA.md); aqui está o detalhe do que sai.
 
-O instalador público é construído pelo **GitHub Actions** do repositório, a partir
-de uma tag `v*`. Não existe instalador público construído na máquina de ninguém: o
-código, o log do build e o SHA-256 são públicos, e qualquer pessoa confere de qual
-código saiu o arquivo. Ver `RN-SEC-22`.
+O instalador público é construído pelo **GitHub Actions** do repositório, quando a
+`version` do `package.json` chega à `main` sem Release publicada. Não existe
+instalador público construído na máquina de ninguém: o código, o log do build e o
+SHA-256 são públicos, e qualquer pessoa confere de qual código saiu o arquivo. Ver
+`RN-SEC-22` e o [ADR 0009](adr/0009-publicacao-pela-esteira-com-aprovacao.md).
 
 ```
-tag v<versão>  ─►  job build (só leitura)                 ─►  job draft-release (escrita)  ─►  mantenedor
-                   npm ci · npm run check                     cria a Release em rascunho       confere e publica
-                   npm run build:win · SHA-256                com o .exe e o .sha256
+version nova na main ─► build (só leitura) ─► atestado ─► rascunho ─► aprovação ─► publicar ─► conferir
+                        check · instalador     id-token    escrita     mantenedor    escrita     hash, atestado,
+                        auditoria · laudo                  sem código                sem código  releases/latest
 ```
 
 ---
 
 ## Publicar uma versão
 
-### 1. Numerar
+### 1. Numerar, no PR da mudança
 
-Subir a `version` no `package.json` e commitar. O número entra no nome do arquivo
-gerado, e a esteira recusa tag que não bata com ele.
+Subir a `version` no `package.json` (e no `package-lock.json`, com `npm install`)
+**no mesmo PR** da mudança. O check `pronto` confere que ela é maior que a anterior
+e que o lock acompanha. Subir a versão é decidir publicar: o PR que não muda a
+`version` integra sem gerar versão nova.
 
-### 2. Conferir localmente o que vai sair
+O número entra no nome do instalador, `plataforma-po-desktop-<versão>-setup.exe`, e
+o app monta o link do download com ele (`RN-GLB-18`). A esteira recusa outro nome.
 
-A esteira roda os mesmos portões, mas é mais barato descobrir antes:
+### 2. Testar o instalador do PR
 
-```bash
-npm run check
-```
+O CI de todo PR monta o instalador e o anexa ao run do `check`, em **Artifacts**, por
+7 dias. É o mesmo código que vai ser publicado. Instale e teste antes do merge.
 
-Se for mexer em `electron-builder.yml` ou acrescentar pasta na raiz, construa e
-audite o pacote localmente (passo 5) antes de criar a tag.
+### 3. A esteira, depois do merge
 
-### 3. Criar a tag
+O push na `main` dispara `.github/workflows/release.yml`:
 
-```bash
-git tag v0.3.0
-```
+1. **`versao`** decide se há o que publicar: a versão do `package.json` sem Release
+   publicada.
+2. **`build`**, só leitura: varredura de credenciais, `npm ci`, `npm run check`,
+   `npm run build:win`, a auditoria do pacote, o laudo de segurança e o SHA-256.
+   Portão vermelho, nada sai.
+3. **`attest`**, o único com `id-token: write`: o atestado de proveniência.
+4. **`rascunho`**, com escrita e sem rodar código do projeto: confere que o ambiente
+   `producao` exige aprovação, e cria a Release em rascunho com o instalador, o
+   `.sha256`, o laudo e as novidades (os PRs desde a última versão publicada).
+5. **`publicar`**, no ambiente `producao`: espera a sua aprovação.
+6. **`conferir`**: baixa o instalador da Release publicada, confere o hash e o
+   atestado, e confere que `releases/latest` devolve a versão nova.
 
-```bash
-git push origin v0.3.0
-```
+### 4. Aprovar
 
-A tag dispara `.github/workflows/release.yml`:
+O GitHub avisa que há um deploy esperando revisão (e-mail e app do celular). No run:
 
-1. **`build`**, com permissão só de leitura: confere que a tag é `v<version>` do
-   `package.json`, roda `npm ci`, `npm run check` e `npm run build:win`, e calcula
-   o SHA-256 do instalador. Portão vermelho, nada sai.
-2. **`draft-release`**, o único job com `contents: write`: não roda código do
-   projeto. Baixa o instalador pronto e cria a Release **em rascunho**, com o
-   `.exe`, um `.sha256` ao lado e o hash no corpo.
+- a lista do `rascunho` mostra o que já passou;
+- o link do ambiente abre o rascunho: leia o `npm-audit.json`, porque aviso nele não
+  barra a versão e quem decide é você;
+- **Review deployments → producao → Approve and deploy**.
 
-### 4. Conferir o rascunho
+Aprovar é o que avisa quem usa: todo app que abrir com versão mais antiga mostra a
+faixa de versão nova (`RN-GLB-18`). O app lê `releases/latest`, por isso a esteira
+publica como a mais recente e não como pré-lançamento.
 
-Na página de Releases, abrir o rascunho e conferir:
+Recusar deixa o rascunho para conferir. Para tentar de novo, rode **Release** pela
+aba Actions (**Run workflow**): o rascunho anterior desta versão é refeito.
 
-- o nome do arquivo tem a versão certa;
-- o hash do corpo é igual ao do arquivo `.sha256`;
-- o log do job `build` está verde e é desta tag;
-- o laudo de segurança está anexado (`verify-security.junit.xml`,
-  `electronegativity.sarif`, `sbom.cdx.json`, `npm-audit.json`, `laudo.sha256`), e o
-  `npm-audit.json` não traz aviso que impeça publicar;
-- o job `attest` está verde.
+### 5. Instalar e abrir
 
-### 5. Auditar o pacote
+O único passo que a esteira não faz. Instalar a versão publicada e abrir. **O app
+tem de abrir sem nenhum Perfil**, pedindo para criar um. Se abrisse já com
+organização, Configuração ou token, o instalador estaria carregando dado de alguém.
 
-Baixar o instalador do rascunho, instalar numa pasta de teste e olhar o que de fato
-entrou:
-
-```bash
-npx @electron/asar list "<pasta de instalação>/resources/app.asar"
-```
-
-Só pode haver `out/`, `package.json`, dependências de execução e os modelos de
-`resources/`. Não pode haver `src/`, `docs/`, `tests/`, `scripts/`, `.claude/`,
-`CLAUDE.md`, `.env` nem arquivo `.bin`. Instalador muito maior que o da versão
-anterior é sinal de pasta indevida. A lista de exclusão do `electron-builder.yml` cobre isso — este
-passo é o que confirma que cobriu (`RN-SEC-13`).
-
-### 6. Publicar
-
-Com tudo conferido, publicar o rascunho pela interface do GitHub. É a única etapa
-manual, de propósito: quem publica é uma pessoa, depois de olhar.
-
-Publicar é também o que avisa quem usa: a partir daí, todo app que abrir com versão
-mais antiga mostra a faixa de versão nova, com o botão que abre este instalador no
-navegador (`RN-GLB-18`). O app lê `releases/latest`, então a Release precisa sair
-como a mais recente (o padrão do GitHub) e **não** como pré-lançamento, e o
-instalador anexado precisa manter o nome `plataforma-po-desktop-<versão>-setup.exe`.
-Sem o instalador, a faixa oferece só a página da Release.
-
-### 7. Conferir de fora
-
-Baixar o arquivo da Release publicada numa pasta limpa e conferir o hash no
-PowerShell:
+Para conferir à mão o que a esteira conferiu:
 
 ```powershell
 (Get-FileHash .\plataforma-po-desktop-<versão>-setup.exe -Algorithm SHA256).Hash.ToLower()
 ```
 
-Conferir a proveniência, com o GitHub CLI:
-
 ```powershell
 gh attestation verify .\plataforma-po-desktop-<versão>-setup.exe --repo <dono>/<repositório>
 ```
 
-Instalar e abrir. **O app tem de abrir sem nenhum Perfil**, pedindo para criar um.
-Se abrisse já com organização, Configuração ou token, o instalador estaria
-carregando dado de alguém.
+E para auditar o pacote de uma instalação ou de um build local (`RN-SEC-13`):
+
+```powershell
+node scripts/audit-package.mjs "<pasta de instalação>\resources"
+```
+
+### Versão com problema
+
+Ver [ESTEIRA.md](ESTEIRA.md), "Versão saiu com problema": recolher com o workflow
+**Recolher versão** e corrigir com uma versão maior.
 
 ---
 
 ## O que o instalador contém
 
-Código compilado, `package.json`, ícone e os modelos de um Perfil novo
-(`resources/profile-template/`). Ficam de fora: fonte, testes, documentação,
-arquivos de configuração e qualquer arquivo de ambiente (`RN-SEC-13`).
+Código compilado, `package.json`, `LICENSE`, as dependências de execução, o ícone e
+os modelos de um Perfil novo (`resources/profile-template/`). Ficam de fora: fonte,
+testes, documentação, arquivos de configuração e qualquer arquivo de ambiente
+(`RN-SEC-13`). A auditoria do pacote recusa o que não estiver nessa lista, no CI de
+todo PR e na esteira de Release.
 
 **Não há credencial nenhuma no pacote.** O app não fala com servidor do autor, e o
 PAT é de cada pessoa: cadastrado na primeira execução, cifrado pelo sistema

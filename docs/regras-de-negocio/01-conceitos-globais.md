@@ -405,8 +405,9 @@ desenvolvimento à frente da publicada não é convidado a voltar.
 **Sem aviso, sem erro.** Sem rede, com o GitHub fora do ar ou na demonstração, a
 faixa simplesmente não aparece; o app nunca mostra erro por causa dessa consulta.
 
-Rascunho de Release não conta: o aviso só aparece depois que o mantenedor publica
-(`docs/DISTRIBUICAO.md`).
+Rascunho de Release não conta: o aviso só aparece depois que o mantenedor aprova a
+publicação (`docs/DISTRIBUICAO.md`). Uma versão recolhida (`RN-SEC-22`) vira
+pré-lançamento e deixa de gerar aviso.
 
 **Implementado em:** `src/shared/update.ts` · `src/main/services/update/release-check.ts` ·
 `src/main/ipc/update-handlers.ts` · `src/renderer/src/components/UpdateBanner.tsx`
