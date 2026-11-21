@@ -26,6 +26,7 @@ const api: IpcBridge = {
   importConfig: (json, mode) => invoke(IPC_CHANNELS.importConfig, json, mode),
   applyProposal: () => invoke(IPC_CHANNELS.applyProposal),
   discardProposal: () => invoke(IPC_CHANNELS.discardProposal),
+  getMcpLaunch: () => invoke(IPC_CHANNELS.getMcpLaunch),
   openProfileFolder: () => invoke(IPC_CHANNELS.openProfileFolder),
   readWorkData: (key) => invoke(IPC_CHANNELS.readWorkData, key),
   writeWorkData: (key, value) => invoke(IPC_CHANNELS.writeWorkData, key, value),

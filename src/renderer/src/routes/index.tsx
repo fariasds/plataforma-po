@@ -1,6 +1,7 @@
 import { createHashRouter, Navigate } from 'react-router-dom'
 import { AppLayout } from '../components/AppLayout'
 import { BugAnalysisScreen } from '../features/bug-analysis/BugAnalysisScreen'
+import { ConnectAiScreen } from '../features/connect-ai/ConnectAiScreen'
 import { DailyScreen } from '../features/daily/DailyScreen'
 import { HomeScreen } from '../features/home/HomeScreen'
 import { PlanningScreen } from '../features/planning/PlanningScreen'
@@ -34,6 +35,7 @@ export const router = createHashRouter([
       { path: 'daily', element: <DailyScreen /> },
       { path: 'configuracao', element: <SettingsScreen /> },
       { path: 'configuracao/assistente', element: <RedoWizardScreen /> },
+      { path: 'configuracao/conectar-ia', element: <ConnectAiScreen /> },
       { path: 'seguranca', element: <SecurityScreen /> },
       // Histórico de novidades (RN-HOM-05): fora do menu, aberto pela Home.
       { path: 'novidades', element: <ReleaseNotesScreen /> },

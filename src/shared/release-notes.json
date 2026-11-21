@@ -1,5 +1,43 @@
 [
   {
+    "version": "1.5.0",
+    "date": "2026-11-21",
+    "items": [
+      {
+        "type": "new",
+        "highlight": true,
+        "title": "Configurar com a sua IA",
+        "text": "Conecte o Claude, o Cursor ou o VS Code ao app. A IA pergunta o que precisa saber, explica por quê e propõe a Configuração para você revisar.",
+        "details": "Em Configuração, \"Conectar à sua IA\" mostra o trecho pronto para colar no Claude Desktop, no Claude Code, no Cursor ou no VS Code. Depois, é só pedir \"Configure a Plataforma do PO para mim\": a IA pergunta uma coisa de cada vez, diz por que o app precisa dela e onde achar no Azure DevOps, e grava uma proposta. A IA não recebe o token, não usa a rede pelo app e não muda nada sozinha: a proposta aparece no topo da janela, e só vale depois que você aplica.",
+        "screen": "connect-ai"
+      },
+      {
+        "type": "new",
+        "title": "Proposta da sua IA",
+        "text": "Quando a sua IA propõe mudanças, uma faixa no topo avisa. Em Configuração, você vê o que entra, muda e sai, e aplica ou descarta.",
+        "screen": "settings"
+      },
+      {
+        "type": "new",
+        "title": "Importar Configuração com prévia",
+        "text": "Escolha o arquivo de um colega e veja o que muda antes de gravar. Substitua tudo ou mescle com o que você já tem, pelo ID.",
+        "screen": "settings"
+      },
+      {
+        "type": "new",
+        "title": "Modelo de processo",
+        "text": "Exporte só o jeito que o time trabalha (processo, campos e calendário), sem a organização nem os Produtos, para um PO de outra empresa importar.",
+        "screen": "settings"
+      },
+      {
+        "type": "improvement",
+        "title": "Garantia nova na tela Segurança",
+        "text": "A tela Segurança mostra o que a sua IA conectada pode fazer, com o teste que prova: não usa rede, não lê o token e só grava a proposta.",
+        "screen": "security"
+      }
+    ]
+  },
+  {
     "version": "1.4.0",
     "date": "2026-11-20",
     "items": [

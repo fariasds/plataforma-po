@@ -27,6 +27,7 @@ export const electronMock = {
   app: {
     getPath: (): string => userDataDir,
     getVersion: (): string => '0.0.0-test',
+    getAppPath: (): string => '/app',
     isPackaged: false
   },
   safeStorage: {

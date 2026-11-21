@@ -1,4 +1,4 @@
-import { BrowserWindow, shell } from 'electron'
+import { BrowserWindow, app, shell } from 'electron'
 import { AppError } from '@shared/errors'
 import { IPC_EVENTS } from '@shared/ipc'
 import {
@@ -47,6 +47,14 @@ export function registerProfileHandlers(): void {
   handle('applyProposal', () => applyProposal())
 
   handle('discardProposal', () => discardProposal())
+
+  // O cliente de IA inicia este mesmo executável com --mcp (ADR 0010). Em
+  // desenvolvimento o executável é o do Electron, e a pasta do app vai antes.
+  handle('getMcpLaunch', () => ({
+    command: process.execPath,
+    appArgs: app.isPackaged ? [] : [app.getAppPath()],
+    profileId: requireActiveProfile().id
+  }))
 
   handle('openProfileFolder', async () => {
     const { dir } = requireActiveProfile()

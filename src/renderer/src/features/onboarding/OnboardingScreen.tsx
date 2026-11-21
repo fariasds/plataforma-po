@@ -7,6 +7,7 @@ import {
   EyeOutlined,
   ImportOutlined,
   LockOutlined,
+  RobotOutlined,
   RocketOutlined
 } from '@ant-design/icons'
 import { SetupCard } from '../../auth/PatSetupScreen'
@@ -15,11 +16,12 @@ import { useProfileState, useStartDemo } from '../../ipc/useProfile'
 import { t } from '../../i18n'
 import { accentTones, NEUTRA, SIDER } from '../../theme'
 import { ConfigWizard } from './ConfigWizard'
+import { AiStart } from './AiStart'
 import { ImportConfig } from './ImportConfig'
 
 const { Title, Paragraph, Text } = Typography
 
-type Door = 'choose' | 'wizard' | 'import'
+type Door = 'choose' | 'wizard' | 'import' | 'ai'
 
 function DoorCard({
   icon,
@@ -119,9 +121,9 @@ function PromiseItem({
 }
 
 /**
- * Primeira execução: nenhum Perfil nesta máquina. Três portas — o assistente,
- * para quem começa do zero, uma Configuração pronta, ou a demonstração com dados
- * fictícios (RN-GLB-15), que não pede token nem organização.
+ * Primeira execução: nenhum Perfil nesta máquina. Quatro portas — o assistente,
+ * para quem começa do zero, a IA do PO (RN-CFG-13), uma Configuração pronta, ou a
+ * demonstração com dados fictícios (RN-GLB-15), que não pede token nem organização.
  *
  * Também abre de dentro da demonstração, pela faixa: aí o Perfil criado é um
  * Perfil novo, e a demonstração continua na lista.
@@ -171,6 +173,18 @@ export function OnboardingScreen({
     return (
       <SetupCard width={640}>
         <ImportConfig
+          profileExists={profileExists}
+          onFinished={onDone}
+          onCancel={() => setDoor('choose')}
+        />
+      </SetupCard>
+    )
+  }
+
+  if (door === 'ai') {
+    return (
+      <SetupCard width={640}>
+        <AiStart
           profileExists={profileExists}
           onFinished={onDone}
           onCancel={() => setDoor('choose')}
@@ -269,6 +283,12 @@ export function OnboardingScreen({
             text={t('onboarding.wizardDoorText')}
             note={t('onboarding.wizardDoorNote')}
             onClick={() => open('wizard')}
+          />
+          <DoorCard
+            icon={<RobotOutlined />}
+            title={t('onboarding.aiDoorTitle')}
+            text={t('onboarding.aiDoorText')}
+            onClick={() => open('ai')}
           />
           <DoorCard
             icon={<ImportOutlined />}

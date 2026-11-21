@@ -26,6 +26,7 @@ export const RELEASE_NOTE_SCREENS = [
   'sprint-delivery',
   'bug-analysis',
   'settings',
+  'connect-ai',
   'security'
 ] as const
 export type ReleaseNoteScreen = (typeof RELEASE_NOTE_SCREENS)[number]

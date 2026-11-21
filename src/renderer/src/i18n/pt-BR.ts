@@ -71,7 +71,8 @@ export const ptBR = {
     security: 'Segurança',
     sprintDelivery: 'Entregas da Sprint',
     bugAnalysis: 'Análise de Bugs',
-    releaseNotes: 'Novidades'
+    releaseNotes: 'Novidades',
+    connectAi: 'Conectar à sua IA'
   },
 
   squads: {
@@ -194,6 +195,7 @@ export const ptBR = {
         'sprint-delivery': 'Ver nas Entregas da Sprint',
         'bug-analysis': 'Ver na Análise de Bugs',
         settings: 'Abrir a Configuração',
+        'connect-ai': 'Conectar a sua IA',
         security: 'Abrir a Segurança'
       }
     },
@@ -490,6 +492,16 @@ export const ptBR = {
     wizardDoorTitle: 'Configurar com o assistente',
     wizardDoorText:
       'O app lista os projetos, times e áreas da sua organização e você escolhe os seus Produtos.',
+    aiDoorTitle: 'Configurar com a sua IA',
+    aiDoorText:
+      'Conecte o Claude, o Cursor ou o VS Code ao app. A IA pergunta o que precisa saber e propõe a Configuração para você revisar.',
+    ai: {
+      title: 'Configurar com a sua IA',
+      intro:
+        'Primeiro, o app precisa da sua organização no Azure DevOps e de um token de leitura. O token fica criptografado neste computador e a sua IA nunca o vê. Depois, o app mostra o que colar na sua IA.',
+      validateAndContinue: 'Validar token e continuar',
+      continue: 'Continuar'
+    },
     importDoorTitle: 'Importar Configuração',
     importDoorText:
       'Já tem um configuracao.json, seu ou de um colega? Escolha o arquivo e informe o seu token.',
@@ -801,6 +813,53 @@ export const ptBR = {
       orphans: {
         one: 'Sai {ids}. O Planning e a capacidade guardados com esse ID ficam sem uso.',
         other: 'Saem {ids}. O Planning e a capacidade guardados com esses IDs ficam sem uso.'
+      }
+    }
+  },
+
+  connectAi: {
+    intro:
+      'Conecte o Claude, o Cursor ou o VS Code a este Perfil. A sua IA passa a ler a Configuração e a propor mudanças, que aparecem aqui para você revisar e aplicar. Ela não recebe o token.',
+    loadFailed: 'Não deu para montar o comando da sua IA',
+    loading: 'Montando o comando…',
+    chooseTitle: 'Escolha a IA que você usa',
+    pasteTitle: 'Copie e cole na sua IA',
+    askTitle: 'Reinicie a IA e peça',
+    askText:
+      'Peça <b>“Configure a Plataforma do PO para mim”</b>, ou escolha o prompt <code>configurar_plataforma</code>. A IA pergunta o que precisa saber, explica por quê e grava uma proposta. Ela aparece no topo do app.',
+    mergeHint:
+      'Se o arquivo já tem outros servidores em "mcpServers", acrescente só o bloco "plataforma-po" dentro dele.',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    openWizard: 'Abrir o assistente',
+    safetyTitle: 'O que a sua IA pode fazer',
+    safetyText:
+      'Ler a Configuração e gravar uma proposta, nada além disso. O servidor que ela inicia não usa a rede nem lê o token, e a Configuração só muda quando você clica em Aplicar.',
+    clients: {
+      'claude-desktop': {
+        label: 'Claude Desktop',
+        where:
+          'No Claude Desktop, abra <b>Settings → Developer → Edit Config</b> e cole no arquivo <code>claude_desktop_config.json</code>:'
+      },
+      'claude-code': {
+        label: 'Claude Code',
+        where:
+          'No terminal (PowerShell), uma vez. Para conferir depois, use <code>claude mcp list</code>:'
+      },
+      cursor: {
+        label: 'Cursor',
+        where:
+          'No Cursor, abra <b>Settings → MCP → Add new server</b>, ou cole no arquivo <code>.cursor/mcp.json</code> da sua pasta de usuário:'
+      },
+      vscode: {
+        label: 'VS Code',
+        where:
+          'No VS Code, rode o comando <b>MCP: Open User Configuration</b> e cole no arquivo <code>mcp.json</code>:'
+      },
+      other: {
+        label: 'ChatGPT ou outra',
+        where:
+          'O ChatGPT e outras IAs na web só se conectam a servidores na internet, e a Plataforma do PO não tem servidor. Configure pelo assistente, ou peça à sua IA o arquivo de Configuração e importe em Configuração → Importar.'
       }
     }
   },
@@ -1160,6 +1219,11 @@ export const ptBR = {
         title: 'O app não executa programa nenhum',
         detail:
           'Nem fala com serviço de IA. Para a sua IA vai só o que você vê na prévia, e quem cola é você.'
+      },
+      mcp: {
+        title: 'Conectada pelo MCP, a sua IA só propõe',
+        detail:
+          'O servidor que a sua IA inicia não usa rede nem lê o token. Ele grava só uma proposta, e nada muda até você aplicar.'
       },
       window: {
         title: 'A janela roda isolada',

@@ -64,6 +64,7 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   importConfig: ['{}'],
   applyProposal: [],
   discardProposal: [],
+  getMcpLaunch: [],
   openProfileFolder: [],
   readWorkData: ['planning:loja'],
   writeWorkData: ['planning:loja', { items: [] }],

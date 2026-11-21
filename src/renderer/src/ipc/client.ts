@@ -26,6 +26,7 @@ export const ipc: IpcApi = {
   importConfig: (json, mode) => unwrap(window.api.importConfig(json, mode)),
   applyProposal: () => unwrap(window.api.applyProposal()),
   discardProposal: () => unwrap(window.api.discardProposal()),
+  getMcpLaunch: () => unwrap(window.api.getMcpLaunch()),
   openProfileFolder: () => unwrap(window.api.openProfileFolder()),
   readWorkData: (key) => unwrap(window.api.readWorkData(key)),
   writeWorkData: (key, value) => unwrap(window.api.writeWorkData(key, value)),
