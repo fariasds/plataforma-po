@@ -5,12 +5,24 @@ import icon from '../../resources/icon.png?asset'
 import { APP_ID, WINDOW_BACKGROUND } from '@shared/app-info'
 import { runSnapshot } from './dev/snapshot'
 import { registerIpcHandlers } from './ipc'
+import { buildServerSpec } from './mcp'
+import { launchMode } from './mcp/launch'
+import { routeLogsToStderr, serveStdio } from './mcp/server'
 import { isAllowedRendererRequest, openExternalIfAllowed } from './security/network-guard'
 import { installConsoleRedaction, redact } from './security/redact'
 import { externalLinkOrganization } from './services/azure/client'
 
 // Antes de qualquer outra coisa: todo log do main sai sem o PAT (RN-SEC-19).
 installConsoleRedaction()
+
+// Com `--mcp`, este processo é o servidor da IA do PO, iniciado pelo cliente de IA
+// (ADR 0010): sem janela, e com a saída padrão só para o protocolo.
+const launch = launchMode(process.argv)
+if (launch.mode !== 'window') {
+  routeLogsToStderr()
+  // Sem janela, não há o que desenhar: a GPU só faria barulho no log.
+  app.disableHardwareAcceleration()
+}
 
 let mainWindow: BrowserWindow | null = null
 
@@ -84,8 +96,11 @@ function createWindow(): void {
 // Duas instâncias disputariam os arquivos do Perfil, e a última a gravar
 // apagaria o que a outra escreveu. A segunda só traz para a frente a que já
 // está aberta.
-const hasSingleInstanceLock = app.requestSingleInstanceLock()
-if (!hasSingleInstanceLock) {
+//
+// O servidor MCP fica de fora da trava: ele não grava a Configuração, só a
+// proposta (ADR 0010), e pode rodar com a janela aberta.
+const hasSingleInstanceLock = launch.mode === 'window' && app.requestSingleInstanceLock()
+if (launch.mode === 'window' && !hasSingleInstanceLock) {
   // Sair calado é o que confunde em desenvolvimento: o `npm run dev` termina
   // com sucesso, a janela antiga vem para a frente, e parece que o código novo
   // subiu — quando na verdade nada foi recarregado.
@@ -108,6 +123,24 @@ app.on('second-instance', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
+  if (launch.mode === 'mcp-error') {
+    console.error(`[mcp] ${launch.message}`)
+    app.exit(2)
+    return
+  }
+  if (launch.mode === 'mcp') {
+    app.dock?.hide()
+    try {
+      await serveStdio(buildServerSpec(launch.profileId, app.getVersion()))
+    } catch (error) {
+      console.error('[mcp]', error instanceof Error ? error.message : error)
+      app.exit(1)
+      return
+    }
+    // O cliente de IA fechou a conexão: o servidor termina junto.
+    app.quit()
+    return
+  }
   if (!hasSingleInstanceLock) return
 
   // Captura de referência dos dashboards (ver src/main/dev/snapshot.ts): roda
