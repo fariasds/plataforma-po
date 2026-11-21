@@ -59,6 +59,7 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-32 | Para o GitHub só sai o que já é público | `tests/security/rn-sec-32-publicacao-so-da-historia-publica.test.ts` · hook de `pre-push` |
 | RN-SEC-33 | Consulta de versão nova sem token, num endereço só | `tests/security/rn-sec-33-consulta-de-versao.test.ts` |
 | RN-SEC-34 | O servidor MCP não faz rede nem lê o PAT | `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts` |
+| RN-SEC-35 | O servidor MCP grava só a proposta | `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts` |
 
 As regras da Configuração que protegem o PAT (`RN-CFG-04`, `05` e `06`) estão em
 [03-configuracao.md](03-configuracao.md), cada uma com o seu teste.
@@ -527,6 +528,31 @@ Além disso:
 
 **Provado por:** `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts`, que
 segue os imports a partir de `src/main/mcp/`.
+
+### RN-SEC-35 · O servidor MCP grava só a proposta
+
+O servidor MCP oferece três ferramentas: `ler_configuracao` e `validar`, que só
+leem, e `propor_configuracao`, a única que grava. Ela grava **só** `proposta.json`,
+na pasta do Perfil em que o servidor foi preso (`RN-SEC-34`). A Configuração, os
+Dados de trabalho, o `AGENTS.md`, o schema e os outros Perfis ficam como estão.
+Quem aplica a proposta é o PO, na janela (`RN-CFG-12`).
+
+- **Proposta recusada não é gravada.** O servidor confere a proposta com as mesmas
+  regras do app (`RN-CFG-01` a `05`, `RN-CFG-09`) e devolve os erros com o caminho,
+  para a IA corrigir. A janela confere de novo ao mostrar e ao aplicar.
+- **A gravação é atômica** (temporário ao lado e troca), como a da Configuração:
+  a janela nunca lê uma proposta pela metade.
+- **A IA não escolhe caminho.** Nenhuma ferramenta recebe nome de arquivo; o
+  destino é sempre o do Perfil preso ao servidor.
+- O servidor também oferece o roteiro `configurar_plataforma` (as perguntas, o
+  porquê de cada uma e onde achar a resposta no Azure, em
+  `resources/mcp/configurar-plataforma.md`) e, como leitura, as instruções e o
+  schema da Configuração.
+
+**Provado por:** `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts`: um
+teste estático sobre o grafo de imports do servidor (nenhuma escrita no disco além
+da gravação atômica, e toda gravação atômica do servidor vai para `proposalPath`) e
+um teste que chama as ferramentas e compara a pasta de dados inteira antes e depois.
 
 ---
 

@@ -279,7 +279,8 @@ removeu, use Substituir ou edite a Configuração.
 
 A IA do PO pode gravar uma **proposta** de Configuração em `proposta.json`, na pasta
 do Perfil, em vez de alterar `configuracao.json`. O `AGENTS.md` pede isso, e o
-servidor MCP só grava assim (ADR 0010).
+servidor MCP só grava assim, pela ferramenta `propor_configuracao` (ADR 0010,
+`RN-SEC-35`).
 
 - **A proposta é a Configuração inteira, como ficaria.** O app a lê como qualquer
   importação: valida, confere a organização e calcula a diferença para a
