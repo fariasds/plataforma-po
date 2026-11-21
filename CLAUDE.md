@@ -33,6 +33,9 @@ Não há Next.js, Tailwind, shadcn/ui nem Recharts neste projeto.
 - `src/shared/` — contrato entre os dois: tipos, canais de IPC, schema da
   Configuração, lógica pura (calendário, horas úteis, story points).
 - `src/preload/` — ponte tipada. Nunca expõe `ipcRenderer` cru.
+- `src/main/mcp/` — servidor MCP da IA do PO (`--mcp --perfil <id>`, por stdio). Não
+  faz rede, não lê o PAT e não alcança `services/` nem `ipc/` (`RN-SEC-34`,
+  [ADR 0010](docs/adr/0010-servidor-mcp-local.md)).
 - `tests/security/` — as barreiras de segurança, uma regra por arquivo.
 
 ### Perfil, Configuração e Dados de trabalho

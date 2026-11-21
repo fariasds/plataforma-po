@@ -58,6 +58,7 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-31 | A tela Segurança só promete o que é provado | `src/renderer/src/features/security/guarantees.test.ts` |
 | RN-SEC-32 | Para o GitHub só sai o que já é público | `tests/security/rn-sec-32-publicacao-so-da-historia-publica.test.ts` · hook de `pre-push` |
 | RN-SEC-33 | Consulta de versão nova sem token, num endereço só | `tests/security/rn-sec-33-consulta-de-versao.test.ts` |
+| RN-SEC-34 | O servidor MCP não faz rede nem lê o PAT | `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts` |
 
 As regras da Configuração que protegem o PAT (`RN-CFG-04`, `05` e `06`) estão em
 [03-configuracao.md](03-configuracao.md), cada uma com o seu teste.
@@ -403,6 +404,11 @@ qualquer outra), como usuário comum dela, e cola a resposta de volta. A `RN-SEC
 continua valendo como está: o main só fala com o Azure. As regras abaixo cercam o
 que entra no pedido e o que volta dele.
 
+A IA do PO também pode chamar o app por um **servidor MCP local**
+([ADR 0010](../adr/0010-servidor-mcp-local.md)). O sentido é o mesmo: quem inicia e
+quem conversa é a IA, e o app continua sem iniciar processo nem falar com serviço de
+IA. A `RN-SEC-34` cerca o que esse servidor alcança.
+
 ### RN-SEC-23 · O app não inicia processo
 
 *Reescrita em 2026-11-12 (ADR 0007). Antes: uma porta só para iniciar processos,
@@ -488,6 +494,39 @@ pedaço é escapado em HTML e em Markdown como qualquer título vindo do Azure
 depois de "Usar este texto". Montar o pedido também não grava nada.
 
 **Provado por:** `tests/security/rn-sec-26-resposta-da-ia.test.ts`.
+
+### RN-SEC-34 · O servidor MCP não faz rede nem lê o PAT
+
+Com `--mcp --perfil <id>`, o executável do app vira o servidor MCP da IA do PO
+(ADR 0010). Quem o inicia é o cliente de IA, e a conversa é por stdio: uma mensagem
+JSON por linha na entrada e na saída padrão. Nada é escutado em porta.
+
+Tudo o que o servidor alcança, a IA pode pedir. Por isso, **a partir de
+`src/main/mcp/`, nenhum arquivo alcançado pelo grafo de imports**:
+
+- abre conexão de rede (`fetch`, `http`, `https`, `net`, `tls`, `dns`, o `net` do
+  Electron, WebSocket);
+- lê o cofre do sistema operacional (`safeStorage`) ou importa
+  `src/main/security/pat-store.ts`;
+- entra no caminho do Azure (`src/main/services/`), nos handlers da janela
+  (`src/main/ipc/`) ou na barreira de rede do Azure;
+- inicia processo (a `RN-SEC-23` vale também aqui).
+
+Além disso:
+
+- **O servidor é preso a um Perfil.** Sem `--perfil`, ou com um Perfil que não existe
+  na máquina, ele sai com a mensagem do que fazer, sem criar pasta nem arquivo. O ID
+  passa pela mesma validação de caminho dos demais (`RN-CFG-08`).
+- **A saída padrão é só do protocolo.** Todo log vai para a saída de erro, que o
+  cliente de IA mostra como log do servidor.
+- **Mensagem inválida não é repetida.** JSON quebrado responde só "a mensagem não é
+  um JSON válido", sem o texto recebido, como na Configuração (`RN-CFG-05`). Linha
+  acima de 4 MB é descartada.
+- **O servidor fica fora da trava de instância única**, porque não grava a
+  Configuração: a janela e o servidor podem estar abertos ao mesmo tempo.
+
+**Provado por:** `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts`, que
+segue os imports a partir de `src/main/mcp/`.
 
 ---
 
