@@ -1,7 +1,13 @@
 import { watch, readFileSync, type FSWatcher } from 'fs'
 import { AppError } from '@shared/errors'
 import type { Configuration } from '@shared/config/schema'
-import { parseConfigurationText, planImport, removedFromDiff } from '@shared/config/import'
+import {
+  IMPORT_MODES,
+  parseConfigurationText,
+  planImport,
+  removedFromDiff,
+  type ImportMode
+} from '@shared/config/import'
 import type { ConfigurationIssue, ConfigurationResult } from '@shared/config/validate'
 import type { ImportConfigResult, ImportPreview, ProfileState } from '@shared/ipc'
 import { hasPat } from '../security/pat-store'
@@ -153,12 +159,19 @@ export function onProfileStateChanged(listener: (state: ProfileState) => void): 
   return () => listeners.delete(listener)
 }
 
+/** O modo chega da janela: fora dos dois conhecidos, é recusado. */
+function importMode(mode: unknown): ImportMode {
+  if (mode === undefined) return 'replace'
+  if (IMPORT_MODES.includes(mode as ImportMode)) return mode as ImportMode
+  throw new AppError('PROFILE_INVALID', 'Modo de importação desconhecido.')
+}
+
 /**
  * Prévia da importação (RN-CFG-09): valida e mostra o que muda, sem gravar.
  */
-export function previewImport(json: string): ImportPreview {
+export function previewImport(json: string, mode: ImportMode = 'replace'): ImportPreview {
   requireActiveProfile()
-  const plan = planImport(getActiveConfig(), json)
+  const plan = planImport(getActiveConfig(), json, importMode(mode))
   return plan.ok
     ? { ok: true, kind: plan.kind, diff: plan.diff }
     : { ok: false, issues: plan.issues }
@@ -169,12 +182,15 @@ export function previewImport(json: string): ImportPreview {
  * plano da prévia: um arquivo recusado não chega ao disco, e a resposta traz os
  * erros.
  */
-export function importConfiguration(json: string): ImportConfigResult {
+export function importConfiguration(
+  json: string,
+  mode: ImportMode = 'replace'
+): ImportConfigResult {
   const profile = requireActiveProfile()
   if (typeof json !== 'string') {
     throw new AppError('PROFILE_INVALID', 'A Configuração precisa chegar como texto JSON.')
   }
-  const plan = planImport(getActiveConfig(), json)
+  const plan = planImport(getActiveConfig(), json, importMode(mode))
   if (!plan.ok) return { saved: false, issues: plan.issues }
 
   writeFileAtomic(configPath(profile.id), JSON.stringify(plan.content, null, 2) + '\n')

@@ -60,7 +60,7 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   // createProfile leva o PAT ao Azure para validá-lo: o eco do erro não pode voltar.
   getProfileState: [],
   createProfile: [{ name: 'Loja Online', organization: 'contoso', pat: FAKE_PAT }],
-  previewImport: ['{}'],
+  previewImport: ['{}', 'replace'],
   importConfig: ['{}'],
   openProfileFolder: [],
   readWorkData: ['planning:loja'],

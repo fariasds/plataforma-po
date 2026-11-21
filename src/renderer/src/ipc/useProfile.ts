@@ -6,6 +6,7 @@ import type {
   ImportPreview,
   ProfileState
 } from '@shared/ipc'
+import type { ImportMode } from '@shared/config/import'
 import { ipc, ipcEvents } from './client'
 
 export const PROFILE_QUERY_KEY = ['profile', 'state']
@@ -116,17 +117,27 @@ export function useRestoreDemo(): ReturnType<typeof useMutation<ProfileState, Er
   })
 }
 
-export function usePreviewImport(): ReturnType<typeof useMutation<ImportPreview, Error, string>> {
-  return useMutation<ImportPreview, Error, string>({
-    mutationFn: (json) => ipc.previewImport(json)
+/** O que a janela manda para importar: o texto do arquivo e o modo (RN-CFG-11). */
+export interface ImportInput {
+  json: string
+  mode?: ImportMode
+}
+
+export function usePreviewImport(): ReturnType<
+  typeof useMutation<ImportPreview, Error, ImportInput>
+> {
+  return useMutation<ImportPreview, Error, ImportInput>({
+    mutationFn: ({ json, mode }) => ipc.previewImport(json, mode)
   })
 }
 
+/** Texto sozinho substitui a Configuração; com o modo, a tela escolhe (RN-CFG-11). */
 export function useImportConfig(): ReturnType<
-  typeof useMutation<ImportConfigResult, Error, string>
+  typeof useMutation<ImportConfigResult, Error, string | ImportInput>
 > {
-  return useMutation<ImportConfigResult, Error, string>({
-    mutationFn: (json) => ipc.importConfig(json)
+  return useMutation<ImportConfigResult, Error, string | ImportInput>({
+    mutationFn: (input) =>
+      typeof input === 'string' ? ipc.importConfig(input) : ipc.importConfig(input.json, input.mode)
   })
 }
 

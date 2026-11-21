@@ -244,3 +244,33 @@ Exportar oferece dois arquivos:
 
 **Casos de borda:** o Modelo traz os feriados extras de quem exportou; o PO de
 outra cidade ajusta depois.
+
+### RN-CFG-11 · Mesclar soma pelo ID; Substituir troca tudo
+
+Ao importar uma Configuração completa num Perfil que já está em uso, o PO escolhe
+como ela entra:
+
+| Modo | O que acontece |
+|---|---|
+| **Substituir** (padrão) | A Configuração do Perfil passa a ser a do arquivo. O que só existia no Perfil sai, e a prévia mostra o quê (`RN-CFG-09`). |
+| **Mesclar** | O arquivo vence nos IDs iguais e nas seções; o que só existe no Perfil fica. |
+
+No modo Mesclar:
+
+- **Produtos, Grupos e Squads** seguem a ordem do Perfil: o item do arquivo entra no
+  lugar do de mesmo ID, e os novos vão para o fim da lista.
+- **Perfis de processo** se somam pelo ID, e o do arquivo vence.
+- **As demais seções** (campos customizados, criticidade, calendário, story points,
+  valores iniciais da capacidade, marcador de reincidente) são as do arquivo.
+- **A cor de destaque fica a do Perfil:** ela é de quem usa o app, não da
+  Configuração do colega.
+- **A soma é validada de novo.** Cada lado pode fechar suas referências e a soma,
+  não: um Produto que só existe no Perfil fica fora de toda Squad do arquivo, e com
+  Squads todo Produto precisa estar numa (`RN-GLB-17`). O erro aparece na prévia, e
+  nada é gravado.
+- Sem Perfil anterior (primeira execução), não há com o que somar: vale o arquivo.
+- O modo chega da janela e é conferido no processo principal; um modo desconhecido
+  é recusado.
+
+**Casos de borda:** mesclar não tira nada. Para remover um Produto que o colega
+removeu, use Substituir ou edite a Configuração.

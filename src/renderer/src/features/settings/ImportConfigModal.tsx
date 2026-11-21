@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Alert, Button, Flex, Modal, Typography, Upload } from 'antd'
+import { Alert, Button, Flex, Modal, Segmented, Typography, Upload } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import { removedFromDiff } from '@shared/config/import'
+import { removedFromDiff, type ImportMode } from '@shared/config/import'
 import type { ImportPreview } from '@shared/ipc'
 import { ConfigDiff } from '../../components/ConfigDiff'
 import { useImportConfig, usePreviewImport } from '../../ipc/useProfile'
@@ -25,6 +25,7 @@ export function ImportConfigModal({
   const [fileName, setFileName] = useState<string | null>(null)
   const [text, setText] = useState<string | null>(null)
   const [preview, setPreview] = useState<ImportPreview | null>(null)
+  const [mode, setMode] = useState<ImportMode>('replace')
   const previewImport = usePreviewImport()
   const importConfig = useImportConfig()
 
@@ -32,6 +33,7 @@ export function ImportConfigModal({
     setFileName(null)
     setText(null)
     setPreview(null)
+    setMode('replace')
     previewImport.reset()
     importConfig.reset()
   }
@@ -47,17 +49,27 @@ export function ImportConfigModal({
     importConfig.reset()
     const content = await file.text()
     setText(content)
+    await runPreview(content, mode)
+  }
+
+  const runPreview = async (content: string, nextMode: ImportMode): Promise<void> => {
     try {
-      setPreview(await previewImport.mutateAsync(content))
+      setPreview(await previewImport.mutateAsync({ json: content, mode: nextMode }))
     } catch {
       // O erro já está na mutação e aparece abaixo.
     }
   }
 
+  const changeMode = (nextMode: ImportMode): void => {
+    setMode(nextMode)
+    importConfig.reset()
+    if (text !== null) void runPreview(text, nextMode)
+  }
+
   const apply = async (): Promise<void> => {
     if (text === null) return
     try {
-      const result = await importConfig.mutateAsync(text)
+      const result = await importConfig.mutateAsync({ json: text, mode })
       if (result.saved) close(true)
       else setPreview({ ok: false, issues: result.issues })
     } catch {
@@ -128,8 +140,24 @@ export function ImportConfigModal({
 
         {preview?.ok && (
           <>
-            {preview.kind === 'template' && (
+            {preview.kind === 'template' ? (
               <Alert type="info" showIcon title={t('settings.import.templateNote')} />
+            ) : (
+              <Flex vertical gap={6}>
+                <Segmented<ImportMode>
+                  value={mode}
+                  onChange={changeMode}
+                  options={[
+                    { value: 'replace', label: t('settings.import.replace') },
+                    { value: 'merge', label: t('settings.import.merge') }
+                  ]}
+                />
+                <Text type="secondary">
+                  {mode === 'merge'
+                    ? t('settings.import.mergeHint')
+                    : t('settings.import.replaceHint')}
+                </Text>
+              </Flex>
             )}
             <Text strong>{t('settings.import.changes')}</Text>
             <ConfigDiff diff={preview.diff} />
