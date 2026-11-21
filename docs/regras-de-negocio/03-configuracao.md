@@ -6,7 +6,8 @@ um caminho para vazar o PAT?
 
 **Implementado em:**
 `src/shared/config/schema.ts` · `src/shared/config/validate.ts` ·
-`src/shared/config/secrets.ts` · `src/shared/config/presets.ts`
+`src/shared/config/secrets.ts` · `src/shared/config/presets.ts` ·
+`src/shared/config/import.ts`
 
 A Configuração é um arquivo JSON por Perfil (`configuracao.json`), acompanhado do
 JSON Schema publicado e de um `AGENTS.md` com as instruções para a IA do PO. Ver
@@ -164,9 +165,8 @@ validação completa (`RN-CFG-01` a `RN-CFG-05`).
 - Quando a Configuração em uso muda, a interface descarta **todos** os resultados
   em cache: qualquer um pode ter sido calculado com Produtos, estados ou calendário
   antigos. Salvar o arquivo sem mudar nada não descarta nada.
-- **Importar** uma Configuração colada valida antes de gravar: um JSON recusado não
-  chega ao disco. Se o JSON aceito tirou IDs de Produto ou Grupo que existiam, a
-  resposta aponta quais (`RN-CFG-02`).
+- **Importar** uma Configuração valida antes de gravar: um JSON recusado não
+  chega ao disco. A prévia e o aviso do que sai estão na `RN-CFG-09`.
 
 ### RN-CFG-08 · Dados de trabalho indexados por ID
 
@@ -186,3 +186,33 @@ Os Dados de trabalho ficam em `dados/`, um arquivo JSON por chave.
 maiúsculas (`Loja` e `loja`) dividem os mesmos Dados de trabalho — o que já
 aconteceria de qualquer forma no Windows, cujo sistema de arquivos não distingue
 caixa.
+
+### RN-CFG-09 · Importar mostra a diferença antes de gravar
+
+Uma Configuração que chega de fora (o arquivo de um colega, a cópia de outra
+máquina) passa por um caminho só, que **valida, confere a organização e calcula a
+diferença sem gravar nada**. A tela mostra essa diferença; só o "Aplicar" grava, e
+grava pelo mesmo cálculo, então o que o PO revisou é o que vai para o disco.
+
+- **A diferença é pelo ID.** Produto, Grupo, Squad e Perfil de processo aparecem
+  como **Entra**, **Muda** ou **Sai**. As demais seções (organização, cor de
+  destaque, campos customizados, criticidade, marcador de reincidente, calendário,
+  tabela de story points, valores iniciais da capacidade) aparecem como **Muda**
+  quando o valor é outro.
+- **O que sai é avisado antes de aplicar:** um ID que some órfã os Dados de
+  trabalho guardados com ele (`RN-CFG-02`), e trocar o ID de um Produto aparece
+  como um que sai e outro que entra.
+- **A organização do arquivo precisa ser a do Perfil**, sem diferenciar
+  maiúsculas. O PAT do Perfil só vale para a organização dele; um arquivo de outra
+  é recusado com esse motivo. Na primeira execução não há Perfil, e é a
+  organização do arquivo que cria o Perfil.
+- **O arquivo é gravado como veio**, sem os valores padrão preenchidos: ele
+  continua sendo do autor, e a IA dele o lê como foi escrito.
+- Valem as mesmas regras do arquivo no disco: 1 MB no máximo, JSON quebrado mostra
+  só a posição, e as `RN-CFG-01` a `05`.
+- O Perfil de demonstração não oferece importar: ele é regravado pelo Cenário
+  (`RN-GLB-15`).
+
+**Casos de borda:** um arquivo igual à Configuração em uso é aceito e a prévia diz
+que nada muda. Uma Squad que só mudou de lugar na lista não aparece como mudança.
+

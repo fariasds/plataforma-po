@@ -769,7 +769,42 @@ export const ptBR = {
     aiInstructions: 'Instruções para a IA: {path}',
     openProfileFolder: 'Abrir pasta do Perfil',
     redoWizard: 'Refazer assistente',
-    exportConfig: 'Exportar Configuração'
+    exportConfig: 'Exportar Configuração',
+    importConfig: 'Importar Configuração',
+    imported: 'Configuração importada',
+    import: {
+      title: 'Importar Configuração',
+      intro:
+        'Escolha um arquivo de Configuração, de um colega ou de outra máquina. O app mostra o que muda antes de gravar, e o token deste Perfil continua o mesmo.',
+      chooseFile: 'Escolher arquivo',
+      chooseAnother: 'Escolher outro arquivo',
+      refused: 'O app recusou este arquivo',
+      changes: 'O que muda na Configuração em uso',
+      apply: 'Aplicar',
+      orphans: {
+        one: 'Sai {ids}. O Planning e a capacidade guardados com esse ID ficam sem uso.',
+        other: 'Saem {ids}. O Planning e a capacidade guardados com esses IDs ficam sem uso.'
+      }
+    }
+  },
+
+  configDiff: {
+    noChanges: 'Nada muda: o arquivo é igual à Configuração em uso.',
+    kind: { added: 'Entra', changed: 'Muda', removed: 'Sai' },
+    product: 'Produto',
+    group: 'Grupo',
+    squad: 'Squad',
+    processProfile: 'Perfil de processo',
+    sections: {
+      organization: 'Organização',
+      appearance: 'Cor de destaque',
+      customFields: 'Campos customizados',
+      criticality: 'Criticidade de bug',
+      recurrentBugTag: 'Marcador de bug reincidente',
+      calendar: 'Calendário',
+      storyPoints: 'Tabela de story points',
+      capacityDefaults: 'Valores iniciais da capacidade'
+    }
   },
 
   daily: {

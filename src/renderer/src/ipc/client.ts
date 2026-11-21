@@ -22,6 +22,7 @@ export const ipc: IpcApi = {
 
   getProfileState: () => unwrap(window.api.getProfileState()),
   createProfile: (input) => unwrap(window.api.createProfile(input)),
+  previewImport: (json) => unwrap(window.api.previewImport(json)),
   importConfig: (json) => unwrap(window.api.importConfig(json)),
   openProfileFolder: () => unwrap(window.api.openProfileFolder()),
   readWorkData: (key) => unwrap(window.api.readWorkData(key)),

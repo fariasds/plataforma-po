@@ -105,19 +105,20 @@ a CSP só aceita fonte local.
 
 Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
 
-| Componente            | Quando                                                                                                                                           |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `AppLayout`           | Moldura de toda tela autenticada: menu lateral (expansível, ver abaixo) e cabeçalho com o título. Tela nova entra no menu em `MAIN` ou num grupo |
-| `AppLogo` / `AppMark` | Marca do app. `AppMark` sozinho em espaço curto; `AppLogo` com o nome                                                                            |
-| `ProductFilter`       | Escolher Produto, Grupo ou a Squad inteira. Sempre o primeiro controle do topo da tela. A Squad inteira mostra os pontos dos Produtos sobrepostos |
-| `SquadTabs`           | Abas de Squad no topo da janela, acima do cabeçalho (RN-GLB-17). Só existe com Squads na Configuração; ver "Abas de Squad" abaixo                 |
-| `DashboardFilters`    | `ProductFilter` + seletor de sprint + nome da sprint em cada Produto (telas de Review)                                                           |
-| `StateTag`            | Estado de work item. Nunca uma `Tag` com cor escolhida na tela                                                                                   |
-| `HelpTip`             | Explicar um cálculo que contraria a intuição (ver Definição de pronto no `CLAUDE.md`)                                                            |
-| `ErrorState`          | Falha ao carregar                                                                                                                                |
-| `UserMenu`            | Cartão da conta no pé do menu lateral                                                                                                            |
-| `DemoBanner`          | Faixa do Perfil de demonstração, presa ao topo com o cabeçalho. Fundo `colorPrimaryBg`, nunca `STATUS`: não é alerta nem situação (RN-GLB-15)    |
-| `UpdateBanner`        | Faixa de versão nova, acima da `DemoBanner`. Fundo neutro (`colorBgContainer`); o destaque fica só no botão de baixar, a ação principal (RN-GLB-18) |
+| Componente            | Quando                                                                                                                                                                           |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AppLayout`           | Moldura de toda tela autenticada: menu lateral (expansível, ver abaixo) e cabeçalho com o título. Tela nova entra no menu em `MAIN` ou num grupo                                 |
+| `AppLogo` / `AppMark` | Marca do app. `AppMark` sozinho em espaço curto; `AppLogo` com o nome                                                                                                            |
+| `ProductFilter`       | Escolher Produto, Grupo ou a Squad inteira. Sempre o primeiro controle do topo da tela. A Squad inteira mostra os pontos dos Produtos sobrepostos                                |
+| `SquadTabs`           | Abas de Squad no topo da janela, acima do cabeçalho (RN-GLB-17). Só existe com Squads na Configuração; ver "Abas de Squad" abaixo                                                |
+| `DashboardFilters`    | `ProductFilter` + seletor de sprint + nome da sprint em cada Produto (telas de Review)                                                                                           |
+| `StateTag`            | Estado de work item. Nunca uma `Tag` com cor escolhida na tela                                                                                                                   |
+| `ConfigDiff`          | O que uma Configuração de fora muda na que está em uso: Entra (`STATUS.ok`), Muda (`STATUS.info`), Sai (`STATUS.danger`), pelo ID (RN-CFG-09)                                    |
+| `HelpTip`             | Explicar um cálculo que contraria a intuição (ver Definição de pronto no `CLAUDE.md`)                                                                                            |
+| `ErrorState`          | Falha ao carregar                                                                                                                                                                |
+| `UserMenu`            | Cartão da conta no pé do menu lateral                                                                                                                                            |
+| `DemoBanner`          | Faixa do Perfil de demonstração, presa ao topo com o cabeçalho. Fundo `colorPrimaryBg`, nunca `STATUS`: não é alerta nem situação (RN-GLB-15)                                    |
+| `UpdateBanner`        | Faixa de versão nova, acima da `DemoBanner`. Fundo neutro (`colorBgContainer`); o destaque fica só no botão de baixar, a ação principal (RN-GLB-18)                              |
 | `RefreshButton`       | Botão Atualizar do cabeçalho, com "Atualizado às HH:MM" em `MONO_FONT` à esquerda (RN-GLB-19). Entra pela flag `refresh` da entrada do menu no `AppLayout`, nunca dentro da tela |
 
 ## Menu lateral

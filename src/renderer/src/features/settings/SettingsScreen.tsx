@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Alert, Button, Card, Descriptions, Flex, Tag, Typography, theme } from 'antd'
 import {
   ExportOutlined,
   FolderOpenOutlined,
+  ImportOutlined,
   KeyOutlined,
   LockOutlined,
   RedoOutlined
@@ -15,6 +17,7 @@ import { tRich } from '../../i18n/rich'
 import { MONO_FONT, NEUTRA, SIDER, STATUS } from '../../theme'
 import { IssueList } from '../onboarding/IssueList'
 import { exportConfiguration } from './exportConfig'
+import { ImportConfigModal } from './ImportConfigModal'
 
 const { Paragraph, Text, Title } = Typography
 
@@ -34,6 +37,8 @@ export function SettingsScreen(): React.JSX.Element {
   const openFolder = useOpenProfileFolder()
   const clearPat = useClearPat()
   const { token } = theme.useToken()
+  const [importing, setImporting] = useState(false)
+  const [imported, setImported] = useState(false)
 
   const profile = state?.profile
   const config = state?.config
@@ -54,6 +59,21 @@ export function SettingsScreen(): React.JSX.Element {
 
   return (
     <Flex vertical gap={20} style={{ maxWidth: 1180 }}>
+      <ImportConfigModal
+        open={importing}
+        onClose={(applied) => {
+          setImporting(false)
+          setImported(applied)
+        }}
+      />
+      {imported && (
+        <Alert
+          type="success"
+          showIcon
+          closable={{ onClose: () => setImported(false) }}
+          title={t('settings.imported')}
+        />
+      )}
       {state.errors.length > 0 && (
         <Alert
           type="warning"
@@ -195,6 +215,12 @@ export function SettingsScreen(): React.JSX.Element {
                   {t('settings.exportConfig')}
                 </Button>
               </Flex>
+              {/* A demonstração é regravada pelo Cenário; importar nela não faria sentido. */}
+              {profile.kind !== 'demo' && (
+                <Button ghost icon={<ImportOutlined />} onClick={() => setImporting(true)}>
+                  {t('settings.importConfig')}
+                </Button>
+              )}
               {openFolder.isError && (
                 <Alert type="error" showIcon title={openFolder.error.message} />
               )}

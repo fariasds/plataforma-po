@@ -12,6 +12,7 @@ const {
   getActiveConfig,
   getProfileState,
   importConfiguration,
+  previewImport,
   onProfileStateChanged,
   reloadProfileState,
   resetConfigLoader
@@ -184,8 +185,37 @@ describe('config-loader', () => {
       .replace('["loja", "app"]', '["loja2", "app"]')
     const result = importConfiguration(renamed)
 
-    expect(result).toEqual({ saved: true, removed: { products: ['loja'], groups: [], squads: [] } })
+    expect(result).toMatchObject({
+      saved: true,
+      removed: { products: ['loja'], groups: [], squads: [] }
+    })
     expect(getActiveConfig()?.products[0].id).toBe('loja2')
+  })
+})
+
+describe('previewImport (RN-CFG-09)', () => {
+  it('mostra a diferença e não grava nada', () => {
+    const id = createReadyProfile()
+    writeConfig(id, example)
+    reloadProfileState()
+    const before = readFileSync(configPath(id), 'utf8')
+
+    const preview = previewImport(example.replace('"Loja Online"', '"Loja Nova"'))
+
+    expect(preview).toMatchObject({ ok: true, diff: { products: { changed: [{ id: 'loja' }] } } })
+    expect(readFileSync(configPath(id), 'utf8')).toBe(before)
+  })
+
+  it('recusa arquivo de outra organização, na prévia e ao gravar', () => {
+    const id = createReadyProfile()
+    writeConfig(id, example)
+    reloadProfileState()
+    const before = readFileSync(configPath(id), 'utf8')
+    const other = example.replace('"contoso"', '"fabrikam"')
+
+    expect(previewImport(other)).toMatchObject({ ok: false, issues: [{ path: 'organization' }] })
+    expect(importConfiguration(other)).toMatchObject({ saved: false })
+    expect(readFileSync(configPath(id), 'utf8')).toBe(before)
   })
 })
 

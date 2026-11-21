@@ -1,6 +1,11 @@
 import { useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query'
-import type { CreateProfileRequest, ImportConfigResult, ProfileState } from '@shared/ipc'
+import type {
+  CreateProfileRequest,
+  ImportConfigResult,
+  ImportPreview,
+  ProfileState
+} from '@shared/ipc'
 import { ipc, ipcEvents } from './client'
 
 export const PROFILE_QUERY_KEY = ['profile', 'state']
@@ -108,6 +113,12 @@ export function useRestoreDemo(): ReturnType<typeof useMutation<ProfileState, Er
       queryClient.setQueryData(PROFILE_QUERY_KEY, state)
       queryClient.invalidateQueries()
     }
+  })
+}
+
+export function usePreviewImport(): ReturnType<typeof useMutation<ImportPreview, Error, string>> {
+  return useMutation<ImportPreview, Error, string>({
+    mutationFn: (json) => ipc.previewImport(json)
   })
 }
 

@@ -22,6 +22,7 @@ const api: IpcBridge = {
 
   getProfileState: () => invoke(IPC_CHANNELS.getProfileState),
   createProfile: (input) => invoke(IPC_CHANNELS.createProfile, input),
+  previewImport: (json) => invoke(IPC_CHANNELS.previewImport, json),
   importConfig: (json) => invoke(IPC_CHANNELS.importConfig, json),
   openProfileFolder: () => invoke(IPC_CHANNELS.openProfileFolder),
   readWorkData: (key) => invoke(IPC_CHANNELS.readWorkData, key),
