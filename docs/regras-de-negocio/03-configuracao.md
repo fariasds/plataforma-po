@@ -7,7 +7,7 @@ um caminho para vazar o PAT?
 **Implementado em:**
 `src/shared/config/schema.ts` · `src/shared/config/validate.ts` ·
 `src/shared/config/secrets.ts` · `src/shared/config/presets.ts` ·
-`src/shared/config/import.ts`
+`src/shared/config/import.ts` · `src/shared/config/template.ts`
 
 A Configuração é um arquivo JSON por Perfil (`configuracao.json`), acompanhado do
 JSON Schema publicado e de um `AGENTS.md` com as instruções para a IA do PO. Ver
@@ -206,8 +206,9 @@ grava pelo mesmo cálculo, então o que o PO revisou é o que vai para o disco.
   maiúsculas. O PAT do Perfil só vale para a organização dele; um arquivo de outra
   é recusado com esse motivo. Na primeira execução não há Perfil, e é a
   organização do arquivo que cria o Perfil.
-- **O arquivo é gravado como veio**, sem os valores padrão preenchidos: ele
-  continua sendo do autor, e a IA dele o lê como foi escrito.
+- **A Configuração completa é gravada como veio**, sem os valores padrão
+  preenchidos: ela continua sendo do autor, e a IA dele a lê como foi escrita. O
+  Modelo de processo é gravado já somado à Configuração em uso (`RN-CFG-10`).
 - Valem as mesmas regras do arquivo no disco: 1 MB no máximo, JSON quebrado mostra
   só a posição, e as `RN-CFG-01` a `05`.
 - O Perfil de demonstração não oferece importar: ele é regravado pelo Cenário
@@ -216,3 +217,30 @@ grava pelo mesmo cálculo, então o que o PO revisou é o que vai para o disco.
 **Casos de borda:** um arquivo igual à Configuração em uso é aceito e a prévia diz
 que nada muda. Uma Squad que só mudou de lugar na lista não aparece como mudança.
 
+### RN-CFG-10 · Modelo de processo leva como o time trabalha, não a empresa
+
+Exportar oferece dois arquivos:
+
+| Arquivo | Leva | Para quem |
+|---|---|---|
+| **Configuração completa** | tudo o que está em `configuracao.json` | um colega da mesma organização |
+| **Modelo de processo** | Perfis de processo, campos customizados, criticidade, marcador de reincidente, calendário, tabela de story points e valores iniciais da capacidade | um PO de outra empresa |
+
+- **O Modelo não leva** organização, Produtos, Grupos, Squads nem a cor de
+  destaque: são da empresa de quem exportou. O arquivo é marcado com
+  `"kind": "modelo-de-processo"` e `"version": 1`.
+- **Importar um Modelo mescla, nunca substitui:** os Perfis de processo do Modelo
+  entram ou substituem os de mesmo ID; os demais Perfis de processo, a organização,
+  os Produtos, os Grupos e as Squads do Perfil ficam como estão. As outras seções
+  do Modelo substituem as do Perfil.
+- O resultado passa pela validação completa (`RN-CFG-01` a `05`) e pela prévia
+  (`RN-CFG-09`). Um Produto que aponta para um Perfil de processo que não existe
+  continua sendo erro.
+- **Na primeira execução**, a porta "Importar Configuração" aceita também um
+  Modelo. Como ele não tem organização, a tela a pede junto com o token, e o
+  Perfil nasce da Configuração inicial (`RN-CFG-07`) com o Modelo aplicado por cima.
+- A varredura de segredo (`RN-CFG-05`) vale para o Modelo como para a
+  Configuração.
+
+**Casos de borda:** o Modelo traz os feriados extras de quem exportou; o PO de
+outra cidade ajusta depois.

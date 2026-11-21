@@ -1,4 +1,5 @@
 import type { Configuration } from './schema'
+import { applyTemplate, isTemplate, validateTemplate } from './template'
 import {
   validateConfiguration,
   type ConfigurationIssue,
@@ -172,16 +173,51 @@ export function hasChanges(diff: ConfigurationDiff): boolean {
 
 // ─── Plano de importação ────────────────────────────────────────────────────
 
+/** Configuração completa ou Modelo de processo (RN-CFG-10). */
+export type ImportKind = 'configuration' | 'template'
+
 export type ImportPlan =
   | {
       ok: true
+      kind: ImportKind
       /** A Configuração que fica em uso depois de aplicar. */
       config: Configuration
-      /** O que vai para o disco: o JSON como veio, para o arquivo continuar do autor. */
+      /**
+       * O que vai para o disco. A Configuração completa vai como veio, para o
+       * arquivo continuar do autor; o Modelo vai já somado à Configuração em uso.
+       */
       content: unknown
       diff: ConfigurationDiff
     }
   | { ok: false; issues: ConfigurationIssue[] }
+
+/** RN-CFG-10: o Modelo entra por cima da Configuração em uso, nunca no lugar dela. */
+function planTemplate(current: Configuration | null, raw: unknown): ImportPlan {
+  const template = validateTemplate(raw)
+  if (!template.ok) return template
+  if (!current) {
+    return {
+      ok: false,
+      issues: [
+        {
+          path: '',
+          message:
+            'Um Modelo de processo não tem organização nem Produtos: ele precisa de um Perfil para entrar.'
+        }
+      ]
+    }
+  }
+  const content = applyTemplate(current, template.template)
+  const result = validateConfiguration(content)
+  if (!result.ok) return result
+  return {
+    ok: true,
+    kind: 'template',
+    config: result.config,
+    content,
+    diff: diffConfiguration(current, result.config)
+  }
+}
 
 /**
  * Organização do Azure não diferencia maiúsculas: `Contoso` e `contoso` são a
@@ -199,6 +235,7 @@ function sameOrganization(a: string, b: string): boolean {
 export function planImport(current: Configuration | null, text: string): ImportPlan {
   const parsed = parseJsonText(text)
   if (!parsed.ok) return parsed
+  if (isTemplate(parsed.raw)) return planTemplate(current, parsed.raw)
   const result = validateConfiguration(parsed.raw)
   if (!result.ok) return result
 
@@ -216,6 +253,7 @@ export function planImport(current: Configuration | null, text: string): ImportP
 
   return {
     ok: true,
+    kind: 'configuration',
     config: result.config,
     content: parsed.raw,
     diff: diffConfiguration(current, result.config)

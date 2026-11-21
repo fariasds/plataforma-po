@@ -3,7 +3,7 @@ import type { UpdateCheck, UpdateLink } from './update'
 import type { SerializedError } from './errors'
 import type { Configuration } from './config/schema'
 import type { ConfigurationIssue } from './config/validate'
-import type { ConfigurationDiff } from './config/import'
+import type { ConfigurationDiff, ImportKind } from './config/import'
 import type { AzureUserProfile, UnifiedSprint } from './azure'
 import type {
   DiscoveredArea,
@@ -87,7 +87,8 @@ export type ImportConfigResult =
 
 /** O que a importação mudaria, sem gravar (RN-CFG-09). */
 export type ImportPreview =
-  { ok: true; diff: ConfigurationDiff } | { ok: false; issues: ConfigurationIssue[] }
+  | { ok: true; kind: ImportKind; diff: ConfigurationDiff }
+  | { ok: false; issues: ConfigurationIssue[] }
 
 /**
  * The clean, domain-level API the renderer codes against (see `ipc/client.ts`).

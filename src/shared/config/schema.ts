@@ -347,7 +347,7 @@ export const squadSchema = z
 
 // ─── Configuração ────────────────────────────────────────────────────────────
 
-const configurationShape = z.strictObject({
+export const configurationShape = z.strictObject({
   $schema: z
     .string()
     .optional()

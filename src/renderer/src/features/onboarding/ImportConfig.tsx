@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import { Alert, Button, Descriptions, Flex, Form, Typography, Upload } from 'antd'
+import { Alert, Button, Descriptions, Flex, Form, Input, Typography, Upload } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import type { Configuration } from '@shared/config/schema'
+import { isTemplate, validateTemplate, type ProcessTemplate } from '@shared/config/template'
 import { validateConfiguration, type ConfigurationIssue } from '@shared/config/validate'
 import { PatField, PatInstructions } from '../../auth/PatSetupScreen'
 import { useCreateProfile, useImportConfig } from '../../ipc/useProfile'
 import { t } from '../../i18n'
 import { tRich } from '../../i18n/rich'
 import { IssueList } from './IssueList'
+import { parseOrganizationInput } from './organization'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -15,7 +17,9 @@ const { Title, Paragraph, Text } = Typography
 const MAX_BYTES = 1024 * 1024
 
 type Checked =
-  { ok: true; text: string; config: Configuration } | { ok: false; issues: ConfigurationIssue[] }
+  | { ok: true; kind: 'configuration'; text: string; config: Configuration }
+  | { ok: true; kind: 'template'; text: string; template: ProcessTemplate }
+  | { ok: false; issues: ConfigurationIssue[] }
 
 /**
  * Checa o arquivo antes de pedir o token. A mensagem de JSON quebrado não
@@ -32,13 +36,21 @@ function check(text: string): Checked {
   } catch {
     return { ok: false, issues: [{ path: '', message: t('onboarding.import.invalidJson') }] }
   }
+  // Um Modelo de processo não tem organização: ela é pedida junto com o token (RN-CFG-10).
+  if (isTemplate(raw)) {
+    const template = validateTemplate(raw)
+    return template.ok
+      ? { ok: true, kind: 'template', text, template: template.template }
+      : template
+  }
   const result = validateConfiguration(raw)
-  return result.ok ? { ok: true, text, config: result.config } : result
+  return result.ok ? { ok: true, kind: 'configuration', text, config: result.config } : result
 }
 
 /**
  * Segunda porta da primeira execução: uma Configuração pronta (de um colega ou
- * de outra máquina). Ela nunca traz o PAT, então o token é pedido aqui.
+ * de outra máquina) ou um Modelo de processo. Nenhum dos dois traz o PAT, então
+ * o token é pedido aqui; o Modelo também não traz a organização.
  */
 export function ImportConfig({
   profileExists,
@@ -53,17 +65,30 @@ export function ImportConfig({
   const [fileName, setFileName] = useState<string | null>(null)
   const [checked, setChecked] = useState<Checked | null>(null)
   const [refused, setRefused] = useState<ConfigurationIssue[] | null>(null)
+  const [organizationText, setOrganizationText] = useState('')
   const createProfile = useCreateProfile()
   const importConfig = useImportConfig()
   const busy = createProfile.isPending || importConfig.isPending
   const failure = createProfile.error ?? importConfig.error
 
+  const typedOrganization = parseOrganizationInput(organizationText)
+  const organization = !checked?.ok
+    ? null
+    : checked.kind === 'configuration'
+      ? checked.config.organization
+      : typedOrganization.ok
+        ? typedOrganization.organization
+        : null
+
   const submit = async (pat: string | null): Promise<void> => {
     if (!checked?.ok) return
     setRefused(null)
-    const organization = checked.config.organization
+    // Com o Perfil já criado numa tentativa anterior, a organização é a dele.
+    if (pat !== null && !organization) return
     try {
-      if (pat !== null) await createProfile.mutateAsync({ name: organization, organization, pat })
+      if (pat !== null && organization) {
+        await createProfile.mutateAsync({ name: organization, organization, pat })
+      }
       const result = await importConfig.mutateAsync(checked.text)
       if (result.saved) onFinished()
       else setRefused(result.issues)
@@ -123,18 +148,33 @@ export function ImportConfig({
             size="small"
             column={1}
             bordered
-            items={[
-              {
-                key: 'org',
-                label: t('common.organization'),
-                children: checked.config.organization
-              },
-              {
-                key: 'products',
-                label: t('common.products'),
-                children: checked.config.products.map((p) => p.name).join(', ') || '—'
-              }
-            ]}
+            items={
+              checked.kind === 'configuration'
+                ? [
+                    {
+                      key: 'org',
+                      label: t('common.organization'),
+                      children: checked.config.organization
+                    },
+                    {
+                      key: 'products',
+                      label: t('common.products'),
+                      children: checked.config.products.map((p) => p.name).join(', ') || '—'
+                    }
+                  ]
+                : [
+                    {
+                      key: 'kind',
+                      label: t('onboarding.import.fileKind'),
+                      children: t('onboarding.import.template')
+                    },
+                    {
+                      key: 'process',
+                      label: t('common.processProfiles'),
+                      children: Object.keys(checked.template.processProfiles).join(', ')
+                    }
+                  ]
+            }
           />
           {profileExists ? (
             <div>
@@ -144,14 +184,32 @@ export function ImportConfig({
             </div>
           ) : (
             <>
-              <PatInstructions organization={checked.config.organization} />
+              {checked.kind === 'template' && (
+                <Form.Item
+                  label={t('onboarding.organization.label')}
+                  validateStatus={organizationText && !typedOrganization.ok ? 'error' : undefined}
+                  help={
+                    organizationText && !typedOrganization.ok
+                      ? typedOrganization.message
+                      : t('onboarding.import.templateOrganization')
+                  }
+                  style={{ marginBottom: 0 }}
+                >
+                  <Input
+                    value={organizationText}
+                    placeholder={t('onboarding.organization.placeholder')}
+                    onChange={(event) => setOrganizationText(event.target.value)}
+                  />
+                </Form.Item>
+              )}
+              <PatInstructions organization={organization ?? undefined} />
               <Form
                 layout="vertical"
                 requiredMark={false}
                 onFinish={(values: { pat: string }) => void submit(values.pat)}
               >
-                <PatField autoFocus />
-                <Button type="primary" htmlType="submit" loading={busy}>
+                <PatField autoFocus={checked.kind === 'configuration'} />
+                <Button type="primary" htmlType="submit" loading={busy} disabled={!organization}>
                   {t('onboarding.import.validateAndEnter')}
                 </Button>
               </Form>
