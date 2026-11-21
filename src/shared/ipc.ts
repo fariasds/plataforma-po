@@ -1,4 +1,5 @@
 import type { SprintGoalRequest } from './ai'
+import type { McpLaunch } from './mcp-clients'
 import type { UpdateCheck, UpdateLink } from './update'
 import type { SerializedError } from './errors'
 import type { Configuration } from './config/schema'
@@ -134,6 +135,11 @@ export interface IpcApi {
   applyProposal(): Promise<ImportConfigResult>
   /** Descarta a proposta da IA do PO sem mudar a Configuração. */
   discardProposal(): Promise<void>
+  /**
+   * Como a IA do PO inicia o servidor MCP para o Perfil ativo: o executável e os
+   * argumentos (RN-CFG-13). Não leva o PAT nem caminho de dado do Perfil.
+   */
+  getMcpLaunch(): Promise<McpLaunch>
   /** Abre a pasta do Perfil ativo no gerenciador de arquivos. */
   openProfileFolder(): Promise<void>
   /** `null` quando a chave nunca foi gravada. */
@@ -250,6 +256,7 @@ export const IPC_CHANNELS = {
   importConfig: 'profile:import-config',
   applyProposal: 'profile:apply-proposal',
   discardProposal: 'profile:discard-proposal',
+  getMcpLaunch: 'profile:mcp-launch',
   openProfileFolder: 'profile:open-folder',
   readWorkData: 'profile:work-data-read',
   writeWorkData: 'profile:work-data-write',

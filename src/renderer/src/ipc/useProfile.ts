@@ -7,6 +7,7 @@ import type {
   ProfileState
 } from '@shared/ipc'
 import type { ImportMode } from '@shared/config/import'
+import type { McpLaunch } from '@shared/mcp-clients'
 import { ipc, ipcEvents } from './client'
 
 export const PROFILE_QUERY_KEY = ['profile', 'state']
@@ -149,6 +150,17 @@ export function useApplyProposal(): ReturnType<
 
 export function useDiscardProposal(): ReturnType<typeof useMutation<void, Error, void>> {
   return useMutation<void, Error, void>({ mutationFn: () => ipc.discardProposal() })
+}
+
+/** Para a tela "Conectar à sua IA": muda só quando o Perfil ativo muda. */
+export function useMcpLaunch(): UseQueryResult<McpLaunch> {
+  const { data: state } = useProfileState()
+  return useQuery({
+    queryKey: ['profile', 'mcp-launch', state?.profile?.id],
+    queryFn: () => ipc.getMcpLaunch(),
+    enabled: !!state?.profile,
+    staleTime: Infinity
+  })
 }
 
 export function useOpenProfileFolder(): ReturnType<typeof useMutation<void, Error, void>> {

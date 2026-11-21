@@ -26,6 +26,7 @@ Para o modelo de ameaça técnico e para relatar uma falha, veja o
 | **O app não executa programa nenhum** e não fala com serviço de IA | RN-SEC-23 | `tests/security/rn-sec-23-fronteira-de-processo.test.ts` |
 | **Para a sua IA, vai só o que você vê na prévia**: campos permitidos, com credenciais apagadas. Quem cola é você | RN-SEC-24 | `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts` |
 | **A resposta da IA entra como rascunho de texto**, nunca como código, e só depois que você aceita | RN-SEC-26 | `tests/security/rn-sec-26-resposta-da-ia.test.ts` |
+| **Conectada pelo MCP, a sua IA só propõe.** O servidor que ela inicia não usa rede nem lê o token, e grava só uma proposta, que você revisa e aplica | RN-SEC-34 · RN-SEC-35 | `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts` · `rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts` |
 | **A janela do app roda isolada** (sandbox do Electron, sem acesso ao sistema, sem câmera, microfone ou notificação) | RN-SEC-29 | `tests/security/rn-sec-29-janela-endurecida.test.ts` |
 | **A configuração do Electron é varrida por uma ferramenta independente** (Electronegativity, da Doyensec). Todo apontamento tem motivo escrito | RN-SEC-30 | `npm run verify:electron` |
 | **O modo de demonstração não usa rede nem token** | RN-SEC-27 | `tests/security/rn-sec-27-perfil-de-demonstracao.test.ts` |
@@ -120,7 +121,7 @@ servidor, login nem sessão, por isso vários capítulos não se aplicam.
 | V2 · Validação e lógica de negócio | Atende | Configuração validada por schema Zod, e a última versão válida é mantida (RN-CFG-07); organização só por nome (RN-CFG-04) |
 | V3 · Segurança do front-end web | Atende, com risco aceito | CSP com `script-src 'self'`; janela em sandbox, sem rede (RN-SEC-18, RN-SEC-29); `style-src 'unsafe-inline'` aceito com motivo (RN-SEC-30) |
 | V4 · API e serviços web | Atende | O app é cliente: só `GET` e uma consulta WIQL (RN-SEC-20); host exato e HTTPS (RN-SEC-18). O contrato de IPC é a única "API" interna e não tem leitura de token (RN-SEC-10) |
-| V5 · Manipulação de arquivos | Atende | O app só grava na pasta do Perfil e na pasta de segredos (RN-CFG-06, RN-CFG-08). Não aceita upload nem executa arquivos (RN-SEC-23) |
+| V5 · Manipulação de arquivos | Atende | O app só grava na pasta do Perfil e na pasta de segredos (RN-CFG-06, RN-CFG-08); o servidor MCP, só a proposta (RN-SEC-35). Não aceita upload nem executa arquivos (RN-SEC-23) |
 | V6 · Autenticação | Não se aplica | Sem login: a proteção é a conta do sistema operacional ([ADR 0002](adr/0002-sem-autenticacao-perfil-local-por-maquina.md)). O token é do Azure, validado antes de guardar (RN-SEC-11) |
 | V7 · Gerenciamento de sessão | Não se aplica | Não há sessão de usuário |
 | V8 · Autorização | Não se aplica | Um usuário por Perfil. O que ele pode ler no Azure é decidido pelo próprio Azure (RN-SEC-16) |

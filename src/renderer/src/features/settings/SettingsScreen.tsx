@@ -4,6 +4,7 @@ import {
   ExportOutlined,
   FolderOpenOutlined,
   ImportOutlined,
+  RobotOutlined,
   KeyOutlined,
   LockOutlined,
   RedoOutlined
@@ -235,6 +236,13 @@ export function SettingsScreen(): React.JSX.Element {
                   </Button>
                 </Dropdown>
               </Flex>
+              <Button
+                ghost
+                icon={<RobotOutlined />}
+                onClick={() => navigate('/configuracao/conectar-ia')}
+              >
+                {t('nav.connectAi')}
+              </Button>
               {/* A demonstração é regravada pelo Cenário; importar nela não faria sentido. */}
               {profile.kind !== 'demo' && (
                 <Button ghost icon={<ImportOutlined />} onClick={() => setImporting(true)}>

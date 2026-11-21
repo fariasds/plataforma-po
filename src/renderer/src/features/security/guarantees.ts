@@ -14,6 +14,7 @@ export interface Guarantee {
     | 'config'
     | 'links'
     | 'noProcess'
+    | 'mcp'
     | 'window'
     | 'installer'
   rules: readonly string[]
@@ -71,6 +72,14 @@ export const GUARANTEES: readonly Guarantee[] = [
     proof: [
       'tests/security/rn-sec-23-fronteira-de-processo.test.ts',
       'tests/security/rn-sec-24-dado-minimo-para-ia.test.ts'
+    ]
+  },
+  {
+    key: 'mcp',
+    rules: ['RN-SEC-34', 'RN-SEC-35'],
+    proof: [
+      'tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts',
+      'tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts'
     ]
   },
   {

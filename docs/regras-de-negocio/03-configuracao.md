@@ -301,3 +301,31 @@ servidor MCP só grava assim, pela ferramenta `propor_configuracao` (ADR 0010,
 **Casos de borda:** uma proposta igual à Configuração em uso aparece dizendo que
 nada muda; aplicar ou descartar dá no mesmo. O `AGENTS.md` de um Perfil criado antes
 desta regra não fala da proposta: ele é escrito só quando o Perfil nasce.
+
+### RN-CFG-13 · Conectar à sua IA mostra o que colar, e o PO cola
+
+A tela **Conectar à sua IA** (em Configuração, e a porta "Configurar com a sua IA" da
+primeira execução) mostra o trecho que liga a IA do PO ao servidor MCP do app
+(ADR 0010), para o Perfil em uso.
+
+| IA | O que a tela mostra |
+|---|---|
+| Claude Desktop, Cursor | `mcpServers.plataforma-po` com `command` e `args`, para colar no arquivo de configuração da IA |
+| VS Code | `servers.plataforma-po` com `type: "stdio"`, `command` e `args` |
+| Claude Code | O comando `claude mcp add plataforma-po --scope user -- <executável> --mcp --perfil <id>` |
+| ChatGPT ou outra | Não há trecho: essas IAs só se conectam a servidores na internet, e o app não tem servidor (ADR 0002). A tela aponta o assistente e o Importar |
+
+- **O caminho do executável e o ID do Perfil vêm do processo principal**, já
+  prontos; o PO não digita nada. No app empacotado, o executável é o próprio app;
+  em desenvolvimento, é o do Electron, com a pasta do app antes do `--mcp`.
+- **O trecho não leva o token nem caminho de dado.** Só o executável, `--mcp`,
+  `--perfil` e o ID.
+- **O app não mexe na configuração da IA.** Ele mostra e copia; quem cola é o PO,
+  na IA dele. O app continua sem iniciar processo (`RN-SEC-23`).
+- **Na primeira execução**, a porta "Configurar com a sua IA" cria o Perfil como as
+  outras, com a organização e o token, sem nenhum Produto, e abre esta tela. A IA
+  então propõe a Configuração (`RN-CFG-12`).
+
+**Casos de borda:** quem já tem outros servidores no arquivo do Claude Desktop
+acrescenta só o bloco `plataforma-po`; a tela avisa. Trocar de Perfil muda o ID no
+trecho, e a IA conectada antes continua presa ao Perfil antigo até o PO colar o novo.

@@ -91,7 +91,19 @@ const RELEASE_NOTES_ENTRY: NavEntry = {
   group: t('nav.home')
 }
 
-const ALL = [...MAIN, ...REVIEW, SETTINGS, SECURITY, RELEASE_NOTES_ENTRY]
+/**
+ * Conectar a IA do PO (RN-CFG-13). Mora dentro da Configuração e não entra no
+ * menu: chega-se pela tela de Configuração e pela primeira execução. Vem antes
+ * de SETTINGS na busca, porque o caminho começa igual.
+ */
+const CONNECT_AI_ENTRY: NavEntry = {
+  key: '/configuracao/conectar-ia',
+  icon: null,
+  label: t('nav.connectAi'),
+  group: t('nav.settings')
+}
+
+const ALL = [...MAIN, ...REVIEW, CONNECT_AI_ENTRY, SETTINGS, SECURITY, RELEASE_NOTES_ENTRY]
 
 /**
  * Preferência de interface desta máquina, não do Perfil: é o tamanho da tela de

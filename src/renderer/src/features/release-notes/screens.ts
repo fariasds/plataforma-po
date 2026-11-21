@@ -9,6 +9,7 @@ export const SCREEN_ROUTE: Record<ReleaseNoteScreen, string> = {
   'sprint-delivery': '/dashboard/sprint-delivery',
   'bug-analysis': '/dashboard/bug-analysis',
   settings: '/configuracao',
+  'connect-ai': '/configuracao/conectar-ia',
   security: '/seguranca'
 }
 
@@ -26,6 +27,8 @@ export function screenLabel(screen: ReleaseNoteScreen): string {
       return t('nav.bugAnalysis')
     case 'settings':
       return t('nav.settings')
+    case 'connect-ai':
+      return t('nav.connectAi')
     case 'security':
       return t('nav.security')
   }
