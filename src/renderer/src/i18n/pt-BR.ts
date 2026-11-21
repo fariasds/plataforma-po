@@ -843,7 +843,8 @@ export const ptBR = {
       },
       'claude-code': {
         label: 'Claude Code',
-        where: 'No terminal, uma vez. Para conferir depois, use <code>claude mcp list</code>:'
+        where:
+          'No terminal (PowerShell), uma vez. Para conferir depois, use <code>claude mcp list</code>:'
       },
       cursor: {
         label: 'Cursor',

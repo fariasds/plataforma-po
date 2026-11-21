@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { MCP_CLIENTS, clientSnippet, serverArgs, type McpLaunch } from './mcp-clients'
+import {
+  MCP_CLIENTS,
+  clientSnippet,
+  powershellQuote,
+  serverArgs,
+  type McpLaunch
+} from './mcp-clients'
 
 const packaged: McpLaunch = {
   command:
@@ -40,8 +46,18 @@ describe('trecho para conectar a IA do PO (RN-CFG-13)', () => {
 
   it('Claude Code recebe um comando com o caminho entre aspas, por ter espaço', () => {
     expect(clientSnippet('claude-code', packaged)).toBe(
-      `claude mcp add plataforma-po --scope user -- "${packaged.command}" --mcp --perfil fabrikam`
+      `claude mcp add plataforma-po --scope user -- '${packaged.command}' --mcp --perfil fabrikam`
     )
+  })
+
+  it('as aspas do PowerShell são completas: aspa simples dobrada, o resto literal', () => {
+    expect(powershellQuote('C:\\Users\\x\\app.exe')).toBe('C:\\Users\\x\\app.exe')
+    expect(powershellQuote("C:\\Users\\O'Brien\\Meu App\\app.exe")).toBe(
+      "'C:\\Users\\O''Brien\\Meu App\\app.exe'"
+    )
+    // `$`, crase, aspa dupla e barra no fim ficam como estão: entre aspas simples,
+    // o PowerShell não interpreta nada.
+    expect(powershellQuote('C:\\a $env:x `b "c"\\')).toBe('\'C:\\a $env:x `b "c"\\\'')
   })
 
   it('ChatGPT e outras IAs na web não têm trecho: o app não tem servidor na internet', () => {

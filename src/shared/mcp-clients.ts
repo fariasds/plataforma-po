@@ -24,9 +24,15 @@ export function serverArgs(launch: McpLaunch): string[] {
   return [...launch.appArgs, '--mcp', '--perfil', launch.profileId]
 }
 
-/** Aspas só onde precisa: caminho com espaço, como "Plataforma do PO". */
-function shellQuote(value: string): string {
-  return /^[\w.:\\/-]+$/.test(value) ? value : `"${value.replace(/"/g, '\\"')}"`
+/**
+ * Aspas do PowerShell, o terminal padrão do Windows, só onde precisa (caminho
+ * com espaço, como "Plataforma do PO"). Entre aspas simples, o PowerShell não
+ * interpreta nada: nem `$`, nem crase, nem barra invertida. O único caractere
+ * especial é a própria aspa simples, escrita dobrada; com isso o escape é
+ * completo, e um nome de usuário como O'Brien no caminho continua certo.
+ */
+export function powershellQuote(value: string): string {
+  return /^[\w.:\\/-]+$/.test(value) ? value : `'${value.replace(/'/g, "''")}'`
 }
 
 function jsonSnippet(root: string, entry: Record<string, unknown>): string {
@@ -50,8 +56,8 @@ export function clientSnippet(client: McpClient, launch: McpLaunch): string | nu
         'claude mcp add',
         MCP_SERVER_KEY,
         '--scope user --',
-        shellQuote(launch.command),
-        ...args.map(shellQuote)
+        powershellQuote(launch.command),
+        ...args.map(powershellQuote)
       ].join(' ')
     case 'other':
       return null

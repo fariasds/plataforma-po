@@ -312,7 +312,7 @@ primeira execução) mostra o trecho que liga a IA do PO ao servidor MCP do app
 |---|---|
 | Claude Desktop, Cursor | `mcpServers.plataforma-po` com `command` e `args`, para colar no arquivo de configuração da IA |
 | VS Code | `servers.plataforma-po` com `type: "stdio"`, `command` e `args` |
-| Claude Code | O comando `claude mcp add plataforma-po --scope user -- <executável> --mcp --perfil <id>` |
+| Claude Code | O comando `claude mcp add plataforma-po --scope user -- <executável> --mcp --perfil <id>`, para o PowerShell |
 | ChatGPT ou outra | Não há trecho: essas IAs só se conectam a servidores na internet, e o app não tem servidor (ADR 0002). A tela aponta o assistente e o Importar |
 
 - **O caminho do executável e o ID do Perfil vêm do processo principal**, já
@@ -320,6 +320,9 @@ primeira execução) mostra o trecho que liga a IA do PO ao servidor MCP do app
   em desenvolvimento, é o do Electron, com a pasta do app antes do `--mcp`.
 - **O trecho não leva o token nem caminho de dado.** Só o executável, `--mcp`,
   `--perfil` e o ID.
+- **No comando, o caminho com espaço vai entre aspas simples do PowerShell**, com a
+  aspa simples dobrada (`O'Brien` vira `'O''Brien'`). Entre aspas simples o PowerShell
+  não interpreta `$`, crase nem barra invertida, então nada do caminho vira comando.
 - **O app não mexe na configuração da IA.** Ele mostra e copia; quem cola é o PO,
   na IA dele. O app continua sem iniciar processo (`RN-SEC-23`).
 - **Na primeira execução**, a porta "Configurar com a sua IA" cria o Perfil como as
