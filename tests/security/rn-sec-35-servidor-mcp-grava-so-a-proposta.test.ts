@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs'
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs'
 import { join, relative, resolve } from 'path'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mcpEntries, reachableFrom, withoutComments } from '../helpers/import-graph'
@@ -56,9 +56,11 @@ describe('RN-SEC-35: o servidor MCP grava só a proposta (estático)', () => {
 function snapshot(dir: string): Record<string, string> {
   const files: Record<string, string> = {}
   const walk = (current: string): void => {
-    for (const entry of readdirSync(current)) {
-      const full = join(current, entry)
-      if (statSync(full).isDirectory()) walk(full)
+    // O tipo vem da própria listagem: sem um `stat` separado antes de ler, não há
+    // janela entre conferir e ler o mesmo arquivo.
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      const full = join(current, entry.name)
+      if (entry.isDirectory()) walk(full)
       else files[relative(dir, full).replace(/\\/g, '/')] = readFileSync(full, 'utf8')
     }
   }
