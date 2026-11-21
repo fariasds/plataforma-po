@@ -9,6 +9,8 @@ vi.mock('electron', async () => (await import('../../../tests/helpers/electron-m
 
 const { createProfile, getActiveProfile, listProfiles } = await import('./profile-store')
 const {
+  applyProposal,
+  discardProposal,
   getActiveConfig,
   getProfileState,
   importConfiguration,
@@ -19,7 +21,7 @@ const {
 } = await import('./config-loader')
 const { readWorkData, workDataKey, writeWorkData } = await import('./work-data')
 const { savePat } = await import('../security/pat-store')
-const { configPath, workDataDir } = await import('./paths')
+const { configPath, proposalPath, workDataDir } = await import('./paths')
 
 // Valores fictícios (organização `contoso`).
 const FAKE_PAT = 'contoso-fake-pat'
@@ -225,6 +227,76 @@ describe('importConfig com modo (RN-CFG-11)', () => {
     expect(() => importConfiguration(example, 'apagar-tudo' as never)).toThrow(
       'Modo de importação desconhecido.'
     )
+  })
+})
+
+describe('proposta da IA (RN-CFG-12)', () => {
+  function readyWithExample(): string {
+    const id = createReadyProfile()
+    writeConfig(id, example)
+    reloadProfileState()
+    return id
+  }
+
+  it('sem proposta, o estado diz null', () => {
+    readyWithExample()
+    expect(getProfileState().proposal).toBeNull()
+  })
+
+  it('a proposta aparece com a diferença, e a Configuração não muda', () => {
+    const id = readyWithExample()
+    const before = readFileSync(configPath(id), 'utf8')
+    writeFileSync(proposalPath(id), example.replace('"Loja Online"', '"Loja Nova"'))
+
+    const state = reloadProfileState()
+
+    expect(state.proposal).toMatchObject({
+      ok: true,
+      diff: { products: { changed: [{ id: 'loja' }] } }
+    })
+    expect(readFileSync(configPath(id), 'utf8')).toBe(before)
+  })
+
+  it('aplicar grava pela importação e apaga a proposta', () => {
+    const id = readyWithExample()
+    writeFileSync(proposalPath(id), example.replace('"Loja Online"', '"Loja Nova"'))
+    reloadProfileState()
+
+    expect(applyProposal()).toMatchObject({ saved: true })
+    expect(getActiveConfig()?.products[0].name).toBe('Loja Nova')
+    expect(existsSync(proposalPath(id))).toBe(false)
+    expect(getProfileState().proposal).toBeNull()
+  })
+
+  it('proposta recusada não é aplicada e continua lá, com os erros', () => {
+    const id = readyWithExample()
+    const before = readFileSync(configPath(id), 'utf8')
+    writeFileSync(proposalPath(id), example.replace('"contoso"', '"fabrikam"'))
+
+    expect(reloadProfileState().proposal).toMatchObject({
+      ok: false,
+      issues: [{ path: 'organization' }]
+    })
+    expect(applyProposal()).toMatchObject({ saved: false })
+    expect(readFileSync(configPath(id), 'utf8')).toBe(before)
+    expect(existsSync(proposalPath(id))).toBe(true)
+  })
+
+  it('descartar apaga a proposta sem mudar a Configuração', () => {
+    const id = readyWithExample()
+    const before = readFileSync(configPath(id), 'utf8')
+    writeFileSync(proposalPath(id), example.replace('"Loja Online"', '"Loja Nova"'))
+    reloadProfileState()
+
+    discardProposal()
+
+    expect(existsSync(proposalPath(id))).toBe(false)
+    expect(readFileSync(configPath(id), 'utf8')).toBe(before)
+  })
+
+  it('aplicar sem proposta é erro', () => {
+    readyWithExample()
+    expect(() => applyProposal()).toThrow('Não há proposta da IA para aplicar.')
   })
 })
 

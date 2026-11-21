@@ -18,6 +18,7 @@ import { MONO_FONT, NEUTRA, SIDER, STATUS } from '../../theme'
 import { IssueList } from '../onboarding/IssueList'
 import { exportConfiguration, exportTemplate } from './exportConfig'
 import { ImportConfigModal } from './ImportConfigModal'
+import { ProposalCard } from './ProposalCard'
 
 const { Paragraph, Text, Title } = Typography
 
@@ -73,6 +74,9 @@ export function SettingsScreen(): React.JSX.Element {
           closable={{ onClose: () => setImported(false) }}
           title={t('settings.imported')}
         />
+      )}
+      {state.proposal && (
+        <ProposalCard proposal={state.proposal} onApplied={() => setImported(true)} />
       )}
       {state.errors.length > 0 && (
         <Alert

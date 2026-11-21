@@ -17,6 +17,8 @@ export const PROFILE_ID_PATTERN = /^[a-z0-9-]{1,40}$/
 export const CONFIG_FILE = 'configuracao.json'
 export const SCHEMA_FILE = 'configuracao.schema.json'
 export const AGENTS_FILE = 'AGENTS.md'
+/** O que a IA do PO propõe; o PO revisa e aplica na janela (RN-CFG-12). */
+export const PROPOSAL_FILE = 'proposta.json'
 
 /** Recusa qualquer coisa que não seja um slug — `..`, barra e letra de unidade incluídos. */
 export function assertProfileId(profileId: string): string {
@@ -40,6 +42,10 @@ export function profileDir(profileId: string): string {
 
 export function configPath(profileId: string): string {
   return join(profileDir(profileId), CONFIG_FILE)
+}
+
+export function proposalPath(profileId: string): string {
+  return join(profileDir(profileId), PROPOSAL_FILE)
 }
 
 export function workDataDir(profileId: string): string {

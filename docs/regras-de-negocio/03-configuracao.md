@@ -274,3 +274,29 @@ No modo Mesclar:
 
 **Casos de borda:** mesclar não tira nada. Para remover um Produto que o colega
 removeu, use Substituir ou edite a Configuração.
+
+### RN-CFG-12 · A IA propõe, o PO aplica
+
+A IA do PO pode gravar uma **proposta** de Configuração em `proposta.json`, na pasta
+do Perfil, em vez de alterar `configuracao.json`. O `AGENTS.md` pede isso, e o
+servidor MCP só grava assim (ADR 0010).
+
+- **A proposta é a Configuração inteira, como ficaria.** O app a lê como qualquer
+  importação: valida, confere a organização e calcula a diferença para a
+  Configuração em uso (`RN-CFG-09`). Um Modelo de processo também vale como proposta
+  (`RN-CFG-10`).
+- **Nada muda até o PO aplicar.** Uma faixa no topo da janela avisa que há proposta
+  e leva à tela de Configuração, onde ela aparece com o que entra, muda e sai, e o
+  aviso dos IDs que saem (`RN-CFG-02`).
+- **Aplicar grava pelo mesmo caminho do Importar**, sempre substituindo, e só então
+  apaga a proposta. **Descartar** apaga a proposta sem tocar na Configuração.
+- **Proposta recusada continua lá**, com os erros e o caminho de cada um, para a IA
+  corrigir e gravar de novo. Aplicar fica indisponível.
+- O app observa `proposta.json` como observa `configuracao.json` (`RN-CFG-07`) e
+  mostra a versão mais recente, com a hora em que foi gravada.
+- A proposta é lida contra a Configuração **em uso**: se ela mudar depois, a
+  diferença mostrada muda junto.
+
+**Casos de borda:** uma proposta igual à Configuração em uso aparece dizendo que
+nada muda; aplicar ou descartar dá no mesmo. O `AGENTS.md` de um Perfil criado antes
+desta regra não fala da proposta: ele é escrito só quando o Perfil nasce.

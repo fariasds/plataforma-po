@@ -21,6 +21,7 @@ import { AppLogo, AppMark } from './AppLogo'
 import { DemoBanner } from './DemoBanner'
 import { RefreshButton } from './RefreshButton'
 import { SquadTabs } from './SquadTabs'
+import { ProposalBanner } from './ProposalBanner'
 import { UpdateBanner } from './UpdateBanner'
 import { UserMenu } from './UserMenu'
 
@@ -409,6 +410,7 @@ export function AppLayout(): React.JSX.Element {
         <div style={{ position: 'sticky', top: 0, zIndex: 10, flex: '0 0 auto' }}>
           <UpdateBanner />
           <DemoBanner />
+          <ProposalBanner />
           {/* A Home não mostra dado de Squad, então não tem abas (RN-GLB-17). */}
           {current !== HOME && <SquadTabs />}
           <Header
