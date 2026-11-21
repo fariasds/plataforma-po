@@ -1,3 +1,4 @@
+import type { z } from 'zod'
 import { configurationSchema, type Configuration } from './schema'
 import { findSecrets } from './secrets'
 
@@ -19,19 +20,22 @@ function formatPath(path: readonly PropertyKey[]): string {
 }
 
 /**
- * Valida uma Configuração já lida do JSON. Nunca lança: devolve os problemas
+ * Valida um JSON já lido contra um schema. Nunca lança: devolve os problemas
  * todos de uma vez, para a tela (e a IA) corrigirem numa passada só.
  *
  * A varredura de segredo (RN-CFG-05) vem antes e é independente da forma: um
  * arquivo com PAT é recusado mesmo que o resto esteja certo.
  */
-export function validateConfiguration(raw: unknown): ConfigurationResult {
+export function validateAgainst<T extends z.ZodType>(
+  schema: T,
+  raw: unknown
+): { ok: true; value: z.output<T> } | { ok: false; issues: ConfigurationIssue[] } {
   const issues: ConfigurationIssue[] = findSecrets(raw).map((issue) => ({
     path: formatPath(issue.path),
     message: issue.message
   }))
 
-  const parsed = configurationSchema.safeParse(raw)
+  const parsed = schema.safeParse(raw)
   if (!parsed.success) {
     for (const issue of parsed.error.issues) {
       issues.push({ path: formatPath(issue.path), message: issue.message })
@@ -39,7 +43,13 @@ export function validateConfiguration(raw: unknown): ConfigurationResult {
   }
 
   if (issues.length > 0 || !parsed.success) return { ok: false, issues }
-  return { ok: true, config: parsed.data }
+  return { ok: true, value: parsed.data }
+}
+
+/** Valida uma Configuração já lida do JSON (RN-CFG-01 a 05). */
+export function validateConfiguration(raw: unknown): ConfigurationResult {
+  const result = validateAgainst(configurationSchema, raw)
+  return result.ok ? { ok: true, config: result.value } : result
 }
 
 /**

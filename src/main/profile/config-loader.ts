@@ -159,7 +159,9 @@ export function onProfileStateChanged(listener: (state: ProfileState) => void): 
 export function previewImport(json: string): ImportPreview {
   requireActiveProfile()
   const plan = planImport(getActiveConfig(), json)
-  return plan.ok ? { ok: true, diff: plan.diff } : { ok: false, issues: plan.issues }
+  return plan.ok
+    ? { ok: true, kind: plan.kind, diff: plan.diff }
+    : { ok: false, issues: plan.issues }
 }
 
 /**

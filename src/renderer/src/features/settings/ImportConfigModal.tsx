@@ -128,6 +128,9 @@ export function ImportConfigModal({
 
         {preview?.ok && (
           <>
+            {preview.kind === 'template' && (
+              <Alert type="info" showIcon title={t('settings.import.templateNote')} />
+            )}
             <Text strong>{t('settings.import.changes')}</Text>
             <ConfigDiff diff={preview.diff} />
             {removedNames.length > 0 && (

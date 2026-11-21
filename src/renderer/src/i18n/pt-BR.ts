@@ -548,7 +548,11 @@ export const ptBR = {
     import: {
       title: 'Importar Configuração',
       intro:
-        'Escolha um arquivo <code>configuracao.json</code>. Ele é validado antes de qualquer coisa ser gravada.',
+        'Escolha um arquivo <code>configuracao.json</code>, ou um Modelo de processo de outro PO. Ele é validado antes de qualquer coisa ser gravada.',
+      fileKind: 'Arquivo',
+      template: 'Modelo de processo, sem organização nem Produtos',
+      templateOrganization:
+        'O Modelo não traz a organização. Os Produtos você acrescenta depois, pelo assistente, pelo arquivo ou pela sua IA.',
       tooBig: 'O arquivo passa de 1 MB.',
       invalidJson: 'O arquivo não é um JSON válido.',
       chooseFile: 'Escolher arquivo',
@@ -772,10 +776,18 @@ export const ptBR = {
     exportConfig: 'Exportar Configuração',
     importConfig: 'Importar Configuração',
     imported: 'Configuração importada',
+    export: {
+      configuration: 'Configuração completa',
+      configurationHint: 'para um colega da mesma organização',
+      template: 'Modelo de processo',
+      templateHint: 'para um PO de outra empresa, sem os seus Produtos'
+    },
     import: {
       title: 'Importar Configuração',
       intro:
-        'Escolha um arquivo de Configuração, de um colega ou de outra máquina. O app mostra o que muda antes de gravar, e o token deste Perfil continua o mesmo.',
+        'Escolha uma Configuração completa, de um colega ou de outra máquina, ou um Modelo de processo. O app mostra o que muda antes de gravar, e o token deste Perfil continua o mesmo.',
+      templateNote:
+        'Este arquivo é um Modelo de processo: ele soma os Perfis de processo e troca campos e calendário, mas mantém a organização, os Produtos e as Squads deste Perfil.',
       chooseFile: 'Escolher arquivo',
       chooseAnother: 'Escolher outro arquivo',
       refused: 'O app recusou este arquivo',

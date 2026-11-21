@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Alert, Button, Card, Descriptions, Flex, Tag, Typography, theme } from 'antd'
+import { Alert, Button, Card, Descriptions, Dropdown, Flex, Tag, Typography, theme } from 'antd'
 import {
   ExportOutlined,
   FolderOpenOutlined,
@@ -16,7 +16,7 @@ import { t } from '../../i18n'
 import { tRich } from '../../i18n/rich'
 import { MONO_FONT, NEUTRA, SIDER, STATUS } from '../../theme'
 import { IssueList } from '../onboarding/IssueList'
-import { exportConfiguration } from './exportConfig'
+import { exportConfiguration, exportTemplate } from './exportConfig'
 import { ImportConfigModal } from './ImportConfigModal'
 
 const { Paragraph, Text, Title } = Typography
@@ -206,14 +206,30 @@ export function SettingsScreen(): React.JSX.Element {
                 >
                   {t('settings.redoWizard')}
                 </Button>
-                <Button
-                  ghost
-                  icon={<ExportOutlined />}
-                  style={{ flex: 1 }}
-                  onClick={() => exportConfiguration(config)}
+                {/* Dois arquivos, para dois públicos (RN-CFG-10). */}
+                <Dropdown
+                  trigger={['click']}
+                  menu={{
+                    items: [
+                      {
+                        key: 'configuration',
+                        label: t('settings.export.configuration'),
+                        extra: t('settings.export.configurationHint')
+                      },
+                      {
+                        key: 'template',
+                        label: t('settings.export.template'),
+                        extra: t('settings.export.templateHint')
+                      }
+                    ],
+                    onClick: ({ key }) =>
+                      key === 'template' ? exportTemplate(config) : exportConfiguration(config)
+                  }}
                 >
-                  {t('settings.exportConfig')}
-                </Button>
+                  <Button ghost icon={<ExportOutlined />} style={{ flex: 1 }}>
+                    {t('settings.exportConfig')}
+                  </Button>
+                </Dropdown>
               </Flex>
               {/* A demonstração é regravada pelo Cenário; importar nela não faria sentido. */}
               {profile.kind !== 'demo' && (
