@@ -141,6 +141,16 @@ export function useImportConfig(): ReturnType<
   })
 }
 
+export function useApplyProposal(): ReturnType<
+  typeof useMutation<ImportConfigResult, Error, void>
+> {
+  return useMutation<ImportConfigResult, Error, void>({ mutationFn: () => ipc.applyProposal() })
+}
+
+export function useDiscardProposal(): ReturnType<typeof useMutation<void, Error, void>> {
+  return useMutation<void, Error, void>({ mutationFn: () => ipc.discardProposal() })
+}
+
 export function useOpenProfileFolder(): ReturnType<typeof useMutation<void, Error, void>> {
   return useMutation<void, Error, void>({ mutationFn: () => ipc.openProfileFolder() })
 }

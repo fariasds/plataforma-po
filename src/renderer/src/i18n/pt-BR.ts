@@ -805,6 +805,18 @@ export const ptBR = {
     }
   },
 
+  proposal: {
+    bannerTitle: 'Sua IA propôs mudanças na Configuração',
+    bannerInvalidTitle: 'Sua IA propôs uma Configuração que o app recusou',
+    bannerWhen: 'gravada em {when}. Nada muda até você aplicar.',
+    review: 'Revisar',
+    title: 'Proposta da sua IA',
+    intro:
+      'Sua IA gravou esta proposta em {when}. Confira o que muda: nada é aplicado até você clicar em Aplicar.',
+    invalid: 'O app recusou a proposta',
+    discard: 'Descartar'
+  },
+
   configDiff: {
     noChanges: 'Nada muda: o arquivo é igual à Configuração em uso.',
     kind: { added: 'Entra', changed: 'Muda', removed: 'Sai' },

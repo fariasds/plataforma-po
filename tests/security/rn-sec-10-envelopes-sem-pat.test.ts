@@ -62,6 +62,8 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   createProfile: [{ name: 'Loja Online', organization: 'contoso', pat: FAKE_PAT }],
   previewImport: ['{}', 'replace'],
   importConfig: ['{}'],
+  applyProposal: [],
+  discardProposal: [],
   openProfileFolder: [],
   readWorkData: ['planning:loja'],
   writeWorkData: ['planning:loja', { items: [] }],

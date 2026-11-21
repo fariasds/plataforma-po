@@ -118,6 +118,7 @@ Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
 | `ErrorState`          | Falha ao carregar                                                                                                                                |
 | `UserMenu`            | Cartão da conta no pé do menu lateral                                                                                                            |
 | `DemoBanner`          | Faixa do Perfil de demonstração, presa ao topo com o cabeçalho. Fundo `colorPrimaryBg`, nunca `STATUS`: não é alerta nem situação (RN-GLB-15)    |
+| `ProposalBanner`      | Faixa da proposta da IA do PO, abaixo da `DemoBanner`. Fundo `colorPrimaryBg`, como ela: avisa e leva à revisão em Configuração, não é alerta (RN-CFG-12) |
 | `UpdateBanner`        | Faixa de versão nova, acima da `DemoBanner`. Fundo neutro (`colorBgContainer`); o destaque fica só no botão de baixar, a ação principal (RN-GLB-18) |
 | `RefreshButton`       | Botão Atualizar do cabeçalho, com "Atualizado às HH:MM" em `MONO_FONT` à esquerda (RN-GLB-19). Entra pela flag `refresh` da entrada do menu no `AppLayout`, nunca dentro da tela |
 

@@ -1,4 +1,4 @@
-import { watch, readFileSync, type FSWatcher } from 'fs'
+import { existsSync, rmSync, statSync, watch, readFileSync, type FSWatcher } from 'fs'
 import { AppError } from '@shared/errors'
 import type { Configuration } from '@shared/config/schema'
 import {
@@ -9,10 +9,10 @@ import {
   type ImportMode
 } from '@shared/config/import'
 import type { ConfigurationIssue, ConfigurationResult } from '@shared/config/validate'
-import type { ImportConfigResult, ImportPreview, ProfileState } from '@shared/ipc'
+import type { ImportConfigResult, ImportPreview, ProfileState, ProposalState } from '@shared/ipc'
 import { hasPat } from '../security/pat-store'
 import { writeFileAtomic } from './atomic-write'
-import { CONFIG_FILE, configPath } from './paths'
+import { CONFIG_FILE, PROPOSAL_FILE, configPath, proposalPath } from './paths'
 import { getActiveProfile, hasAzureProfile, requireActiveProfile } from './profile-store'
 
 /**
@@ -80,7 +80,7 @@ function watchDir(dir: string): void {
   stopWatching()
   try {
     watcher = watch(dir, (_event, filename) => {
-      if (filename && filename !== CONFIG_FILE) return
+      if (filename && filename !== CONFIG_FILE && filename !== PROPOSAL_FILE) return
       if (pending) clearTimeout(pending)
       pending = setTimeout(() => {
         pending = null
@@ -102,6 +102,28 @@ function watchDir(dir: string): void {
   }
 }
 
+/**
+ * RN-CFG-12: a proposta da IA do PO, lida e conferida como qualquer importação,
+ * contra a Configuração em uso. Nunca é aplicada aqui.
+ */
+function readProposal(profileId: string, current: Configuration | null): ProposalState | null {
+  const file = proposalPath(profileId)
+  if (!existsSync(file)) return null
+  let text: string
+  let updatedAt: string
+  try {
+    text = readFileSync(file, 'utf8')
+    updatedAt = statSync(file).mtime.toISOString()
+  } catch {
+    // Arquivo sumiu entre a checagem e a leitura (a IA regravou): o observador relê.
+    return null
+  }
+  const plan = planImport(current, text)
+  return plan.ok
+    ? { ok: true, kind: plan.kind, diff: plan.diff, updatedAt }
+    : { ok: false, issues: plan.issues, updatedAt }
+}
+
 /** Relê tudo do disco, publica se mudou e devolve o estado. */
 export function reloadProfileState(): ProfileState {
   const profile = getActiveProfile()
@@ -113,7 +135,8 @@ export function reloadProfileState(): ProfileState {
       profile: null,
       config: null,
       errors: [],
-      hasAzureProfile: false
+      hasAzureProfile: false,
+      proposal: null
     })
   }
 
@@ -140,7 +163,8 @@ export function reloadProfileState(): ProfileState {
     profile: { id: profile.id, name: profile.name, dir: profile.dir, kind: profile.kind },
     config: loaded.lastValid,
     errors: loaded.errors,
-    hasAzureProfile: hasAzureProfile()
+    hasAzureProfile: hasAzureProfile(),
+    proposal: readProposal(profile.id, loaded.lastValid)
   })
 }
 
@@ -196,6 +220,31 @@ export function importConfiguration(
   writeFileAtomic(configPath(profile.id), JSON.stringify(plan.content, null, 2) + '\n')
   reloadProfileState()
   return { saved: true, removed: removedFromDiff(plan.diff), diff: plan.diff }
+}
+
+/**
+ * Aplica a proposta da IA do PO (RN-CFG-12) pelo mesmo caminho do Importar
+ * Configuração, e só então a apaga. Uma proposta recusada fica, com os erros.
+ */
+export function applyProposal(): ImportConfigResult {
+  const profile = requireActiveProfile()
+  const file = proposalPath(profile.id)
+  if (!existsSync(file)) {
+    throw new AppError('PROFILE_INVALID', 'Não há proposta da IA para aplicar.')
+  }
+  const result = importConfiguration(readFileSync(file, 'utf8'))
+  if (result.saved) {
+    rmSync(file, { force: true })
+    reloadProfileState()
+  }
+  return result
+}
+
+/** Descarta a proposta sem mudar a Configuração. */
+export function discardProposal(): void {
+  const profile = requireActiveProfile()
+  rmSync(proposalPath(profile.id), { force: true })
+  reloadProfileState()
 }
 
 /** Para testes: esquece o estado e para o observador. */

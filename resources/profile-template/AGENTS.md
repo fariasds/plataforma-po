@@ -71,6 +71,17 @@ na Daily.
 5. **Não edite `configuracao.schema.json` nem `dados/`.** O schema é gerado pelo
    app; os Dados de trabalho são do app.
 
+## Propor em vez de gravar
+
+Prefira **propor** a mudança: grave a Configuração inteira, como ficaria, em
+`proposta.json`, nesta mesma pasta, em vez de alterar `configuracao.json`. O app
+mostra ao PO o que entra, o que muda e o que sai, e só aplica quando ele confirma.
+Se um ID de Produto, Grupo ou Squad sair, o app avisa que os Dados de trabalho
+guardados com ele ficam sem uso, antes de gravar.
+
+A proposta passa pela mesma validação da Configuração. Se o app a recusar, o PO vê
+os erros com o caminho de cada um; corrija e grave `proposta.json` de novo.
+
 ## Como validar
 
 - O `$schema` no topo do arquivo dá autocompletar e aponta erro de forma em editores

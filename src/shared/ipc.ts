@@ -55,6 +55,14 @@ export type ProfileStatus = 'no-profile' | 'needs-pat' | 'invalid-config' | 'rea
  */
 export type ProfileKind = 'azure' | 'demo'
 
+/**
+ * Proposta da IA do PO esperando revisão (RN-CFG-12): o que ela mudaria, ou por
+ * que não pode ser aplicada. `updatedAt` é quando a IA gravou, em ISO.
+ */
+export type ProposalState =
+  | { ok: true; kind: ImportKind; diff: ConfigurationDiff; updatedAt: string }
+  | { ok: false; issues: ConfigurationIssue[]; updatedAt: string }
+
 export interface ProfileState {
   status: ProfileStatus
   /** `dir` é a pasta que o app abre para o PO; o PAT não está nela (RN-CFG-06). */
@@ -68,6 +76,8 @@ export interface ProfileState {
    * a demonstração oferece voltar para ele, e não criar outro (RN-GLB-15).
    */
   hasAzureProfile: boolean
+  /** Proposta da IA do PO na pasta do Perfil, ou `null` (RN-CFG-12). */
+  proposal: ProposalState | null
 }
 
 /** O PAT entra junto porque o Perfil só nasce se o token funcionar. */
@@ -120,6 +130,10 @@ export interface IpcApi {
   previewImport(json: string, mode?: ImportMode): Promise<ImportPreview>
   /** Valida antes de gravar; um JSON recusado não chega ao disco. */
   importConfig(json: string, mode?: ImportMode): Promise<ImportConfigResult>
+  /** Aplica a proposta da IA do PO, pelo mesmo caminho do Importar (RN-CFG-12). */
+  applyProposal(): Promise<ImportConfigResult>
+  /** Descarta a proposta da IA do PO sem mudar a Configuração. */
+  discardProposal(): Promise<void>
   /** Abre a pasta do Perfil ativo no gerenciador de arquivos. */
   openProfileFolder(): Promise<void>
   /** `null` quando a chave nunca foi gravada. */
@@ -234,6 +248,8 @@ export const IPC_CHANNELS = {
   createProfile: 'profile:create',
   previewImport: 'profile:preview-import',
   importConfig: 'profile:import-config',
+  applyProposal: 'profile:apply-proposal',
+  discardProposal: 'profile:discard-proposal',
   openProfileFolder: 'profile:open-folder',
   readWorkData: 'profile:work-data-read',
   writeWorkData: 'profile:work-data-write',

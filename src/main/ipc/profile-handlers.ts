@@ -2,6 +2,8 @@ import { BrowserWindow, shell } from 'electron'
 import { AppError } from '@shared/errors'
 import { IPC_EVENTS } from '@shared/ipc'
 import {
+  applyProposal,
+  discardProposal,
   getProfileState,
   importConfiguration,
   onProfileStateChanged,
@@ -41,6 +43,10 @@ export function registerProfileHandlers(): void {
   handle('previewImport', (json, mode) => previewImport(json, mode))
 
   handle('importConfig', (json, mode) => importConfiguration(json, mode))
+
+  handle('applyProposal', () => applyProposal())
+
+  handle('discardProposal', () => discardProposal())
 
   handle('openProfileFolder', async () => {
     const { dir } = requireActiveProfile()
