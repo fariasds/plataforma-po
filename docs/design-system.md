@@ -113,6 +113,7 @@ Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
 | `SquadTabs`           | Abas de Squad no topo da janela, acima do cabeçalho (RN-GLB-17). Só existe com Squads na Configuração; ver "Abas de Squad" abaixo                 |
 | `DashboardFilters`    | `ProductFilter` + seletor de sprint + nome da sprint em cada Produto (telas de Review)                                                           |
 | `StateTag`            | Estado de work item. Nunca uma `Tag` com cor escolhida na tela                                                                                   |
+| `ConfigDiff`          | O que uma Configuração de fora muda na que está em uso: Entra (`STATUS.ok`), Muda (`STATUS.info`), Sai (`STATUS.danger`), pelo ID (RN-CFG-09) |
 | `HelpTip`             | Explicar um cálculo que contraria a intuição (ver Definição de pronto no `CLAUDE.md`)                                                            |
 | `ErrorState`          | Falha ao carregar                                                                                                                                |
 | `UserMenu`            | Cartão da conta no pé do menu lateral                                                                                                            |

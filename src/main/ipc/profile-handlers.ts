@@ -5,6 +5,7 @@ import {
   getProfileState,
   importConfiguration,
   onProfileStateChanged,
+  previewImport,
   reloadProfileState
 } from '../profile/config-loader'
 import { createProfile, requireActiveProfile } from '../profile/profile-store'
@@ -36,6 +37,8 @@ export function registerProfileHandlers(): void {
     clearUserProfileCache()
     return reloadProfileState()
   })
+
+  handle('previewImport', (json) => previewImport(json))
 
   handle('importConfig', (json) => importConfiguration(json))
 

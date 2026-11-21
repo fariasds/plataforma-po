@@ -1,13 +1,9 @@
 import { watch, readFileSync, type FSWatcher } from 'fs'
 import { AppError } from '@shared/errors'
 import type { Configuration } from '@shared/config/schema'
-import {
-  removedIds,
-  validateConfiguration,
-  type ConfigurationIssue,
-  type ConfigurationResult
-} from '@shared/config/validate'
-import type { ImportConfigResult, ProfileState } from '@shared/ipc'
+import { parseConfigurationText, planImport, removedFromDiff } from '@shared/config/import'
+import type { ConfigurationIssue, ConfigurationResult } from '@shared/config/validate'
+import type { ImportConfigResult, ImportPreview, ProfileState } from '@shared/ipc'
 import { hasPat } from '../security/pat-store'
 import { writeFileAtomic } from './atomic-write'
 import { CONFIG_FILE, configPath } from './paths'
@@ -22,7 +18,6 @@ import { getActiveProfile, hasAzureProfile, requireActiveProfile } from './profi
  */
 
 const DEBOUNCE_MS = 300
-const MAX_CONFIG_BYTES = 1024 * 1024
 
 interface Loaded {
   profileId: string
@@ -37,36 +32,6 @@ let watchedDir: string | null = null
 let pending: ReturnType<typeof setTimeout> | null = null
 const listeners = new Set<(state: ProfileState) => void>()
 
-/**
- * A mensagem do `JSON.parse` do V8 cita um trecho do texto. Se o PO colou um
- * token no arquivo e quebrou o JSON, esse trecho iria para a tela e o log —
- * o mesmo vazamento que a RN-CFG-05 fecha. Fica só a posição.
- */
-function syntaxIssue(error: unknown): ConfigurationIssue {
-  const message = error instanceof Error ? error.message : ''
-  const line = /line (\d+) column (\d+)/.exec(message)
-  const position = /position (\d+)/.exec(message)
-  const where = line
-    ? ` (linha ${line[1]}, coluna ${line[2]})`
-    : position
-      ? ` (caractere ${position[1]})`
-      : ''
-  return { path: '', message: `O arquivo não é um JSON válido${where}.` }
-}
-
-function parseAndValidate(text: string): ConfigurationResult {
-  if (Buffer.byteLength(text, 'utf8') > MAX_CONFIG_BYTES) {
-    return { ok: false, issues: [{ path: '', message: 'A Configuração passa de 1 MB.' }] }
-  }
-  let raw: unknown
-  try {
-    raw = JSON.parse(text.replace(/^\uFEFF/, ''))
-  } catch (error) {
-    return { ok: false, issues: [syntaxIssue(error)] }
-  }
-  return validateConfiguration(raw)
-}
-
 function readConfiguration(profileId: string): ConfigurationResult {
   let text: string
   try {
@@ -79,7 +44,7 @@ function readConfiguration(profileId: string): ConfigurationResult {
         : `Não consegui ler ${CONFIG_FILE} (${code}).`
     return { ok: false, issues: [{ path: '', message }] }
   }
-  return parseAndValidate(text)
+  return parseConfigurationText(text)
 }
 
 function publish(next: ProfileState): ProfileState {
@@ -189,26 +154,30 @@ export function onProfileStateChanged(listener: (state: ProfileState) => void): 
 }
 
 /**
- * Substitui a Configuração do Perfil ativo por um JSON colado. Valida **antes**
- * de gravar: um arquivo recusado não chega ao disco, e a resposta traz os erros.
+ * Prévia da importação (RN-CFG-09): valida e mostra o que muda, sem gravar.
+ */
+export function previewImport(json: string): ImportPreview {
+  requireActiveProfile()
+  const plan = planImport(getActiveConfig(), json)
+  return plan.ok ? { ok: true, diff: plan.diff } : { ok: false, issues: plan.issues }
+}
+
+/**
+ * Substitui a Configuração do Perfil ativo pelo JSON que chegou. Passa pelo mesmo
+ * plano da prévia: um arquivo recusado não chega ao disco, e a resposta traz os
+ * erros.
  */
 export function importConfiguration(json: string): ImportConfigResult {
   const profile = requireActiveProfile()
   if (typeof json !== 'string') {
     throw new AppError('PROFILE_INVALID', 'A Configuração precisa chegar como texto JSON.')
   }
-  const result = parseAndValidate(json)
-  if (!result.ok) return { saved: false, issues: result.issues }
+  const plan = planImport(getActiveConfig(), json)
+  if (!plan.ok) return { saved: false, issues: plan.issues }
 
-  const previous = getActiveConfig()
-  const removed = previous
-    ? removedIds(previous, result.config)
-    : { products: [], groups: [], squads: [] }
-
-  const raw = JSON.parse(json.replace(/^\uFEFF/, ''))
-  writeFileAtomic(configPath(profile.id), JSON.stringify(raw, null, 2) + '\n')
+  writeFileAtomic(configPath(profile.id), JSON.stringify(plan.content, null, 2) + '\n')
   reloadProfileState()
-  return { saved: true, removed }
+  return { saved: true, removed: removedFromDiff(plan.diff), diff: plan.diff }
 }
 
 /** Para testes: esquece o estado e para o observador. */

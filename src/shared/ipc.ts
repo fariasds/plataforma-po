@@ -3,6 +3,7 @@ import type { UpdateCheck, UpdateLink } from './update'
 import type { SerializedError } from './errors'
 import type { Configuration } from './config/schema'
 import type { ConfigurationIssue } from './config/validate'
+import type { ConfigurationDiff } from './config/import'
 import type { AzureUserProfile, UnifiedSprint } from './azure'
 import type {
   DiscoveredArea,
@@ -77,8 +78,16 @@ export interface CreateProfileRequest {
 }
 
 export type ImportConfigResult =
-  | { saved: true; removed: { products: string[]; groups: string[]; squads: string[] } }
+  | {
+      saved: true
+      removed: { products: string[]; groups: string[]; squads: string[] }
+      diff: ConfigurationDiff
+    }
   | { saved: false; issues: ConfigurationIssue[] }
+
+/** O que a importação mudaria, sem gravar (RN-CFG-09). */
+export type ImportPreview =
+  { ok: true; diff: ConfigurationDiff } | { ok: false; issues: ConfigurationIssue[] }
 
 /**
  * The clean, domain-level API the renderer codes against (see `ipc/client.ts`).
@@ -106,6 +115,8 @@ export interface IpcApi {
    * token cifrado. Se o token não funciona, nada é criado.
    */
   createProfile(input: CreateProfileRequest): Promise<ProfileState>
+  /** Valida e mostra o que mudaria, sem gravar nada (RN-CFG-09). */
+  previewImport(json: string): Promise<ImportPreview>
   /** Valida antes de gravar; um JSON recusado não chega ao disco. */
   importConfig(json: string): Promise<ImportConfigResult>
   /** Abre a pasta do Perfil ativo no gerenciador de arquivos. */
@@ -220,6 +231,7 @@ export const IPC_CHANNELS = {
   clearPat: 'pat:clear',
   getProfileState: 'profile:state',
   createProfile: 'profile:create',
+  previewImport: 'profile:preview-import',
   importConfig: 'profile:import-config',
   openProfileFolder: 'profile:open-folder',
   readWorkData: 'profile:work-data-read',
