@@ -228,11 +228,48 @@ function sameOrganization(a: string, b: string): boolean {
 }
 
 /**
+ * Como uma Configuração completa entra (RN-CFG-11): no lugar da que está em uso,
+ * ou somada a ela pelo ID. O Modelo de processo sempre soma (RN-CFG-10).
+ */
+export type ImportMode = 'replace' | 'merge'
+
+export const IMPORT_MODES: readonly ImportMode[] = ['replace', 'merge']
+
+/** Lista com ID: a do Perfil, com o item do arquivo no lugar do de mesmo ID e os novos no fim. */
+function mergeById<T extends { id: string }>(current: T[], incoming: T[]): T[] {
+  const fromFile = new Map(incoming.map((item) => [item.id, item]))
+  const kept = new Set(current.map((item) => item.id))
+  return [
+    ...current.map((item) => fromFile.get(item.id) ?? item),
+    ...incoming.filter((item) => !kept.has(item.id))
+  ]
+}
+
+/**
+ * RN-CFG-11: o arquivo vence nos IDs iguais e nas seções; o que só existe no
+ * Perfil fica. A cor de destaque é de quem usa o app e também fica.
+ */
+function mergeConfigurations(current: Configuration, incoming: Configuration): Configuration {
+  return {
+    ...incoming,
+    appearance: current.appearance,
+    processProfiles: { ...current.processProfiles, ...incoming.processProfiles },
+    products: mergeById(current.products, incoming.products),
+    groups: mergeById(current.groups, incoming.groups),
+    squads: mergeById(current.squads, incoming.squads)
+  }
+}
+
+/**
  * Planeja a troca da Configuração em uso (`current`) pelo texto que chegou.
  * Sem `current` (Perfil nascendo agora), qualquer organização serve: é a do
- * arquivo que cria o Perfil.
+ * arquivo que cria o Perfil, e não há com o que somar.
  */
-export function planImport(current: Configuration | null, text: string): ImportPlan {
+export function planImport(
+  current: Configuration | null,
+  text: string,
+  mode: ImportMode = 'replace'
+): ImportPlan {
   const parsed = parseJsonText(text)
   if (!parsed.ok) return parsed
   if (isTemplate(parsed.raw)) return planTemplate(current, parsed.raw)
@@ -248,6 +285,21 @@ export function planImport(current: Configuration | null, text: string): ImportP
           message: `Este arquivo é da organização "${result.config.organization}", e este Perfil usa "${current.organization}". O token do Perfil só vale para "${current.organization}", então o app não importa um arquivo de outra organização.`
         }
       ]
+    }
+  }
+
+  if (current && mode === 'merge') {
+    // A soma pode quebrar uma referência que cada lado, sozinho, fechava (um
+    // Produto do Perfil fora de toda Squad do arquivo): valida de novo.
+    const content = mergeConfigurations(current, result.config)
+    const merged = validateConfiguration(content)
+    if (!merged.ok) return merged
+    return {
+      ok: true,
+      kind: 'configuration',
+      config: merged.config,
+      content,
+      diff: diffConfiguration(current, merged.config)
     }
   }
 

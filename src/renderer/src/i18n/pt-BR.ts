@@ -792,6 +792,11 @@ export const ptBR = {
       chooseAnother: 'Escolher outro arquivo',
       refused: 'O app recusou este arquivo',
       changes: 'O que muda na Configuração em uso',
+      replace: 'Substituir',
+      merge: 'Mesclar',
+      replaceHint: 'A Configuração deste Perfil passa a ser a do arquivo.',
+      mergeHint:
+        'O arquivo vence nos IDs iguais; o que só existe neste Perfil fica, e a sua cor de destaque também.',
       apply: 'Aplicar',
       orphans: {
         one: 'Sai {ids}. O Planning e a capacidade guardados com esse ID ficam sem uso.',

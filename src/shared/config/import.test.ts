@@ -147,3 +147,72 @@ describe('planImport (RN-CFG-09)', () => {
     expect(parseConfigurationText(exported).ok).toBe(true)
   })
 })
+
+describe('planImport no modo Mesclar (RN-CFG-11)', () => {
+  it('o arquivo vence no ID igual e o que só existe no Perfil fica', () => {
+    const current = config((draft) => {
+      draft.products.push({ ...draft.products[0], id: 'backoffice', name: 'Backoffice' })
+    })
+    const incoming = text((draft) => {
+      draft.products[0].name = 'Loja Nova'
+      draft.products.push({ ...draft.products[0], id: 'portal', name: 'Portal' })
+    })
+
+    const plan = planImport(current, incoming, 'merge')
+
+    if (!plan.ok) throw new Error(JSON.stringify(plan.issues))
+    const ids = plan.config.products.map((p) => p.id)
+    expect(ids).toContain('backoffice')
+    expect(ids).toContain('portal')
+    expect(plan.config.products.find((p) => p.id === 'loja')?.name).toBe('Loja Nova')
+    expect(plan.diff.products.removed).toEqual([])
+  })
+
+  it('Substituir tira o que só existe no Perfil, e a prévia mostra', () => {
+    const current = config((draft) => {
+      draft.products.push({ ...draft.products[0], id: 'backoffice', name: 'Backoffice' })
+    })
+    const plan = planImport(current, exampleText, 'replace')
+    if (!plan.ok) throw new Error(JSON.stringify(plan.issues))
+    expect(removedFromDiff(plan.diff).products).toEqual(['backoffice'])
+  })
+
+  it('a cor de destaque é de quem usa e fica ao mesclar', () => {
+    const current = config((draft) => {
+      draft.appearance = { accentColor: '#112233' }
+    })
+    const incoming = text((draft) => {
+      draft.appearance = { accentColor: '#445566' }
+    })
+    const plan = planImport(current, incoming, 'merge')
+    if (!plan.ok) throw new Error(JSON.stringify(plan.issues))
+    expect(plan.config.appearance?.accentColor).toBe('#112233')
+  })
+
+  it('a soma é validada de novo: o Produto do Perfil fora das Squads do arquivo é erro', () => {
+    const squads = readFileSync(resolve('examples/exemplo-squads.json'), 'utf8')
+    const squadConfig = validateConfiguration(JSON.parse(squads))
+    if (!squadConfig.ok) throw new Error('exemplo de Squads inválido')
+    const current = {
+      ...squadConfig.config,
+      products: [
+        ...squadConfig.config.products,
+        { ...squadConfig.config.products[0], id: 'sozinho', name: 'Sozinho' }
+      ],
+      squads: squadConfig.config.squads.map((squad, index) =>
+        index === 0 ? { ...squad, products: [...squad.products, 'sozinho'] } : squad
+      )
+    }
+
+    // O arquivo traz a mesma Squad sem o Produto "sozinho": ele fica sem Squad (RN-GLB-17).
+    const plan = planImport(current, squads, 'merge')
+
+    expect(plan.ok).toBe(false)
+  })
+
+  it('sem Perfil, Mesclar é o mesmo que Substituir', () => {
+    const plan = planImport(null, exampleText, 'merge')
+    if (!plan.ok) throw new Error('plano recusado')
+    expect(plan.content).toEqual(JSON.parse(exampleText))
+  })
+})

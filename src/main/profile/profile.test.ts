@@ -219,6 +219,15 @@ describe('previewImport (RN-CFG-09)', () => {
   })
 })
 
+describe('importConfig com modo (RN-CFG-11)', () => {
+  it('recusa modo desconhecido vindo da janela', () => {
+    createReadyProfile()
+    expect(() => importConfiguration(example, 'apagar-tudo' as never)).toThrow(
+      'Modo de importação desconhecido.'
+    )
+  })
+})
+
 describe('work-data', () => {
   it('grava e lê de volta; chave nunca gravada é null', () => {
     const id = createReadyProfile()

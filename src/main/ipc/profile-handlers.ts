@@ -38,9 +38,9 @@ export function registerProfileHandlers(): void {
     return reloadProfileState()
   })
 
-  handle('previewImport', (json) => previewImport(json))
+  handle('previewImport', (json, mode) => previewImport(json, mode))
 
-  handle('importConfig', (json) => importConfiguration(json))
+  handle('importConfig', (json, mode) => importConfiguration(json, mode))
 
   handle('openProfileFolder', async () => {
     const { dir } = requireActiveProfile()

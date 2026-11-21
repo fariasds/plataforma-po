@@ -3,7 +3,7 @@ import type { UpdateCheck, UpdateLink } from './update'
 import type { SerializedError } from './errors'
 import type { Configuration } from './config/schema'
 import type { ConfigurationIssue } from './config/validate'
-import type { ConfigurationDiff, ImportKind } from './config/import'
+import type { ConfigurationDiff, ImportKind, ImportMode } from './config/import'
 import type { AzureUserProfile, UnifiedSprint } from './azure'
 import type {
   DiscoveredArea,
@@ -117,9 +117,9 @@ export interface IpcApi {
    */
   createProfile(input: CreateProfileRequest): Promise<ProfileState>
   /** Valida e mostra o que mudaria, sem gravar nada (RN-CFG-09). */
-  previewImport(json: string): Promise<ImportPreview>
+  previewImport(json: string, mode?: ImportMode): Promise<ImportPreview>
   /** Valida antes de gravar; um JSON recusado não chega ao disco. */
-  importConfig(json: string): Promise<ImportConfigResult>
+  importConfig(json: string, mode?: ImportMode): Promise<ImportConfigResult>
   /** Abre a pasta do Perfil ativo no gerenciador de arquivos. */
   openProfileFolder(): Promise<void>
   /** `null` quando a chave nunca foi gravada. */
