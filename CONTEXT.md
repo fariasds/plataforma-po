@@ -26,8 +26,8 @@ _Avoid_: settings, parametrização, setup
 
 **Dados de trabalho**:
 Informação que nasce do uso do app (itens manuais do Planning, desmarcações,
-capacidade, planejamento de Roadmap). Pertence ao Perfil e não faz parte da
-Configuração.
+capacidade). Pertence ao Perfil e não faz parte da Configuração. O plano do Roadmap
+não é Dado de trabalho: mora na pasta de trabalho do Produto (ADR 0017).
 _Avoid_: cache, estado local, preferências
 
 **Cenário**:
