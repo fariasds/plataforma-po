@@ -1,3 +1,4 @@
+import { absorbCatalog } from '../services/flow/absorb'
 import { linkDraftFeature, linkPlannedPbi } from '../services/flow/reconcile'
 import { handle } from './registry'
 
@@ -13,4 +14,6 @@ export function registerFlowWriteHandlers(): void {
   handle('linkDraftFeature', (productId, slug, featureId) =>
     linkDraftFeature(productId, slug, featureId)
   )
+  // Absorver grava no catálogo da pasta o que veio da wiki, depois de o PO ver a diferença.
+  handle('absorbCatalog', (productId, useWiki) => absorbCatalog(productId, useWiki))
 }

@@ -359,3 +359,23 @@ PO, e o retrato grava `feedbacks: null`. Um estado escrito diferente do Azure n�
 encontra nada, sem erro: o Azure compara sem diferenciar maiúsculas.
 
 **Implementado em:** `src/shared/config/schema.ts`
+
+### RN-CFG-15 · O catálogo de regras de cada Produto
+
+Cada Produto pode ter a seção `catalog`, que diz de onde vêm as regras de negócio dele
+([31-catalogo.md](31-catalogo.md)):
+
+| Chave | Padrão | Para quê |
+|---|---|---|
+| `source` | obrigatório | `{ "kind": "wiki", "wiki", "rootPage", "project"? }` ou `{ "kind": "local" }` |
+| `ruleIdPattern` | `RN-[A-Z]+(?:-[A-Z]+)*-\d+` | Como o ID da regra se escreve no título. Expressão regular sem grupo de captura |
+| `consults` | `[]` | IDs de outros Produtos cujo catálogo este consulta (`RN-CAT-05`) |
+
+- **A wiki é indicada pelo nome**, nunca por URL (`RN-CFG-04`). `project` é opcional:
+  sem ele, vale o projeto do Produto.
+- **Consultar a si mesmo, ou um Produto que não existe**, é recusado (`RN-CFG-03`).
+
+**Casos de borda:** sem `catalog`, o Produto funciona sem catálogo: a tela Catálogo diz
+o que configurar, e nenhuma Feature chega a Publicada.
+
+**Implementado em:** `src/shared/config/schema.ts`

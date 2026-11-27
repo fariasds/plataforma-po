@@ -1,5 +1,7 @@
 import { refreshFlowSnapshot } from '../services/azure/flow-snapshot'
+import { previewCatalogAbsorb } from '../services/flow/absorb'
 import { getFlowBoard } from '../services/flow/board'
+import { getCatalogView } from '../services/flow/catalog'
 import { handle } from './registry'
 
 /**
@@ -10,4 +12,6 @@ import { handle } from './registry'
 export function registerFlowHandlers(): void {
   handle('refreshFlowSnapshot', (productId) => refreshFlowSnapshot(productId))
   handle('getFlowBoard', (productId) => getFlowBoard(productId))
+  handle('getCatalog', (productId) => getCatalogView(productId))
+  handle('previewCatalogAbsorb', (productId) => previewCatalogAbsorb(productId))
 }

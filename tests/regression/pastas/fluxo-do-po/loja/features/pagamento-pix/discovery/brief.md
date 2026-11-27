@@ -12,7 +12,7 @@ Cliente da Loja Online.
 - Feedbacks do board da Loja
 
 ## 4. Como é hoje
-Hoje a RN-PAG-012 trata só cartão e boleto.
+Hoje a RN-PAG-012 trata só cartão e boleto. O limite por pedido vem da RN-PAG-099.
 
 ## 5. Objetivo e métrica
 Converter quem hoje abandona no pagamento; meta: 20% menos abandono em 60 dias.

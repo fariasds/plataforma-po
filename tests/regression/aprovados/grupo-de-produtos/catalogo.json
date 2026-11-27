@@ -1,0 +1,26 @@
+{
+  "app": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [],
+      "duplicates": [],
+      "pages": [],
+      "productId": "app",
+      "source": null,
+      "workFolder": "unset"
+    }
+  },
+  "loja": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [],
+      "duplicates": [],
+      "pages": [],
+      "productId": "loja",
+      "source": null,
+      "workFolder": "unset"
+    }
+  }
+}

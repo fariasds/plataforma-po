@@ -101,3 +101,9 @@ _Avoid_: status, etapa (etapa é do fluxo, não da Feature)
 O que falta para a Feature andar, calculado dos artefatos: Decisão em Proposta, PBI
 sem ID, regra em duas Features. Some quando o artefato existe; ninguém a marca.
 _Avoid_: tarefa, checklist (o checklist é o do Pronta para quebra)
+
+**Catálogo**:
+As regras de negócio de um Produto do PO, uma página por domínio, em `catalogo/` na
+pasta de trabalho. Pode vir da wiki do Azure, que é a versão oficial, ou ser mantido
+só na pasta. Não confundir com as regras do próprio app, em `docs/regras-de-negocio/`.
+_Avoid_: base de conhecimento, documentação

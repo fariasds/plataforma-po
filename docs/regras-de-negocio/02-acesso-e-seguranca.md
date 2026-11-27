@@ -61,6 +61,7 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-34 | O servidor MCP não faz rede nem lê o PAT | `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts` |
 | RN-SEC-35 | O servidor MCP grava só a proposta | `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts` |
 | RN-SEC-36 | A pasta de trabalho só vem do diálogo do sistema | `tests/security/rn-sec-36-pasta-de-trabalho-pelo-dialogo.test.ts` |
+| RN-SEC-37 | O que vem da wiki só é gravado dentro de catalogo/ | `tests/security/rn-sec-37-catalogo-so-dentro-da-pasta.test.ts` |
 
 As regras da Configuração que protegem o PAT (`RN-CFG-04`, `05` e `06`) estão em
 [03-configuracao.md](03-configuracao.md), cada uma com o seu teste.
@@ -589,6 +590,22 @@ ele:
 chama os handlers com o diálogo simulado: o argumento a mais é ignorado, a pasta de
 dados do app (ela mesma, dentro e acima) é recusada, cancelar não grava, e Produto
 desconhecido não abre o diálogo.
+
+### RN-SEC-37 · O que vem da wiki só é gravado dentro de catalogo/
+
+Absorver o catálogo (`RN-CAT-03`) grava arquivos com nomes que saem do caminho das
+páginas, que quem edita a wiki escolhe, e da base da absorção, que fica na pasta do
+PO. Por isso:
+
+- **O caminho de página que sobe** (`..`) ou desce para fora da raiz não vira arquivo.
+- **Todo arquivo a gravar é conferido** contra `catalogo/`: caminho absoluto, que sobe
+  da pasta ou que não é Markdown é recusado, e a absorção para.
+- **Ou entra tudo, ou nada:** os caminhos são conferidos antes do primeiro arquivo ser
+  gravado.
+
+**Provado por:** `tests/security/rn-sec-37-catalogo-so-dentro-da-pasta.test.ts`, que
+troca o caminho na base da absorção por um que sobe da pasta, um absoluto e um que não
+é Markdown, e confere que nada foi gravado, nem a página nova.
 
 ---
 

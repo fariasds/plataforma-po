@@ -143,6 +143,18 @@
             "stage": "Discovery"
           },
           {
+            "code": "rule-missing",
+            "file": "discovery/brief.md",
+            "message": "RN-PAG-099, citada no Brief, não existe no catálogo.",
+            "stage": "Discovery"
+          },
+          {
+            "code": "rule-changed",
+            "file": "discovery/brief.md",
+            "message": "RN-PAG-012 mudou em 2026-11-20, depois da D1 (2026-11-18). Revalide antes da quebra.",
+            "stage": "Quebra"
+          },
+          {
             "code": "unrecognized-line",
             "file": "discovery/decisoes.md",
             "line": 10,
@@ -228,6 +240,12 @@
         "key": "#4135",
         "pendencies": [
           {
+            "code": "rule-changed",
+            "file": "discovery/brief.md",
+            "message": "RN-PAG-012 mudou em 2026-11-20, depois da D1 (2026-09-20). Revalide antes da quebra.",
+            "stage": "Quebra"
+          },
+          {
             "code": "not-in-snapshot",
             "message": "A Feature #4135 não está no retrato: fechada há mais de 180 dias, removida ou de outro Produto.",
             "stage": "Discovery"
@@ -290,6 +308,12 @@
             "stage": "Quebra"
           },
           {
+            "code": "rule-changed",
+            "file": "discovery/brief.md",
+            "message": "RN-PAG-012 mudou em 2026-11-20, depois da D1 (2026-10-01). Revalide antes da quebra.",
+            "stage": "Quebra"
+          },
+          {
             "code": "rule-shared",
             "file": "plano-pbis.md",
             "message": "RN-CUP-009 também está no plano de outra Feature: pasta retirada-loja.",
@@ -318,60 +342,6 @@
         "stale": false,
         "staleDays": 1,
         "title": "Cupom de desconto por categoria"
-      },
-      {
-        "azureState": "Done",
-        "checklist": [
-          {
-            "key": "brief",
-            "label": "Brief com Problema, Para quem, Objetivo e Escopo",
-            "ok": true
-          },
-          {
-            "key": "decisions",
-            "label": "Nenhuma Decisão em Proposta",
-            "ok": true
-          },
-          {
-            "key": "questions",
-            "label": "Nenhuma pergunta em aberto que bloqueie a quebra",
-            "ok": true
-          },
-          {
-            "key": "plan",
-            "label": "Plano de PBIs cobrindo todo Requisito",
-            "ok": true
-          },
-          {
-            "key": "design",
-            "label": "PBIs de design escritos",
-            "ok": true
-          }
-        ],
-        "divergences": [
-          "O Azure diz Done, e a Fase é Em quebra."
-        ],
-        "featureId": 4060,
-        "key": "#4060",
-        "pendencies": [],
-        "phase": "Em quebra",
-        "plan": {
-          "active": 1,
-          "written": 1
-        },
-        "priority": null,
-        "readmePhase": "Publicada",
-        "reconciliation": {
-          "feature": null,
-          "pbis": []
-        },
-        "rules": [
-          "RN-TRO-001"
-        ],
-        "slug": "troca-sem-nota",
-        "stale": false,
-        "staleDays": 60,
-        "title": "Troca sem nota fiscal"
       },
       {
         "azureState": null,
@@ -414,6 +384,12 @@
             "stage": "Discovery"
           },
           {
+            "code": "rule-discontinued",
+            "file": "plano-pbis.md",
+            "message": "RN-PAG-015 está descontinuada no catálogo.",
+            "stage": "Quebra"
+          },
+          {
             "code": "rule-shared",
             "file": "plano-pbis.md",
             "message": "RN-CUP-009 também está no plano de outra Feature: #4088.",
@@ -449,12 +425,65 @@
           ]
         },
         "rules": [
-          "RN-CUP-009"
+          "RN-CUP-009",
+          "RN-PAG-015"
         ],
         "slug": "retirada-loja",
         "stale": false,
         "staleDays": 10,
         "title": "Retirada na loja"
+      },
+      {
+        "azureState": "Done",
+        "checklist": [
+          {
+            "key": "brief",
+            "label": "Brief com Problema, Para quem, Objetivo e Escopo",
+            "ok": true
+          },
+          {
+            "key": "decisions",
+            "label": "Nenhuma Decisão em Proposta",
+            "ok": true
+          },
+          {
+            "key": "questions",
+            "label": "Nenhuma pergunta em aberto que bloqueie a quebra",
+            "ok": true
+          },
+          {
+            "key": "plan",
+            "label": "Plano de PBIs cobrindo todo Requisito",
+            "ok": true
+          },
+          {
+            "key": "design",
+            "label": "PBIs de design escritos",
+            "ok": true
+          }
+        ],
+        "divergences": [],
+        "featureId": 4060,
+        "key": "#4060",
+        "pendencies": [],
+        "phase": "Publicada",
+        "plan": {
+          "active": 1,
+          "written": 1
+        },
+        "priority": null,
+        "readmePhase": null,
+        "reconciliation": {
+          "feature": null,
+          "pbis": []
+        },
+        "rules": [
+          "RN-TRO-001"
+        ],
+        "slug": "troca-sem-nota",
+        "stale": false,
+        "staleDays": 60,
+        "title": "Troca sem nota fiscal"
       },
       {
         "azureState": null,

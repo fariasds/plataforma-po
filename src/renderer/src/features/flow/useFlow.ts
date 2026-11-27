@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query'
+import type { AbsorbPreview, CatalogView } from '@shared/flow-absorb'
 import type { FlowBoard } from '@shared/flow-board'
 import type { FlowSnapshotSummary } from '@shared/flow-snapshot'
 import { ipc } from '../../ipc/client'
@@ -70,5 +71,34 @@ export function useLinkDraftFeature(): ReturnType<
   return useMutation({
     mutationFn: ({ productId, slug, id }) => ipc.linkDraftFeature(productId, slug, id),
     onSuccess: refresh
+  })
+}
+
+export function useCatalog(productId: string): UseQueryResult<CatalogView, Error> {
+  return useQuery({
+    queryKey: ['catalog', productId],
+    enabled: productId !== '',
+    // O PO e a IA mexem no catálogo por fora: é sempre lido de novo.
+    staleTime: 0,
+    queryFn: () => ipc.getCatalog(productId)
+  })
+}
+
+/** A diferença da absorção: lê a wiki, então só quando o PO pede. */
+export function usePreviewAbsorb(): ReturnType<typeof useMutation<AbsorbPreview, Error, string>> {
+  return useMutation({ mutationFn: (productId: string) => ipc.previewCatalogAbsorb(productId) })
+}
+
+export function useAbsorbCatalog(): ReturnType<
+  typeof useMutation<CatalogView, Error, { productId: string; useWiki: string[] }>
+> {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ productId, useWiki }) => ipc.absorbCatalog(productId, useWiki),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['catalog'] })
+      // O catálogo novo pode levar uma Feature a Publicada (RN-FLX-05).
+      await queryClient.invalidateQueries({ queryKey: ['flow-board'] })
+    }
   })
 }

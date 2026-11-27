@@ -33,6 +33,8 @@ export interface UnrecognizedLine {
 export interface Requirement {
   key: string
   decisions: string[]
+  /** As regras atuais que o Requisito diz impactar ("RNs impactadas"), para a revalidação. */
+  rules: string[]
 }
 
 export interface OpenQuestion {
@@ -47,6 +49,8 @@ export interface Brief {
   sections: { problem: boolean; audience: boolean; objective: boolean; scope: boolean }
   requirements: Requirement[]
   questions: OpenQuestion[]
+  /** Toda regra citada pelo ID no Brief, para conferir no catálogo (RN-CAT-04). */
+  citations: string[]
 }
 
 export interface Decision {
@@ -168,7 +172,8 @@ export function expandRuleIds(text: string): string[] {
   let prefix: string | null = null
   let width = 0
   let last = 0
-  const pattern = /RN-([A-Z]{2,})-(\d+)|\ba\s+(\d+)\b|\b(\d+)\b/g
+  // O prefixo pode ter subdomínio: `RN-ELN-APP-001`.
+  const pattern = /RN-((?:[A-Z]{2,}-)*[A-Z]{2,})-(\d+)|\ba\s+(\d+)\b|\b(\d+)\b/g
   for (const m of stripped.matchAll(pattern)) {
     if (m[1] !== undefined) {
       prefix = `RN-${m[1]}`
@@ -251,13 +256,14 @@ function parseBrief(text: string): Brief {
   for (const line of requirementsSection?.body ?? []) {
     const head = /^\s*-\s*\*\*(R\d+)\*\*/.exec(line)
     if (head) {
-      requirements.push({ key: head[1], decisions: [] })
+      requirements.push({ key: head[1], decisions: [], rules: [] })
       continue
     }
+    const current = requirements[requirements.length - 1]
     const decisions = /Decis[õo]es:\s*([^·]*)/.exec(line)
-    if (decisions && requirements.length > 0) {
-      requirements[requirements.length - 1].decisions = keysIn(decisions[1], 'D')
-    }
+    if (decisions && current) current.decisions = keysIn(decisions[1], 'D')
+    const impacted = /RNs impactadas[^:]*:\s*(.*)$/.exec(line)
+    if (impacted && current) current.rules = expandRuleIds(impacted[1])
   }
 
   const questionsSection = section((t) => t.startsWith('perguntas em aberto'))
@@ -291,7 +297,10 @@ function parseBrief(text: string): Brief {
       scope: has((t) => t.startsWith('escopo'))
     },
     requirements,
-    questions
+    questions,
+    citations: [
+      ...new Set([...text.matchAll(/RN-(?:[A-Z]{2,}-)*[A-Z]{2,}-\d+/g)].map((match) => match[0]))
+    ]
   }
 }
 

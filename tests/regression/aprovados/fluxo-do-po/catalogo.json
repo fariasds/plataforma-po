@@ -1,0 +1,157 @@
+{
+  "app": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [
+        {
+          "name": "Loja Online",
+          "productId": "loja",
+          "rules": 5
+        }
+      ],
+      "duplicates": [],
+      "pages": [],
+      "productId": "app",
+      "source": {
+        "kind": "local"
+      },
+      "workFolder": "unset"
+    }
+  },
+  "loja": {
+    "absorcao": {
+      "localOnly": [
+        "Rascunho de frete.md"
+      ],
+      "pages": [
+        {
+          "file": "Cupons.md",
+          "path": "/Catálogo/Loja/Cupons",
+          "rules": {
+            "added": [],
+            "changed": [],
+            "removed": []
+          },
+          "status": "unchanged"
+        },
+        {
+          "file": "Entregas.md",
+          "path": "/Catálogo/Loja/Entregas",
+          "rules": {
+            "added": [
+              "RN-ENT-001"
+            ],
+            "changed": [],
+            "removed": []
+          },
+          "status": "new"
+        },
+        {
+          "file": "Pagamentos.md",
+          "path": "/Catálogo/Loja/Pagamentos",
+          "rules": {
+            "added": [
+              "RN-PAG-016"
+            ],
+            "changed": [],
+            "removed": []
+          },
+          "status": "changed"
+        },
+        {
+          "file": "Trocas.md",
+          "path": "/Catálogo/Loja/Trocas",
+          "rules": {
+            "added": [],
+            "changed": [
+              "RN-TRO-001"
+            ],
+            "removed": []
+          },
+          "status": "conflict"
+        }
+      ],
+      "productId": "loja",
+      "rootPage": "/Catálogo/Loja",
+      "wiki": "Contoso.wiki"
+    },
+    "catalogo": {
+      "absorbedAt": "2026-11-10T12:00:00.000Z",
+      "consults": [],
+      "duplicates": [],
+      "pages": [
+        {
+          "file": "Cupons.md",
+          "rules": [
+            {
+              "id": "RN-CUP-004",
+              "status": "Ativa",
+              "title": "Cupom por categoria do produto",
+              "updated": "2026-10-01",
+              "validation": "Não validada"
+            }
+          ],
+          "title": "Cupons (CUP)",
+          "toPublish": false
+        },
+        {
+          "file": "Pagamentos.md",
+          "rules": [
+            {
+              "id": "RN-PAG-012",
+              "status": "Ativa",
+              "title": "Formas de pagamento aceitas no checkout",
+              "updated": "2026-11-20",
+              "validation": "Validada"
+            },
+            {
+              "id": "RN-PAG-015",
+              "status": "Descontinuada",
+              "title": "Limite do Pix por pedido",
+              "updated": "2026-08-01",
+              "validation": "Não validada"
+            }
+          ],
+          "title": "Pagamentos (PAG)",
+          "toPublish": false
+        },
+        {
+          "file": "Rascunho de frete.md",
+          "rules": [
+            {
+              "id": "RN-FRT-001",
+              "status": "Em revisão",
+              "title": "Frete grátis na retirada",
+              "updated": "2026-11-26",
+              "validation": "Não validada"
+            }
+          ],
+          "title": "Frete (FRT)",
+          "toPublish": true
+        },
+        {
+          "file": "Trocas.md",
+          "rules": [
+            {
+              "id": "RN-TRO-001",
+              "status": "Ativa",
+              "title": "Troca sem nota fiscal",
+              "updated": "2026-09-10",
+              "validation": "Não validada"
+            }
+          ],
+          "title": "Trocas (TRO)",
+          "toPublish": true
+        }
+      ],
+      "productId": "loja",
+      "source": {
+        "kind": "wiki",
+        "rootPage": "/Catálogo/Loja",
+        "wiki": "Contoso.wiki"
+      },
+      "workFolder": "ok"
+    }
+  }
+}

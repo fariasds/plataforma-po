@@ -170,6 +170,58 @@ const poFlowSchema = z
   .default({ featureType: 'Feature', priorityField: DEFAULT_PRIORITY_FIELD, feedback: null })
   .describe('Fluxo do PO: o que é Feature, como ela é priorizada e de onde vem o feedback.')
 
+// ─── Catálogo de regras do Produto (RN-CFG-15) ───────────────────────────────
+
+/** O ID de regra do processo rule-first: `RN-DOC-045`, ou com subdomínio, `RN-ELN-APP-001`. */
+export const DEFAULT_RULE_ID_PATTERN = 'RN-[A-Z]+(?:-[A-Z]+)*-\\d+'
+
+const ruleIdPattern = z
+  .string()
+  .min(3)
+  .max(100)
+  .refine((value) => {
+    try {
+      // Sem grupo de captura: o app envolve o padrão no dele.
+      return new RegExp(value).source.length > 0 && !/\((?!\?:)/.test(value)
+    } catch {
+      return false
+    }
+  }, 'Use uma expressão regular válida, sem grupo de captura (ex.: "RN-[A-Z]+-\\\\d+").')
+
+const catalogSourceSchema = z.discriminatedUnion('kind', [
+  z
+    .strictObject({
+      kind: z.literal('wiki'),
+      wiki: nonEmpty.describe('Nome da wiki no Azure DevOps (ex.: "Loja.wiki"). Nunca uma URL.'),
+      project: nonEmpty.optional().describe('Projeto da wiki. Sem ele, vale o projeto do Produto.'),
+      rootPage: z
+        .string()
+        .regex(/^\/[^\n]*$/, 'Caminho da página na wiki, começando por "/".')
+        .describe(
+          'Página que reúne o catálogo deste Produto (ex.: "/Catálogo de Regras/Loja"). As páginas abaixo dela são os domínios.'
+        )
+    })
+    .describe('O catálogo é absorvido da wiki do Azure DevOps.'),
+  z
+    .strictObject({ kind: z.literal('local') })
+    .describe('O catálogo é a pasta catalogo/ da pasta de trabalho, mantida pelo PO.')
+])
+
+const catalogSchema = z
+  .strictObject({
+    source: catalogSourceSchema,
+    ruleIdPattern: ruleIdPattern
+      .default(DEFAULT_RULE_ID_PATTERN)
+      .describe('Como o ID de uma regra se escreve no título "### <ID> · <título>".'),
+    consults: z
+      .array(nonEmpty)
+      .default([])
+      .describe(
+        'IDs de outros Produtos cujo catálogo este consulta: a IA lê e cita as regras deles, mas não grava lá.'
+      )
+  })
+  .describe('De onde vêm as regras de negócio do Produto (ADR 0015).')
+
 // ─── Produto e Grupo ─────────────────────────────────────────────────────────
 
 export const productSchema = z
@@ -202,7 +254,11 @@ export const productSchema = z
       .describe(
         '"sprints": o Produto tem iterações próprias no Azure. "continuous": fluxo sem iterações; os indicadores o medem pela janela de datas da Sprint unificada dos demais Produtos, e ele não aparece no Planning nem na Daily.'
       ),
-    poFlow: poFlowSchema
+    poFlow: poFlowSchema,
+    catalog: catalogSchema
+      .nullable()
+      .default(null)
+      .describe('Sem ele, o fluxo do PO funciona sem catálogo: nenhuma Feature chega a Publicada.')
   })
   .describe('Unidade que o PO acompanha.')
 
@@ -471,6 +527,23 @@ function checkReferences(config: ConfigurationShape, ctx: z.RefinementCtx): void
         `O Perfil de processo "${product.processProfile}" não existe em "processProfiles".`
       )
     }
+  })
+
+  // Catálogo consultado: outro Produto que existe (RN-CFG-15).
+  config.products.forEach((product, i) => {
+    product.catalog?.consults.forEach((ref, j) => {
+      if (ref === product.id) {
+        issue(
+          ['products', i, 'catalog', 'consults', j],
+          'O Produto não consulta o próprio catálogo.'
+        )
+      } else if (!productIds.has(ref)) {
+        issue(
+          ['products', i, 'catalog', 'consults', j],
+          `O catálogo consulta o Produto "${ref}", que não existe.`
+        )
+      }
+    })
   })
 
   const groupIds = new Set<string>()

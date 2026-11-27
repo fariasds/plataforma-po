@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "absorbedAt": "2026-11-10T12:00:00.000Z",
+  "source": {
+    "wiki": "Contoso.wiki",
+    "rootPage": "/Catálogo/Loja"
+  },
+  "pages": {
+    "/Catálogo/Loja/Pagamentos": {
+      "file": "Pagamentos.md",
+      "hash": "ed53a77a8870b"
+    },
+    "/Catálogo/Loja/Cupons": {
+      "file": "Cupons.md",
+      "hash": "1cba660d31e4cf"
+    },
+    "/Catálogo/Loja/Trocas": {
+      "file": "Trocas.md",
+      "hash": "e39f91fbc7d1c"
+    }
+  }
+}

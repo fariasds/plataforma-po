@@ -132,7 +132,7 @@ Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
   desconhecida. Só ela mostra a versão do app no cabeçalho.
 - **Itens de primeiro nível** são telas (`MAIN`) ou grupos. Todo item tem ícone de
   `@ant-design/icons` — recolhido, o ícone é tudo o que sobra.
-- **Grupo** (hoje só "Review", em `REVIEW`) é um botão com seta que abre e fecha
+- **Grupo** ("Fluxo do PO", em `FLOW`, e "Review", em `REVIEW`) é um botão com seta que abre e fecha
   os subitens abaixo dele. Ele começa aberto quando a tela atual é dele. Subitens
   não têm ícone e ficam recuados, alinhados ao nome do grupo.
 - **Grupo com o menu recolhido** abre os subitens num menu flutuante ao lado do

@@ -58,6 +58,9 @@ export interface Pendency {
     | 'unrecognized-line'
     | 'duplicate-folder'
     | 'not-in-snapshot'
+    | 'rule-missing'
+    | 'rule-discontinued'
+    | 'rule-changed'
   stage: FlowStage
   message: string
   file?: ArtifactFile
@@ -112,10 +115,23 @@ export interface FlowBoard {
   features: BoardFeature[]
 }
 
-/** O catálogo do Produto, quando existir (fatia do Catálogo). Sem ele, nenhuma Feature chega a Publicada. */
+/** Uma regra do catálogo, como o quadro precisa dela. */
+export interface CatalogRuleRef {
+  status: 'Ativa' | 'Em revisão' | 'Descontinuada' | null
+  /** `AAAA-MM-DD`, ou `null`. */
+  updated: string | null
+  /** PBIs da Origem e das Atualizações. */
+  origins: number[]
+  /** A regra é de um catálogo consultado, de outro Produto (RN-CAT-05). */
+  consulted: boolean
+}
+
+/** O catálogo do Produto (ADR 0015). Sem ele, nenhuma Feature chega a Publicada. */
 export interface RuleCatalog {
-  /** A regra existe e cita estes PBIs na Origem ou nas Atualizações? */
+  /** A regra existe no catálogo do Produto e cita estes PBIs na Origem ou nas Atualizações? */
   origins(ruleId: string): number[] | null
+  /** A regra no catálogo do Produto ou num consultado; `null` se não existe em nenhum. */
+  find(ruleId: string): CatalogRuleRef | null
 }
 
 export interface FeatureFolderInput {
@@ -343,6 +359,70 @@ function ruleWithoutDev(folder: ParsedFeatureFolder): Pendency[] {
     }))
 }
 
+/**
+ * O que o catálogo diz das regras que a Feature cita (RN-CAT-04, RN-FLX-20): regra do
+ * Brief que não existe, regra descontinuada e regra que mudou depois da Decisão.
+ */
+function catalogPendencies(folder: ParsedFeatureFolder, catalog: RuleCatalog): Pendency[] {
+  const result: Pendency[] = []
+  const plannedRules = featureRules(folder)
+  const ownPbis = new Set(
+    (folder.plan?.pbis ?? []).flatMap((pbi) => (pbi.azureId !== null ? [pbi.azureId] : []))
+  )
+  for (const id of folder.brief?.citations ?? []) {
+    const rule = catalog.find(id)
+    if (rule === null) {
+      // Regra do plano que ainda não está no catálogo é regra nova, e é esperado.
+      if (plannedRules.includes(id)) continue
+      result.push({
+        code: 'rule-missing',
+        stage: 'Discovery',
+        message: `${id}, citada no Brief, não existe no catálogo.`,
+        file: ARTIFACT_FILES.brief
+      })
+    }
+  }
+  for (const id of [...new Set([...(folder.brief?.citations ?? []), ...plannedRules])]) {
+    if (catalog.find(id)?.status === 'Descontinuada') {
+      result.push({
+        code: 'rule-discontinued',
+        stage: plannedRules.includes(id) ? 'Quebra' : 'Discovery',
+        message: `${id} está descontinuada no catálogo.`,
+        file: plannedRules.includes(id) ? ARTIFACT_FILES.plan : ARTIFACT_FILES.brief
+      })
+    }
+  }
+
+  // RN-FLX-20: a regra mudou depois da última Decisão aceita do Requisito que a cita.
+  const decisionDate = new Map(
+    (folder.decisions ?? [])
+      .filter((d) => d.status === 'Aceita' && d.date !== null)
+      .map((d) => [d.key, d.date!])
+  )
+  const reported = new Set<string>()
+  for (const requirement of folder.brief?.requirements ?? []) {
+    const dated = requirement.decisions.flatMap((key) =>
+      decisionDate.has(key) ? [[key, decisionDate.get(key)!] as const] : []
+    )
+    if (dated.length === 0) continue
+    const [lastKey, lastDate] = dated.reduce((a, b) => (b[1] > a[1] ? b : a))
+    for (const id of requirement.rules) {
+      const rule = catalog.find(id)
+      if (!rule || !rule.updated || rule.updated <= lastDate || reported.has(id)) continue
+      // A mudança é desta mesma Feature: a regra cita um PBI do plano.
+      if (rule.origins.some((pbi) => ownPbis.has(pbi))) continue
+      reported.add(id)
+      result.push({
+        code: 'rule-changed',
+        stage: 'Quebra',
+        message: `${id} mudou em ${rule.updated}, depois da ${lastKey} (${lastDate}). Revalide antes da quebra.`,
+        file: ARTIFACT_FILES.brief
+      })
+    }
+  }
+  return result
+}
+
 function unrecognizedPendencies(folder: ParsedFeatureFolder): Pendency[] {
   return folder.unrecognized.map((u) => ({
     code: 'unrecognized-line' as const,
@@ -419,6 +499,7 @@ export function buildFlowBoard(input: BoardInput): FlowBoard {
         ...discoveryPendencies(folder, reconciliation.pbis),
         ...ruleWithoutDev(folder)
       )
+      if (catalog && phase !== 'Publicada') pendencies.push(...catalogPendencies(folder, catalog))
       for (const rule of rules) {
         const others = (rulesOwners.get(rule) ?? []).filter((other) => other.slug !== folder.slug)
         if (others.length === 0) continue

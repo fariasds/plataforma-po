@@ -312,6 +312,90 @@
               }
             },
             "additionalProperties": false
+          },
+          "catalog": {
+            "default": null,
+            "description": "Sem ele, o fluxo do PO funciona sem catálogo: nenhuma Feature chega a Publicada.",
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "type": "string",
+                            "const": "wiki"
+                          },
+                          "wiki": {
+                            "type": "string",
+                            "minLength": 1,
+                            "description": "Nome da wiki no Azure DevOps (ex.: \"Loja.wiki\"). Nunca uma URL."
+                          },
+                          "project": {
+                            "description": "Projeto da wiki. Sem ele, vale o projeto do Produto.",
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "rootPage": {
+                            "type": "string",
+                            "pattern": "^\\/[^\\n]*$",
+                            "description": "Página que reúne o catálogo deste Produto (ex.: \"/Catálogo de Regras/Loja\"). As páginas abaixo dela são os domínios."
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "wiki",
+                          "rootPage"
+                        ],
+                        "additionalProperties": false,
+                        "description": "O catálogo é absorvido da wiki do Azure DevOps."
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "type": "string",
+                            "const": "local"
+                          }
+                        },
+                        "required": [
+                          "kind"
+                        ],
+                        "additionalProperties": false,
+                        "description": "O catálogo é a pasta catalogo/ da pasta de trabalho, mantida pelo PO."
+                      }
+                    ]
+                  },
+                  "ruleIdPattern": {
+                    "default": "RN-[A-Z]+(?:-[A-Z]+)*-\\d+",
+                    "description": "Como o ID de uma regra se escreve no título \"### <ID> · <título>\".",
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 100
+                  },
+                  "consults": {
+                    "default": [],
+                    "description": "IDs de outros Produtos cujo catálogo este consulta: a IA lê e cita as regras deles, mas não grava lá.",
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "source"
+                ],
+                "additionalProperties": false,
+                "description": "De onde vêm as regras de negócio do Produto (ADR 0015)."
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [

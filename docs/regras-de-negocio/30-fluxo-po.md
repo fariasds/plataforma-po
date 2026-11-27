@@ -141,8 +141,9 @@ PBI **ativo** é o Planejado ou o Escrito; os outros são histórico do plano.
 
 - **A linha `Fase:` do README não entra no cálculo.** Quando ela diverge do
   calculado, o quadro mostra as duas.
-- **Publicada depende do catálogo de regras absorvido** (ADR 0015). Enquanto o
-  Produto não tem catálogo, a Feature com regras fica em Em quebra.
+- **Publicada depende do catálogo de regras** ([31-catalogo.md](31-catalogo.md)). Enquanto
+  o Produto não tem catálogo, a Feature com regras fica em Em quebra. Vale a Origem e
+  o bloco Atualizações da regra: a alterada cita o PBI da Feature nas Atualizações.
 
 ### RN-FLX-06 · O checklist de "Pronta para quebra"
 
@@ -197,8 +198,11 @@ do fluxo a que pertence:
 | Regra da Feature que não está em nenhum PBI de desenvolvimento | Quebra |
 | Regra que outra Feature também tem no plano (`RN-FLX-19`) | Quebra |
 
-As pendências do catálogo, da reconciliação com o Azure e do acompanhamento chegam
-com as regras delas.
+| Regra citada no Brief que não existe no catálogo, ou regra descontinuada (`RN-CAT-04`) | Discovery, Quebra |
+| Regra que mudou depois da Decisão (`RN-FLX-20`) | Quebra |
+
+As pendências da reconciliação com o Azure e do acompanhamento chegam com as regras
+delas.
 
 ### RN-FLX-11 · Parada há N dias
 
@@ -222,6 +226,17 @@ reservado duas vezes; se existe, as duas Features a alteram ao mesmo tempo. As d
 situações pedem decisão antes da gravação no catálogo.
 
 Feature arquivada não conta.
+
+### RN-FLX-20 · Revalidação
+
+Com catálogo, a regra que um Requisito diz impactar (`RNs impactadas:` no Brief) e
+que foi **atualizada depois da última Decisão aceita** desse Requisito é pendência:
+"RN-PAG-012 mudou em 2026-11-20, depois da D1 (2026-11-18)". É o Passo 0 da quebra,
+feito pelo app: a Decisão pode ter sido tomada sobre uma regra que já não é a mesma.
+
+A comparação é pela data de `Atualizado:` da regra e pela `Data:` das Decisões.
+Mudança que a própria Feature fez (a regra cita um PBI dela) não conta. Feature
+Publicada não é revalidada.
 
 ---
 

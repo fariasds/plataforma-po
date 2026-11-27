@@ -5,6 +5,7 @@ import { requireActiveProfile } from '../../profile/profile-store'
 import { readWorkData } from '../../profile/work-data'
 import { getWorkFolder } from '../../profile/work-folders'
 import { activeProduct } from '../azure/scope'
+import { boardCatalog } from './catalog'
 import { readFeatureFolders } from './feature-folders'
 
 /**
@@ -34,7 +35,7 @@ export function getFlowBoard(productId: string, now = new Date()): FlowBoard {
     now,
     deliveredStates: product.processProfile.deliveredStates,
     terminalStates: product.processProfile.terminalStates,
-    // Sem catálogo de regras absorvido (ADR 0015), nenhuma Feature chega a Publicada.
-    catalog: null
+    // Sem catálogo de regras (ADR 0015), nenhuma Feature chega a Publicada.
+    catalog: workFolder === 'ok' ? boardCatalog(product.id) : null
   })
 }

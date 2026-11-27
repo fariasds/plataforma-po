@@ -3,6 +3,7 @@ import { AppLayout } from '../components/AppLayout'
 import { BugAnalysisScreen } from '../features/bug-analysis/BugAnalysisScreen'
 import { ConnectAiScreen } from '../features/connect-ai/ConnectAiScreen'
 import { DailyScreen } from '../features/daily/DailyScreen'
+import { CatalogScreen } from '../features/flow/CatalogScreen'
 import { FeaturesScreen } from '../features/flow/FeaturesScreen'
 import { HomeScreen } from '../features/home/HomeScreen'
 import { PlanningScreen } from '../features/planning/PlanningScreen'
@@ -35,6 +36,7 @@ export const router = createHashRouter([
       { path: 'planning', element: <PlanningScreen /> },
       { path: 'daily', element: <DailyScreen /> },
       { path: 'features', element: <FeaturesScreen /> },
+      { path: 'catalogo', element: <CatalogScreen /> },
       { path: 'configuracao', element: <SettingsScreen /> },
       { path: 'configuracao/assistente', element: <RedoWizardScreen /> },
       { path: 'configuracao/conectar-ia', element: <ConnectAiScreen /> },

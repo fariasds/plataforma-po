@@ -92,12 +92,20 @@ export interface FakePerson {
   descriptor: string
 }
 
+/** Uma wiki do projeto, com as páginas pelo caminho (`/Catálogo/Loja/Cupons`). */
+export interface FakeWiki {
+  name: string
+  project: string
+  pages: Array<{ path: string; content: string }>
+}
+
 export interface AzureState {
   organization: string
   /** Dono do PAT fictício: quem `connectionData` diz que está conectado. */
   user: FakePerson
   projects: FakeProject[]
   workItems: FakeWorkItem[]
+  wikis?: FakeWiki[]
 }
 
 export interface Scenario {

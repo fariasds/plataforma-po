@@ -136,6 +136,14 @@ describe('expandRuleIds: as abreviações do PO', () => {
     ).toEqual(['RN-DOC-080', 'RN-PED-045'])
   })
 
+  it('o prefixo com subdomínio também continua', () => {
+    expect(expandRuleIds('RN-ELN-APP-001, 003 a 004')).toEqual([
+      'RN-ELN-APP-001',
+      'RN-ELN-APP-003',
+      'RN-ELN-APP-004'
+    ])
+  })
+
   it('"—" e texto sem regra não dão nada', () => {
     expect(expandRuleIds('—')).toEqual([])
     expect(expandRuleIds('Passo 2 de 4')).toEqual([])
@@ -190,12 +198,16 @@ describe('Brief', () => {
     expect(brief.sections).toEqual({ problem: true, audience: true, objective: false, scope: true })
   })
 
-  it('Requisitos com as Decisões de origem', () => {
+  it('Requisitos com as Decisões de origem e as regras impactadas', () => {
     expect(brief.requirements).toEqual([
-      { key: 'R1', decisions: ['D1'] },
-      { key: 'R2', decisions: ['D1', 'D2'] },
-      { key: 'R3', decisions: ['D2'] }
+      { key: 'R1', decisions: ['D1'], rules: ['RN-PAG-012'] },
+      { key: 'R2', decisions: ['D1', 'D2'], rules: [] },
+      { key: 'R3', decisions: ['D2'], rules: [] }
     ])
+  })
+
+  it('toda regra citada pelo ID, para conferir no catálogo', () => {
+    expect(brief.citations).toEqual(['RN-PAG-012'])
   })
 
   it('pergunta respondida, que bloqueia, que não bloqueia e sem marca; o modelo fica de fora', () => {

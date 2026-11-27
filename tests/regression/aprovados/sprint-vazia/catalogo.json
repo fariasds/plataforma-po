@@ -1,0 +1,14 @@
+{
+  "loja": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [],
+      "duplicates": [],
+      "pages": [],
+      "productId": "loja",
+      "source": null,
+      "workFolder": "unset"
+    }
+  }
+}

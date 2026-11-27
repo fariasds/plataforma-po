@@ -19,6 +19,7 @@ identificador próprio e ponteiro para onde ela vive no código.
 | [20-review-entregas.md](20-review-entregas.md) | **Review › Entregas da Sprint** |
 | [21-review-bugs.md](21-review-bugs.md) | **Review › Análise de Bugs** |
 | [22-review-desempenho.md](22-review-desempenho.md) | **Review › Desempenho da Equipe** (construída, oculta na navegação) |
+| [31-catalogo.md](31-catalogo.md) | **Catálogo** — as regras dos produtos do PO, absorvidas da wiki |
 | [30-fluxo-po.md](30-fluxo-po.md) | **Fluxo do PO** — o retrato do Azure e, nas próximas fatias, oportunidade, Discovery, quebra e acompanhamento |
 
 A numeração tem folga de propósito: uma tela nova em Review entra como `23`,
@@ -40,6 +41,7 @@ Cada regra tem um **ID estável** no formato `RN-<ÁREA>-<NN>`:
 | `RN-BUG` | Review › Análise de Bugs |
 | `RN-DES` | Review › Desempenho da Equipe |
 | `RN-FLX` | Fluxo do PO |
+| `RN-CAT` | Catálogo de regras |
 
 **O ID nunca é reciclado.** Se uma regra deixa de valer, ela é marcada como
 revogada e o número morre com ela — assim uma conversa antiga que cita `RN-ENT-04`

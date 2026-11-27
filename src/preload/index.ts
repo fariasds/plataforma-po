@@ -64,6 +64,9 @@ const api: IpcBridge = {
     invoke(IPC_CHANNELS.linkPlannedPbi, productId, slug, pbiKey, azureId),
   linkDraftFeature: (productId, slug, featureId) =>
     invoke(IPC_CHANNELS.linkDraftFeature, productId, slug, featureId),
+  getCatalog: (productId) => invoke(IPC_CHANNELS.getCatalog, productId),
+  previewCatalogAbsorb: (productId) => invoke(IPC_CHANNELS.previewCatalogAbsorb, productId),
+  absorbCatalog: (productId, useWiki) => invoke(IPC_CHANNELS.absorbCatalog, productId, useWiki),
   checkForUpdate: () => invoke(IPC_CHANNELS.checkForUpdate),
   openUpdateLink: (link) => invoke(IPC_CHANNELS.openUpdateLink, link),
 

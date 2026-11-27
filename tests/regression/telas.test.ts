@@ -91,6 +91,8 @@ const { getCurrentUser, clearUserProfileCache } =
 const organization = await import('../../src/main/services/azure/organization')
 const { buildFlowSnapshot } = await import('../../src/main/services/azure/flow-snapshot')
 const { getFlowBoard } = await import('../../src/main/services/flow/board')
+const { getCatalogView } = await import('../../src/main/services/flow/catalog')
+const { previewCatalogAbsorb } = await import('../../src/main/services/flow/absorb')
 const { buildSprintGoalRequest } = await import('../../src/main/services/ai/sprint-goal')
 const { resolveScope } = await import('../../src/main/services/azure/scope')
 const { buildPlanningSummary, summaryToMarkdown } =
@@ -343,6 +345,22 @@ export const SCREENS: Record<string, ScreenRun> = {
     return result
   },
 
+  // O catálogo de regras de cada Produto e o que a absorção da wiki mudaria (RN-CAT-01 a 06).
+  catalogo: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      const view = getCatalogView(product.id)
+      result[product.id] = {
+        catalogo: view,
+        absorcao:
+          view.source?.kind === 'wiki' && view.workFolder === 'ok'
+            ? await previewCatalogAbsorb(product.id)
+            : null
+      }
+    }
+    return result
+  },
+
   usuario: async () => {
     clearUserProfileCache()
     return getCurrentUser()
@@ -395,6 +413,8 @@ const COVERED_HANDLERS: Record<string, string> = {
   discoverFields: 'descoberta',
   refreshFlowSnapshot: 'retrato',
   getFlowBoard: 'fluxo',
+  getCatalog: 'catalogo',
+  previewCatalogAbsorb: 'catalogo',
   buildSprintGoalRequest: 'pedido-ia'
 }
 

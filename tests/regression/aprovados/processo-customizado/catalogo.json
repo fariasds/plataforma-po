@@ -1,0 +1,26 @@
+{
+  "portal": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [],
+      "duplicates": [],
+      "pages": [],
+      "productId": "portal",
+      "source": null,
+      "workFolder": "unset"
+    }
+  },
+  "suporte": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [],
+      "duplicates": [],
+      "pages": [],
+      "productId": "suporte",
+      "source": null,
+      "workFolder": "unset"
+    }
+  }
+}

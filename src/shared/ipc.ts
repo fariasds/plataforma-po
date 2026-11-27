@@ -1,4 +1,5 @@
 import type { SprintGoalRequest } from './ai'
+import type { AbsorbPreview, CatalogView } from './flow-absorb'
 import type { FlowBoard } from './flow-board'
 import type { FlowSnapshotSummary } from './flow-snapshot'
 import type { McpLaunch } from './mcp-clients'
@@ -242,6 +243,15 @@ export interface IpcApi {
   ): Promise<FlowBoard>
   /** O PO confirma a Feature do Azure de uma pasta rascunho (RN-FLX-13). */
   linkDraftFeature(productId: string, slug: string, featureId: number): Promise<FlowBoard>
+  /** O catálogo de regras do Produto na pasta de trabalho (ADR 0015). Não lê o Azure. */
+  getCatalog(productId: string): Promise<CatalogView>
+  /** Lê a wiki e diz, página a página, o que a absorção mudaria (RN-CAT-03). Não grava. */
+  previewCatalogAbsorb(productId: string): Promise<AbsorbPreview>
+  /**
+   * Lê a wiki de novo e absorve. `useWiki`: as páginas em conflito em que o PO
+   * escolheu a versão da wiki; as outras em conflito ficam como estão.
+   */
+  absorbCatalog(productId: string, useWiki: string[]): Promise<CatalogView>
 
   // --- IA do PO (ADR 0007) ------------------------------------------------
   //
@@ -319,6 +329,9 @@ export const IPC_CHANNELS = {
   clearWorkFolder: 'flow:clear-work-folder',
   linkPlannedPbi: 'flow:link-planned-pbi',
   linkDraftFeature: 'flow:link-draft-feature',
+  getCatalog: 'flow:catalog',
+  previewCatalogAbsorb: 'flow:catalog-preview',
+  absorbCatalog: 'flow:catalog-absorb',
   buildSprintGoalRequest: 'ai:sprint-goal-request',
   checkForUpdate: 'update:check',
   openUpdateLink: 'update:open-link'

@@ -37,12 +37,23 @@ Cada Produto declara a sua fonte. Duas são previstas:
   no primeiro ajuste feito direto na wiki.
 - **Ler qualquer URL:** o PAT sairia para outro servidor.
 
-## Em aberto
+## Como ficou na implementação (2026-11-27)
 
-- **Formato.** O app exige uma estrutura de regra (ID, título, texto) ou absorve o
-  texto como está? Decide-se no modelo de domínio, e pesa no que o app consegue
-  validar (regra citada que não existe, ID repetido).
-- **Wiki de projeto ou wiki de código**, e o escopo de leitura que o PAT precisa.
+- **A fonte `local` é a própria pasta `catalogo/`** da pasta de trabalho, e não uma
+  segunda pasta de onde se absorve: quem guarda as regras em outro sistema exporta
+  para lá.
+- **O formato é o do processo rule-first**, reconhecido pelo título (`RN-CAT-02`), e o
+  padrão de ID é do Produto. O de fábrica aceita ID com subdomínio (`RN-ELN-APP-001`).
+- **A árvore e o conteúdo são lidos separados**: a documentação da API não garante o
+  conteúdo das subpáginas na leitura recursiva.
+
+## O que estava em aberto
+
+- **Formato:** resolvido pela decisão M2 do [modelo de domínio](../fluxo-po/MODELO.md):
+  o app reconhece a regra pelo título, e o texto vai como está.
+- **Wiki de projeto ou wiki de código:** a mesma rota de páginas serve às duas, pelo
+  nome da wiki. O escopo de leitura é `vso.wiki`. Falta conferir com uma wiki real se a
+  página que só agrupa outras vem sem conteúdo, como o app supõe.
 
 ## Consequências
 

@@ -296,6 +296,54 @@ export function createFakeAzure(state: AzureState): FakeAzure {
     return { count: found.updates.length, value: found.updates }
   }
 
+  function wikiPage(projectName: string, wikiName: string, query: URLSearchParams): unknown {
+    project(projectName)
+    const wiki = (state.wikis ?? []).find(
+      (w) =>
+        w.name.toLowerCase() === wikiName.toLowerCase() &&
+        w.project.toLowerCase() === projectName.toLowerCase()
+    )
+    if (!wiki) throw new UnknownAzureRequestError(`wiki "${wikiName}" não existe em ${projectName}`)
+    const pagePath = query.get('path') ?? '/'
+    const recursion = query.get('recursionLevel')
+    const withContent = query.get('includeContent') === 'true'
+    const under = (p: string, root: string): boolean =>
+      root === '/' || p === root || p.startsWith(`${root}/`)
+    const exists = wiki.pages.some((p) => under(p.path, pagePath))
+    if (!exists)
+      throw new UnknownAzureRequestError(`página "${pagePath}" não existe na wiki ${wikiName}`)
+    // Página "pai" sem conteúdo próprio existe na árvore do Azure mesmo sem estar na lista.
+    const build = (p: string, depth: number): unknown => {
+      const own = wiki.pages.find((page) => page.path === p)
+      const children = [
+        ...new Set(
+          wiki.pages
+            .filter((page) => page.path.startsWith(`${p === '/' ? '' : p}/`))
+            .map((page) => {
+              const rest = page.path.slice((p === '/' ? '' : p).length + 1).split('/')[0]
+              return `${p === '/' ? '' : p}/${rest}`
+            })
+        )
+      ].sort()
+      const node: Record<string, unknown> = {
+        path: p,
+        order: 0,
+        isParentPage: children.length > 0,
+        gitItemPath: `${p.replace(/ /g, '-')}.md`,
+        url: `https://dev.azure.com/${state.organization}/${projectName}/_apis/wiki/wikis/${wikiName}/pages${p}`
+      }
+      if (withContent && depth === 0) node.content = own?.content ?? ''
+      if (recursion === 'full' || (recursion === 'oneLevel' && depth === 0)) {
+        node.subPages = children.map((child) => build(child, depth + 1))
+      }
+      return node
+    }
+    if (recursion !== null && recursion !== 'full' && recursion !== 'oneLevel') {
+      throw new UnknownAzureRequestError(`recursionLevel "${recursion}" não previsto`)
+    }
+    return build(pagePath, 0)
+  }
+
   function processType(
     p: FakeProject,
     name: string,
@@ -384,6 +432,12 @@ export function createFakeAzure(state: AzureState): FakeAzure {
         rev: found.updates.length,
         fields: pick(found, requestedFields(query.get('fields'), null, path))
       }
+    }
+
+    // Wiki: a árvore de páginas e o conteúdo de uma página.
+    if ((m = matches(segments, [null, '_apis', 'wiki', 'wikis', null, 'pages']))) {
+      checkQuery(path, query, ['path', 'recursionLevel', 'includeContent'])
+      return wikiPage(m[0], m[1], query)
     }
 
     // Projeto: campos, processo e árvores

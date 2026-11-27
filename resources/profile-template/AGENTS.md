@@ -57,6 +57,11 @@ vêm as oportunidades — `type`, `states`, `areaPaths` (vazio usa as do Produto
 `"related"` quando o vínculo é "Related". Sem `feedback`, as oportunidades vêm só da
 conversa.
 
+`catalog` do Produto: de onde vêm as regras de negócio dele. `source` é
+`{ "kind": "wiki", "wiki": "<nome da wiki>", "rootPage": "/<página raiz do catálogo>" }` ou
+`{ "kind": "local" }`, quando o catálogo é só a pasta `catalogo/`. `consults` lista outros Produtos
+cujo catálogo este consulta. Sem `catalog`, nenhuma Feature chega a Publicada.
+
 ## Nunca faça
 
 1. **Nunca peça, aceite nem escreva o PAT** — nem em `configuracao.json`, nem em

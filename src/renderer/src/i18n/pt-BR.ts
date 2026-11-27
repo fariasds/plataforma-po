@@ -73,7 +73,9 @@ export const ptBR = {
     bugAnalysis: 'Análise de Bugs',
     releaseNotes: 'Novidades',
     connectAi: 'Conectar à sua IA',
-    features: 'Features'
+    features: 'Features',
+    catalog: 'Catálogo',
+    flow: 'Fluxo do PO'
   },
 
   squads: {
@@ -269,6 +271,10 @@ export const ptBR = {
     ruleLabel: 'Regra {rule}',
     ariaLabel: 'Como {title} é calculado',
     rules: {
+      'RN-CAT-06': {
+        title: 'A publicar',
+        text: 'A página está diferente da que veio da wiki na última absorção, ou nunca veio de lá. A regra está gravada no catálogo da pasta, mas ainda não na wiki, que é a versão oficial.'
+      },
       'RN-FLX-05': {
         title: 'Fase',
         text:
@@ -1225,6 +1231,53 @@ export const ptBR = {
       }
     },
     linked: 'ID gravado no arquivo.'
+  },
+
+  catalog: {
+    noSource:
+      'O catálogo de {product} não está configurado. Defina "catalog" no Produto, na Configuração: a wiki do Azure DevOps e a página raiz, ou "local" para manter o catálogo só na pasta.',
+    noFolder:
+      'Escolha a pasta de trabalho de {product} na tela Features: o catálogo mora em catalogo/, dentro dela.',
+    sourceWiki: 'Wiki {wiki}, a partir de {root}',
+    sourceLocal: 'Catálogo mantido na pasta, sem wiki',
+    absorbedAt: 'Absorvido em {date}',
+    neverAbsorbed: 'Ainda não absorvido',
+    absorb: 'Absorver da wiki',
+    empty: 'Nenhuma página em catalogo/ ainda.',
+    duplicates: 'O mesmo ID aparece em mais de uma página: {ids}. Vale a primeira.',
+    consults: 'Consulta também: {list}',
+    consultCount: '{name} ({count} regras)',
+    consultMissing: '{name} (sem catálogo)',
+    toPublish: 'a publicar',
+    noRules: 'nenhuma regra reconhecida',
+    rules: { one: '{count} regra', other: '{count} regras' },
+    columns: {
+      id: 'ID',
+      title: 'Regra',
+      status: 'Status',
+      validation: 'Validação',
+      updated: 'Atualizada'
+    },
+    preview: {
+      title: 'Absorver o catálogo da wiki',
+      hint: 'O que muda em catalogo/ se a versão da wiki entrar. Nada é gravado até você absorver.',
+      confirm: 'Absorver',
+      nothing: 'A cópia local já está igual à wiki.',
+      useWiki: 'Usar a da wiki',
+      added: 'entra: {ids}',
+      changed: 'muda: {ids}',
+      removed: 'sai: {ids}',
+      localOnly: 'Só na pasta, nunca veio da wiki (fica, a publicar): {files}',
+      done: 'Catálogo absorvido.',
+      status: {
+        new: 'nova na wiki',
+        changed: 'mudou na wiki',
+        unchanged: 'igual',
+        'local-changed': 'mudou só aqui (fica, a publicar)',
+        conflict: 'mudou nos dois lados',
+        'removed-in-wiki': 'saiu da wiki (fica aqui)'
+      }
+    }
   },
 
   security: {

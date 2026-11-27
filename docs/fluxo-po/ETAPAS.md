@@ -190,7 +190,7 @@ reservado duas vezes, ou duas Features alterando a mesma regra ao mesmo tempo.
 | **Tela** | Catálogo: domínios e regras com Status e Validação, o que está a publicar, os botões Absorver e Publicar |
 
 **RN-CAT-01 · A fonte é por Produto.** Wiki do projeto no Azure (nome da wiki e
-página raiz, nunca URL) ou pasta local de Markdown.
+página raiz, nunca URL) ou `local`: a própria pasta `catalogo/`, mantida pelo PO.
 
 **RN-CAT-02 · A regra é reconhecida pelo título** (decisão M2). O padrão de ID é do
 Produto, na Configuração; o padrão de fábrica é `RN-<DOMÍNIO>-<NNN>`.

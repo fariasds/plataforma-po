@@ -100,7 +100,11 @@ describe('a Fase', () => {
   it('Publicada só com o catálogo citando um PBI da Feature na Origem', () => {
     const files = folder('pix', { plan: plan('RN-PAG-016, 017') })
     const catalog = (origins: Record<string, number[]>): RuleCatalog => ({
-      origins: (id) => origins[id] ?? null
+      origins: (id) => origins[id] ?? null,
+      find: (id) =>
+        origins[id]
+          ? { status: 'Ativa', updated: null, origins: origins[id], consulted: false }
+          : null
     })
     expect(
       board([[files, 1]], { catalog: catalog({ 'RN-PAG-016': [4211], 'RN-PAG-017': [4211, 9] }) })

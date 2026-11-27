@@ -104,6 +104,10 @@ nome o PO troca quando quiser.
   **como ele se liga à Feature** — o feedback é pai dela, filho dela ou tem um vínculo
   "Related". Peça ao PO para abrir um feedback já ligado e olhar a aba de vínculos.
   Isso vai em `poFlow` do Produto.
+- **Onde estão as regras de negócio do Produto?** Na wiki do Azure DevOps: o nome da
+  wiki e a página que reúne o catálogo do Produto (`catalog.source`). Ou só numa pasta,
+  e então `"kind": "local"`. Se um Produto usa regras de outro, ele o consulta
+  (`catalog.consults`).
 
 ## Ao terminar
 

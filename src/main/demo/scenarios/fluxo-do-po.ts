@@ -17,6 +17,7 @@ import {
   PBI,
   lojaSprint
 } from './comum'
+import { CONTOSO_WIKI_PAGES } from './fluxo-do-po-wiki'
 import { FAKE_TOKEN } from './planning-com-remanescentes'
 
 /**
@@ -301,10 +302,18 @@ export const fluxoDoPo: Scenario = {
     'RN-FLX-13',
     'RN-FLX-18',
     'RN-FLX-19',
+    'RN-FLX-20',
+    'RN-CAT-01',
+    'RN-CAT-02',
+    'RN-CAT-03',
+    'RN-CAT-04',
+    'RN-CAT-05',
+    'RN-CAT-06',
     'RN-CFG-14',
+    'RN-CFG-15',
     'RN-SEC-24'
   ],
-  telas: ['retrato', 'fluxo', 'descoberta'],
+  telas: ['retrato', 'fluxo', 'catalogo', 'descoberta'],
   anchorDate: '2026-11-26T10:00:00',
   config: baseConfig({
     products: [
@@ -317,7 +326,8 @@ export const fluxoDoPo: Scenario = {
             areaPaths: [FEEDBACK_AREA],
             link: 'parent'
           }
-        }
+        },
+        catalog: { source: { kind: 'wiki', wiki: 'Contoso.wiki', rootPage: '/Catálogo/Loja' } }
       },
       {
         id: 'app',
@@ -329,21 +339,27 @@ export const fluxoDoPo: Scenario = {
         poFlow: {
           priorityField: null,
           feedback: { type: 'Feedback', states: ['Approved'], link: 'related' }
-        }
+        },
+        // O App consulta o catálogo da Loja e mantém o seu na pasta (RN-CAT-05).
+        catalog: { source: { kind: 'local' }, consults: ['loja'] }
       }
     ]
   }),
   selections: ['loja', 'app'],
-  azure: azure(
-    [
-      project({
-        id: '00000000-0000-4000-9000-000000000001',
-        name: LOJA_PROJECT,
-        process: FLOW_PROCESS,
-        areas: [LOJA_AREA, APP_AREA, FEEDBACK_AREA],
-        iterations: LOJA_SPRINTS
-      })
-    ],
-    WORK_ITEMS
-  )
+  azure: {
+    ...azure(
+      [
+        project({
+          id: '00000000-0000-4000-9000-000000000001',
+          name: LOJA_PROJECT,
+          process: FLOW_PROCESS,
+          areas: [LOJA_AREA, APP_AREA, FEEDBACK_AREA],
+          iterations: LOJA_SPRINTS
+        })
+      ],
+      WORK_ITEMS
+    ),
+    // O catálogo da Loja na wiki (ADR 0015).
+    wikis: [{ name: 'Contoso.wiki', project: LOJA_PROJECT, pages: CONTOSO_WIKI_PAGES }]
+  }
 }
