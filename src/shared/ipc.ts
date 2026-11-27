@@ -1,4 +1,5 @@
 import type { SprintGoalRequest } from './ai'
+import type { FlowBoard } from './flow-board'
 import type { FlowSnapshotSummary } from './flow-snapshot'
 import type { McpLaunch } from './mcp-clients'
 import type { UpdateCheck, UpdateLink } from './update'
@@ -216,6 +217,19 @@ export interface IpcApi {
    * data: a descrição não vem para a janela (RN-SEC-24).
    */
   refreshFlowSnapshot(productId: string): Promise<FlowSnapshotSummary>
+  /**
+   * Fase, checklist e pendências de cada Feature do Produto, do retrato já gravado
+   * e da pasta de trabalho (RN-FLX-05 a RN-FLX-11). Não lê o Azure.
+   */
+  getFlowBoard(productId: string): Promise<FlowBoard>
+  /** A pasta de trabalho de cada Produto que já tem uma, pelo ID do Produto (RN-FLX-03). */
+  getWorkFolders(): Promise<Record<string, string>>
+  /**
+   * Abre o diálogo do sistema para o PO escolher a pasta de trabalho do Produto.
+   * A janela não manda caminho (RN-SEC-36). Devolve a pasta, ou `null` se o PO cancelou.
+   */
+  chooseWorkFolder(productId: string): Promise<string | null>
+  clearWorkFolder(productId: string): Promise<void>
 
   // --- IA do PO (ADR 0007) ------------------------------------------------
   //
@@ -287,6 +301,10 @@ export const IPC_CHANNELS = {
   discoverProcess: 'organization:process',
   discoverFields: 'organization:fields',
   refreshFlowSnapshot: 'flow:refresh-snapshot',
+  getFlowBoard: 'flow:board',
+  getWorkFolders: 'flow:work-folders',
+  chooseWorkFolder: 'flow:choose-work-folder',
+  clearWorkFolder: 'flow:clear-work-folder',
   buildSprintGoalRequest: 'ai:sprint-goal-request',
   checkForUpdate: 'update:check',
   openUpdateLink: 'update:open-link'

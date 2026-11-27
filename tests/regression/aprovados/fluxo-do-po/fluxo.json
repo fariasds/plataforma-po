@@ -1,0 +1,402 @@
+{
+  "app": {
+    "features": [
+      {
+        "azureState": "New",
+        "checklist": null,
+        "divergences": [],
+        "featureId": 4140,
+        "key": "#4140",
+        "pendencies": [],
+        "phase": "Sem Discovery",
+        "plan": null,
+        "priority": null,
+        "readmePhase": null,
+        "rules": [],
+        "slug": null,
+        "stale": false,
+        "staleDays": null,
+        "title": "Login por biometria"
+      }
+    ],
+    "productId": "app",
+    "snapshotTakenAt": "2026-11-26T13:00:00.000Z",
+    "workFolder": "unset"
+  },
+  "loja": {
+    "features": [
+      {
+        "azureState": null,
+        "checklist": null,
+        "divergences": [],
+        "featureId": null,
+        "key": "pasta:lista-presentes",
+        "pendencies": [],
+        "phase": "Sem Discovery",
+        "plan": null,
+        "priority": null,
+        "readmePhase": null,
+        "rules": [],
+        "slug": "lista-presentes",
+        "stale": false,
+        "staleDays": 2,
+        "title": "Lista de presentes"
+      },
+      {
+        "azureState": "New",
+        "checklist": [
+          {
+            "key": "brief",
+            "label": "Brief com Problema, Para quem, Objetivo e Escopo",
+            "ok": true
+          },
+          {
+            "key": "decisions",
+            "label": "Nenhuma Decisão em Proposta",
+            "ok": false
+          },
+          {
+            "key": "questions",
+            "label": "Nenhuma pergunta em aberto que bloqueie a quebra",
+            "ok": false
+          },
+          {
+            "key": "plan",
+            "label": "Plano de PBIs cobrindo todo Requisito",
+            "ok": true
+          },
+          {
+            "key": "design",
+            "label": "PBIs de design escritos",
+            "ok": false
+          }
+        ],
+        "divergences": [],
+        "featureId": 4102,
+        "key": "#4102",
+        "pendencies": [
+          {
+            "code": "question-blocks",
+            "file": "discovery/brief.md",
+            "line": 34,
+            "message": "Pergunta em aberto que bloqueia a quebra: P2 · O QR expira em quanto tempo?",
+            "stage": "Discovery"
+          },
+          {
+            "code": "decision-proposed",
+            "file": "discovery/decisoes.md",
+            "line": 6,
+            "message": "D2 está em Proposta.",
+            "stage": "Discovery"
+          },
+          {
+            "code": "pbi-without-azure",
+            "file": "plano-pbis.md",
+            "line": 13,
+            "message": "P3 ainda não tem o ID do Azure.",
+            "stage": "Discovery"
+          },
+          {
+            "code": "pbi-without-azure",
+            "file": "plano-pbis.md",
+            "line": 17,
+            "message": "P4 ainda não tem o ID do Azure.",
+            "stage": "Discovery"
+          },
+          {
+            "code": "design-not-written",
+            "file": "plano-pbis.md",
+            "line": 17,
+            "message": "P4 (design) ainda não está escrito.",
+            "stage": "Discovery"
+          },
+          {
+            "code": "unrecognized-line",
+            "file": "discovery/decisoes.md",
+            "line": 10,
+            "message": "Linha não reconhecida: \"Status: Aprovada\" não é um status de Decisão. Use Proposta, Aceita ou Substituída por Dn.",
+            "stage": "Discovery"
+          }
+        ],
+        "phase": "Discovery",
+        "plan": {
+          "active": 4,
+          "written": 1
+        },
+        "priority": 29,
+        "readmePhase": "Pronta para quebra",
+        "rules": [],
+        "slug": "pagamento-pix",
+        "stale": false,
+        "staleDays": 3,
+        "title": "Pagamento por Pix no checkout"
+      },
+      {
+        "azureState": null,
+        "checklist": [
+          {
+            "key": "brief",
+            "label": "Brief com Problema, Para quem, Objetivo e Escopo",
+            "ok": true
+          },
+          {
+            "key": "decisions",
+            "label": "Nenhuma Decisão em Proposta",
+            "ok": true
+          },
+          {
+            "key": "questions",
+            "label": "Nenhuma pergunta em aberto que bloqueie a quebra",
+            "ok": true
+          },
+          {
+            "key": "plan",
+            "label": "Plano de PBIs cobrindo todo Requisito",
+            "ok": true
+          },
+          {
+            "key": "design",
+            "label": "PBIs de design escritos",
+            "ok": true
+          }
+        ],
+        "divergences": [],
+        "featureId": 4135,
+        "key": "#4135",
+        "pendencies": [
+          {
+            "code": "not-in-snapshot",
+            "message": "A Feature #4135 não está no retrato: fechada há mais de 180 dias, removida ou de outro Produto.",
+            "stage": "Discovery"
+          }
+        ],
+        "phase": "Pronta para quebra",
+        "plan": {
+          "active": 2,
+          "written": 1
+        },
+        "priority": null,
+        "readmePhase": null,
+        "rules": [],
+        "slug": "avaliacao-foto",
+        "stale": true,
+        "staleDays": 45,
+        "title": "Avaliação de produto com foto"
+      },
+      {
+        "azureState": "In Progress",
+        "checklist": [
+          {
+            "key": "brief",
+            "label": "Brief com Problema, Para quem, Objetivo e Escopo",
+            "ok": true
+          },
+          {
+            "key": "decisions",
+            "label": "Nenhuma Decisão em Proposta",
+            "ok": true
+          },
+          {
+            "key": "questions",
+            "label": "Nenhuma pergunta em aberto que bloqueie a quebra",
+            "ok": true
+          },
+          {
+            "key": "plan",
+            "label": "Plano de PBIs cobrindo todo Requisito",
+            "ok": true
+          },
+          {
+            "key": "design",
+            "label": "PBIs de design escritos",
+            "ok": true
+          }
+        ],
+        "divergences": [],
+        "featureId": 4088,
+        "key": "#4088",
+        "pendencies": [
+          {
+            "code": "rule-without-dev",
+            "file": "plano-pbis.md",
+            "message": "RN-CUP-010 não está em nenhum PBI de desenvolvimento.",
+            "stage": "Quebra"
+          },
+          {
+            "code": "rule-shared",
+            "file": "plano-pbis.md",
+            "message": "RN-CUP-009 também está no plano de outra Feature: pasta retirada-loja.",
+            "stage": "Quebra"
+          }
+        ],
+        "phase": "Em quebra",
+        "plan": {
+          "active": 3,
+          "written": 3
+        },
+        "priority": 22,
+        "readmePhase": null,
+        "rules": [
+          "RN-CUP-009",
+          "RN-CUP-004",
+          "RN-CUP-005",
+          "RN-CUP-006",
+          "RN-CUP-010"
+        ],
+        "slug": "cupom-categoria",
+        "stale": false,
+        "staleDays": 1,
+        "title": "Cupom de desconto por categoria"
+      },
+      {
+        "azureState": "Done",
+        "checklist": [
+          {
+            "key": "brief",
+            "label": "Brief com Problema, Para quem, Objetivo e Escopo",
+            "ok": true
+          },
+          {
+            "key": "decisions",
+            "label": "Nenhuma Decisão em Proposta",
+            "ok": true
+          },
+          {
+            "key": "questions",
+            "label": "Nenhuma pergunta em aberto que bloqueie a quebra",
+            "ok": true
+          },
+          {
+            "key": "plan",
+            "label": "Plano de PBIs cobrindo todo Requisito",
+            "ok": true
+          },
+          {
+            "key": "design",
+            "label": "PBIs de design escritos",
+            "ok": true
+          }
+        ],
+        "divergences": [
+          "O Azure diz Done, e a Fase é Em quebra."
+        ],
+        "featureId": 4060,
+        "key": "#4060",
+        "pendencies": [],
+        "phase": "Em quebra",
+        "plan": {
+          "active": 1,
+          "written": 1
+        },
+        "priority": null,
+        "readmePhase": "Publicada",
+        "rules": [
+          "RN-TRO-001"
+        ],
+        "slug": "troca-sem-nota",
+        "stale": false,
+        "staleDays": 60,
+        "title": "Troca sem nota fiscal"
+      },
+      {
+        "azureState": null,
+        "checklist": [
+          {
+            "key": "brief",
+            "label": "Brief com Problema, Para quem, Objetivo e Escopo",
+            "ok": true
+          },
+          {
+            "key": "decisions",
+            "label": "Nenhuma Decisão em Proposta",
+            "ok": true
+          },
+          {
+            "key": "questions",
+            "label": "Nenhuma pergunta em aberto que bloqueie a quebra",
+            "ok": true
+          },
+          {
+            "key": "plan",
+            "label": "Plano de PBIs cobrindo todo Requisito",
+            "ok": true
+          },
+          {
+            "key": "design",
+            "label": "PBIs de design escritos",
+            "ok": true
+          }
+        ],
+        "divergences": [],
+        "featureId": null,
+        "key": "pasta:retirada-loja",
+        "pendencies": [
+          {
+            "code": "pbi-without-azure",
+            "file": "plano-pbis.md",
+            "line": 3,
+            "message": "P1 ainda não tem o ID do Azure.",
+            "stage": "Discovery"
+          },
+          {
+            "code": "rule-shared",
+            "file": "plano-pbis.md",
+            "message": "RN-CUP-009 também está no plano de outra Feature: #4088.",
+            "stage": "Quebra"
+          }
+        ],
+        "phase": "Em quebra",
+        "plan": {
+          "active": 1,
+          "written": 0
+        },
+        "priority": null,
+        "readmePhase": null,
+        "rules": [
+          "RN-CUP-009"
+        ],
+        "slug": "retirada-loja",
+        "stale": false,
+        "staleDays": 10,
+        "title": "Retirada na loja"
+      },
+      {
+        "azureState": null,
+        "checklist": null,
+        "divergences": [],
+        "featureId": 3001,
+        "key": "#3001",
+        "pendencies": [],
+        "phase": "Fora do fluxo",
+        "plan": null,
+        "priority": null,
+        "readmePhase": null,
+        "rules": [],
+        "slug": "adhoc-troca-gateway",
+        "stale": false,
+        "staleDays": 200,
+        "title": "Troca do gateway de pagamento"
+      },
+      {
+        "azureState": null,
+        "checklist": null,
+        "divergences": [],
+        "featureId": 4070,
+        "key": "#4070",
+        "pendencies": [],
+        "phase": "Arquivada",
+        "plan": null,
+        "priority": null,
+        "readmePhase": null,
+        "rules": [],
+        "slug": "frete-gratis",
+        "stale": false,
+        "staleDays": 90,
+        "title": "Frete grátis acima de R$ 200"
+      }
+    ],
+    "productId": "loja",
+    "snapshotTakenAt": "2026-11-26T13:00:00.000Z",
+    "workFolder": "ok"
+  }
+}

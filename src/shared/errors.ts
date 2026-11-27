@@ -33,6 +33,7 @@ export type AppErrorCode =
   | 'PROFILE_CORRUPT'
   /** Chave de Dados de trabalho fora do formato (RN-CFG-08). */
   | 'WORK_DATA_INVALID_KEY'
+  | 'WORK_FOLDER_INVALID'
   /** Valor de Dados de trabalho acima do limite, ou que não vira JSON. */
   | 'WORK_DATA_INVALID_VALUE'
   /** O arquivo de Dados de trabalho existe mas não é JSON válido. */

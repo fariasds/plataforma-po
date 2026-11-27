@@ -55,6 +55,10 @@ export const ipc: IpcApi = {
     unwrap(window.api.buildSprintGoalRequest(selection, sprint, itemIds)),
 
   refreshFlowSnapshot: (productId) => unwrap(window.api.refreshFlowSnapshot(productId)),
+  getFlowBoard: (productId) => unwrap(window.api.getFlowBoard(productId)),
+  getWorkFolders: () => unwrap(window.api.getWorkFolders()),
+  chooseWorkFolder: (productId) => unwrap(window.api.chooseWorkFolder(productId)),
+  clearWorkFolder: (productId) => unwrap(window.api.clearWorkFolder(productId)),
 
   checkForUpdate: () => unwrap(window.api.checkForUpdate()),
   openUpdateLink: (link) => unwrap(window.api.openUpdateLink(link))

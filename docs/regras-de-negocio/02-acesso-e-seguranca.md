@@ -60,6 +60,7 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-33 | Consulta de versão nova sem token, num endereço só | `tests/security/rn-sec-33-consulta-de-versao.test.ts` |
 | RN-SEC-34 | O servidor MCP não faz rede nem lê o PAT | `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts` |
 | RN-SEC-35 | O servidor MCP grava só a proposta | `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts` |
+| RN-SEC-36 | A pasta de trabalho só vem do diálogo do sistema | `tests/security/rn-sec-36-pasta-de-trabalho-pelo-dialogo.test.ts` |
 
 As regras da Configuração que protegem o PAT (`RN-CFG-04`, `05` e `06`) estão em
 [03-configuracao.md](03-configuracao.md), cada uma com o seu teste.
@@ -563,6 +564,31 @@ Quem aplica a proposta é o PO, na janela (`RN-CFG-12`).
 teste estático sobre o grafo de imports do servidor (nenhuma escrita no disco além
 da gravação atômica, e toda gravação atômica do servidor vai para `proposalPath`) e
 um teste que chama as ferramentas e compara a pasta de dados inteira antes e depois.
+
+### RN-SEC-36 · A pasta de trabalho só vem do diálogo do sistema
+
+A pasta de trabalho de cada Produto (`RN-FLX-03`, ADR 0013) guarda o que a IA do PO
+vai escrever: Brief, Decisões, PBIs, catálogo. Quem escolhe onde ela fica é o PO, e só
+ele:
+
+- **Nenhum caminho vem da janela.** O contrato de IPC tem `chooseWorkFolder`,
+  `clearWorkFolder` e `getWorkFolders`, e os dois primeiros recebem só o ID do
+  Produto, conferido contra a Configuração em uso antes de abrir o diálogo. O caminho
+  sai do diálogo do sistema, aberto pelo processo principal. Um argumento a mais é
+  ignorado.
+- **A pasta nunca é a de dados do app**, nem fica dentro dela, nem a contém. Lá estão
+  os Perfis e o cofre do PAT (`RN-CFG-06`): se a IA pudesse gravar ali, a fronteira do
+  servidor MCP (`RN-SEC-34`) não valeria nada. O caminho é conferido depois de
+  resolver link simbólico.
+- **Caminho relativo e pasta que não existe são recusados.**
+- **O caminho fica em `pastas-de-trabalho.json`, na pasta do Perfil, fora de
+  `dados/`**: a janela grava Dados de trabalho por chave, e a chave não tem ponto nem
+  barra, então não alcança esse arquivo.
+
+**Provado por:** `tests/security/rn-sec-36-pasta-de-trabalho-pelo-dialogo.test.ts`, que
+chama os handlers com o diálogo simulado: o argumento a mais é ignorado, a pasta de
+dados do app (ela mesma, dentro e acima) é recusada, cancelar não grava, e Produto
+desconhecido não abre o diálogo.
 
 ---
 

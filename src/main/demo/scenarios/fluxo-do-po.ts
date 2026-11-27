@@ -257,9 +257,29 @@ export const fluxoDoPo: Scenario = {
     'sem as removidas; os filhos de cada Feature, inclusive o que mora em outra área; os ' +
     'feedbacks nos estados configurados, ligados à Feature pelo vínculo de pai (Loja) ou ' +
     '"Related" (App); e os bugs abertos e os fechados na janela, com descrição só nos abertos. ' +
-    'O título e a descrição vão em texto puro, e o token fictício colado num feedback sai redigido.',
-  regras: ['RN-FLX-01', 'RN-FLX-02', 'RN-CFG-14', 'RN-SEC-24'],
-  telas: ['retrato', 'descoberta'],
+    'O título e a descrição vão em texto puro, e o token fictício colado num feedback sai redigido. ' +
+    'A pasta de trabalho fictícia da Loja (tests/regression/pastas/fluxo-do-po/loja) tem uma Feature ' +
+    'em cada situação: Discovery com pendências, Em quebra com ID de regra repetido entre duas ' +
+    'pastas, rascunho, Pronta para quebra parada há 45 dias, fechada no Azure com regras ainda ' +
+    'abertas, arquivada e anterior ao fluxo. O App não tem pasta.',
+  regras: [
+    'RN-FLX-01',
+    'RN-FLX-02',
+    'RN-FLX-03',
+    'RN-FLX-04',
+    'RN-FLX-05',
+    'RN-FLX-06',
+    'RN-FLX-07',
+    'RN-FLX-08',
+    'RN-FLX-09',
+    'RN-FLX-10',
+    'RN-FLX-11',
+    'RN-FLX-18',
+    'RN-FLX-19',
+    'RN-CFG-14',
+    'RN-SEC-24'
+  ],
+  telas: ['retrato', 'fluxo', 'descoberta'],
   anchorDate: '2026-11-26T10:00:00',
   config: baseConfig({
     products: [

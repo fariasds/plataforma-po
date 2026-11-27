@@ -170,8 +170,9 @@ no README.
 
 **RN-FLX-18 · As regras da Feature** são a união das linhas `RNs` dos PBIs do plano.
 
-**RN-FLX-19 · ID repetido.** O mesmo ID de regra nova nas linhas `RNs` de duas
-Features que ainda não estão Publicadas é pendência nas duas.
+**RN-FLX-19 · Regra em mais de uma Feature.** A mesma regra nas linhas `RNs` de duas
+Features que ainda não estão Publicadas é pendência nas duas: é ID de regra nova
+reservado duas vezes, ou duas Features alterando a mesma regra ao mesmo tempo.
 
 **RN-FLX-20 · Revalidação.** Regra citada num Requisito, com `Atualizado` posterior à
 `Data` da Decisão de origem, é pendência: "RN-X mudou depois da D2".

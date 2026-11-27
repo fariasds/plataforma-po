@@ -10,6 +10,7 @@ import { join } from 'path'
  *   vi.mock('electron', async () => (await import('../helpers/electron-mock')).electronMock)
  *
  * - `app.getPath` aponta para um diretório temporário, recriado por `resetElectronMock`.
+ * - `dialog.showOpenDialog` devolve o que `setOpenDialogResult` mandar (por padrão, cancela).
  * - `safeStorage` cifra de forma reversível e marcada, para o teste distinguir texto
  *   cifrado de texto puro; `setEncryptionAvailable(false)` simula SO sem criptografia.
  */
@@ -18,6 +19,9 @@ const PREFIX = 'mock-encrypted:'
 
 let userDataDir = mkdtempSync(join(tmpdir(), 'po-test-'))
 let encryptionAvailable = true
+/** O que o diálogo de escolha de pasta "responde"; por padrão, o PO cancela. */
+let openDialogResult: { canceled: boolean; filePaths: string[] } = { canceled: true, filePaths: [] }
+const openDialogCalls: unknown[] = []
 
 export const electronMock = {
   // O aviso de estado do Perfil percorre as janelas; em teste não há nenhuma.
@@ -29,6 +33,12 @@ export const electronMock = {
     getVersion: (): string => '0.0.0-test',
     getAppPath: (): string => '/app',
     isPackaged: false
+  },
+  dialog: {
+    showOpenDialog: async (...args: unknown[]): Promise<typeof openDialogResult> => {
+      openDialogCalls.push(args)
+      return openDialogResult
+    }
   },
   safeStorage: {
     isEncryptionAvailable: (): boolean => encryptionAvailable,
@@ -44,6 +54,15 @@ export const electronMock = {
   }
 }
 
+/** O próximo diálogo de pasta devolve esta escolha. */
+export function setOpenDialogResult(result: { canceled: boolean; filePaths: string[] }): void {
+  openDialogResult = result
+}
+
+export function getOpenDialogCalls(): unknown[] {
+  return openDialogCalls
+}
+
 export function setEncryptionAvailable(available: boolean): void {
   encryptionAvailable = available
 }
@@ -57,4 +76,6 @@ export function resetElectronMock(): void {
   rmSync(userDataDir, { recursive: true, force: true })
   userDataDir = mkdtempSync(join(tmpdir(), 'po-test-'))
   encryptionAvailable = true
+  openDialogResult = { canceled: true, filePaths: [] }
+  openDialogCalls.length = 0
 }

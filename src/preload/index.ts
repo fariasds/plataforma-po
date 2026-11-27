@@ -56,6 +56,10 @@ const api: IpcBridge = {
     invoke(IPC_CHANNELS.buildSprintGoalRequest, selection, sprint, itemIds),
 
   refreshFlowSnapshot: (productId) => invoke(IPC_CHANNELS.refreshFlowSnapshot, productId),
+  getFlowBoard: (productId) => invoke(IPC_CHANNELS.getFlowBoard, productId),
+  getWorkFolders: () => invoke(IPC_CHANNELS.getWorkFolders),
+  chooseWorkFolder: (productId) => invoke(IPC_CHANNELS.chooseWorkFolder, productId),
+  clearWorkFolder: (productId) => invoke(IPC_CHANNELS.clearWorkFolder, productId),
   checkForUpdate: () => invoke(IPC_CHANNELS.checkForUpdate),
   openUpdateLink: (link) => invoke(IPC_CHANNELS.openUpdateLink, link),
 

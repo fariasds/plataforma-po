@@ -1,5 +1,5 @@
 import { existsSync, readdirSync } from 'fs'
-import { join } from 'path'
+import { basename, join } from 'path'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import type { UnifiedSprint } from '@shared/azure'
 import type { Configuration } from '@shared/config/schema'
@@ -7,6 +7,7 @@ import type { AnticipatedShare, ManualPlanningItem, PlanningItem } from '@shared
 import { createCalendar } from '@shared/calendar'
 import { validateConfiguration } from '@shared/config/validate'
 import { sprintMoment } from '@shared/home'
+import { flowKeys } from '@shared/flow-snapshot'
 import { planningKeys } from '@shared/planning-keys'
 import type { CapacityConfig } from '../../src/renderer/src/features/planning/planning-rules'
 import { isAggregateSelection, squadOfSelection } from '@shared/squads'
@@ -32,7 +33,9 @@ process.env.TZ = 'America/Sao_Paulo'
 const state = vi.hoisted(() => ({
   config: null as Configuration | null,
   azure: null as FakeAzure | null,
-  workData: {} as Record<string, unknown>
+  workData: {} as Record<string, unknown>,
+  scenarioId: '',
+  anchor: 0
 }))
 
 function fake(): FakeAzure {
@@ -48,6 +51,26 @@ vi.mock('../../src/main/profile/paths', () => ({ configPath: () => '' }))
 vi.mock('../../src/main/profile/work-data', () => ({
   readWorkData: (_profileId: string, key: string) => state.workData[key]
 }))
+// A pasta de trabalho fictícia do Cenário, por Produto: tests/regression/pastas/<cenário>/<produto>.
+vi.mock('../../src/main/profile/work-folders', async () => {
+  const { existsSync: exists } = await import('fs')
+  const { join: joinPath } = await import('path')
+  return {
+    getWorkFolder: (_profileId: string, productId: string) => {
+      const dir = joinPath(__dirname, 'pastas', state.scenarioId, productId)
+      return exists(dir) ? dir : null
+    }
+  }
+})
+// Num checkout, a data dos arquivos é a do clone: o "parada há N dias" (RN-FLX-11)
+// sai de uma tabela fixa, pelo nome da pasta da Feature.
+vi.mock('../../src/main/services/flow/file-times', () => ({
+  lastModified: (dir: string) => {
+    const days = FOLDER_AGE_DAYS[basename(dir)]
+    return days === undefined ? null : state.anchor - days * 24 * 60 * 60 * 1000
+  }
+}))
+
 vi.mock('../../src/main/services/azure/client', () => ({
   fetchAzure: (path: string) => fake().fetchAzure(path),
   postAzure: (path: string, body: unknown) => fake().postAzure(path, body),
@@ -67,6 +90,7 @@ const { getCurrentUser, clearUserProfileCache } =
   await import('../../src/main/services/azure/directory')
 const organization = await import('../../src/main/services/azure/organization')
 const { buildFlowSnapshot } = await import('../../src/main/services/azure/flow-snapshot')
+const { getFlowBoard } = await import('../../src/main/services/flow/board')
 const { buildSprintGoalRequest } = await import('../../src/main/services/ai/sprint-goal')
 const { resolveScope } = await import('../../src/main/services/azure/scope')
 const { buildPlanningSummary, summaryToMarkdown } =
@@ -75,6 +99,18 @@ const { buildPlanningRows, resolveCapacity, resolveSquadCapacity } =
   await import('../../src/renderer/src/features/planning/planning-rules')
 
 const APPROVED_DIR = join(__dirname, 'aprovados')
+
+/** Há quantos dias cada pasta de Feature das pastas fictícias foi alterada pela última vez. */
+const FOLDER_AGE_DAYS: Record<string, number> = {
+  'pagamento-pix': 3,
+  'cupom-categoria': 1,
+  'retirada-loja': 10,
+  'troca-sem-nota': 60,
+  'avaliacao-foto': 45,
+  'lista-presentes': 2,
+  'frete-gratis': 90,
+  'adhoc-troca-gateway': 200
+}
 
 /** Quantas sprints cada tela pede, como no renderer. */
 const HISTORY_SPRINTS = 12
@@ -296,6 +332,17 @@ export const SCREENS: Record<string, ScreenRun> = {
     return result
   },
 
+  // O quadro do fluxo do PO: o retrato que a janela gravaria mais a pasta de
+  // trabalho do Produto (RN-FLX-05 a RN-FLX-11).
+  fluxo: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      state.workData[flowKeys.snapshot(product.id)] = await buildFlowSnapshot(product.id)
+      result[product.id] = getFlowBoard(product.id)
+    }
+    return result
+  },
+
   usuario: async () => {
     clearUserProfileCache()
     return getCurrentUser()
@@ -347,6 +394,7 @@ const COVERED_HANDLERS: Record<string, string> = {
   discoverProcess: 'descoberta',
   discoverFields: 'descoberta',
   refreshFlowSnapshot: 'retrato',
+  getFlowBoard: 'fluxo',
   buildSprintGoalRequest: 'pedido-ia'
 }
 
@@ -370,7 +418,9 @@ function activate(scenario: Scenario): FakeAzure {
   }
   state.config = parsed.config
   state.azure = createFakeAzure(scenario.azure)
-  state.workData = scenario.workData ?? {}
+  state.workData = { ...(scenario.workData ?? {}) }
+  state.scenarioId = scenario.id
+  state.anchor = new Date(scenario.anchorDate).getTime()
   vi.setSystemTime(new Date(scenario.anchorDate))
   return state.azure
 }

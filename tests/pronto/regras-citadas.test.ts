@@ -8,7 +8,9 @@ import { describe, expect, it } from 'vitest'
 
 const ROOT = resolve(__dirname, '../..')
 const RULES_DIR = join(ROOT, 'docs/regras-de-negocio')
-const RULE_ID = /RN-[A-Z]{3}-\d{2}/g
+// Exatamente dois dígitos: as regras dos produtos do PO, no catálogo deles, têm três
+// (`RN-DOC-045`) e não são regras do app (ADR 0015).
+const RULE_ID = /RN-[A-Z]{3}-\d{2}(?!\d)/g
 
 function files(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {

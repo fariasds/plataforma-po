@@ -9,6 +9,7 @@ import { AppError } from '@shared/errors'
  *
  *   <userData>/perfis.json
  *   <userData>/perfis/<id>/configuracao.json, configuracao.schema.json, AGENTS.md, dados/
+ *   <userData>/perfis/<id>/pastas-de-trabalho.json   ← só o main grava (RN-SEC-36)
  *   <userData>/segredos/<id>.bin      ← fora da pasta do Perfil (RN-CFG-06)
  */
 
@@ -19,6 +20,8 @@ export const SCHEMA_FILE = 'configuracao.schema.json'
 export const AGENTS_FILE = 'AGENTS.md'
 /** O que a IA do PO propõe; o PO revisa e aplica na janela (RN-CFG-12). */
 export const PROPOSAL_FILE = 'proposta.json'
+/** A pasta de trabalho de cada Produto (RN-FLX-03). Só o main grava, e fora de `dados/` (RN-SEC-36). */
+export const WORK_FOLDERS_FILE = 'pastas-de-trabalho.json'
 
 /** Recusa qualquer coisa que não seja um slug — `..`, barra e letra de unidade incluídos. */
 export function assertProfileId(profileId: string): string {
@@ -46,6 +49,10 @@ export function configPath(profileId: string): string {
 
 export function proposalPath(profileId: string): string {
   return join(profileDir(profileId), PROPOSAL_FILE)
+}
+
+export function workFoldersPath(profileId: string): string {
+  return join(profileDir(profileId), WORK_FOLDERS_FILE)
 }
 
 export function workDataDir(profileId: string): string {

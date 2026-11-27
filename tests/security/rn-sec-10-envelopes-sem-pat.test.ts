@@ -72,6 +72,10 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   buildSprintGoalRequest: ['loja', sprint, [101]],
   // O retrato do fluxo do PO lê o Azure com o mesmo PAT (RN-FLX-01).
   refreshFlowSnapshot: ['loja'],
+  getFlowBoard: ['loja'],
+  getWorkFolders: [],
+  chooseWorkFolder: ['loja'],
+  clearWorkFolder: ['loja'],
   // A consulta de versão não leva o PAT (RN-SEC-33); o envelope dela também não.
   checkForUpdate: [],
   openUpdateLink: ['installer'],
