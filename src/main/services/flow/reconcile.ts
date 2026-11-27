@@ -8,7 +8,7 @@ import { writeFileAtomic } from '../../profile/atomic-write'
 import { requireActiveProfile } from '../../profile/profile-store'
 import { getWorkFolder } from '../../profile/work-folders'
 import { getFlowBoard } from './board'
-import { FEATURES_DIR } from './feature-folders'
+import { FEATURES_DIR } from '../../flow/feature-folders'
 
 /**
  * O clique do PO que confirma o ID do Azure (RN-FLX-12, RN-FLX-13). A janela manda

@@ -1,6 +1,7 @@
 import { join } from 'path'
 import { app } from 'electron'
 import { AppError } from '@shared/errors'
+import { isRuleFirstPrompt, type RuleFirstPromptName } from '@shared/flow-prompts'
 
 /**
  * Onde cada parte do Perfil mora no disco. Tudo deriva de `userData`; nenhum
@@ -53,6 +54,24 @@ export function proposalPath(profileId: string): string {
 
 export function workFoldersPath(profileId: string): string {
   return join(profileDir(profileId), WORK_FOLDERS_FILE)
+}
+
+/** Textos de instrução do processo que o PO trocou, e as propostas da IA (ADR 0014). */
+export const INSTRUCTIONS_DIR = 'instrucoes'
+
+function assertInstruction(name: string): RuleFirstPromptName {
+  if (!isRuleFirstPrompt(name)) {
+    throw new AppError('PROFILE_INVALID', `Instrução desconhecida: "${String(name)}".`)
+  }
+  return name
+}
+
+export function instructionPath(profileId: string, name: string): string {
+  return join(profileDir(profileId), INSTRUCTIONS_DIR, `${assertInstruction(name)}.md`)
+}
+
+export function instructionProposalPath(profileId: string, name: string): string {
+  return join(profileDir(profileId), INSTRUCTIONS_DIR, `${assertInstruction(name)}.proposta.md`)
 }
 
 export function workDataDir(profileId: string): string {

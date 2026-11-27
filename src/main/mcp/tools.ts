@@ -49,7 +49,7 @@ export function diffText(diff: ConfigurationDiff): string {
 }
 
 /** A Configuração em uso, como está no disco. Inválida, é `null`: sem ela não há o que comparar. */
-function currentConfiguration(profileId: string): Configuration | null {
+export function currentConfiguration(profileId: string): Configuration | null {
   const file = configPath(profileId)
   if (!existsSync(file)) return null
   const result = parseConfigurationText(readFileSync(file, 'utf8'))

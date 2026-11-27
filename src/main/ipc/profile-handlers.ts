@@ -17,6 +17,12 @@ import * as patStore from '../security/pat-store'
 import { checkCredentials, clearAvatarCache } from '../services/azure/client'
 import { clearUserProfileCache } from '../services/azure/directory'
 import { activeProduct } from '../services/azure/scope'
+import {
+  applyInstructionProposal,
+  discardInstructionProposal,
+  listInstructions,
+  resetInstruction
+} from '../services/flow/instructions'
 import { handle } from './registry'
 
 /**
@@ -70,6 +76,12 @@ export function registerProfileHandlers(): void {
   handle('writeWorkData', (key, value) => writeWorkData(requireActiveProfile().id, key, value))
 
   handle('getWorkFolders', () => getWorkFolders(requireActiveProfile().id))
+
+  // RN-FLX-26: a IA propõe a instrução; quem aplica, descarta ou volta ao padrão é o PO.
+  handle('getInstructions', () => listInstructions())
+  handle('applyInstructionProposal', (name) => applyInstructionProposal(name))
+  handle('discardInstructionProposal', (name) => discardInstructionProposal(name))
+  handle('resetInstruction', (name) => resetInstruction(name))
 
   // RN-SEC-36: o caminho vem do diálogo do sistema, nunca da janela. Só o ID do
   // Produto atravessa, e ele é conferido contra a Configuração em uso.

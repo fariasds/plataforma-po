@@ -310,3 +310,56 @@ para ela andar?
   escolher a pasta (`RN-SEC-36`).
 
 **Implementado em:** `src/renderer/src/features/flow/`
+
+---
+
+## O fluxo do PO na IA
+
+A IA do PO trabalha o fluxo pelo servidor MCP do app ([ADR 0010](../adr/0010-servidor-mcp-local.md)),
+com as ferramentas e os prompts abaixo. O servidor lê o retrato que a janela gravou, a
+pasta de trabalho e o catálogo; não fala com o Azure (`RN-SEC-34`).
+
+| Ferramenta | O que faz |
+|---|---|
+| `listar_features` | As Features do Produto, com a Fase e quantas pendências |
+| `ler_feature` | Uma Feature: Fase, checklist, pendências e o texto dos artefatos |
+| `validar_feature` | O checklist, as pendências, as divergências e o que confirmar no Azure |
+| `ler_retrato` | O retrato do Azure, inteiro ou por coleção |
+| `buscar_regra` | Regras pelo ID ou por um trecho, no catálogo do Produto e nos consultados |
+| `ler_catalogo` | As páginas do catálogo, ou o texto de uma |
+| `gravar_arquivo` | Grava texto na pasta de trabalho (`RN-SEC-38`) |
+| `propor_instrucao` | Propõe um texto novo para um prompt do processo (`RN-FLX-26`) |
+
+Prompts do processo: `resumir_feedback`, `encaixar_oportunidade`, `discovery`, `quebra`,
+`analisar_bug` e `reescrever_bug`, cada um com o Produto e, quando faz sentido, a
+Feature ou o bug como argumento.
+
+### RN-FLX-17 · Uma fonte de pendências
+
+A tela Features e a ferramenta `validar_feature` calculam a Fase, o checklist e as
+pendências **pelo mesmo código**, sobre os mesmos arquivos e o mesmo retrato. A IA não
+tem um checklist próprio: o que ela vê é o que o PO vê.
+
+Toda ferramenta que usa o retrato devolve a data dele, e a instrução manda a IA dizê-la
+ao PO (`RN-FLX-02`). Sem retrato, a ferramenta diz ao PO para abrir a tela Features.
+
+### RN-FLX-26 · As instruções do processo
+
+O texto de cada prompt do processo vem com o app, escrito para o processo rule-first
+([ADR 0014](../adr/0014-processo-rule-first-nativo-e-alteravel.md)). O PO pode trocá-lo:
+
+- **O texto em uso** é `instrucoes/<nome>.md`, na pasta do Perfil, quando existe e não
+  está vazio; senão, o de fábrica.
+- **A IA propõe** um texto novo pela ferramenta `propor_instrucao`. A proposta fica em
+  `instrucoes/<nome>.proposta.md` e **não vale** até o PO aplicar.
+- **Na Configuração**, o cartão "Instruções do processo" mostra cada prompt, se o texto é
+  o de fábrica ou o do PO, e a proposta da IA, para ler, aplicar ou descartar. **Voltar ao
+  de fábrica** apaga o texto do PO.
+- O PO também pode editar o arquivo à mão: o app lê o que estiver lá.
+
+**Casos de borda:** versão nova do app com um texto de fábrica melhor não sobrescreve o
+do PO. Proposta vazia, ou acima de 100 KB, não é aplicada.
+
+**Implementado em:** `src/main/mcp/flow-tools.ts` · `src/main/flow/` ·
+`src/main/services/flow/instructions.ts` · `resources/mcp/rule-first/` ·
+`src/renderer/src/features/settings/InstructionsCard.tsx`

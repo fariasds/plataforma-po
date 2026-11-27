@@ -59,9 +59,10 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-32 | Para o GitHub só sai o que já é público | `tests/security/rn-sec-32-publicacao-so-da-historia-publica.test.ts` · hook de `pre-push` |
 | RN-SEC-33 | Consulta de versão nova sem token, num endereço só | `tests/security/rn-sec-33-consulta-de-versao.test.ts` |
 | RN-SEC-34 | O servidor MCP não faz rede nem lê o PAT | `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts` |
-| RN-SEC-35 | O servidor MCP grava só a proposta | `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts` |
+| RN-SEC-35 | O que o servidor MCP grava | `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts` |
 | RN-SEC-36 | A pasta de trabalho só vem do diálogo do sistema | `tests/security/rn-sec-36-pasta-de-trabalho-pelo-dialogo.test.ts` |
 | RN-SEC-37 | O que vem da wiki só é gravado dentro de catalogo/ | `tests/security/rn-sec-37-catalogo-so-dentro-da-pasta.test.ts` |
+| RN-SEC-38 | A IA grava só dentro da pasta de trabalho | `tests/security/rn-sec-38-ia-grava-so-na-pasta-de-trabalho.test.ts` |
 
 As regras da Configuração que protegem o PAT (`RN-CFG-04`, `05` e `06`) estão em
 [03-configuracao.md](03-configuracao.md), cada uma com o seu teste.
@@ -541,71 +542,63 @@ Além disso:
 **Provado por:** `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts`, que
 segue os imports a partir de `src/main/mcp/`.
 
-### RN-SEC-35 · O servidor MCP grava só a proposta
+### RN-SEC-35 · O que o servidor MCP grava
 
-O servidor MCP oferece três ferramentas: `ler_configuracao` e `validar`, que só
-leem, e `propor_configuracao`, a única que grava. Ela grava **só** `proposta.json`,
-na pasta do Perfil em que o servidor foi preso (`RN-SEC-34`). A Configuração, os
-Dados de trabalho, o `AGENTS.md`, o schema e os outros Perfis ficam como estão.
-Quem aplica a proposta é o PO, na janela (`RN-CFG-12`).
+*Reescrita em 2026-11-27 (ADR 0013, ADR 0014). Antes: o servidor gravava só a proposta
+de Configuração.*
 
-- **Proposta recusada não é gravada.** O servidor confere a proposta com as mesmas
-  regras do app (`RN-CFG-01` a `05`, `RN-CFG-09`) e devolve os erros com o caminho,
-  para a IA corrigir. A janela confere de novo ao mostrar e ao aplicar.
-- **A gravação é atômica** (temporário ao lado e troca), como a da Configuração:
-  a janela nunca lê uma proposta pela metade.
-- **A IA não escolhe caminho.** Nenhuma ferramenta recebe nome de arquivo; o
-  destino é sempre o do Perfil preso ao servidor.
-- O servidor também oferece o roteiro `configurar_plataforma` (as perguntas, o
-  porquê de cada uma e onde achar a resposta no Azure, em
-  `resources/mcp/configurar-plataforma.md`) e, como leitura, as instruções e o
-  schema da Configuração.
+O servidor MCP grava **três coisas, e nada mais**:
+
+1. **A proposta de Configuração**, `proposta.json`, pela ferramenta
+   `propor_configuracao`. Quem aplica é o PO, na janela (`RN-CFG-12`).
+2. **A proposta de instrução do processo**, `instrucoes/<nome>.proposta.md`, pela
+   ferramenta `propor_instrucao`. Quem aplica é o PO, na Configuração (`RN-FLX-26`).
+3. **Arquivo de texto na pasta de trabalho de um Produto**, pela ferramenta
+   `gravar_arquivo`, só pela guarda da `RN-SEC-38`.
+
+As duas propostas ficam na pasta do Perfil em que o servidor foi preso (`RN-SEC-34`). A
+Configuração, os Dados de trabalho, o `AGENTS.md`, o schema, as instruções em uso e os
+outros Perfis ficam como estão.
+
+- **Proposta recusada não é gravada.** O servidor confere a proposta de Configuração com
+  as mesmas regras do app (`RN-CFG-01` a `05`, `RN-CFG-09`) e devolve os erros com o
+  caminho, para a IA corrigir. A janela confere de novo ao mostrar e ao aplicar. A de
+  instrução precisa ter texto e até 100 KB, e o nome tem de ser de um prompt do processo.
+- **A gravação é atômica** (temporário ao lado e troca): a janela nunca lê um arquivo
+  pela metade.
+- **A IA não escolhe o caminho das propostas.** Ela escolhe o caminho só em
+  `gravar_arquivo`, e ele passa pela guarda.
+- O servidor também oferece o roteiro `configurar_plataforma`, os prompts do processo
+  rule-first e, como leitura, as instruções e o schema da Configuração.
 
 **Provado por:** `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts`: um
-teste estático sobre o grafo de imports do servidor (nenhuma escrita no disco além
-da gravação atômica, e toda gravação atômica do servidor vai para `proposalPath`) e
-um teste que chama as ferramentas e compara a pasta de dados inteira antes e depois.
+teste estático sobre o grafo de imports do servidor (nenhuma escrita no disco além da
+gravação atômica, e toda gravação atômica do servidor vai para `proposalPath`,
+`instructionProposalPath` ou `workspaceTarget`) e um teste que chama as ferramentas e
+compara a pasta de dados inteira antes e depois.
 
-### RN-SEC-36 · A pasta de trabalho só vem do diálogo do sistema
+### RN-SEC-38 · A IA grava só dentro da pasta de trabalho
 
-A pasta de trabalho de cada Produto (`RN-FLX-03`, ADR 0013) guarda o que a IA do PO
-vai escrever: Brief, Decisões, PBIs, catálogo. Quem escolhe onde ela fica é o PO, e só
-ele:
+`gravar_arquivo` recebe o Produto, um caminho relativo e o texto. O arquivo só é gravado
+se o caminho couber na **pasta de trabalho daquele Produto**, que o PO escolheu pelo
+diálogo do sistema (`RN-SEC-36`):
 
-- **Nenhum caminho vem da janela.** O contrato de IPC tem `chooseWorkFolder`,
-  `clearWorkFolder` e `getWorkFolders`, e os dois primeiros recebem só o ID do
-  Produto, conferido contra a Configuração em uso antes de abrir o diálogo. O caminho
-  sai do diálogo do sistema, aberto pelo processo principal. Um argumento a mais é
-  ignorado.
-- **A pasta nunca é a de dados do app**, nem fica dentro dela, nem a contém. Lá estão
-  os Perfis e o cofre do PAT (`RN-CFG-06`): se a IA pudesse gravar ali, a fronteira do
-  servidor MCP (`RN-SEC-34`) não valeria nada. O caminho é conferido depois de
-  resolver link simbólico.
-- **Caminho relativo e pasta que não existe são recusados.**
-- **O caminho fica em `pastas-de-trabalho.json`, na pasta do Perfil, fora de
-  `dados/`**: a janela grava Dados de trabalho por chave, e a chave não tem ponto nem
-  barra, então não alcança esse arquivo.
+- **Só nas pastas do processo:** `features/`, `oportunidades/`, `bugs/` e `catalogo/`.
+  A raiz da pasta (onde fica o `roadmap.json`, do app) fica de fora.
+- **Só texto:** `.md`, `.drawio`, `.txt`, até 1 MB.
+- **Recusado:** caminho absoluto ou com letra de unidade, `..`, `.`, barra repetida,
+  parte que começa com ponto (`.absorcao.json`, `.git`), caractere que o Windows não
+  aceita e **qualquer link simbólico no caminho**, que levaria para fora.
+- **Um Produto não alcança a pasta de outro.** O caminho é sempre relativo à pasta do
+  Produto nomeado, e duas pastas de trabalho não podem ser a mesma, nem uma ficar dentro
+  da outra (`RN-FLX-03`). Por isso o catálogo de outro Produto, que este só consulta
+  (`RN-CAT-05`), não é gravável por ele.
 
-**Provado por:** `tests/security/rn-sec-36-pasta-de-trabalho-pelo-dialogo.test.ts`, que
-chama os handlers com o diálogo simulado: o argumento a mais é ignorado, a pasta de
-dados do app (ela mesma, dentro e acima) é recusada, cancelar não grava, e Produto
-desconhecido não abre o diálogo.
+Recusa devolve "Nada foi gravado" e o motivo, para a IA corrigir.
 
-### RN-SEC-37 · O que vem da wiki só é gravado dentro de catalogo/
-
-Absorver o catálogo (`RN-CAT-03`) grava arquivos com nomes que saem do caminho das
-páginas, que quem edita a wiki escolhe, e da base da absorção, que fica na pasta do
-PO. Por isso:
-
-- **O caminho de página que sobe** (`..`) ou desce para fora da raiz não vira arquivo.
-- **Todo arquivo a gravar é conferido** contra `catalogo/`: caminho absoluto, que sobe
-  da pasta ou que não é Markdown é recusado, e a absorção para.
-- **Ou entra tudo, ou nada:** os caminhos são conferidos antes do primeiro arquivo ser
-  gravado.
-
-**Provado por:** `tests/security/rn-sec-37-catalogo-so-dentro-da-pasta.test.ts`, que
-troca o caminho na base da absorção por um que sobe da pasta, um absoluto e um que não
-é Markdown, e confere que nada foi gravado, nem a página nova.
+**Provado por:** `tests/security/rn-sec-38-ia-grava-so-na-pasta-de-trabalho.test.ts`, que
+chama a ferramenta com cada caminho proibido, com um link para fora da pasta e pelo
+Produto que consulta outro, e confere que nada foi gravado fora do lugar.
 
 ---
 

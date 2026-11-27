@@ -1,6 +1,7 @@
 import type { SprintGoalRequest } from './ai'
 import type { AbsorbPreview, CatalogView } from './flow-absorb'
 import type { FlowBoard } from './flow-board'
+import type { InstructionState } from './flow-prompts'
 import type { FlowSnapshotSummary } from './flow-snapshot'
 import type { McpLaunch } from './mcp-clients'
 import type { UpdateCheck, UpdateLink } from './update'
@@ -252,6 +253,12 @@ export interface IpcApi {
    * escolheu a versão da wiki; as outras em conflito ficam como estão.
    */
   absorbCatalog(productId: string, useWiki: string[]): Promise<CatalogView>
+  /** As instruções do processo rule-first, o texto em uso e a proposta da IA (RN-FLX-26). */
+  getInstructions(): Promise<InstructionState[]>
+  applyInstructionProposal(name: string): Promise<InstructionState[]>
+  discardInstructionProposal(name: string): Promise<InstructionState[]>
+  /** Volta ao texto de fábrica. */
+  resetInstruction(name: string): Promise<InstructionState[]>
 
   // --- IA do PO (ADR 0007) ------------------------------------------------
   //
@@ -332,6 +339,10 @@ export const IPC_CHANNELS = {
   getCatalog: 'flow:catalog',
   previewCatalogAbsorb: 'flow:catalog-preview',
   absorbCatalog: 'flow:catalog-absorb',
+  getInstructions: 'profile:instructions',
+  applyInstructionProposal: 'profile:instruction-apply',
+  discardInstructionProposal: 'profile:instruction-discard',
+  resetInstruction: 'profile:instruction-reset',
   buildSprintGoalRequest: 'ai:sprint-goal-request',
   checkForUpdate: 'update:check',
   openUpdateLink: 'update:open-link'

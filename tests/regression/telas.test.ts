@@ -64,7 +64,7 @@ vi.mock('../../src/main/profile/work-folders', async () => {
 })
 // Num checkout, a data dos arquivos é a do clone: o "parada há N dias" (RN-FLX-11)
 // sai de uma tabela fixa, pelo nome da pasta da Feature.
-vi.mock('../../src/main/services/flow/file-times', () => ({
+vi.mock('../../src/main/flow/file-times', () => ({
   lastModified: (dir: string) => {
     const days = FOLDER_AGE_DAYS[basename(dir)]
     return days === undefined ? null : state.anchor - days * 24 * 60 * 60 * 1000

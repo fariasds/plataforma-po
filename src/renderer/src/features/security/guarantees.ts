@@ -76,10 +76,11 @@ export const GUARANTEES: readonly Guarantee[] = [
   },
   {
     key: 'mcp',
-    rules: ['RN-SEC-34', 'RN-SEC-35'],
+    rules: ['RN-SEC-34', 'RN-SEC-35', 'RN-SEC-38'],
     proof: [
       'tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts',
-      'tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts'
+      'tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts',
+      'tests/security/rn-sec-38-ia-grava-so-na-pasta-de-trabalho.test.ts'
     ]
   },
   {

@@ -4,7 +4,10 @@ import schemaTemplate from '../../../resources/profile-template/configuracao.sch
 import configurePrompt from '../../../resources/mcp/configurar-plataforma.md?raw'
 import { configPath } from '../profile/paths'
 import type { McpPrompt, McpResource, McpServerSpec } from './protocol'
-import { configurationTools } from './tools'
+import { RULE_FIRST_PROMPTS } from '@shared/flow-prompts'
+import { currentInstruction } from '../flow/instructions'
+import { flowTools } from './flow-tools'
+import { configurationTools, currentConfiguration } from './tools'
 
 /**
  * O servidor MCP da Plataforma do PO (ADR 0010). Ele só conhece a pasta do Perfil
@@ -42,6 +45,36 @@ export const PROMPTS: McpPrompt[] = [
   }
 ]
 
+/** O que o PO informou ao escolher o prompt, para a IA começar dali. */
+function request(args: Record<string, string>): string {
+  const lines = Object.entries(args)
+    .filter(([, value]) => value.trim() !== '')
+    .map(([name, value]) => `- ${name}: ${value.trim().slice(0, 200)}`)
+  return lines.length > 0 ? `\n\n## O pedido\n\n${lines.join('\n')}\n` : ''
+}
+
+/** Os prompts do processo rule-first, com o texto em uso no Perfil (ADR 0014). */
+function ruleFirstPrompts(profileId: string): McpPrompt[] {
+  return RULE_FIRST_PROMPTS.map((prompt) => ({
+    name: prompt.name,
+    title: prompt.title,
+    description: prompt.description,
+    arguments: prompt.arguments.map((arg) => ({ ...arg })),
+    get: (args) => ({
+      description: prompt.title,
+      messages: [
+        {
+          role: 'user',
+          content: {
+            type: 'text',
+            text: currentInstruction(profileId, prompt.name) + request(args)
+          }
+        }
+      ]
+    })
+  }))
+}
+
 export const RESOURCES: McpResource[] = [
   {
     uri: 'plataforma-po://configuracao/instrucoes',
@@ -68,9 +101,13 @@ export function buildServerSpec(profileId: string, version: string): McpServerSp
     title: 'Plataforma do PO',
     version,
     instructions:
-      'Servidor da Plataforma do PO, preso a um Perfil. Ele lê a Configuração e grava propostas, que o PO revisa e aplica no app. Não tem acesso ao Azure DevOps nem ao token (PAT): nunca peça o token ao PO. Para configurar do zero, use o prompt configurar_plataforma.',
-    tools: configurationTools(profileId),
-    prompts: PROMPTS,
+      'Servidor da Plataforma do PO, preso a um Perfil. Ele lê a Configuração e grava propostas, que o PO revisa e aplica no app. Não tem acesso ao Azure DevOps nem ao token (PAT): nunca peça o token ao PO. Para configurar do zero, use o prompt configurar_plataforma. ' +
+      'No fluxo do PO (Discovery, quebra, bugs, oportunidades), use os prompts do processo e as ferramentas listar_features, ler_feature, validar_feature, ler_retrato, buscar_regra, ler_catalogo e gravar_arquivo. O retrato do Azure tem data: diga-a ao PO.',
+    tools: [
+      ...configurationTools(profileId),
+      ...flowTools(profileId, () => currentConfiguration(profileId))
+    ],
+    prompts: [...PROMPTS, ...ruleFirstPrompts(profileId)],
     resources: RESOURCES
   }
 }

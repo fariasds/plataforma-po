@@ -46,7 +46,8 @@ Ferramentas novas, todas presas ao Perfil do `--perfil`:
 | `validar_feature` | As pendências de uma Feature, as mesmas da tela | não |
 | `buscar_regra` | Regras por ID ou por texto, no catálogo do Produto e nos consultados | não |
 | `ler_catalogo` | Um domínio do catálogo, inteiro | não |
-| `listar_oportunidades` | Oportunidades e o encaixe de cada uma | não |
+| `listar_features` | As Features do Produto, com a Fase e as pendências | não |
+| `listar_oportunidades` | Oportunidades e o encaixe de cada uma (fatia 6) | não |
 | `gravar_arquivo` | Grava um arquivo dentro da pasta de trabalho de um Produto | **sim** |
 | `propor_instrucao` | Grava a proposta de instrução alterada (ADR 0014) | só a proposta |
 

@@ -30,6 +30,16 @@ IA pode propor a alteração, que o PO revisa e aplica.
   IA grava a proposta, o PO vê a diferença e aplica.
 - **Voltar ao padrão** é apagar o arquivo do Perfil.
 
+## Como ficou na implementação (2026-11-27)
+
+- Os textos de fábrica estão em `resources/mcp/rule-first/`, um por prompt.
+- O texto do PO é `instrucoes/<nome>.md`, na pasta do Perfil; a proposta da IA,
+  `instrucoes/<nome>.proposta.md`. O PO lê o texto proposto e aplica ou descarta no
+  cartão "Instruções do processo", na Configuração (`RN-FLX-26`). A diferença linha a
+  linha, que a decisão previa, ainda não existe: o PO lê o texto inteiro.
+- O app ainda não avisa quando o texto de fábrica muda numa versão nova e o PO tem o
+  dele: fica como pendência do desenho.
+
 ## Alternativas consideradas
 
 - **Só o processo fixo:** serviria a um PO.

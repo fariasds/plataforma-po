@@ -847,7 +847,7 @@ export const ptBR = {
     openWizard: 'Abrir o assistente',
     safetyTitle: 'O que a sua IA pode fazer',
     safetyText:
-      'Ler a Configuração e gravar uma proposta, nada além disso. O servidor que ela inicia não usa a rede nem lê o token, e a Configuração só muda quando você clica em Aplicar.',
+      'Ler a Configuração e o fluxo do PO, propor mudanças na Configuração e nas instruções do processo, e gravar arquivos de texto na pasta de trabalho que você escolheu. O servidor que ela inicia não usa a rede nem lê o token, e a Configuração só muda quando você clica em Aplicar.',
     clients: {
       'claude-desktop': {
         label: 'Claude Desktop',
@@ -1233,6 +1233,20 @@ export const ptBR = {
     linked: 'ID gravado no arquivo.'
   },
 
+  instructions: {
+    title: 'Instruções do processo',
+    intro:
+      'O que a sua IA recebe nos prompts do fluxo do PO, pelo servidor MCP. O texto de fábrica segue o processo rule-first; quando a IA propõe um texto novo, ele aparece aqui, e só vale depois de você aplicar.',
+    default: 'de fábrica',
+    own: 'sua versão',
+    read: 'Ler',
+    reset: 'Voltar ao de fábrica',
+    proposal: 'A IA propôs um texto novo.',
+    proposalOf: 'Proposta para {title}',
+    apply: 'Aplicar',
+    discard: 'Descartar'
+  },
+
   catalog: {
     noSource:
       'O catálogo de {product} não está configurado. Defina "catalog" no Produto, na Configuração: a wiki do Azure DevOps e a página raiz, ou "local" para manter o catálogo só na pasta.',
@@ -1350,9 +1364,9 @@ export const ptBR = {
           'Nem fala com serviço de IA. Para a sua IA vai só o que você vê na prévia, e quem cola é você.'
       },
       mcp: {
-        title: 'Conectada pelo MCP, a sua IA só propõe',
+        title: 'Conectada pelo MCP, a sua IA propõe e só escreve na pasta de trabalho',
         detail:
-          'O servidor que a sua IA inicia não usa rede nem lê o token. Ele grava só uma proposta, e nada muda até você aplicar.'
+          'O servidor que a sua IA inicia não usa rede nem lê o token. A Configuração e as instruções do processo ela só propõe, e nada muda até você aplicar. Arquivo ela grava só dentro da pasta de trabalho que você escolheu.'
       },
       window: {
         title: 'A janela roda isolada',

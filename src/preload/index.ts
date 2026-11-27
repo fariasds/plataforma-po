@@ -67,6 +67,10 @@ const api: IpcBridge = {
   getCatalog: (productId) => invoke(IPC_CHANNELS.getCatalog, productId),
   previewCatalogAbsorb: (productId) => invoke(IPC_CHANNELS.previewCatalogAbsorb, productId),
   absorbCatalog: (productId, useWiki) => invoke(IPC_CHANNELS.absorbCatalog, productId, useWiki),
+  getInstructions: () => invoke(IPC_CHANNELS.getInstructions),
+  applyInstructionProposal: (name) => invoke(IPC_CHANNELS.applyInstructionProposal, name),
+  discardInstructionProposal: (name) => invoke(IPC_CHANNELS.discardInstructionProposal, name),
+  resetInstruction: (name) => invoke(IPC_CHANNELS.resetInstruction, name),
   checkForUpdate: () => invoke(IPC_CHANNELS.checkForUpdate),
   openUpdateLink: (link) => invoke(IPC_CHANNELS.openUpdateLink, link),
 

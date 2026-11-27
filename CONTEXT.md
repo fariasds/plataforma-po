@@ -107,3 +107,8 @@ As regras de negócio de um Produto do PO, uma página por domínio, em `catalog
 pasta de trabalho. Pode vir da wiki do Azure, que é a versão oficial, ou ser mantido
 só na pasta. Não confundir com as regras do próprio app, em `docs/regras-de-negocio/`.
 _Avoid_: base de conhecimento, documentação
+
+**Instrução do processo**:
+O texto que a IA do PO recebe num prompt do fluxo (Discovery, quebra, análise de bug).
+Vem com o app, e o PO pode trocá-lo pelo dele; a IA só propõe a troca.
+_Avoid_: prompt (prompt é o que o servidor oferece; a instrução é o texto dele), template

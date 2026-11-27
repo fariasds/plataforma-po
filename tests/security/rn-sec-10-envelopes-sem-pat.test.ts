@@ -81,6 +81,10 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   getCatalog: ['loja'],
   previewCatalogAbsorb: ['loja'],
   absorbCatalog: ['loja', []],
+  getInstructions: [],
+  applyInstructionProposal: ['discovery'],
+  discardInstructionProposal: ['discovery'],
+  resetInstruction: ['discovery'],
   // A consulta de versão não leva o PAT (RN-SEC-33); o envelope dela também não.
   checkForUpdate: [],
   openUpdateLink: ['installer'],

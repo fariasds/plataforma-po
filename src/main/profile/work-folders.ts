@@ -85,6 +85,17 @@ export function getWorkFolders(profileId: string): Record<string, string> {
 export function setWorkFolder(profileId: string, productId: string, path: string): string {
   const folder = assertWorkFolder(path)
   const stored = read(profileId)
+  // Duas pastas não se misturam (RN-FLX-03): a IA que grava num Produto não pode
+  // alcançar o catálogo de outro, que ela só consulta (RN-SEC-38).
+  for (const [otherId, other] of Object.entries(stored.folders)) {
+    if (otherId === productId) continue
+    if (inside(folder, real(other)) || inside(real(other), folder)) {
+      throw new AppError(
+        'WORK_FOLDER_INVALID',
+        `Esta pasta já é, contém ou fica dentro da pasta de trabalho de outro Produto (${otherId}). Cada Produto tem a sua.`
+      )
+    }
+  }
   stored.folders[productId] = folder
   writeFileAtomic(workFoldersPath(profileId), JSON.stringify(stored, null, 2) + '\n')
   return folder

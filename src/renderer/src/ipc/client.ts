@@ -66,6 +66,10 @@ export const ipc: IpcApi = {
   getCatalog: (productId) => unwrap(window.api.getCatalog(productId)),
   previewCatalogAbsorb: (productId) => unwrap(window.api.previewCatalogAbsorb(productId)),
   absorbCatalog: (productId, useWiki) => unwrap(window.api.absorbCatalog(productId, useWiki)),
+  getInstructions: () => unwrap(window.api.getInstructions()),
+  applyInstructionProposal: (name) => unwrap(window.api.applyInstructionProposal(name)),
+  discardInstructionProposal: (name) => unwrap(window.api.discardInstructionProposal(name)),
+  resetInstruction: (name) => unwrap(window.api.resetInstruction(name)),
 
   checkForUpdate: () => unwrap(window.api.checkForUpdate()),
   openUpdateLink: (link) => unwrap(window.api.openUpdateLink(link))

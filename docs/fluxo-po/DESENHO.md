@@ -203,7 +203,7 @@ Só a última fatia sobe a versão e escreve as novidades.
 | 2 | Pasta de trabalho e Fase | Escolher a pasta por Produto; ler os artefatos pelas linhas reconhecidas; Fase, checklist, pendências, parada há N dias | FLX-03 a 11, 18, 19 · SEC-36 |
 | 3 | Tela Features | Funil por Fase, a Feature aberta com checklist e pendências, reconciliação de PBI e de Feature com um clique; `PO_DEMO_SCENARIO` para testar com os Cenários | FLX-12, 13 · GLB-15 |
 | 4 | Catálogo | Fonte por Produto, absorver da wiki (só `GET`) ou da pasta, com diferença; regra pelo título; citação conferida; catálogos consultados; tela Catálogo; a Fase Publicada e a revalidação, que dependem do catálogo | CAT-01 a 06, FLX-20 · CFG-15 · SEC-37 |
-| 5 | Servidor MCP | As ferramentas de leitura, `gravar_arquivo` presa à pasta, os prompts do rule-first, instrução substituível e `propor_instrucao` | FLX-17 · SEC (35 reescrita, caminho, consultado) |
+| 5 | Servidor MCP | As ferramentas de leitura, `gravar_arquivo` presa à pasta, os prompts do rule-first, instrução substituível e `propor_instrucao`, revisada na Configuração | FLX-17, FLX-26 · SEC-35 reescrita, SEC-38 |
 | 6 | Oportunidades e Encaixe | Tela Oportunidades: feedbacks e conversa, encaixe derivado, "A validar" de volta ao começo | FLX-14 a 16, 25 |
 | 7 | Acompanhamento | Análises de Bug, bugs por Feature e por regra, regras a conferir | FLX-21 a 24 |
 | 8 | Roadmap | `roadmap.json`, Janelas, trilhas e sobrecarga, Fase sobre a Janela, fora da Janela, Minha sprint, marco | RDM-01 a 21 |
