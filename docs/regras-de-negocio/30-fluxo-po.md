@@ -437,3 +437,69 @@ fechar o encaixe?
 
 **Implementado em:** `src/shared/flow-opportunities.ts` · `src/main/flow/opportunities.ts` ·
 `src/renderer/src/features/flow/OpportunitiesScreen.tsx`
+
+---
+
+## Acompanhamento
+
+Depois da entrega, o que volta são bugs. O acompanhamento diz quais faltam analisar,
+onde eles se concentram e quais regras novas ainda não foram conferidas em uso. A
+análise de cada bug é da IA do PO com ele, pelo prompt `analisar_bug`; o app lê o
+resultado.
+
+### RN-FLX-21 · Análise de Bug
+
+Um arquivo por bug em `bugs/BUG-<id>-<slug>.md`, na pasta de trabalho, com o título
+(`# BUG <id> · <título>`) e as linhas `Veredito:` (Bug, Não é bug ou A validar),
+`Violada:` e `Preservar:`. Bug **aberto** do retrato sem arquivo é **sem análise** e
+aparece primeiro na tela. Bug fechado sem análise não é cobrado.
+
+A análise de um bug que já saiu do retrato (fechado antes da janela) continua valendo:
+conta por regra e, pela regra, por Feature.
+
+### RN-FLX-22 · Bugs por Feature
+
+Um bug chega à Feature por dois caminhos:
+
+| Caminho | Como |
+|---|---|
+| **Azure** | O pai do bug no retrato é a Feature, ou um filho dela |
+| **Regra** | A análise tem veredito "Bug" e viola uma regra do catálogo do Produto; a `Origem:` ou as Atualizações da regra citam um PBI; o PBI está no plano (`plano-pbis.md`) de uma Feature |
+
+O bug conta **uma vez por Feature**, mesmo quando os dois caminhos dão nela; a tela diz
+por qual caminho ele chegou (Azure, Regra ou os dois). Veredito **Não é bug** não conta
+em nenhum caminho. Bug sem análise conta pelo Azure. Ordem: a Feature com mais bugs
+primeiro.
+
+### RN-FLX-23 · Bugs por regra
+
+Os bugs com veredito "Bug", agrupados pela regra da linha `Violada:`. A regra que não
+está no catálogo aparece sem título. Ordem: a regra com mais bugs primeiro.
+
+### RN-FLX-24 · Regra a conferir
+
+Regra com `Validação: Não validada` cujo PBI da `Origem:` ou das Atualizações está, no
+retrato, num estado de entrega do Perfil de processo (`deliveredStates`). Ela já está
+em uso e ninguém conferiu: o PO confere e marca a validação no catálogo. Só o catálogo
+do próprio Produto entra; o consultado é de outro Produto.
+
+Sem catálogo configurado (`RN-CFG-15`), não há caminho pela regra nem regra a conferir,
+e a tela diz isso.
+
+---
+
+## A tela Acompanhamento
+
+**Pergunta que responde:** o que a entrega trouxe de volta, e onde?
+
+- **Por Produto.** Abrir a tela e Atualizar refazem o retrato (`RN-FLX-02`).
+- **Quatro blocos:** bugs sem análise, bugs por Feature (com `HelpTip` da `RN-FLX-22`:
+  a Feature pode ter bug que não está ligado a ela no Azure), bugs por regra e regras a
+  conferir.
+- **Veredito:** "Bug" em vermelho, "A validar" e sem análise em âmbar, "Não é bug" em
+  cinza.
+
+A IA lê o mesmo pela ferramenta `ler_acompanhamento`.
+
+**Implementado em:** `src/shared/flow-follow-up.ts` · `src/main/flow/follow-up.ts` ·
+`src/renderer/src/features/flow/FollowUpScreen.tsx`

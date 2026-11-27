@@ -102,7 +102,7 @@ export function buildServerSpec(profileId: string, version: string): McpServerSp
     version,
     instructions:
       'Servidor da Plataforma do PO, preso a um Perfil. Ele lê a Configuração e grava propostas, que o PO revisa e aplica no app. Não tem acesso ao Azure DevOps nem ao token (PAT): nunca peça o token ao PO. Para configurar do zero, use o prompt configurar_plataforma. ' +
-      'No fluxo do PO (Discovery, quebra, bugs, oportunidades), use os prompts do processo e as ferramentas listar_features, ler_feature, validar_feature, ler_retrato, buscar_regra, ler_catalogo e gravar_arquivo. O retrato do Azure tem data: diga-a ao PO.',
+      'No fluxo do PO (Discovery, quebra, bugs, oportunidades), use os prompts do processo e as ferramentas listar_features, ler_feature, validar_feature, ler_retrato, listar_oportunidades, ler_acompanhamento, buscar_regra, ler_catalogo e gravar_arquivo. O retrato do Azure tem data: diga-a ao PO.',
     tools: [
       ...configurationTools(profileId),
       ...flowTools(profileId, () => currentConfiguration(profileId))

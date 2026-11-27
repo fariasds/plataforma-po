@@ -1,6 +1,7 @@
 import type { SprintGoalRequest } from './ai'
 import type { AbsorbPreview, CatalogView } from './flow-absorb'
 import type { FlowBoard } from './flow-board'
+import type { FollowUpView } from './flow-follow-up'
 import type { OpportunitiesView } from './flow-opportunities'
 import type { InstructionState } from './flow-prompts'
 import type { FlowSnapshotSummary } from './flow-snapshot'
@@ -250,6 +251,11 @@ export interface IpcApi {
    * RN-FLX-25), do retrato já gravado e da pasta de trabalho. Não lê o Azure.
    */
   getOpportunities(productId: string): Promise<OpportunitiesView>
+  /**
+   * O acompanhamento do Produto (RN-FLX-21 a RN-FLX-24): bugs sem análise, bugs por
+   * Feature e por regra, regras a conferir. Do retrato já gravado e da pasta; não lê o Azure.
+   */
+  getFollowUp(productId: string): Promise<FollowUpView>
   /** O catálogo de regras do Produto na pasta de trabalho (ADR 0015). Não lê o Azure. */
   getCatalog(productId: string): Promise<CatalogView>
   /** Lê a wiki e diz, página a página, o que a absorção mudaria (RN-CAT-03). Não grava. */
@@ -343,6 +349,7 @@ export const IPC_CHANNELS = {
   linkPlannedPbi: 'flow:link-planned-pbi',
   linkDraftFeature: 'flow:link-draft-feature',
   getOpportunities: 'flow:opportunities',
+  getFollowUp: 'flow:follow-up',
   getCatalog: 'flow:catalog',
   previewCatalogAbsorb: 'flow:catalog-preview',
   absorbCatalog: 'flow:catalog-absorb',

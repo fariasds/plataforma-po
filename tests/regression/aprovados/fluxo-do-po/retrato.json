@@ -72,6 +72,13 @@
     ],
     "children": [
       {
+        "id": 4061,
+        "parentId": 4060,
+        "state": "Done",
+        "title": "Aceitar a troca sem nota fiscal",
+        "type": "Product Backlog Item"
+      },
+      {
         "id": 4211,
         "parentId": 4102,
         "state": "New",
@@ -116,7 +123,9 @@
     ],
     "features": [
       {
-        "childIds": [],
+        "childIds": [
+          4061
+        ],
         "createdDate": "2026-07-01T09:00:00",
         "id": 4060,
         "parentId": null,

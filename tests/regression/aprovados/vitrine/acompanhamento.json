@@ -1,0 +1,37 @@
+{
+  "app": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "app",
+    "snapshotTakenAt": "2026-11-09T12:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [],
+    "workFolder": "unset"
+  },
+  "loja": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "loja",
+    "snapshotTakenAt": "2026-11-09T12:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [
+      {
+        "id": 10651,
+        "open": true,
+        "state": "Committed",
+        "title": "Pagamento duplicado no cartão",
+        "verdict": null
+      },
+      {
+        "id": 10653,
+        "open": true,
+        "state": "New",
+        "title": "Ícone desalinhado no menu",
+        "verdict": null
+      }
+    ],
+    "workFolder": "unset"
+  }
+}

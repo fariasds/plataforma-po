@@ -1,0 +1,27 @@
+{
+  "loja": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "loja",
+    "snapshotTakenAt": "2026-10-08T18:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [
+      {
+        "id": 5004,
+        "open": true,
+        "state": "Approved",
+        "title": "Ícone desalinhado no menu",
+        "verdict": null
+      },
+      {
+        "id": 5005,
+        "open": true,
+        "state": "Committed",
+        "title": "[reincidente] Cache do catálogo desatualizado",
+        "verdict": null
+      }
+    ],
+    "workFolder": "unset"
+  }
+}

@@ -7,6 +7,7 @@ import { MAX_INSTRUCTION_BYTES, isRuleFirstPrompt, RULE_FIRST_PROMPTS } from '@s
 import { flowBoard, storedSnapshot } from '../flow/board'
 import { productCatalog, productOf } from '../flow/catalog-files'
 import { FEATURES_DIR } from '../flow/feature-folders'
+import { followUpView } from '../flow/follow-up'
 import { opportunitiesView } from '../flow/opportunities'
 import { writeFileAtomic } from '../profile/atomic-write'
 import { instructionProposalPath } from '../profile/paths'
@@ -207,6 +208,35 @@ export function flowTools(profileId: string, configuration: () => Configuration 
           ? ''
           : '\nO Produto não declara feedback na Configuração: as oportunidades vêm só da conversa e dos bugs.'
         return text(`${snapshotLine(view.snapshotTakenAt)}${note}\n\n${json(view.opportunities)}`)
+      }
+    },
+    {
+      name: 'ler_acompanhamento',
+      title: 'Ler o acompanhamento',
+      description:
+        'Os bugs abertos sem Análise de Bug em bugs/, os bugs por Feature (pelo vínculo do Azure e pela regra violada), os bugs por regra e as regras "Não validada" cujo PBI já foi entregue.',
+      inputSchema: {
+        type: 'object',
+        properties: PRODUCT_ARG,
+        required: ['produto'],
+        additionalProperties: false
+      },
+      readOnly: true,
+      call: (args) => {
+        const { snapshotTakenAt, workFolder, catalogConfigured, ...view } = followUpView(
+          config(),
+          profileId,
+          productArg(args)
+        )
+        const notes = [
+          workFolder !== 'ok'
+            ? 'A pasta de trabalho do Produto não está disponível: só os bugs do retrato.'
+            : '',
+          catalogConfigured
+            ? ''
+            : 'O Produto não tem catálogo de regras: sem bugs pela regra e sem regras a conferir.'
+        ].filter(Boolean)
+        return text([snapshotLine(snapshotTakenAt), ...notes, '', json(view)].join('\n'))
       }
     },
     {

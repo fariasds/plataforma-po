@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Button, Dropdown, Flex, Layout, Tooltip, Typography, theme } from 'antd'
 import {
+  AuditOutlined,
   BookOutlined,
   BugOutlined,
   BulbOutlined,
@@ -63,6 +64,13 @@ const FLOW: NavEntry[] = [
     key: '/oportunidades',
     icon: <BulbOutlined />,
     label: t('nav.opportunities'),
+    group: t('nav.flow'),
+    refresh: true
+  },
+  {
+    key: '/acompanhamento',
+    icon: <AuditOutlined />,
+    label: t('nav.followUp'),
     group: t('nav.flow'),
     refresh: true
   },

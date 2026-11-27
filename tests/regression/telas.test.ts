@@ -93,6 +93,7 @@ const { buildFlowSnapshot } = await import('../../src/main/services/azure/flow-s
 const { getFlowBoard } = await import('../../src/main/services/flow/board')
 const { getCatalogView } = await import('../../src/main/services/flow/catalog')
 const { getOpportunities } = await import('../../src/main/services/flow/opportunities')
+const { getFollowUp } = await import('../../src/main/services/flow/follow-up')
 const { previewCatalogAbsorb } = await import('../../src/main/services/flow/absorb')
 const { buildSprintGoalRequest } = await import('../../src/main/services/ai/sprint-goal')
 const { resolveScope } = await import('../../src/main/services/azure/scope')
@@ -356,6 +357,17 @@ export const SCREENS: Record<string, ScreenRun> = {
     return result
   },
 
+  // O acompanhamento de cada Produto: bugs sem análise, por Feature e por regra, e
+  // regras a conferir (RN-FLX-21 a RN-FLX-24).
+  acompanhamento: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      state.workData[flowKeys.snapshot(product.id)] = await buildFlowSnapshot(product.id)
+      result[product.id] = getFollowUp(product.id)
+    }
+    return result
+  },
+
   // O catálogo de regras de cada Produto e o que a absorção da wiki mudaria (RN-CAT-01 a 06).
   catalogo: async () => {
     const result: Record<string, unknown> = {}
@@ -425,6 +437,7 @@ const COVERED_HANDLERS: Record<string, string> = {
   refreshFlowSnapshot: 'retrato',
   getFlowBoard: 'fluxo',
   getOpportunities: 'oportunidades',
+  getFollowUp: 'acompanhamento',
   getCatalog: 'catalogo',
   previewCatalogAbsorb: 'catalogo',
   buildSprintGoalRequest: 'pedido-ia'

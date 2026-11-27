@@ -64,6 +64,7 @@ export const ipc: IpcApi = {
   linkDraftFeature: (productId, slug, featureId) =>
     unwrap(window.api.linkDraftFeature(productId, slug, featureId)),
   getOpportunities: (productId) => unwrap(window.api.getOpportunities(productId)),
+  getFollowUp: (productId) => unwrap(window.api.getFollowUp(productId)),
   getCatalog: (productId) => unwrap(window.api.getCatalog(productId)),
   previewCatalogAbsorb: (productId) => unwrap(window.api.previewCatalogAbsorb(productId)),
   absorbCatalog: (productId, useWiki) => unwrap(window.api.absorbCatalog(productId, useWiki)),

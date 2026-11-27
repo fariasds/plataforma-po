@@ -76,6 +76,7 @@ export const ptBR = {
     features: 'Features',
     catalog: 'Catálogo',
     opportunities: 'Oportunidades',
+    followUp: 'Acompanhamento',
     flow: 'Fluxo do PO'
   },
 
@@ -281,6 +282,12 @@ export const ptBR = {
         text:
           'A Fase sai dos arquivos da pasta de trabalho, não da linha "Fase:" do README. Discovery até o checklist fechar; Pronta para quebra quando fecha; Em quebra quando o plano ganha regras; Publicada quando todas estão no catálogo. ' +
           'O estado da Feature no Azure não muda a Fase: quando discorda, aparece como divergência.'
+      },
+      'RN-FLX-22': {
+        title: 'Bugs por Feature',
+        text:
+          'Um bug chega à Feature por dois caminhos: o vínculo no Azure (filho da Feature ou de um PBI dela) e a regra que ele viola, pela Origem da regra até o plano da Feature. ' +
+          'O mesmo bug conta uma vez por Feature, mesmo quando os dois caminhos dão nela. Bug com veredito "Não é bug" não conta.'
       },
       'RN-GLB-16': {
         title: 'Datas da demonstração',
@@ -1255,6 +1262,45 @@ export const ptBR = {
       Proposto: 'Proposto',
       Encaixada: 'Encaixada',
       Descartada: 'Descartada'
+    }
+  },
+
+  followUp: {
+    noFolder:
+      'Sem pasta de trabalho, a tela mostra só os bugs do retrato. As Análises de Bug e o catálogo de regras moram na pasta.',
+    noCatalog:
+      'O Produto não tem catálogo de regras ("catalog"): sem bugs pela regra violada e sem regras a conferir.',
+    unanalyzed: {
+      title: 'Bugs sem análise',
+      hint: 'Bugs abertos sem arquivo em bugs/. Peça à sua IA para analisá-los com o prompt analisar_bug.',
+      empty: 'Todo bug aberto já tem análise.'
+    },
+    byFeature: {
+      title: 'Bugs por Feature',
+      empty: 'Nenhum bug ligado a uma Feature, nem pelo Azure nem pela regra violada.',
+      bugs: '{count} bugs'
+    },
+    byRule: {
+      title: 'Bugs por regra',
+      empty: 'Nenhuma Análise de Bug com veredito "Bug" e regra violada.'
+    },
+    toConfirm: {
+      title: 'Regras a conferir',
+      hint: 'Regras "Não validada" cujo PBI já foi entregue: confira em uso e marque a validação no catálogo.',
+      empty: 'Nenhuma regra nova entregue esperando conferência.'
+    },
+    via: { azure: 'Azure', regra: 'Regra', ambos: 'Azure e regra' },
+    verdict: { none: 'sem análise' },
+    closed: 'fechado',
+    columns: {
+      bug: 'Bug',
+      state: 'Estado',
+      verdict: 'Veredito',
+      via: 'Caminho',
+      rule: 'Regra',
+      bugs: 'Bugs',
+      pbi: 'PBI entregue',
+      file: 'Arquivo'
     }
   },
 

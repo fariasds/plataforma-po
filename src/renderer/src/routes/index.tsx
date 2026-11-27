@@ -5,6 +5,7 @@ import { ConnectAiScreen } from '../features/connect-ai/ConnectAiScreen'
 import { DailyScreen } from '../features/daily/DailyScreen'
 import { CatalogScreen } from '../features/flow/CatalogScreen'
 import { FeaturesScreen } from '../features/flow/FeaturesScreen'
+import { FollowUpScreen } from '../features/flow/FollowUpScreen'
 import { OpportunitiesScreen } from '../features/flow/OpportunitiesScreen'
 import { HomeScreen } from '../features/home/HomeScreen'
 import { PlanningScreen } from '../features/planning/PlanningScreen'
@@ -38,6 +39,7 @@ export const router = createHashRouter([
       { path: 'daily', element: <DailyScreen /> },
       { path: 'features', element: <FeaturesScreen /> },
       { path: 'oportunidades', element: <OpportunitiesScreen /> },
+      { path: 'acompanhamento', element: <FollowUpScreen /> },
       { path: 'catalogo', element: <CatalogScreen /> },
       { path: 'configuracao', element: <SettingsScreen /> },
       { path: 'configuracao/assistente', element: <RedoWizardScreen /> },

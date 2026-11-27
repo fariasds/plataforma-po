@@ -79,6 +79,7 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   linkPlannedPbi: ['loja', 'pagamento-pix', 'P3', 4213],
   linkDraftFeature: ['loja', 'retirada-loja', 4120],
   getOpportunities: ['loja'],
+  getFollowUp: ['loja'],
   getCatalog: ['loja'],
   previewCatalogAbsorb: ['loja'],
   absorbCatalog: ['loja', []],

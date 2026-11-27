@@ -184,6 +184,19 @@ const WORK_ITEMS: FakeWorkItem[] = [
       ['2026-10-28T09:00:00', { state: 'Done' }]
     ]
   }),
+  // Entregue, Origem de uma regra ainda "Não validada": a regra fica a conferir (RN-FLX-24).
+  item({
+    id: 4061,
+    type: PBI,
+    title: 'Aceitar a troca sem nota fiscal',
+    area: LOJA_AREA,
+    created: '2026-07-02T09:00:00',
+    parent: 4060,
+    events: [
+      ['2026-07-20T09:00:00', { state: 'Committed' }],
+      ['2026-09-05T09:00:00', { state: 'Done' }]
+    ]
+  }),
   item({
     id: 4232,
     type: PBI,
@@ -306,6 +319,10 @@ export const fluxoDoPo: Scenario = {
     'RN-FLX-18',
     'RN-FLX-19',
     'RN-FLX-20',
+    'RN-FLX-21',
+    'RN-FLX-22',
+    'RN-FLX-23',
+    'RN-FLX-24',
     'RN-FLX-25',
     'RN-CAT-01',
     'RN-CAT-02',
@@ -317,7 +334,7 @@ export const fluxoDoPo: Scenario = {
     'RN-CFG-15',
     'RN-SEC-24'
   ],
-  telas: ['retrato', 'fluxo', 'oportunidades', 'catalogo', 'descoberta'],
+  telas: ['retrato', 'fluxo', 'oportunidades', 'acompanhamento', 'catalogo', 'descoberta'],
   anchorDate: '2026-11-26T10:00:00',
   config: baseConfig({
     products: [
