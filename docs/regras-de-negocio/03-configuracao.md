@@ -332,3 +332,30 @@ primeira execução) mostra o trecho que liga a IA do PO ao servidor MCP do app
 **Casos de borda:** quem já tem outros servidores no arquivo do Claude Desktop
 acrescenta só o bloco `plataforma-po`; a tela avisa. Trocar de Perfil muda o ID no
 trecho, e a IA conectada antes continua presa ao Perfil antigo até o PO colar o novo.
+
+### RN-CFG-14 · O fluxo do PO de cada Produto
+
+Cada Produto tem a seção `poFlow`, que diz ao fluxo do PO ([docs/fluxo-po/](../fluxo-po/DESENHO.md))
+como ler o Azure daquele Produto. Tudo tem valor padrão: um Produto sem a seção
+funciona, só sem feedback.
+
+| Chave | Padrão | Para quê |
+|---|---|---|
+| `featureType` | `"Feature"` | O tipo de work item que o fluxo trata como Feature |
+| `priorityField` | `"Microsoft.VSTS.Common.BusinessValue"` | Campo numérico de prioridade da Feature, maior primeiro. `null` desliga |
+| `feedback` | `null` | De onde vêm as oportunidades: `type`, `states`, `areaPaths` (vazio usa as do Produto) e `link` |
+
+`link` diz como o feedback se liga à Feature no Azure: `"parent"` (o feedback é pai
+da Feature), `"child"` (é filho dela) ou `"related"` (vínculo "Related"). Cada
+organização liga de um jeito; o app não supõe nenhum.
+
+- **Nada fica fixo para uma organização.** Tipo de Feature, tipo de feedback, estados
+  e áreas vêm daqui, nunca do código.
+- **Campo de prioridade que não existe no projeto** é ignorado: a Feature fica sem
+  prioridade e a leitura segue (`RN-FLX-01`).
+
+**Casos de borda:** sem `feedback`, as oportunidades vêm só da conversa com a IA do
+PO, e o retrato grava `feedbacks: null`. Um estado escrito diferente do Azure não
+encontra nada, sem erro: o Azure compara sem diferenciar maiúsculas.
+
+**Implementado em:** `src/shared/config/schema.ts`

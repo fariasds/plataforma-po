@@ -124,6 +124,52 @@ export const processProfileSchema = z
   })
   .describe('Regras de um processo de trabalho: quais tipos contam e o que cada estado significa.')
 
+// ─── Fluxo do PO (RN-CFG-14) ─────────────────────────────────────────────────
+
+/** Campo de prioridade de fábrica: existe no processo Scrum. */
+export const DEFAULT_PRIORITY_FIELD = 'Microsoft.VSTS.Common.BusinessValue'
+
+const feedbackSchema = z
+  .strictObject({
+    type: nonEmpty.describe(
+      'Tipo de work item do feedback, como o Azure o escreve (ex.: "Feedback").'
+    ),
+    states: stateList(
+      'Estados em que o feedback entra no fluxo como oportunidade (ex.: "Approved").'
+    ),
+    areaPaths: z
+      .array(nonEmpty)
+      .default([])
+      .describe(
+        'Area paths onde o feedback vive, com os filhos. Vazio usa as áreas do Produto. Use "\\\\" como separador no JSON.'
+      ),
+    link: z
+      .enum(['parent', 'child', 'related'])
+      .describe(
+        'Como o feedback se liga à Feature no Azure: "parent" (o feedback é pai da Feature), "child" (é filho dela) ou "related" (vínculo Related).'
+      )
+  })
+  .describe('De onde vêm as oportunidades do fluxo do PO.')
+
+const poFlowSchema = z
+  .strictObject({
+    featureType: nonEmpty
+      .default('Feature')
+      .describe('Tipo de work item que o fluxo do PO trata como Feature.'),
+    priorityField: fieldRef
+      .nullable()
+      .default(DEFAULT_PRIORITY_FIELD)
+      .describe(
+        'Campo numérico de prioridade da Feature, maior primeiro (ex.: "Microsoft.VSTS.Common.BusinessValue"). Campo que não existe no projeto é ignorado.'
+      ),
+    feedback: feedbackSchema
+      .nullable()
+      .default(null)
+      .describe('Sem ele, as oportunidades vêm só da conversa com a IA do PO.')
+  })
+  .default({ featureType: 'Feature', priorityField: DEFAULT_PRIORITY_FIELD, feedback: null })
+  .describe('Fluxo do PO: o que é Feature, como ela é priorizada e de onde vem o feedback.')
+
 // ─── Produto e Grupo ─────────────────────────────────────────────────────────
 
 export const productSchema = z
@@ -155,7 +201,8 @@ export const productSchema = z
       .default('sprints')
       .describe(
         '"sprints": o Produto tem iterações próprias no Azure. "continuous": fluxo sem iterações; os indicadores o medem pela janela de datas da Sprint unificada dos demais Produtos, e ele não aparece no Planning nem na Daily.'
-      )
+      ),
+    poFlow: poFlowSchema
   })
   .describe('Unidade que o PO acompanha.')
 

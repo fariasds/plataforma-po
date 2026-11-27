@@ -1,0 +1,30 @@
+{
+  "app": {
+    "dados": {
+      "items": [],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 0,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 16 de nov. → 27 de nov.\n\nApp Mobile · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **0** |\n\n## Itens da sprint\n\nNenhum item marcado para esta sprint.\n",
+    "sprint": "2026-11-16_2026-11-27"
+  },
+  "loja": {
+    "dados": {
+      "items": [],
+      "totals": {
+        "backend": 0,
+        "frontend": 0,
+        "geral": 0,
+        "qa": 0
+      }
+    },
+    "remanescentes": [],
+    "resumo": "# Planning · 16 de nov. → 27 de nov.\n\nLoja Online · gerado em (data da geração)\n\n## Resumo geral\n\n| Disciplina | Pontos |\n| --- | --- |\n| **Total geral** | **0** |\n\n## Itens da sprint\n\nNenhum item marcado para esta sprint.\n",
+    "sprint": "2026-11-16_2026-11-27"
+  }
+}

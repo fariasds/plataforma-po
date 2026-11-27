@@ -223,12 +223,46 @@ export function createFakeAzure(state: AzureState): FakeAzure {
     return found
   }
 
+  const workItemUrl = (id: number): string =>
+    `https://dev.azure.com/${state.organization}/_apis/wit/workItems/${id}`
+
+  /** Pai, filhos e "Related" do item, como o `$expand=relations` do Azure devolve. */
+  function relationsOf(found: FakeWorkItem): unknown[] {
+    const relation = (rel: string, id: number): unknown => ({
+      rel,
+      url: workItemUrl(id),
+      attributes: { isLocked: false }
+    })
+    const parent = found.fields['System.Parent']
+    const children = state.workItems.filter((w) => w.fields['System.Parent'] === found.id)
+    const related = new Set([
+      ...(found.related ?? []),
+      ...state.workItems.filter((w) => w.related?.includes(found.id)).map((w) => w.id)
+    ])
+    return [
+      ...(typeof parent === 'number'
+        ? [relation('System.LinkTypes.Hierarchy-Reverse', parent)]
+        : []),
+      ...children.map((child) => relation('System.LinkTypes.Hierarchy-Forward', child.id)),
+      ...[...related].map((id) => relation('System.LinkTypes.Related', id))
+    ]
+  }
+
   function workItemsBatch(
     path: string,
     query: URLSearchParams,
     scope: FakeProject | null
   ): unknown {
-    checkQuery(path, query, ['ids', 'fields', 'errorPolicy'])
+    checkQuery(path, query, ['ids', 'fields', 'errorPolicy', '$expand'])
+    const expand = query.get('$expand')
+    if (expand !== null) {
+      // O Azure real recusa "fields" junto com "$expand": com ele, vêm todos os campos.
+      if (expand !== 'relations')
+        throw new UnknownAzureRequestError(`$expand "${expand}" não previsto`)
+      if (query.has('fields')) {
+        throw new UnknownAzureRequestError(`"fields" junto com "$expand" em ${path}`)
+      }
+    }
     const ids = (query.get('ids') ?? '').split(',').map(Number)
     if (ids.length === 0 || ids.some((id) => !Number.isSafeInteger(id) || id <= 0)) {
       throw new UnknownAzureRequestError(`lista de IDs inválida em ${path}`)
@@ -240,12 +274,16 @@ export function createFakeAzure(state: AzureState): FakeAzure {
     if (omit !== null && omit !== 'omit') {
       throw new UnknownAzureRequestError(`errorPolicy "${omit}" não previsto`)
     }
-    const fields = requestedFields(query.get('fields'), scope, path)
+    const fields = expand ? null : requestedFields(query.get('fields'), scope, path)
     const value = ids.map((id) => {
       const found = byId.get(id)
       if (!found) {
         if (omit) return null
         throw new UnknownAzureRequestError(`work item ${id} não existe (${path})`)
+      }
+      if (!fields) {
+        const all = pick(found, ['System.Id', ...Object.keys(found.fields)])
+        return { id, rev: found.updates.length, fields: all, relations: relationsOf(found) }
       }
       return { id, rev: found.updates.length, fields: pick(found, fields) }
     })

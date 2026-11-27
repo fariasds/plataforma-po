@@ -55,6 +55,7 @@ const api: IpcBridge = {
   buildSprintGoalRequest: (selection, sprint, itemIds) =>
     invoke(IPC_CHANNELS.buildSprintGoalRequest, selection, sprint, itemIds),
 
+  refreshFlowSnapshot: (productId) => invoke(IPC_CHANNELS.refreshFlowSnapshot, productId),
   checkForUpdate: () => invoke(IPC_CHANNELS.checkForUpdate),
   openUpdateLink: (link) => invoke(IPC_CHANNELS.openUpdateLink, link),
 

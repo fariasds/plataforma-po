@@ -4,8 +4,8 @@ import type {
   DiscoveredField,
   DiscoveredProject,
   DiscoveredTeam,
-  ProcessDiscovery
-} from '@shared/discovery'
+  SuggestedProcess
+} from '@shared/organization'
 import { ipc } from '../../ipc/client'
 
 /*
@@ -17,7 +17,7 @@ const STALE_MS = 5 * 60 * 1000
 
 export function useDiscoveredProjects(): UseQueryResult<DiscoveredProject[], Error> {
   return useQuery({
-    queryKey: ['discovery', 'projects'],
+    queryKey: ['organization', 'projects'],
     queryFn: () => ipc.discoverProjects(),
     staleTime: STALE_MS
   })
@@ -25,7 +25,7 @@ export function useDiscoveredProjects(): UseQueryResult<DiscoveredProject[], Err
 
 export function useDiscoveredTeams(project: string): UseQueryResult<DiscoveredTeam[], Error> {
   return useQuery({
-    queryKey: ['discovery', 'teams', project],
+    queryKey: ['organization', 'teams', project],
     queryFn: () => ipc.discoverTeams(project),
     staleTime: STALE_MS
   })
@@ -33,7 +33,7 @@ export function useDiscoveredTeams(project: string): UseQueryResult<DiscoveredTe
 
 export function useDiscoveredAreas(project: string): UseQueryResult<DiscoveredArea, Error> {
   return useQuery({
-    queryKey: ['discovery', 'areas', project],
+    queryKey: ['organization', 'areas', project],
     queryFn: () => ipc.discoverAreas(project),
     staleTime: STALE_MS
   })
@@ -41,10 +41,10 @@ export function useDiscoveredAreas(project: string): UseQueryResult<DiscoveredAr
 
 export function useDiscoveredProcesses(
   projects: string[]
-): UseQueryResult<ProcessDiscovery, Error>[] {
+): UseQueryResult<SuggestedProcess, Error>[] {
   return useQueries({
     queries: projects.map((project) => ({
-      queryKey: ['discovery', 'process', project],
+      queryKey: ['organization', 'process', project],
       queryFn: () => ipc.discoverProcess(project),
       staleTime: STALE_MS
     }))
@@ -56,7 +56,7 @@ export function useDiscoveredFields(
 ): UseQueryResult<DiscoveredField[], Error>[] {
   return useQueries({
     queries: projects.map((project) => ({
-      queryKey: ['discovery', 'fields', project],
+      queryKey: ['organization', 'fields', project],
       queryFn: () => ipc.discoverFields(project),
       staleTime: STALE_MS
     }))

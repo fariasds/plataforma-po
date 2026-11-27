@@ -1,23 +1,23 @@
 import { AppError } from '@shared/errors'
 import { withOrganization } from '../services/azure/client'
 import {
-  discoveryOrganization,
+  wizardOrganization,
   getAreaTree,
   getProcessDetails,
   listFields,
   listProjects,
   listTeams,
   suggestProcessProfile
-} from '../services/azure/discovery'
+} from '../services/azure/organization'
 import { handle } from './registry'
 
 /**
  * Descoberta para o assistente de Configuração. Diferente dos dashboards, não
  * passa pela seleção nem exige Configuração válida: a organização vem de
- * `discoveryOrganization`, e a fronteira de rede (RN-SEC-18) vale do mesmo jeito.
+ * `wizardOrganization`, e a fronteira de rede (RN-SEC-18) vale do mesmo jeito.
  */
 function discover<T>(task: () => Promise<T>): Promise<T> {
-  return withOrganization(discoveryOrganization(), task)
+  return withOrganization(wizardOrganization(), task)
 }
 
 /** O nome do projeto chega da janela e vira segmento de URL: só texto não vazio. */
@@ -28,7 +28,7 @@ function projectName(project: unknown): string {
   return project.trim()
 }
 
-export function registerDiscoveryHandlers(): void {
+export function registerOrganizationHandlers(): void {
   handle('discoverProjects', () => discover(listProjects))
   handle('discoverTeams', (project) => discover(() => listTeams(projectName(project))))
   handle('discoverAreas', (project) => discover(() => getAreaTree(projectName(project))))

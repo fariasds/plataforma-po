@@ -1,7 +1,8 @@
 import { registerAiHandlers } from './ai-handlers'
 import { registerAzureHandlers } from './azure-handlers'
 import { registerDemoHandlers } from './demo-handlers'
-import { registerDiscoveryHandlers } from './discovery-handlers'
+import { registerFlowHandlers } from './flow-handlers'
+import { registerOrganizationHandlers } from './organization-handlers'
 import { registerPatHandlers } from './pat-handlers'
 import { registerProfileHandlers } from './profile-handlers'
 import { registerUpdateHandlers } from './update-handlers'
@@ -15,7 +16,8 @@ export function registerIpcHandlers(): void {
   registerProfileHandlers()
   registerDemoHandlers()
   registerAzureHandlers()
-  registerDiscoveryHandlers()
+  registerOrganizationHandlers()
+  registerFlowHandlers()
   registerAiHandlers()
   registerUpdateHandlers()
 }

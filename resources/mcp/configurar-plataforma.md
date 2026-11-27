@@ -94,6 +94,17 @@ nome o PO troca quando quiser.
   identifica bug reincidente (ex.: `[reincidente]`). Sem eles, esses indicadores
   ficam vazios.
 
+### 7. Fluxo do PO (opcional)
+
+- **Qual tipo de work item é a Feature** no Azure? Quase sempre `Feature`.
+- **Qual campo dá a prioridade da Feature?** No Scrum, `Business Value`
+  (`Microsoft.VSTS.Common.BusinessValue`). Sem um, a ordem do Roadmap fica sem ele.
+- **Os feedbacks de cliente estão no Azure?** Se sim: o tipo de work item, os estados
+  em que o feedback já foi aprovado para virar oportunidade, a área onde ele vive e
+  **como ele se liga à Feature** — o feedback é pai dela, filho dela ou tem um vínculo
+  "Related". Peça ao PO para abrir um feedback já ligado e olhar a aba de vínculos.
+  Isso vai em `poFlow` do Produto.
+
 ## Ao terminar
 
 1. Monte a Configuração inteira, partindo da atual.

@@ -1,5 +1,5 @@
 import type { WorkItemUpdate } from '@shared/azure'
-import type { StateCategory } from '@shared/discovery'
+import type { StateCategory } from '@shared/organization'
 import type {
   AzureState,
   FakeIteration,

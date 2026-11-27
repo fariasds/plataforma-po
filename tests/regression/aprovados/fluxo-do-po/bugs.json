@@ -1,0 +1,291 @@
+{
+  "app": {
+    "activeBugItems": [],
+    "activeBugsByState": [],
+    "activeBugsCount": 0,
+    "allBugs": [],
+    "criticalityBreakdown": [],
+    "criticalityConfigured": false,
+    "monthStats": [],
+    "recurrenceConfigured": false,
+    "sprintStats": [
+      {
+        "finishDate": "2026-09-04T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-08-24_2026-09-04",
+        "sprintLabel": "24 de ago. → 04 de set.",
+        "sprintName": "Sprint 1",
+        "startDate": "2026-08-24T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-09-18T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-09-07_2026-09-18",
+        "sprintLabel": "07 de set. → 18 de set.",
+        "sprintName": "Sprint 2",
+        "startDate": "2026-09-07T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-10-02T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "startDate": "2026-09-21T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-10-16T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-10-05_2026-10-16",
+        "sprintLabel": "05 de out. → 16 de out.",
+        "sprintName": "Sprint 4",
+        "startDate": "2026-10-05T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-10-30T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-10-19_2026-10-30",
+        "sprintLabel": "19 de out. → 30 de out.",
+        "sprintName": "Sprint 5",
+        "startDate": "2026-10-19T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-11-13T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-11-02_2026-11-13",
+        "sprintLabel": "02 de nov. → 13 de nov.",
+        "sprintName": "Sprint 6",
+        "startDate": "2026-11-02T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-11-27T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-11-16_2026-11-27",
+        "sprintLabel": "16 de nov. → 27 de nov.",
+        "sprintName": "Sprint 7",
+        "startDate": "2026-11-16T00:00:00Z",
+        "total": 0
+      }
+    ],
+    "stateOrder": [
+      "New",
+      "Approved",
+      "Committed",
+      "Done"
+    ]
+  },
+  "loja": {
+    "activeBugItems": [
+      {
+        "createdDate": "2026-11-10T09:00:00",
+        "criticality": "Não informado",
+        "id": 5302,
+        "isRecurrent": false,
+        "monthKey": "2026-11",
+        "monthLabel": "Nov/26",
+        "productId": "loja",
+        "sprintKey": "2026-11-02_2026-11-13",
+        "sprintLabel": "02 de nov. → 13 de nov.",
+        "sprintName": "Sprint 6",
+        "state": "New",
+        "title": "Cupom expirado ainda aceito"
+      },
+      {
+        "createdDate": "2026-11-03T09:00:00",
+        "criticality": "Não informado",
+        "id": 5301,
+        "isRecurrent": false,
+        "monthKey": "2026-11",
+        "monthLabel": "Nov/26",
+        "productId": "loja",
+        "sprintKey": "2026-11-02_2026-11-13",
+        "sprintLabel": "02 de nov. → 13 de nov.",
+        "sprintName": "Sprint 6",
+        "state": "Committed",
+        "title": "Cupom aplicado duas vezes no carrinho"
+      }
+    ],
+    "activeBugsByState": [
+      {
+        "name": "New",
+        "value": 1
+      },
+      {
+        "name": "Committed",
+        "value": 1
+      }
+    ],
+    "activeBugsCount": 2,
+    "allBugs": [
+      {
+        "createdDate": "2026-11-10T09:00:00",
+        "criticality": "Não informado",
+        "id": 5302,
+        "isRecurrent": false,
+        "monthKey": "2026-11",
+        "monthLabel": "Nov/26",
+        "productId": "loja",
+        "sprintKey": "2026-11-02_2026-11-13",
+        "sprintLabel": "02 de nov. → 13 de nov.",
+        "sprintName": "Sprint 6",
+        "state": "New",
+        "title": "Cupom expirado ainda aceito"
+      },
+      {
+        "createdDate": "2026-11-03T09:00:00",
+        "criticality": "Não informado",
+        "id": 5301,
+        "isRecurrent": false,
+        "monthKey": "2026-11",
+        "monthLabel": "Nov/26",
+        "productId": "loja",
+        "sprintKey": "2026-11-02_2026-11-13",
+        "sprintLabel": "02 de nov. → 13 de nov.",
+        "sprintName": "Sprint 6",
+        "state": "Committed",
+        "title": "Cupom aplicado duas vezes no carrinho"
+      },
+      {
+        "closedDate": "2026-11-20T09:00:00",
+        "closedSprintKey": "2026-11-16_2026-11-27",
+        "createdDate": "2026-11-01T09:00:00",
+        "criticality": "Não informado",
+        "id": 5309,
+        "isRecurrent": false,
+        "monthKey": "2026-11",
+        "monthLabel": "Nov/26",
+        "productId": "loja",
+        "sprintKey": "__no_sprint__",
+        "sprintLabel": "",
+        "sprintName": "",
+        "state": "Done",
+        "title": "Pix recusado acima do limite"
+      },
+      {
+        "closedDate": "2026-04-01T09:00:00",
+        "createdDate": "2026-03-01T09:00:00",
+        "criticality": "Não informado",
+        "id": 5100,
+        "isRecurrent": false,
+        "monthKey": "2026-03",
+        "monthLabel": "Mar/26",
+        "productId": "loja",
+        "sprintKey": "__no_sprint__",
+        "sprintLabel": "",
+        "sprintName": "",
+        "state": "Done",
+        "title": "Banner antigo na home"
+      }
+    ],
+    "criticalityBreakdown": [],
+    "criticalityConfigured": false,
+    "monthStats": [
+      {
+        "monthKey": "2026-03",
+        "monthLabel": "Mar/26",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "total": 1
+      },
+      {
+        "monthKey": "2026-11",
+        "monthLabel": "Nov/26",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "total": 3
+      }
+    ],
+    "recurrenceConfigured": false,
+    "sprintStats": [
+      {
+        "finishDate": "2026-09-04T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-08-24_2026-09-04",
+        "sprintLabel": "24 de ago. → 04 de set.",
+        "sprintName": "Sprint 1",
+        "startDate": "2026-08-24T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-09-18T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-09-07_2026-09-18",
+        "sprintLabel": "07 de set. → 18 de set.",
+        "sprintName": "Sprint 2",
+        "startDate": "2026-09-07T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-10-02T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-09-21_2026-10-02",
+        "sprintLabel": "21 de set. → 02 de out.",
+        "sprintName": "Sprint 3",
+        "startDate": "2026-09-21T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-10-16T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-10-05_2026-10-16",
+        "sprintLabel": "05 de out. → 16 de out.",
+        "sprintName": "Sprint 4",
+        "startDate": "2026-10-05T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-10-30T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-10-19_2026-10-30",
+        "sprintLabel": "19 de out. → 30 de out.",
+        "sprintName": "Sprint 5",
+        "startDate": "2026-10-19T00:00:00Z",
+        "total": 0
+      },
+      {
+        "finishDate": "2026-11-13T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-11-02_2026-11-13",
+        "sprintLabel": "02 de nov. → 13 de nov.",
+        "sprintName": "Sprint 6",
+        "startDate": "2026-11-02T00:00:00Z",
+        "total": 2
+      },
+      {
+        "finishDate": "2026-11-27T00:00:00Z",
+        "recurrenceRate": 0,
+        "recurrentCount": 0,
+        "sprintKey": "2026-11-16_2026-11-27",
+        "sprintLabel": "16 de nov. → 27 de nov.",
+        "sprintName": "Sprint 7",
+        "startDate": "2026-11-16T00:00:00Z",
+        "total": 0
+      }
+    ],
+    "stateOrder": [
+      "New",
+      "Approved",
+      "Committed",
+      "Done"
+    ]
+  }
+}

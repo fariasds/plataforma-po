@@ -70,6 +70,8 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   writeWorkData: ['planning:loja', { items: [] }],
   // A IA entra para provar que o caminho dela também não devolve o PAT.
   buildSprintGoalRequest: ['loja', sprint, [101]],
+  // O retrato do fluxo do PO lê o Azure com o mesmo PAT (RN-FLX-01).
+  refreshFlowSnapshot: ['loja'],
   // A consulta de versão não leva o PAT (RN-SEC-33); o envelope dela também não.
   checkForUpdate: [],
   openUpdateLink: ['installer'],

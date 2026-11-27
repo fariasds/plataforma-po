@@ -66,7 +66,7 @@ export interface DiscoveredProcess {
  * Processo descoberto mais o Perfil de processo sugerido a partir das categorias.
  * `suggestion` é `null` quando o projeto não tem tipo de requisito visível.
  */
-export interface ProcessDiscovery extends DiscoveredProcess {
+export interface SuggestedProcess extends DiscoveredProcess {
   suggestion: ProcessProfile | null
 }
 

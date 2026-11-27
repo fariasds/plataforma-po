@@ -1,0 +1,25 @@
+{
+  "loja": {
+    "bugs": [
+      {
+        "closedDate": "2026-09-25T16:00:00",
+        "createdDate": "2026-09-23T09:00:00",
+        "description": "",
+        "id": 4006,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Cupom aceito depois de vencido",
+        "type": "Bug"
+      }
+    ],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "loja",
+    "takenAt": "2026-09-30T14:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-03"
+  }
+}

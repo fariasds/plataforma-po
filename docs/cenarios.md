@@ -18,7 +18,8 @@ Os Cenários servem a duas coisas:
 
 As telas da regressão são `sprint-unificada`, `entregas`, `bugs`, `desempenho`,
 `daily`, `planning` (com o resumo para compartilhar), `descoberta`, `usuario`,
-`home` (o momento da sprint que a Home sugere) e,
+`home` (o momento da sprint que a Home sugere), `retrato` (o retrato do fluxo do
+PO de cada Produto, `RN-FLX-01`) e,
 nos Cenários com item de Planning, `pedido-ia` (o texto que o PO copia para a IA
 dele). Toda tela roda em todo Cenário; a coluna "Telas em foco" diz onde está o
 que o Cenário prova.
@@ -55,6 +56,7 @@ código, na mesma ordem, com as mesmas regras e telas.
 | `processo-customizado` | Tipos e estados que não são os do Scrum nem os do Agile; Produto de fluxo contínuo num Grupo; abrandamento da Daily para item só aguardando teste; sugestão de Perfil de processo | RN-GLB-01, RN-GLB-04, RN-ENT-04, RN-ENT-08, RN-DLY-14, RN-DLY-19, RN-BUG-17 | entregas, daily, bugs, desempenho, planning, descoberta |
 | `sprint-vazia` | Sprints sem nenhum item, com os campos configurados: nenhuma tela quebra e nada vira divisão por zero | RN-ENT-01, RN-BUG-02, RN-DES-03, RN-DLY-01, RN-PLN-02 | entregas, bugs, desempenho, daily, planning |
 | `vitrine` | O Cenário da demonstração e dos prints: Grupo com dois Produtos no mesmo projeto, cinco sprints de histórico, sprint em andamento com um item em cada situação da Daily e a seguinte pronta para o Planning | RN-GLB-01, RN-GLB-02, RN-GLB-15, RN-ENT-01, RN-ENT-08, RN-BUG-02, RN-DLY-01 | entregas, bugs, desempenho, daily, planning, pedido-ia, home |
+| `fluxo-do-po` | O retrato do fluxo do PO: Features abertas e fechadas há pouco, sem as removidas nem as antigas; filhos, inclusive em outra área; feedbacks ligados por vínculo pai (Loja) e "Related" (App); bugs abertos e fechados na janela, descrição só nos abertos; token fictício redigido | RN-FLX-01, RN-FLX-02, RN-CFG-14, RN-SEC-24 | retrato, descoberta |
 
 ## Como um Cenário é montado
 

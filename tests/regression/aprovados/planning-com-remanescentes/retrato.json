@@ -1,0 +1,25 @@
+{
+  "loja": {
+    "bugs": [
+      {
+        "closedDate": null,
+        "createdDate": "2026-10-02T09:00:00",
+        "description": "",
+        "id": 7007,
+        "open": true,
+        "parentId": null,
+        "state": "New",
+        "title": "Status some depois de entregue",
+        "type": "Bug"
+      }
+    ],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "loja",
+    "takenAt": "2026-10-03T13:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-06"
+  }
+}

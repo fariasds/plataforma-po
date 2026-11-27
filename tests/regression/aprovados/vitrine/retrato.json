@@ -1,0 +1,290 @@
+{
+  "app": {
+    "bugs": [
+      {
+        "closedDate": "2026-08-26T15:00:00",
+        "createdDate": "2026-08-25T09:00:00",
+        "description": "",
+        "id": 20151,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (1)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-08-28T15:00:00",
+        "createdDate": "2026-08-25T09:00:00",
+        "description": "",
+        "id": 20152,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (1)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-09T15:00:00",
+        "createdDate": "2026-09-08T09:00:00",
+        "description": "",
+        "id": 20251,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (2)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-11T15:00:00",
+        "createdDate": "2026-09-08T09:00:00",
+        "description": "",
+        "id": 20252,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (2)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-23T15:00:00",
+        "createdDate": "2026-09-22T09:00:00",
+        "description": "",
+        "id": 20351,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (3)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-26T15:00:00",
+        "createdDate": "2026-09-22T09:00:00",
+        "description": "",
+        "id": 20352,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (3)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-07T15:00:00",
+        "createdDate": "2026-10-06T09:00:00",
+        "description": "",
+        "id": 20451,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (4)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-11T15:00:00",
+        "createdDate": "2026-10-06T09:00:00",
+        "description": "",
+        "id": 20452,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (4)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-21T15:00:00",
+        "createdDate": "2026-10-20T09:00:00",
+        "description": "",
+        "id": 20551,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (5)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-26T15:00:00",
+        "createdDate": "2026-10-20T09:00:00",
+        "description": "",
+        "id": 20552,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (5)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-11-05T11:00:00",
+        "createdDate": "2026-11-04T09:00:00",
+        "description": "",
+        "id": 20651,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "App fecha ao girar a tela",
+        "type": "Bug"
+      }
+    ],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "app",
+    "takenAt": "2026-11-09T12:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-05-13"
+  },
+  "loja": {
+    "bugs": [
+      {
+        "closedDate": "2026-08-26T15:00:00",
+        "createdDate": "2026-08-25T09:00:00",
+        "description": "",
+        "id": 10151,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (1)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-08-28T15:00:00",
+        "createdDate": "2026-08-25T09:00:00",
+        "description": "",
+        "id": 10152,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (1)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-09T15:00:00",
+        "createdDate": "2026-09-08T09:00:00",
+        "description": "",
+        "id": 10251,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (2)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-11T15:00:00",
+        "createdDate": "2026-09-08T09:00:00",
+        "description": "",
+        "id": 10252,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (2)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-23T15:00:00",
+        "createdDate": "2026-09-22T09:00:00",
+        "description": "",
+        "id": 10351,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (3)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-25T15:00:00",
+        "createdDate": "2026-09-22T09:00:00",
+        "description": "",
+        "id": 10352,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (3)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-07T15:00:00",
+        "createdDate": "2026-10-06T09:00:00",
+        "description": "",
+        "id": 10451,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (4)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-09T15:00:00",
+        "createdDate": "2026-10-06T09:00:00",
+        "description": "",
+        "id": 10452,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (4)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-21T15:00:00",
+        "createdDate": "2026-10-20T09:00:00",
+        "description": "",
+        "id": 10551,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Erro ao finalizar compra (5)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-23T15:00:00",
+        "createdDate": "2026-10-20T09:00:00",
+        "description": "",
+        "id": 10552,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Texto cortado na tela (5)",
+        "type": "Bug"
+      },
+      {
+        "closedDate": null,
+        "createdDate": "2026-11-03T10:00:00",
+        "description": "",
+        "id": 10651,
+        "open": true,
+        "parentId": null,
+        "state": "Committed",
+        "title": "Pagamento duplicado no cartão",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-11-06T15:00:00",
+        "createdDate": "2026-11-05T09:00:00",
+        "description": "",
+        "id": 10652,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Foto do produto não carrega",
+        "type": "Bug"
+      },
+      {
+        "closedDate": null,
+        "createdDate": "2026-11-06T11:00:00",
+        "description": "",
+        "id": 10653,
+        "open": true,
+        "parentId": null,
+        "state": "New",
+        "title": "Ícone desalinhado no menu",
+        "type": "Bug"
+      }
+    ],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "loja",
+    "takenAt": "2026-11-09T12:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-05-13"
+  }
+}

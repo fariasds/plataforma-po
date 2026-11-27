@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { Alert, Card, Flex, Form, Input, Select, Spin, Typography } from 'antd'
 import type { ProcessProfile } from '@shared/config/schema'
-import type { ProcessDiscovery } from '@shared/discovery'
+import type { SuggestedProcess } from '@shared/organization'
 import { ErrorState } from '../../../components/ErrorState'
 import { t } from '../../../i18n'
 import { idFromName } from '../draft'
-import { useDiscoveredProcesses, useDiscoveredProjects } from '../useDiscovery'
+import { useDiscoveredProcesses, useDiscoveredProjects } from '../useOrganization'
 import type { StepProps } from './types'
 
 const { Paragraph, Text } = Typography
@@ -43,7 +43,7 @@ const FIELDS: {
 ]
 
 function optionsFrom(
-  discoveries: ProcessDiscovery[]
+  discoveries: SuggestedProcess[]
 ): Record<'types' | 'states' | 'estimate', string[]> {
   const types = discoveries.flatMap((d) => d.workItemTypes)
   const unique = (values: (string | null)[]): string[] => [

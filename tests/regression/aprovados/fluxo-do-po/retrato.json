@@ -1,0 +1,172 @@
+{
+  "app": {
+    "bugs": [],
+    "children": [],
+    "features": [
+      {
+        "childIds": [],
+        "createdDate": "2026-10-15T09:00:00",
+        "id": 4140,
+        "parentId": null,
+        "priority": null,
+        "state": "New",
+        "stateChangeDate": "2026-10-15T09:00:00",
+        "title": "Login por biometria",
+        "type": "Feature"
+      }
+    ],
+    "feedbacks": [
+      {
+        "description": "Pedem entrar com a digital.",
+        "featureIds": [
+          4140
+        ],
+        "id": 5220,
+        "parentId": null,
+        "state": "Approved",
+        "title": "Digitar a senha no celular é lento",
+        "type": "Feedback"
+      }
+    ],
+    "priorityField": null,
+    "productId": "app",
+    "takenAt": "2026-11-26T13:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-05-30"
+  },
+  "loja": {
+    "bugs": [
+      {
+        "closedDate": null,
+        "createdDate": "2026-11-03T09:00:00",
+        "description": "Com dois itens da mesma categoria, o desconto entra duas vezes.",
+        "id": 5301,
+        "open": true,
+        "parentId": null,
+        "state": "Committed",
+        "title": "Cupom aplicado duas vezes no carrinho",
+        "type": "Bug"
+      },
+      {
+        "closedDate": null,
+        "createdDate": "2026-11-10T09:00:00",
+        "description": "Cupom vencido ontem foi aceito hoje.",
+        "id": 5302,
+        "open": true,
+        "parentId": 4230,
+        "state": "New",
+        "title": "Cupom expirado ainda aceito",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-11-20T09:00:00",
+        "createdDate": "2026-11-01T09:00:00",
+        "description": "",
+        "id": 5309,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Pix recusado acima do limite",
+        "type": "Bug"
+      }
+    ],
+    "children": [
+      {
+        "id": 4211,
+        "parentId": 4102,
+        "state": "New",
+        "title": "Gerar QR Code Pix no checkout",
+        "type": "Product Backlog Item"
+      },
+      {
+        "id": 4212,
+        "parentId": 4102,
+        "state": "New",
+        "title": "Confirmar o pagamento Pix e liberar o pedido",
+        "type": "Product Backlog Item"
+      },
+      {
+        "id": 4230,
+        "parentId": 4088,
+        "state": "Done",
+        "title": "Aplicar o cupom por categoria do produto",
+        "type": "Product Backlog Item"
+      },
+      {
+        "id": 4232,
+        "parentId": 4088,
+        "state": "New",
+        "title": "Mostrar o cupom no app",
+        "type": "Product Backlog Item"
+      }
+    ],
+    "features": [
+      {
+        "childIds": [],
+        "createdDate": "2026-07-01T09:00:00",
+        "id": 4060,
+        "parentId": null,
+        "priority": null,
+        "state": "Done",
+        "stateChangeDate": "2026-09-10T09:00:00",
+        "title": "Troca sem nota fiscal",
+        "type": "Feature"
+      },
+      {
+        "childIds": [
+          4230,
+          4232
+        ],
+        "createdDate": "2026-09-01T09:00:00",
+        "id": 4088,
+        "parentId": null,
+        "priority": 22,
+        "state": "In Progress",
+        "stateChangeDate": "2026-10-05T09:00:00",
+        "title": "Cupom de desconto por categoria",
+        "type": "Feature"
+      },
+      {
+        "childIds": [
+          4211,
+          4212
+        ],
+        "createdDate": "2026-10-01T09:00:00",
+        "id": 4102,
+        "parentId": 5214,
+        "priority": 29,
+        "state": "New",
+        "stateChangeDate": "2026-10-01T09:00:00",
+        "title": "Pagamento por Pix no checkout",
+        "type": "Feature"
+      }
+    ],
+    "feedbacks": [
+      {
+        "description": "O cupom some quando o item está em promoção.",
+        "featureIds": [],
+        "id": 5198,
+        "parentId": null,
+        "state": "Approved",
+        "title": "Cupom não vale para produto em promoção",
+        "type": "Feedback"
+      },
+      {
+        "description": "Três clientes grandes pediram Pix.\n- Abandono no pagamento\nChave colada sem querer: [REDACTED]",
+        "featureIds": [
+          4102
+        ],
+        "id": 5214,
+        "parentId": null,
+        "state": "Approved",
+        "title": "Clientes desistem do checkout por falta de Pix",
+        "type": "Feedback"
+      }
+    ],
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "loja",
+    "takenAt": "2026-11-26T13:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-05-30"
+  }
+}

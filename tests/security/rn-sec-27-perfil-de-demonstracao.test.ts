@@ -42,7 +42,7 @@ const { getPlanningData } = await import('../../src/main/services/azure/planning
 const { getPlanningItem } = await import('../../src/main/services/azure/planning-item')
 const { getCurrentUser, clearUserProfileCache } =
   await import('../../src/main/services/azure/directory')
-const discovery = await import('../../src/main/services/azure/discovery')
+const organization = await import('../../src/main/services/azure/organization')
 const { buildSprintGoalRequest } = await import('../../src/main/services/ai/sprint-goal')
 const { buildPlanningSummary, summaryToMarkdown } =
   await import('../../src/renderer/src/features/planning/planning-summary')
@@ -96,11 +96,11 @@ async function runEveryScreen(): Promise<void> {
   }
   clearUserProfileCache()
   expect(await getCurrentUser()).toMatchObject({ displayName: 'Ana Souza', avatar: null })
-  await discovery.listProjects()
-  await discovery.listTeams('Contoso')
-  await discovery.getAreaTree('Contoso')
-  await discovery.getProcessDetails('Contoso')
-  await discovery.listFields('Contoso')
+  await organization.listProjects()
+  await organization.listTeams('Contoso')
+  await organization.getAreaTree('Contoso')
+  await organization.getProcessDetails('Contoso')
+  await organization.listFields('Contoso')
 }
 
 describe('RN-SEC-27: Perfil de demonstração sem rede e sem PAT', () => {

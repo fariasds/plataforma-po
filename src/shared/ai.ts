@@ -84,7 +84,7 @@ const CONTROL_CHARS = /[\u0000-\u001f\u007f-\u009f]+/g
 const CONTROL_CHARS_BUT_NEWLINE = /[\u0000-\u0009\u000b-\u001f\u007f-\u009f]+/g
 
 /** Uma linha só: controle e quebra de linha viram espaço. */
-function plain(text: string, max: number): string {
+export function plain(text: string, max: number): string {
   return text.replace(CONTROL_CHARS, ' ').replace(/\s+/g, ' ').trim().slice(0, max)
 }
 

@@ -48,7 +48,7 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-21 | Link externo só para a organização e para a Release | `tests/security/rn-sec-21-links-externos.test.ts` |
 | RN-SEC-22 | Instalador público pela esteira, com hash | `.github/workflows/release.yml` |
 | RN-SEC-23 | O app não inicia processo | `tests/security/rn-sec-23-fronteira-de-processo.test.ts` |
-| RN-SEC-24 | Só campos permitidos vão no pedido, redigidos e com prévia | `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts` |
+| RN-SEC-24 | Só campos permitidos vão no pedido e no retrato, redigidos | `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts` · `tests/security/rn-sec-24-dado-minimo-no-retrato.test.ts` |
 | RN-SEC-25 | O app executa só a IA que ele localiza | Revogada (ADR 0007) |
 | RN-SEC-26 | A resposta colada é texto, e é rascunho | `tests/security/rn-sec-26-resposta-da-ia.test.ts` |
 | RN-SEC-27 | Perfil de demonstração sem rede e sem PAT | `tests/security/rn-sec-27-perfil-de-demonstracao.test.ts` |
@@ -464,7 +464,17 @@ a prévia mostra: o que o PO vê é o que ele leva.
 que você colar numa IA vai para a conta dela, sob os termos dela". O app não envia
 nada e não tem como garantir o que o fornecedor faz depois.
 
-**Provado por:** `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts`.
+**O retrato do fluxo do PO** (`RN-FLX-01`, ampliada em 2026-11-26) também vai para a
+IA, pelo servidor MCP, e segue as mesmas regras: campo a campo, só os da tabela da
+`RN-FLX-01`; pessoa, histórico, esforço e qualquer outro campo ficam, mesmo na
+leitura com vínculos, que traz todos os campos do Azure. Título e descrição em texto
+puro e com a mesma redação. Os limites são os do pedido por item; o conjunto das
+descrições vai até 400.000 caracteres. A janela manda só o ID do Produto e recebe só
+as contagens e a data: a descrição não chega a ela.
+
+**Provado por:** `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts` e
+`tests/security/rn-sec-24-dado-minimo-no-retrato.test.ts`, que lê o Cenário
+`fluxo-do-po` com token de cada forma e campo privado em todo item.
 
 ### ~~RN-SEC-25~~ · O app executa só a IA que ele localiza
 

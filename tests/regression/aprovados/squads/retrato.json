@@ -1,0 +1,58 @@
+{
+  "app": {
+    "bugs": [],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "app",
+    "takenAt": "2026-09-29T18:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-02"
+  },
+  "backoffice": {
+    "bugs": [],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "backoffice",
+    "takenAt": "2026-09-29T18:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-02"
+  },
+  "loja": {
+    "bugs": [],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "loja",
+    "takenAt": "2026-09-29T18:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-02"
+  },
+  "portal": {
+    "bugs": [
+      {
+        "closedDate": "2026-09-17T16:00:00",
+        "createdDate": "2026-09-15T10:00:00",
+        "description": "",
+        "id": 3202,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Relatório de comissão sem o mês corrente",
+        "type": "Bug"
+      }
+    ],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "portal",
+    "takenAt": "2026-09-29T18:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-02"
+  }
+}

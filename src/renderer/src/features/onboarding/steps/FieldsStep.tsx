@@ -1,9 +1,9 @@
 import { Form, Input, Select, Typography } from 'antd'
 import type { Configuration } from '@shared/config/schema'
-import type { DiscoveredField } from '@shared/discovery'
+import type { DiscoveredField } from '@shared/organization'
 import { ErrorState } from '../../../components/ErrorState'
 import { compareText, t } from '../../../i18n'
-import { useDiscoveredFields } from '../useDiscovery'
+import { useDiscoveredFields } from '../useOrganization'
 import type { StepProps } from './types'
 
 const { Paragraph } = Typography

@@ -65,7 +65,8 @@ const { getPlanningData } = await import('../../src/main/services/azure/planning
 const { getPlanningItem } = await import('../../src/main/services/azure/planning-item')
 const { getCurrentUser, clearUserProfileCache } =
   await import('../../src/main/services/azure/directory')
-const discovery = await import('../../src/main/services/azure/discovery')
+const organization = await import('../../src/main/services/azure/organization')
+const { buildFlowSnapshot } = await import('../../src/main/services/azure/flow-snapshot')
 const { buildSprintGoalRequest } = await import('../../src/main/services/ai/sprint-goal')
 const { resolveScope } = await import('../../src/main/services/azure/scope')
 const { buildPlanningSummary, summaryToMarkdown } =
@@ -272,16 +273,25 @@ export const SCREENS: Record<string, ScreenRun> = {
   },
 
   descoberta: async (scenario) => {
-    const result: Record<string, unknown> = { projetos: await discovery.listProjects() }
+    const result: Record<string, unknown> = { projetos: await organization.listProjects() }
     for (const { name } of scenario.azure.projects) {
-      const details = await discovery.getProcessDetails(name)
+      const details = await organization.getProcessDetails(name)
       result[name] = {
-        times: await discovery.listTeams(name),
-        areas: await discovery.getAreaTree(name),
+        times: await organization.listTeams(name),
+        areas: await organization.getAreaTree(name),
         processo: details,
-        sugestao: discovery.suggestProcessProfile(details),
-        campos: await discovery.listFields(name)
+        sugestao: organization.suggestProcessProfile(details),
+        campos: await organization.listFields(name)
       }
+    }
+    return result
+  },
+
+  // O retrato é por Produto, não por seleção: é o que a IA do PO lê (RN-FLX-01).
+  retrato: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      result[product.id] = await buildFlowSnapshot(product.id)
     }
     return result
   },
@@ -336,11 +346,17 @@ const COVERED_HANDLERS: Record<string, string> = {
   discoverAreas: 'descoberta',
   discoverProcess: 'descoberta',
   discoverFields: 'descoberta',
+  refreshFlowSnapshot: 'retrato',
   buildSprintGoalRequest: 'pedido-ia'
 }
 
 /** Arquivos de handler cujos canais falam com o Azure. */
-const AZURE_HANDLER_FILES = ['azure-handlers.ts', 'discovery-handlers.ts', 'ai-handlers.ts']
+const AZURE_HANDLER_FILES = [
+  'azure-handlers.ts',
+  'organization-handlers.ts',
+  'flow-handlers.ts',
+  'ai-handlers.ts'
+]
 
 // ─── Execução ────────────────────────────────────────────────────────────────
 

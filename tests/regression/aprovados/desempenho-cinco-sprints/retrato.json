@@ -1,0 +1,146 @@
+{
+  "loja": {
+    "bugs": [
+      {
+        "closedDate": "2026-08-26T15:00:00",
+        "createdDate": "2026-08-25T09:00:00",
+        "description": "",
+        "id": 8015,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 1.1",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-08-28T15:00:00",
+        "createdDate": "2026-08-25T09:00:00",
+        "description": "",
+        "id": 8016,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 1.2",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-09T15:00:00",
+        "createdDate": "2026-09-08T09:00:00",
+        "description": "",
+        "id": 8025,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 2.1",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-11T15:00:00",
+        "createdDate": "2026-09-08T09:00:00",
+        "description": "",
+        "id": 8026,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 2.2",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-23T15:00:00",
+        "createdDate": "2026-09-22T09:00:00",
+        "description": "",
+        "id": 8035,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 3.1",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-26T15:00:00",
+        "createdDate": "2026-09-22T09:00:00",
+        "description": "",
+        "id": 8036,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 3.2",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-07T15:00:00",
+        "createdDate": "2026-10-06T09:00:00",
+        "description": "",
+        "id": 8045,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 4.1",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-11T15:00:00",
+        "createdDate": "2026-10-06T09:00:00",
+        "description": "",
+        "id": 8046,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 4.2",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-21T15:00:00",
+        "createdDate": "2026-10-20T09:00:00",
+        "description": "",
+        "id": 8055,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 5.1",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-26T15:00:00",
+        "createdDate": "2026-10-20T09:00:00",
+        "description": "",
+        "id": 8056,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 5.2",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-11-04T15:00:00",
+        "createdDate": "2026-11-03T09:00:00",
+        "description": "",
+        "id": 8065,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Defeito 6.1",
+        "type": "Bug"
+      },
+      {
+        "closedDate": null,
+        "createdDate": "2026-11-03T09:00:00",
+        "description": "",
+        "id": 8066,
+        "open": true,
+        "parentId": null,
+        "state": "Committed",
+        "title": "Defeito 6.2",
+        "type": "Bug"
+      }
+    ],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "loja",
+    "takenAt": "2026-11-10T13:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-05-14"
+  }
+}

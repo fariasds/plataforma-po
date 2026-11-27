@@ -1,0 +1,13 @@
+{
+  "loja": {
+    "bugs": [],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "loja",
+    "takenAt": "2026-10-14T19:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-17"
+  }
+}

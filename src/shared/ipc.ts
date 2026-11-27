@@ -1,4 +1,5 @@
 import type { SprintGoalRequest } from './ai'
+import type { FlowSnapshotSummary } from './flow-snapshot'
 import type { McpLaunch } from './mcp-clients'
 import type { UpdateCheck, UpdateLink } from './update'
 import type { SerializedError } from './errors'
@@ -11,8 +12,8 @@ import type {
   DiscoveredField,
   DiscoveredProject,
   DiscoveredTeam,
-  ProcessDiscovery
-} from './discovery'
+  SuggestedProcess
+} from './organization'
 import type {
   BugAnalysisResult,
   DailyResult,
@@ -203,9 +204,18 @@ export interface IpcApi {
   /** Raiz da árvore de áreas do projeto, com os caminhos no formato da Configuração. */
   discoverAreas(project: string): Promise<DiscoveredArea>
   /** Tipos, estados com categoria e o Perfil de processo sugerido. */
-  discoverProcess(project: string): Promise<ProcessDiscovery>
+  discoverProcess(project: string): Promise<SuggestedProcess>
   /** Campos acrescentados pelo processo, para mapear em `customFields`. */
   discoverFields(project: string): Promise<DiscoveredField[]>
+
+  // --- Fluxo do PO (ADR 0011) ---------------------------------------------
+
+  /**
+   * Lê o Azure e grava o retrato do Produto nos Dados de trabalho, para a IA do
+   * PO ler pelo servidor MCP (RN-FLX-01, RN-FLX-02). Devolve só as contagens e a
+   * data: a descrição não vem para a janela (RN-SEC-24).
+   */
+  refreshFlowSnapshot(productId: string): Promise<FlowSnapshotSummary>
 
   // --- IA do PO (ADR 0007) ------------------------------------------------
   //
@@ -271,11 +281,12 @@ export const IPC_CHANNELS = {
   getPlanningItem: 'azure:planning-item',
   getDaily: 'azure:daily',
   getCurrentUser: 'azure:current-user',
-  discoverProjects: 'discovery:projects',
-  discoverTeams: 'discovery:teams',
-  discoverAreas: 'discovery:areas',
-  discoverProcess: 'discovery:process',
-  discoverFields: 'discovery:fields',
+  discoverProjects: 'organization:projects',
+  discoverTeams: 'organization:teams',
+  discoverAreas: 'organization:areas',
+  discoverProcess: 'organization:process',
+  discoverFields: 'organization:fields',
+  refreshFlowSnapshot: 'flow:refresh-snapshot',
   buildSprintGoalRequest: 'ai:sprint-goal-request',
   checkForUpdate: 'update:check',
   openUpdateLink: 'update:open-link'

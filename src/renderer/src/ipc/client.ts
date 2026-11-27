@@ -54,6 +54,8 @@ export const ipc: IpcApi = {
   buildSprintGoalRequest: (selection, sprint, itemIds) =>
     unwrap(window.api.buildSprintGoalRequest(selection, sprint, itemIds)),
 
+  refreshFlowSnapshot: (productId) => unwrap(window.api.refreshFlowSnapshot(productId)),
+
   checkForUpdate: () => unwrap(window.api.checkForUpdate()),
   openUpdateLink: (link) => unwrap(window.api.openUpdateLink(link))
 }

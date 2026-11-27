@@ -72,3 +72,15 @@ _Avoid_: iteração (iteração é do Azure)
 Regras de um processo de trabalho: quais tipos de work item contam, quais estados
 significam entrega e quais são terminais.
 _Avoid_: template, workflow
+
+### Fluxo do PO
+
+O vocabulário do processo rule-first (Discovery, Brief da Feature, Requisito,
+Decisão, Plano de PBIs, Quebra, Fase) está em `docs/fluxo-po/` e entra aqui com o
+código de cada fatia.
+
+**Retrato**:
+O que a janela leu do Azure para o fluxo do PO, por Produto: Features, os filhos
+delas, feedbacks e bugs, com a data em que foi tirado. Fica nos Dados de trabalho, e
+é dele que a IA do PO lê, porque o servidor MCP não fala com o Azure.
+_Avoid_: cache, snapshot (no texto), sincronização

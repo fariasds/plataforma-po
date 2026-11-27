@@ -10,7 +10,7 @@ import type {
   DiscoveredTeam,
   DiscoveredWorkItemType,
   StateCategory
-} from '@shared/discovery'
+} from '@shared/organization'
 import { getActiveConfig } from '../../profile/config-loader'
 import { configPath } from '../../profile/paths'
 import { requireActiveProfile } from '../../profile/profile-store'
@@ -37,7 +37,7 @@ const BOM = new RegExp(`^${String.fromCharCode(0xfeff)}`)
  * versão válida, vale o campo `organization` do arquivo como está no disco: o
  * assistente existe justamente para consertar ou completar essa Configuração.
  */
-export function discoveryOrganization(): string {
+export function wizardOrganization(): string {
   const fromConfig = getActiveConfig()?.organization
   if (fromConfig) return fromConfig
 

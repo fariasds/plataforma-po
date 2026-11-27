@@ -4,9 +4,9 @@ import { join } from 'path'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { SCRUM_PRESET } from '@shared/config/presets'
 import { processProfileSchema } from '@shared/config/schema'
-import org from '../../../../tests/fixtures/azure/discovery-org.json'
-import scrum from '../../../../tests/fixtures/azure/discovery-process-scrum.json'
-import custom from '../../../../tests/fixtures/azure/discovery-process-custom.json'
+import org from '../../../../tests/fixtures/azure/organization-org.json'
+import scrum from '../../../../tests/fixtures/azure/organization-process-scrum.json'
+import custom from '../../../../tests/fixtures/azure/organization-process-custom.json'
 
 // Organização `contoso`, projetos fictícios. O `fetchAzure` é trocado por um
 // roteador sobre as fixtures: o que se testa aqui é a leitura das respostas.
@@ -25,14 +25,14 @@ vi.mock('../../profile/profile-store', () => ({
 vi.mock('../../profile/paths', () => ({ configPath: () => fake.configFile }))
 
 const {
-  discoveryOrganization,
+  wizardOrganization,
   getAreaTree,
   getProcessDetails,
   listFields,
   listProjects,
   listTeams,
   suggestProcessProfile
-} = await import('./discovery')
+} = await import('./organization')
 
 type ProcessFixture = typeof scrum | typeof custom
 
@@ -229,13 +229,13 @@ describe('suggestProcessProfile', () => {
   })
 })
 
-describe('discoveryOrganization', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'discovery-'))
+describe('wizardOrganization', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'organization-'))
   afterAll(() => rmSync(dir, { recursive: true, force: true }))
 
   it('usa a organização da Configuração em uso', () => {
     fake.activeConfig = { organization: 'contoso' }
-    expect(discoveryOrganization()).toBe('contoso')
+    expect(wizardOrganization()).toBe('contoso')
   })
 
   it('sem Configuração válida, lê a organização do arquivo como está no disco', () => {
@@ -244,12 +244,12 @@ describe('discoveryOrganization', () => {
       fake.configFile,
       JSON.stringify({ organization: 'contoso', products: 'quebrado' })
     )
-    expect(discoveryOrganization()).toBe('contoso')
+    expect(wizardOrganization()).toBe('contoso')
   })
 
   it('sem organização no arquivo, recusa com erro claro', () => {
     fake.configFile = join(dir, 'vazio.json')
     writeFileSync(fake.configFile, '{ não é json')
-    expect(() => discoveryOrganization()).toThrow(/organization/)
+    expect(() => wizardOrganization()).toThrow(/organization/)
   })
 })

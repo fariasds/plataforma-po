@@ -139,7 +139,7 @@ Onde a Plataforma já usava a mesma palavra para outra coisa, quem muda é ela:
 
 | Termo do fluxo | O que muda na Plataforma |
 |---|---|
-| Discovery | `src/shared/discovery.ts` (leitura da organização no Azure) é renomeado |
+| Discovery | A leitura da organização no Azure, que se chamava `discovery`, passou a `src/shared/organization.ts` e `services/azure/organization.ts` |
 | Quebra, Fase | [O estudo do Roadmap](../roadmap/DESENHO.md) é remodelado na etapa 5: "Refinamento" e a "Fase" planejada ganham outros nomes |
 | Regra de negócio | Nada na tela. As regras do próprio app (`RN-PLN-07` etc.) só aparecem na documentação de quem desenvolve |
 
