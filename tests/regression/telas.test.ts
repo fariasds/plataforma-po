@@ -92,6 +92,7 @@ const organization = await import('../../src/main/services/azure/organization')
 const { buildFlowSnapshot } = await import('../../src/main/services/azure/flow-snapshot')
 const { getFlowBoard } = await import('../../src/main/services/flow/board')
 const { getCatalogView } = await import('../../src/main/services/flow/catalog')
+const { getOpportunities } = await import('../../src/main/services/flow/opportunities')
 const { previewCatalogAbsorb } = await import('../../src/main/services/flow/absorb')
 const { buildSprintGoalRequest } = await import('../../src/main/services/ai/sprint-goal')
 const { resolveScope } = await import('../../src/main/services/azure/scope')
@@ -345,6 +346,16 @@ export const SCREENS: Record<string, ScreenRun> = {
     return result
   },
 
+  // As oportunidades de cada Produto e o encaixe de cada uma (RN-FLX-14 a 16, RN-FLX-25).
+  oportunidades: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      state.workData[flowKeys.snapshot(product.id)] = await buildFlowSnapshot(product.id)
+      result[product.id] = getOpportunities(product.id)
+    }
+    return result
+  },
+
   // O catálogo de regras de cada Produto e o que a absorção da wiki mudaria (RN-CAT-01 a 06).
   catalogo: async () => {
     const result: Record<string, unknown> = {}
@@ -413,6 +424,7 @@ const COVERED_HANDLERS: Record<string, string> = {
   discoverFields: 'descoberta',
   refreshFlowSnapshot: 'retrato',
   getFlowBoard: 'fluxo',
+  getOpportunities: 'oportunidades',
   getCatalog: 'catalogo',
   previewCatalogAbsorb: 'catalogo',
   buildSprintGoalRequest: 'pedido-ia'

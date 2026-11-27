@@ -1,6 +1,7 @@
 import type { SprintGoalRequest } from './ai'
 import type { AbsorbPreview, CatalogView } from './flow-absorb'
 import type { FlowBoard } from './flow-board'
+import type { OpportunitiesView } from './flow-opportunities'
 import type { InstructionState } from './flow-prompts'
 import type { FlowSnapshotSummary } from './flow-snapshot'
 import type { McpLaunch } from './mcp-clients'
@@ -244,6 +245,11 @@ export interface IpcApi {
   ): Promise<FlowBoard>
   /** O PO confirma a Feature do Azure de uma pasta rascunho (RN-FLX-13). */
   linkDraftFeature(productId: string, slug: string, featureId: number): Promise<FlowBoard>
+  /**
+   * As oportunidades do Produto e o encaixe de cada uma (RN-FLX-14 a RN-FLX-16,
+   * RN-FLX-25), do retrato já gravado e da pasta de trabalho. Não lê o Azure.
+   */
+  getOpportunities(productId: string): Promise<OpportunitiesView>
   /** O catálogo de regras do Produto na pasta de trabalho (ADR 0015). Não lê o Azure. */
   getCatalog(productId: string): Promise<CatalogView>
   /** Lê a wiki e diz, página a página, o que a absorção mudaria (RN-CAT-03). Não grava. */
@@ -336,6 +342,7 @@ export const IPC_CHANNELS = {
   clearWorkFolder: 'flow:clear-work-folder',
   linkPlannedPbi: 'flow:link-planned-pbi',
   linkDraftFeature: 'flow:link-draft-feature',
+  getOpportunities: 'flow:opportunities',
   getCatalog: 'flow:catalog',
   previewCatalogAbsorb: 'flow:catalog-preview',
   absorbCatalog: 'flow:catalog-absorb',

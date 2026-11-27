@@ -75,6 +75,7 @@ export const ptBR = {
     connectAi: 'Conectar à sua IA',
     features: 'Features',
     catalog: 'Catálogo',
+    opportunities: 'Oportunidades',
     flow: 'Fluxo do PO'
   },
 
@@ -1231,6 +1232,30 @@ export const ptBR = {
       }
     },
     linked: 'ID gravado no arquivo.'
+  },
+
+  opportunities: {
+    noFeedback:
+      'O Produto não declara feedback na Configuração ("poFlow.feedback"): as oportunidades vêm só da conversa com a IA e dos bugs sem regra.',
+    noFolder:
+      'Sem pasta de trabalho, a tela mostra só os feedbacks do Azure. As oportunidades da conversa e os bugs analisados moram na pasta.',
+    empty:
+      'Nenhuma oportunidade. Peça à sua IA para resumir e encaixar um feedback, ou traga uma dor na conversa.',
+    newFeature: 'Feature nova: {title}',
+    columns: {
+      opportunity: 'Oportunidade',
+      source: 'Origem',
+      fit: 'Encaixe',
+      feature: 'Feature',
+      next: 'O que falta'
+    },
+    source: { feedback: 'Feedback', conversa: 'Conversa', bug: 'Bug sem regra' },
+    fit: {
+      'Sem encaixe': 'Sem encaixe',
+      Proposto: 'Proposto',
+      Encaixada: 'Encaixada',
+      Descartada: 'Descartada'
+    }
   },
 
   instructions: {

@@ -300,9 +300,13 @@ export const fluxoDoPo: Scenario = {
     'RN-FLX-11',
     'RN-FLX-12',
     'RN-FLX-13',
+    'RN-FLX-14',
+    'RN-FLX-15',
+    'RN-FLX-16',
     'RN-FLX-18',
     'RN-FLX-19',
     'RN-FLX-20',
+    'RN-FLX-25',
     'RN-CAT-01',
     'RN-CAT-02',
     'RN-CAT-03',
@@ -313,7 +317,7 @@ export const fluxoDoPo: Scenario = {
     'RN-CFG-15',
     'RN-SEC-24'
   ],
-  telas: ['retrato', 'fluxo', 'catalogo', 'descoberta'],
+  telas: ['retrato', 'fluxo', 'oportunidades', 'catalogo', 'descoberta'],
   anchorDate: '2026-11-26T10:00:00',
   config: baseConfig({
     products: [

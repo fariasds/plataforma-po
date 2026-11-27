@@ -363,3 +363,77 @@ do PO. Proposta vazia, ou acima de 100 KB, não é aplicada.
 **Implementado em:** `src/main/mcp/flow-tools.ts` · `src/main/flow/` ·
 `src/main/services/flow/instructions.ts` · `resources/mcp/rule-first/` ·
 `src/renderer/src/features/settings/InstructionsCard.tsx`
+
+---
+
+## Oportunidade e encaixe
+
+Uma **oportunidade** é uma dor com evidência, que ainda pode não ter Feature. O
+**encaixe** é decidir em qual Feature ela entra. Quem encaixa é a IA do PO com ele, pelo
+prompt `encaixar_oportunidade`; o app mostra o resultado e o que falta fazer no Azure.
+
+### RN-FLX-14 · Três origens
+
+| Origem | De onde vem |
+|---|---|
+| **Feedback** | Os feedbacks do retrato (`RN-FLX-01`): o tipo, os estados e a área que a Configuração declara para o Produto (`RN-CFG-14`) |
+| **Conversa** | Um arquivo em `oportunidades/` na pasta de trabalho, com `Origem: conversa` |
+| **Bug sem regra** | Uma Análise de Bug com veredito "A validar" (`RN-FLX-25`) |
+
+O arquivo da oportunidade, que a IA grava, tem estas linhas, que o app lê:
+
+```
+# <a dor, numa linha>
+Origem: feedback #<id> | conversa
+Feature: #<id> | nova: <título>
+Descartada: AAAA-MM-DD · <motivo>
+```
+
+Sem feedback na Configuração, a tela diz que as oportunidades vêm só da conversa e dos
+bugs.
+
+### RN-FLX-15 · O encaixe é calculado
+
+| Encaixe | Feedback | Conversa |
+|---|---|---|
+| **Sem encaixe** | Sem vínculo no Azure e sem Feature indicada no arquivo | Sem Feature indicada |
+| **Proposto** | O arquivo indica uma Feature (ou uma nova), e o Azure ainda não tem o vínculo | Indica uma Feature nova, ou uma que não está no retrato |
+| **Encaixada** | O Azure tem o vínculo, pelo tipo que a Configuração declara | Indica uma Feature que está no retrato |
+| **Descartada** | O arquivo tem a linha `Descartada:`, e o Azure não tem o vínculo | Tem a linha `Descartada:` |
+
+**O vínculo do Azure manda:** feedback ligado a uma Feature está encaixado, diga o
+arquivo o que disser. Descartar é o único gesto, e fica no arquivo, com o motivo.
+
+### RN-FLX-16 · O que fazer no Azure
+
+Ligar o feedback à Feature é do PO, no Azure (ADR 0012). Para cada oportunidade
+proposta, a tela diz o gesto, no vínculo que a Configuração declara: "No Azure, ligar
+#5198 como pai de #4088", "como filho de" ou "com vínculo Related a". Para a Feature nova,
+diz para criá-la no Azure.
+
+### RN-FLX-25 · "A validar" volta ao começo
+
+Análise de Bug com veredito **A validar** é regra ausente, e regra ausente é
+oportunidade de Feature: ela aparece em Oportunidades, com a origem "Bug sem regra".
+Com a linha `Feature:` na análise, ela fica proposta; sem, fica sem encaixe. "Bug" e
+"Não é bug" não viram oportunidade.
+
+O app lê da análise, em `bugs/BUG-<id>-<slug>.md`, o título (`# BUG <id> · <título>`) e
+as linhas `Veredito:`, `Violada:`, `Preservar:` e `Feature:`.
+
+---
+
+## A tela Oportunidades
+
+**Pergunta que responde:** o que chegou e ainda não tem Feature, e o que falta para
+fechar o encaixe?
+
+- **Por Produto.** Abrir a tela e Atualizar refazem o retrato (`RN-FLX-02`).
+- **Uma linha por oportunidade:** o ID (feedback ou bug), o título, a origem, o encaixe,
+  a Feature e o que falta. Ordem: sem encaixe primeiro, depois propostas, encaixadas e
+  descartadas.
+- **Sem encaixe** em âmbar: pede olhar. **Proposto** no destaque: pede um gesto do PO.
+  **Encaixada** em verde. **Descartada** em cinza, com o motivo.
+
+**Implementado em:** `src/shared/flow-opportunities.ts` · `src/main/flow/opportunities.ts` ·
+`src/renderer/src/features/flow/OpportunitiesScreen.tsx`

@@ -3,6 +3,7 @@ import { Button, Dropdown, Flex, Layout, Tooltip, Typography, theme } from 'antd
 import {
   BookOutlined,
   BugOutlined,
+  BulbOutlined,
   CalendarOutlined,
   CheckCircleOutlined,
   DownOutlined,
@@ -55,6 +56,13 @@ const FLOW: NavEntry[] = [
     key: '/features',
     icon: <NodeIndexOutlined />,
     label: t('nav.features'),
+    group: t('nav.flow'),
+    refresh: true
+  },
+  {
+    key: '/oportunidades',
+    icon: <BulbOutlined />,
+    label: t('nav.opportunities'),
     group: t('nav.flow'),
     refresh: true
   },

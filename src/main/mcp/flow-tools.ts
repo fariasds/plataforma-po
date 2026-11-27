@@ -7,6 +7,7 @@ import { MAX_INSTRUCTION_BYTES, isRuleFirstPrompt, RULE_FIRST_PROMPTS } from '@s
 import { flowBoard, storedSnapshot } from '../flow/board'
 import { productCatalog, productOf } from '../flow/catalog-files'
 import { FEATURES_DIR } from '../flow/feature-folders'
+import { opportunitiesView } from '../flow/opportunities'
 import { writeFileAtomic } from '../profile/atomic-write'
 import { instructionProposalPath } from '../profile/paths'
 import { getWorkFolder } from '../profile/work-folders'
@@ -186,6 +187,26 @@ export function flowTools(profileId: string, configuration: () => Configuration 
             aConfirmarNoAzure: f.reconciliation
           })
         )
+      }
+    },
+    {
+      name: 'listar_oportunidades',
+      title: 'Listar as oportunidades',
+      description:
+        'Os feedbacks do Azure, as oportunidades da conversa (em oportunidades/) e os bugs "A validar", com o encaixe de cada um e o que o PO faz no Azure para fechar o encaixe.',
+      inputSchema: {
+        type: 'object',
+        properties: PRODUCT_ARG,
+        required: ['produto'],
+        additionalProperties: false
+      },
+      readOnly: true,
+      call: (args) => {
+        const view = opportunitiesView(config(), profileId, productArg(args))
+        const note = view.feedbackConfigured
+          ? ''
+          : '\nO Produto não declara feedback na Configuração: as oportunidades vêm só da conversa e dos bugs.'
+        return text(`${snapshotLine(view.snapshotTakenAt)}${note}\n\n${json(view.opportunities)}`)
       }
     },
     {

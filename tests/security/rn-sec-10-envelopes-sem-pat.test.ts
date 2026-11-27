@@ -78,6 +78,7 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   clearWorkFolder: ['loja'],
   linkPlannedPbi: ['loja', 'pagamento-pix', 'P3', 4213],
   linkDraftFeature: ['loja', 'retirada-loja', 4120],
+  getOpportunities: ['loja'],
   getCatalog: ['loja'],
   previewCatalogAbsorb: ['loja'],
   absorbCatalog: ['loja', []],
