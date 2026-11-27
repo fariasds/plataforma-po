@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs'
 import { join } from 'path'
+import { app } from 'electron'
 import { AppError } from '@shared/errors'
 import { SCRUM_PRESET } from '@shared/config/presets'
 import type { Configuration } from '@shared/config/schema'
@@ -252,24 +253,46 @@ function writeDemoFiles(id: string, scenarioId: string): void {
  * "Explorar com dados de exemplo": torna ativa a demonstração, criando-a na
  * primeira vez. Existe no máximo uma; criar um Perfil real depois não a apaga.
  */
+/**
+ * O Cenário da demonstração. Em desenvolvimento, `PO_DEMO_SCENARIO` escolhe outro
+ * (`fluxo-do-po`, por exemplo), para ver uma tela nova com os dados que a provam. No
+ * app empacotado é sempre o `vitrine`, e a variável é ignorada (RN-GLB-15).
+ */
+export function wantedDemoScenario(
+  env: Record<string, string | undefined> = process.env,
+  packaged: boolean = app.isPackaged
+): string {
+  const chosen = env['PO_DEMO_SCENARIO']
+  if (packaged || !chosen) return DEMO_SCENARIO_ID
+  return demoScenario(chosen).id
+}
+
 export function startDemoProfile(): ActiveProfile {
   const index = readIndex()
+  const scenario = wantedDemoScenario()
   const existing = index.profiles.find((profile) => profile.kind === 'demo')
   if (existing) {
-    if (!existsSync(configPath(existing.id))) {
-      writeDemoFiles(existing.id, existing.scenario ?? DEMO_SCENARIO_ID)
+    // Trocou o Cenário pela variável: a demonstração é regravada com o novo.
+    const current = existing.scenario ?? DEMO_SCENARIO_ID
+    if (current !== scenario || !existsSync(configPath(existing.id))) {
+      writeDemoFiles(existing.id, scenario)
     }
-    writeIndex({ ...index, active: existing.id })
-    return toActive(existing)
+    const updated = { ...existing, scenario }
+    writeIndex({
+      ...index,
+      active: existing.id,
+      profiles: index.profiles.map((p) => (p.id === existing.id ? updated : p))
+    })
+    return toActive(updated)
   }
 
   const entry: ProfileEntry = {
     id: uniqueId(DEMO_NAME, index.profiles),
     name: DEMO_NAME,
     kind: 'demo',
-    scenario: DEMO_SCENARIO_ID
+    scenario
   }
-  writeDemoFiles(entry.id, DEMO_SCENARIO_ID)
+  writeDemoFiles(entry.id, scenario)
   writeIndex({ active: entry.id, profiles: [...index.profiles, entry] })
   return toActive(entry)
 }

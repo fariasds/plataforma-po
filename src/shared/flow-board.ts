@@ -4,6 +4,12 @@ import {
   type ArtifactFile,
   type ParsedFeatureFolder
 } from './flow-artifacts'
+import {
+  reconcileDraft,
+  reconcilePlan,
+  type PbiReconciliation,
+  type TitleMatch
+} from './flow-reconcile'
 import type { FlowSnapshot } from './flow-snapshot'
 
 /**
@@ -89,6 +95,11 @@ export interface BoardFeature {
   rules: string[]
   /** PBIs ativos do plano e quantos deles estão escritos. */
   plan: { active: number; written: number } | null
+  /**
+   * O que o app reconheceu no Azure e o PO confirma com um clique: os PBIs ativos sem
+   * ID (RN-FLX-12) e, no rascunho, a Feature (RN-FLX-13).
+   */
+  reconciliation: { pbis: PbiReconciliation[]; feature: TitleMatch | null }
 }
 
 export type WorkFolderState = 'unset' | 'missing' | 'ok'
@@ -204,7 +215,25 @@ const BRIEF_SECTIONS = {
   scope: 'Escopo'
 } as const
 
-function discoveryPendencies(folder: ParsedFeatureFolder): Pendency[] {
+function reconciliationHint(match: PbiReconciliation | undefined): string {
+  if (!match) return ''
+  const ids = match.candidates.map((c) => `#${c.id}`).join(', ')
+  switch (match.match) {
+    case 'exact':
+      return ` No Azure, ${ids} tem o mesmo título: confirme.`
+    case 'similar':
+      return ` No Azure, ${ids} tem um título parecido: confirme se é ele.`
+    case 'ambiguous':
+      return ` No Azure, mais de um filho serve (${ids}): escolha qual.`
+    case 'none':
+      return ''
+  }
+}
+
+function discoveryPendencies(
+  folder: ParsedFeatureFolder,
+  reconciliation: PbiReconciliation[] = []
+): Pendency[] {
   const result: Pendency[] = []
   const brief = folder.brief
   if (!brief) {
@@ -281,7 +310,9 @@ function discoveryPendencies(folder: ParsedFeatureFolder): Pendency[] {
       result.push({
         code: 'pbi-without-azure',
         stage: 'Discovery',
-        message: `${pbi.key} ainda não tem o ID do Azure.`,
+        message: `${pbi.key} ainda não tem o ID do Azure.${reconciliationHint(
+          reconciliation.find((r) => r.pbi === pbi.key)
+        )}`,
         file: ARTIFACT_FILES.plan,
         line: pbi.line
       })
@@ -366,19 +397,28 @@ export function buildFlowBoard(input: BoardInput): FlowBoard {
   }
 
   const features: BoardFeature[] = []
-  const withFolder = new Set<number>()
+  const withFolder = new Set(
+    folders.flatMap(({ folder }) => (folder.featureId !== null ? [folder.featureId] : []))
+  )
 
   for (const { folder, lastModified } of folders) {
     const azure = folder.featureId !== null ? byId.get(folder.featureId) : undefined
-    if (folder.featureId !== null) withFolder.add(folder.featureId)
     const phase = phases.get(folder.slug)!
     const rules = featureRules(folder)
     const pendencies: Pendency[] = []
     const divergences: string[] = []
     const inFlow = phase !== 'Arquivada' && phase !== 'Fora do fluxo'
+    const children = (azure?.childIds ?? []).flatMap((id) => childById.get(id) ?? [])
+    const reconciliation = {
+      pbis: inFlow ? reconcilePlan(folder, children) : [],
+      feature: inFlow ? reconcileDraft(folder, snapshot?.features ?? [], withFolder) : null
+    }
 
     if (inFlow && phase !== 'Sem Discovery') {
-      pendencies.push(...discoveryPendencies(folder), ...ruleWithoutDev(folder))
+      pendencies.push(
+        ...discoveryPendencies(folder, reconciliation.pbis),
+        ...ruleWithoutDev(folder)
+      )
       for (const rule of rules) {
         const others = (rulesOwners.get(rule) ?? []).filter((other) => other.slug !== folder.slug)
         if (others.length === 0) continue
@@ -458,7 +498,8 @@ export function buildFlowBoard(input: BoardInput): FlowBoard {
       rules,
       plan: active
         ? { active: active.length, written: active.filter((p) => p.status === 'Escrito').length }
-        : null
+        : null,
+      reconciliation
     })
   }
 
@@ -480,7 +521,8 @@ export function buildFlowBoard(input: BoardInput): FlowBoard {
       staleDays: null,
       stale: false,
       rules: [],
-      plan: null
+      plan: null,
+      reconciliation: { pbis: [], feature: null }
     })
   }
 

@@ -7,7 +7,8 @@ import { getUserDataDir, resetElectronMock } from '../../../tests/helpers/electr
 
 vi.mock('electron', async () => (await import('../../../tests/helpers/electron-mock')).electronMock)
 
-const { createProfile, getActiveProfile, listProfiles } = await import('./profile-store')
+const { createProfile, getActiveProfile, listProfiles, wantedDemoScenario } =
+  await import('./profile-store')
 const {
   applyProposal,
   discardProposal,
@@ -335,6 +336,21 @@ describe('work-data', () => {
     expect(workDataKey('capacity', 'LojaOnline')).toBe('capacity:lojaonline')
     expect(() => workDataKey('capacity', '../x')).toThrow(
       expect.objectContaining({ code: 'WORK_DATA_INVALID_KEY' })
+    )
+  })
+})
+
+describe('Cenário da demonstração (RN-GLB-15)', () => {
+  it('é o vitrine, a não ser em desenvolvimento com PO_DEMO_SCENARIO', () => {
+    expect(wantedDemoScenario({}, false)).toBe('vitrine')
+    expect(wantedDemoScenario({ PO_DEMO_SCENARIO: 'fluxo-do-po' }, false)).toBe('fluxo-do-po')
+    // No app empacotado, a variável não vale.
+    expect(wantedDemoScenario({ PO_DEMO_SCENARIO: 'fluxo-do-po' }, true)).toBe('vitrine')
+  })
+
+  it('Cenário que não existe é recusado', () => {
+    expect(() => wantedDemoScenario({ PO_DEMO_SCENARIO: 'nao-existe' }, false)).toThrow(
+      /não existe/
     )
   })
 })

@@ -76,6 +76,8 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   getWorkFolders: [],
   chooseWorkFolder: ['loja'],
   clearWorkFolder: ['loja'],
+  linkPlannedPbi: ['loja', 'pagamento-pix', 'P3', 4213],
+  linkDraftFeature: ['loja', 'retirada-loja', 4120],
   // A consulta de versão não leva o PAT (RN-SEC-33); o envelope dela também não.
   checkForUpdate: [],
   openUpdateLink: ['installer'],

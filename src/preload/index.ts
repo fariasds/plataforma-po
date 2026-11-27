@@ -60,6 +60,10 @@ const api: IpcBridge = {
   getWorkFolders: () => invoke(IPC_CHANNELS.getWorkFolders),
   chooseWorkFolder: (productId) => invoke(IPC_CHANNELS.chooseWorkFolder, productId),
   clearWorkFolder: (productId) => invoke(IPC_CHANNELS.clearWorkFolder, productId),
+  linkPlannedPbi: (productId, slug, pbiKey, azureId) =>
+    invoke(IPC_CHANNELS.linkPlannedPbi, productId, slug, pbiKey, azureId),
+  linkDraftFeature: (productId, slug, featureId) =>
+    invoke(IPC_CHANNELS.linkDraftFeature, productId, slug, featureId),
   checkForUpdate: () => invoke(IPC_CHANNELS.checkForUpdate),
   openUpdateLink: (link) => invoke(IPC_CHANNELS.openUpdateLink, link),
 

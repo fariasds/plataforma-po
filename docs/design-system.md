@@ -185,6 +185,12 @@ Use antes de criar um novo. Se precisar de uma variação, estenda o componente.
   `STATUS.info.text`, "Antecipado". O percentual vai ao lado em texto secundário de
   11 px, e o ponto descontado mostra o valor do Azure em texto secundário
   (`7 /13`). Nas duas, a cor marca a origem do item, nunca situação.
+- **Funil por Fase (tela Features):** colunas em trilho `NEUTRA[100]`, uma por Fase,
+  com a contagem em `MONO_FONT`; cada Feature é um cartão-botão branco com borda
+  `NEUTRA[200]`. **A Fase é etiqueta neutra** (`Tag` sem cor): ela não é situação. O
+  que precisa de olhar (pendência, parada, divergência) vai em `STATUS.warning`; o que
+  o PO pode confirmar agora vai no destaque (`colorPrimaryBg`), porque é ação, não
+  situação. A Feature abre num `Drawer` à direita.
 - **Estado vazio:** diga o que falta e onde configurar ("Defina
   `customFields.criticality` na Configuração"), nunca só "sem dados".
 

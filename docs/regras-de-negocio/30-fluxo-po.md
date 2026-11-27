@@ -11,7 +11,8 @@ de cada fatia.
 **Implementado em:**
 `src/shared/flow-snapshot.ts` · `src/shared/flow-artifacts.ts` · `src/shared/flow-board.ts` ·
 `src/main/services/azure/flow-snapshot.ts` · `src/main/services/flow/` ·
-`src/main/profile/work-folders.ts` · `src/main/ipc/flow-handlers.ts`
+`src/main/profile/work-folders.ts` · `src/main/ipc/flow-handlers.ts` ·
+`src/shared/flow-reconcile.ts` · `src/renderer/src/features/flow/`
 
 ---
 
@@ -221,3 +222,76 @@ reservado duas vezes; se existe, as duas Features a alteram ao mesmo tempo. As d
 situações pedem decisão antes da gravação no catálogo.
 
 Feature arquivada não conta.
+
+---
+
+## A reconciliação com o Azure
+
+O app não cria work item (ADR 0012): o PO cria o PBI ou a Feature no Azure, e o app
+reconhece o item na leitura seguinte. Quem confirma é o PO, com um clique na Feature
+aberta. Só então o ID vai para o arquivo.
+
+### RN-FLX-12 · Reconciliação do PBI
+
+PBI ativo do plano sem `Azure: #<id>` é comparado com os **filhos da Feature no
+retrato** que nenhum outro PBI do plano já usa:
+
+| Encontrado | O que a tela mostra |
+|---|---|
+| Um filho com o **mesmo título**, sem maiúscula, acento, pontuação nem espaço repetido | "mesmo título", com o botão **É este** |
+| Nenhum igual, e um filho com **título parecido**: pelo menos 75% das palavras do título menor estão no maior, sem contar artigo e preposição | "título parecido", com o botão **É este** |
+| Dois ou mais iguais, ou dois igualmente parecidos | "mais de um serve", com um botão para cada |
+| Nada | "nenhum item do Azure com título igual ou parecido" |
+
+O parecido existe porque o PO costuma encurtar o título ao colar no Azure. **O app
+nunca escolhe sozinho:** até o clique, o PBI continua com a pendência "ainda não tem o
+ID do Azure", que diz o que foi encontrado.
+
+**O clique grava `Azure: #<id>` na linha do PBI** e só nela: o status, a observação e o
+resto da linha ficam como o PO escreveu, e o fim de linha do arquivo (LF ou CRLF) é
+preservado. **Quem grava é o processo principal**, que refaz o quadro e só aceita o ID
+se ele ainda for um dos candidatos: a janela não grava um ID qualquer, e um plano que
+mudou depois de a tela abrir não é sobrescrito.
+
+**Casos de borda:** filho já usado por outro PBI do plano não é candidato. PBI
+cancelado, unificado ou quebrado não é reconciliado. Feature fora do retrato não tem
+filhos para comparar.
+
+### RN-FLX-13 · Reconciliação da Feature
+
+A pasta rascunho (`Feature: #a criar`) é comparada, pelo título do README (`# ...`),
+com as **Features abertas do retrato que ainda não têm pasta**, do mesmo jeito da
+`RN-FLX-12`. O clique troca `#a criar` pelo ID no README, e o resto da linha fica.
+Depois disso, a pasta é a da Feature, e o quadro passa a ler o Azure dela.
+
+Até a confirmação, a Feature do Azure aparece também sozinha, em Sem Discovery: o app
+não junta as duas sem o PO dizer que são a mesma.
+
+**Implementado em:** `src/shared/flow-reconcile.ts` · `src/main/services/flow/reconcile.ts` ·
+`src/renderer/src/features/flow/`
+
+---
+
+## A tela Features
+
+**Pergunta que responde:** em que Fase está cada Feature do Produto, e o que falta
+para ela andar?
+
+- **Por Produto**, no `ProductFilter` (sem Grupo nem Squad inteira: a pasta de trabalho
+  é de um Produto, `RN-FLX-03`).
+- **O funil** tem as cinco Fases do fluxo, da esquerda para a direita (`RN-FLX-05`).
+  Arquivadas e fora do fluxo ficam num bloco recolhido abaixo.
+- **Cada cartão** mostra o ID (ou "rascunho"), o título e, quando há, as pendências, os
+  IDs a confirmar, "parada há N dias" (`RN-FLX-11`), "diverge do Azure" (`RN-FLX-09`) e
+  quantos PBIs do plano já estão escritos.
+- **A Feature aberta** mostra a Fase, o estado no Azure, a pasta e há quanto tempo foi
+  alterada, a linha `Fase:` do README quando diverge, as divergências, o que confirmar
+  no Azure, o checklist (`RN-FLX-06`), as pendências por etapa, com arquivo e linha
+  (`RN-FLX-10`), e as regras da Feature (`RN-FLX-18`).
+- **Atualizar** (e abrir a tela) refaz o retrato do Azure (`RN-FLX-02`); a data do
+  retrato fica no topo. Se o Azure falhar, a tela avisa e mostra o último retrato
+  gravado.
+- **Sem pasta de trabalho**, a tela mostra as Features do retrato e o botão para
+  escolher a pasta (`RN-SEC-36`).
+
+**Implementado em:** `src/renderer/src/features/flow/`

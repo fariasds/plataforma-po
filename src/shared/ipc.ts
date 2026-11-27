@@ -230,6 +230,18 @@ export interface IpcApi {
    */
   chooseWorkFolder(productId: string): Promise<string | null>
   clearWorkFolder(productId: string): Promise<void>
+  /**
+   * O PO confirma que o PBI planejado é este item do Azure (RN-FLX-12). O main só
+   * grava `Azure: #<id>` no plano se o ID for um dos candidatos que ele encontrou.
+   */
+  linkPlannedPbi(
+    productId: string,
+    slug: string,
+    pbiKey: string,
+    azureId: number
+  ): Promise<FlowBoard>
+  /** O PO confirma a Feature do Azure de uma pasta rascunho (RN-FLX-13). */
+  linkDraftFeature(productId: string, slug: string, featureId: number): Promise<FlowBoard>
 
   // --- IA do PO (ADR 0007) ------------------------------------------------
   //
@@ -305,6 +317,8 @@ export const IPC_CHANNELS = {
   getWorkFolders: 'flow:work-folders',
   chooseWorkFolder: 'flow:choose-work-folder',
   clearWorkFolder: 'flow:clear-work-folder',
+  linkPlannedPbi: 'flow:link-planned-pbi',
+  linkDraftFeature: 'flow:link-draft-feature',
   buildSprintGoalRequest: 'ai:sprint-goal-request',
   checkForUpdate: 'update:check',
   openUpdateLink: 'update:open-link'

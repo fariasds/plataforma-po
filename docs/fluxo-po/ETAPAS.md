@@ -150,8 +150,9 @@ o limite do Perfil (padrão 30) é destacada.
 
 **RN-FLX-12 · Reconciliação do PBI.** PBI planejado sem `Azure: #` é comparado com
 os filhos da Feature no retrato, pelo título normalizado (sem maiúscula, acento,
-pontuação e espaço repetido). Um candidato: o app mostra, e o clique do PO grava o
-ID no plano. Nenhum ou mais de um: fica a pendência, com os candidatos.
+pontuação e espaço repetido) e, sem igual, pelo título parecido, porque o PO encurta
+o título ao colar. Um candidato: o app mostra, e o clique do PO grava o ID no plano.
+Mais de um: o PO escolhe. Até o clique, fica a pendência.
 
 **RN-FLX-13 · Reconciliação da Feature.** A pasta rascunho (`Feature: #a criar`) é
 comparada com as Features do Produto da mesma forma. Confirmada, o app grava o ID

@@ -72,7 +72,8 @@ export const ptBR = {
     sprintDelivery: 'Entregas da Sprint',
     bugAnalysis: 'Análise de Bugs',
     releaseNotes: 'Novidades',
-    connectAi: 'Conectar à sua IA'
+    connectAi: 'Conectar à sua IA',
+    features: 'Features'
   },
 
   squads: {
@@ -268,6 +269,12 @@ export const ptBR = {
     ruleLabel: 'Regra {rule}',
     ariaLabel: 'Como {title} é calculado',
     rules: {
+      'RN-FLX-05': {
+        title: 'Fase',
+        text:
+          'A Fase sai dos arquivos da pasta de trabalho, não da linha "Fase:" do README. Discovery até o checklist fechar; Pronta para quebra quando fecha; Em quebra quando o plano ganha regras; Publicada quando todas estão no catálogo. ' +
+          'O estado da Feature no Azure não muda a Fase: quando discorda, aparece como divergência.'
+      },
       'RN-GLB-16': {
         title: 'Datas da demonstração',
         text:
@@ -1149,6 +1156,75 @@ export const ptBR = {
     devFocusHint:
       '% de horas em progresso dedicadas aos tipos de desenvolvimento — todos os itens trabalhados na sprint',
     devFocusEmpty: 'Sem horas registradas no período.'
+  },
+
+  flow: {
+    noProducts: 'Cadastre um Produto na Configuração para ver as Features dele.',
+    folder: {
+      label: 'Pasta de trabalho',
+      choose: 'Escolher a pasta de trabalho',
+      change: 'Trocar pasta',
+      unsetTitle: '{product} ainda não tem pasta de trabalho',
+      unsetText:
+        'É lá que moram o Brief, as Decisões e o Plano de PBIs de cada Feature, em features/<pasta>. Sem ela, a tela mostra só as Features abertas no Azure.',
+      missingTitle: 'A pasta de trabalho de {product} não foi encontrada',
+      missingText:
+        'Ela pode ter sido renomeada, movida ou estar num disco desconectado. Escolha de novo.'
+    },
+    snapshotFailed:
+      'Não deu para atualizar o retrato do Azure. A tela mostra o último retrato gravado.',
+    snapshotAt: 'Retrato do Azure de {date}',
+    noSnapshot: 'Sem retrato do Azure ainda',
+    empty: 'Nenhuma Feature aberta no Azure para {product}, e nenhuma pasta em features/.',
+    emptyColumn: 'Nenhuma',
+    others: 'Arquivadas e fora do fluxo ({count})',
+    phases: {
+      'Sem Discovery': 'Sem Discovery',
+      Discovery: 'Discovery',
+      'Pronta para quebra': 'Pronta para quebra',
+      'Em quebra': 'Em quebra',
+      Publicada: 'Publicada',
+      Arquivada: 'Arquivada',
+      'Fora do fluxo': 'Fora do fluxo'
+    },
+    card: {
+      draft: 'rascunho',
+      pendencies: { one: '{count} pendência', other: '{count} pendências' },
+      stale: 'parada há {days} dias',
+      divergence: 'diverge do Azure',
+      toConfirm: { one: '{count} ID a confirmar', other: '{count} IDs a confirmar' },
+      written: '{written} de {active} PBIs escritos'
+    },
+    detail: {
+      folder: 'Pasta:',
+      folderPath: 'features/{slug}',
+      updated: 'alterada há {days} dias',
+      updatedToday: 'alterada hoje',
+      readmePhase: 'O README diz "{readme}"; o app calcula {phase}.',
+      divergences: 'O Azure discorda',
+      reconcile: 'Confirmar no Azure',
+      reconcileHint:
+        'O app achou estes itens pelo título. Confirme o que é de cada um; só então o ID vai para o arquivo.',
+      exact: 'mesmo título',
+      similar: 'título parecido',
+      ambiguous: 'mais de um serve',
+      none: 'nenhum item do Azure com título igual ou parecido',
+      confirm: 'É este',
+      draftFeature: 'Feature desta pasta',
+      checklist: 'Para ficar Pronta para quebra',
+      pendencies: 'Pendências',
+      noPendencies: 'Nenhuma pendência.',
+      rules: 'Regras da Feature',
+      line: 'linha {line}',
+      stages: {
+        Encaixe: 'Encaixe',
+        Discovery: 'Discovery',
+        Quebra: 'Quebra',
+        Regras: 'Regras',
+        Acompanhamento: 'Acompanhamento'
+      }
+    },
+    linked: 'ID gravado no arquivo.'
   },
 
   security: {

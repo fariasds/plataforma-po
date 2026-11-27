@@ -8,6 +8,7 @@ import {
   FieldTimeOutlined,
   FundProjectionScreenOutlined,
   HomeOutlined,
+  NodeIndexOutlined,
   SafetyCertificateOutlined,
   SettingOutlined
 } from '@ant-design/icons'
@@ -43,7 +44,9 @@ const HOME: NavEntry = { key: '/home', icon: <HomeOutlined />, label: t('nav.hom
 const MAIN: NavEntry[] = [
   HOME,
   { key: '/planning', icon: <CalendarOutlined />, label: t('nav.planning'), refresh: true },
-  { key: '/daily', icon: <FieldTimeOutlined />, label: t('nav.daily'), refresh: true }
+  { key: '/daily', icon: <FieldTimeOutlined />, label: t('nav.daily'), refresh: true },
+  // O fluxo do PO (docs/fluxo-po/). Vira grupo quando ganhar a segunda tela.
+  { key: '/features', icon: <NodeIndexOutlined />, label: t('nav.features'), refresh: true }
 ]
 
 /**

@@ -12,6 +12,10 @@
         "plan": null,
         "priority": null,
         "readmePhase": null,
+        "reconciliation": {
+          "feature": null,
+          "pbis": []
+        },
         "rules": [],
         "slug": null,
         "stale": false,
@@ -26,6 +30,27 @@
   "loja": {
     "features": [
       {
+        "azureState": "New",
+        "checklist": null,
+        "divergences": [],
+        "featureId": 4120,
+        "key": "#4120",
+        "pendencies": [],
+        "phase": "Sem Discovery",
+        "plan": null,
+        "priority": null,
+        "readmePhase": null,
+        "reconciliation": {
+          "feature": null,
+          "pbis": []
+        },
+        "rules": [],
+        "slug": null,
+        "stale": false,
+        "staleDays": null,
+        "title": "Retirada na loja"
+      },
+      {
         "azureState": null,
         "checklist": null,
         "divergences": [],
@@ -36,6 +61,13 @@
         "plan": null,
         "priority": null,
         "readmePhase": null,
+        "reconciliation": {
+          "feature": {
+            "candidates": [],
+            "match": "none"
+          },
+          "pbis": []
+        },
         "rules": [],
         "slug": "lista-presentes",
         "stale": false,
@@ -93,14 +125,14 @@
             "code": "pbi-without-azure",
             "file": "plano-pbis.md",
             "line": 13,
-            "message": "P3 ainda não tem o ID do Azure.",
+            "message": "P3 ainda não tem o ID do Azure. No Azure, #4213 tem o mesmo título: confirme.",
             "stage": "Discovery"
           },
           {
             "code": "pbi-without-azure",
             "file": "plano-pbis.md",
             "line": 17,
-            "message": "P4 ainda não tem o ID do Azure.",
+            "message": "P4 ainda não tem o ID do Azure. No Azure, #4214 tem um título parecido: confirme se é ele.",
             "stage": "Discovery"
           },
           {
@@ -125,6 +157,37 @@
         },
         "priority": 29,
         "readmePhase": "Pronta para quebra",
+        "reconciliation": {
+          "feature": null,
+          "pbis": [
+            {
+              "candidates": [
+                {
+                  "id": 4213,
+                  "state": "New",
+                  "title": "Expirar o pedido quando o Pix não é pago no prazo",
+                  "type": "Product Backlog Item"
+                }
+              ],
+              "match": "exact",
+              "pbi": "P3",
+              "title": "Expirar o pedido quando o Pix não é pago no prazo"
+            },
+            {
+              "candidates": [
+                {
+                  "id": 4214,
+                  "state": "New",
+                  "title": "Cliente não sabe quanto tempo tem para pagar o Pix",
+                  "type": "Product Backlog Item"
+                }
+              ],
+              "match": "similar",
+              "pbi": "P4",
+              "title": "Cliente não sabe quanto tempo tem para pagar o Pix — checkout"
+            }
+          ]
+        },
         "rules": [],
         "slug": "pagamento-pix",
         "stale": false,
@@ -177,6 +240,10 @@
         },
         "priority": null,
         "readmePhase": null,
+        "reconciliation": {
+          "feature": null,
+          "pbis": []
+        },
         "rules": [],
         "slug": "avaliacao-foto",
         "stale": true,
@@ -236,6 +303,10 @@
         },
         "priority": 22,
         "readmePhase": null,
+        "reconciliation": {
+          "feature": null,
+          "pbis": []
+        },
         "rules": [
           "RN-CUP-009",
           "RN-CUP-004",
@@ -290,6 +361,10 @@
         },
         "priority": null,
         "readmePhase": "Publicada",
+        "reconciliation": {
+          "feature": null,
+          "pbis": []
+        },
         "rules": [
           "RN-TRO-001"
         ],
@@ -352,6 +427,27 @@
         },
         "priority": null,
         "readmePhase": null,
+        "reconciliation": {
+          "feature": {
+            "candidates": [
+              {
+                "id": 4120,
+                "state": "New",
+                "title": "Retirada na loja",
+                "type": "Feature"
+              }
+            ],
+            "match": "exact"
+          },
+          "pbis": [
+            {
+              "candidates": [],
+              "match": "none",
+              "pbi": "P1",
+              "title": "Permitir retirar o pedido na loja"
+            }
+          ]
+        },
         "rules": [
           "RN-CUP-009"
         ],
@@ -371,6 +467,10 @@
         "plan": null,
         "priority": null,
         "readmePhase": null,
+        "reconciliation": {
+          "feature": null,
+          "pbis": []
+        },
         "rules": [],
         "slug": "adhoc-troca-gateway",
         "stale": false,
@@ -388,6 +488,10 @@
         "plan": null,
         "priority": null,
         "readmePhase": null,
+        "reconciliation": {
+          "feature": null,
+          "pbis": []
+        },
         "rules": [],
         "slug": "frete-gratis",
         "stale": false,

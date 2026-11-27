@@ -59,6 +59,10 @@ export const ipc: IpcApi = {
   getWorkFolders: () => unwrap(window.api.getWorkFolders()),
   chooseWorkFolder: (productId) => unwrap(window.api.chooseWorkFolder(productId)),
   clearWorkFolder: (productId) => unwrap(window.api.clearWorkFolder(productId)),
+  linkPlannedPbi: (productId, slug, pbiKey, azureId) =>
+    unwrap(window.api.linkPlannedPbi(productId, slug, pbiKey, azureId)),
+  linkDraftFeature: (productId, slug, featureId) =>
+    unwrap(window.api.linkDraftFeature(productId, slug, featureId)),
 
   checkForUpdate: () => unwrap(window.api.checkForUpdate()),
   openUpdateLink: (link) => unwrap(window.api.openUpdateLink(link))

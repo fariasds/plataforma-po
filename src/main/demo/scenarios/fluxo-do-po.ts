@@ -192,6 +192,27 @@ const WORK_ITEMS: FakeWorkItem[] = [
     parent: 4088
   }),
 
+  // A reconciliação do plano (RN-FLX-12): o P3 tem o mesmo título no Azure; o P4 foi
+  // colado com o título encurtado.
+  item({
+    id: 4213,
+    type: PBI,
+    title: 'Expirar o pedido quando o Pix não é pago no prazo',
+    area: LOJA_AREA,
+    created: '2026-11-21T09:00:00',
+    parent: 4102
+  }),
+  item({
+    id: 4214,
+    type: PBI,
+    title: 'Cliente não sabe quanto tempo tem para pagar o Pix',
+    area: LOJA_AREA,
+    created: '2026-11-21T09:00:00',
+    parent: 4102
+  }),
+  // A Feature que o rascunho "Retirada na loja" acabou de ganhar no Azure (RN-FLX-13).
+  feature(4120, 'Retirada na loja', '2026-11-24T09:00:00', []),
+
   // Bugs da Loja.
   item({
     id: 5301,
@@ -261,7 +282,9 @@ export const fluxoDoPo: Scenario = {
     'A pasta de trabalho fictícia da Loja (tests/regression/pastas/fluxo-do-po/loja) tem uma Feature ' +
     'em cada situação: Discovery com pendências, Em quebra com ID de regra repetido entre duas ' +
     'pastas, rascunho, Pronta para quebra parada há 45 dias, fechada no Azure com regras ainda ' +
-    'abertas, arquivada e anterior ao fluxo. O App não tem pasta.',
+    'abertas, arquivada e anterior ao fluxo. O App não tem pasta. Reconciliação: o P3 tem o ' +
+    'mesmo título no Azure, o P4 foi colado com o título encurtado e o rascunho de Retirada ' +
+    'ganhou a Feature #4120.',
   regras: [
     'RN-FLX-01',
     'RN-FLX-02',
@@ -274,6 +297,8 @@ export const fluxoDoPo: Scenario = {
     'RN-FLX-09',
     'RN-FLX-10',
     'RN-FLX-11',
+    'RN-FLX-12',
+    'RN-FLX-13',
     'RN-FLX-18',
     'RN-FLX-19',
     'RN-CFG-14',
