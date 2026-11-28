@@ -6,7 +6,12 @@ import type { FakeAzure } from '../../demo/fake-azure'
 import { getActiveConfig } from '../../profile/config-loader'
 import { getActiveProfile } from '../../profile/profile-store'
 import { requirePat } from '../../security/pat-store'
-import { assertAllowedAzureUrl, assertReadOnlyRequest } from '../../security/network-guard'
+import {
+  assertAllowedAzureUrl,
+  assertReadOnlyRequest,
+  assertWikiPageWrite,
+  type WikiWriteScope
+} from '../../security/network-guard'
 import { rememberSecret } from '../../security/redact'
 
 /**
@@ -64,8 +69,15 @@ function authHeaderFor(pat: string): string {
  * O único `fetch` do processo principal (RN-SEC-18): nada sai sem passar pela
  * checagem de host, organização e método. O teste de segurança conta as chamadas.
  */
-async function guardedFetch(url: string, init: RequestInit = {}): Promise<Response> {
-  assertReadOnlyRequest(init.method, assertAllowedAzureUrl(url, azureOrganization()))
+async function guardedFetch(
+  url: string,
+  init: RequestInit = {},
+  /** Só o `putWikiPage` passa: é a única escrita do app (ADR 0016). */
+  write: WikiWriteScope | null = null
+): Promise<Response> {
+  const allowed = assertAllowedAzureUrl(url, azureOrganization())
+  if (write === null) assertReadOnlyRequest(init.method, allowed)
+  else assertWikiPageWrite(init.method, allowed, write)
   return fetch(url, init)
 }
 
@@ -77,19 +89,28 @@ function isUnauthorized(status: number): boolean {
   return status === 401 || status === 403 || status === 203
 }
 
-async function request(path: string, pat: string, init?: RequestInit): Promise<Response> {
+async function request(
+  path: string,
+  pat: string,
+  init?: RequestInit,
+  options: { write?: WikiWriteScope; accept?: number[] } = {}
+): Promise<Response> {
   const url = `https://dev.azure.com/${azureOrganization()}${path}`
 
   let response: Response
   try {
-    response = await guardedFetch(url, {
-      ...init,
-      headers: {
-        ...init?.headers,
-        Authorization: authHeaderFor(pat),
-        'Content-Type': 'application/json'
-      }
-    })
+    response = await guardedFetch(
+      url,
+      {
+        ...init,
+        headers: {
+          ...init?.headers,
+          Authorization: authHeaderFor(pat),
+          'Content-Type': 'application/json'
+        }
+      },
+      options.write ?? null
+    )
   } catch (cause) {
     if (cause instanceof AppError) throw cause
     throw new AppError(
@@ -105,6 +126,8 @@ async function request(path: string, pat: string, init?: RequestInit): Promise<R
       'O Azure DevOps recusou o token. Confira se ele é válido, não expirou e tem escopo de leitura.'
     )
   }
+
+  if (options.accept?.includes(response.status)) return response
 
   if (!response.ok) {
     throw new AppError(
@@ -133,6 +156,82 @@ export async function postAzure<T>(path: string, body: unknown): Promise<T> {
     body: JSON.stringify(body)
   })
   return response.json() as Promise<T>
+}
+
+/**
+ * GET de uma página de wiki com o ETag dela, para a publicação saber se a página
+ * mudou desde a absorção. `null` quando a página não existe.
+ */
+export async function fetchWikiPage(
+  path: string
+): Promise<{ content: string; etag: string | null } | null> {
+  const demo = demoFor()
+  if (demo) return demo.fetchWikiPage(path)
+  const response = await request(path, requirePat(), undefined, { accept: [404] })
+  if (response.status === 404) return null
+  const page = (await response.json()) as { content?: string }
+  return { content: page.content ?? '', etag: response.headers.get('etag') }
+}
+
+/** A wiki e a raiz do catálogo do Produto, lidas da Configuração em uso (RN-SEC-40). */
+function wikiWriteScope(productId: string): WikiWriteScope {
+  const config = getActiveConfig()
+  const product = config?.products.find((p) => p.id === productId)
+  const source = product?.catalog?.source
+  if (!product || !source || source.kind !== 'wiki') {
+    throw new AppError('WIKI_PUBLISH_OFF', 'O Produto não tem catálogo numa wiki.')
+  }
+  return {
+    project: source.project ?? product.project,
+    wiki: source.wiki,
+    rootPage: source.rootPage
+  }
+}
+
+/**
+ * A única escrita do app no Azure (ADR 0016): grava uma página do catálogo na wiki.
+ * Recusa com a publicação desligada no Perfil (RN-SEC-39) e fora do catálogo do
+ * Produto (RN-SEC-40). Com o ETag, só grava se a página não mudou desde a leitura.
+ */
+export async function putWikiPage(
+  productId: string,
+  pagePath: string,
+  content: string,
+  etag: string | null
+): Promise<void> {
+  if (getActiveProfile()?.wikiPublish !== true) {
+    throw new AppError('WIKI_PUBLISH_OFF', 'A publicação na wiki está desligada neste Perfil.')
+  }
+  const scope = wikiWriteScope(productId)
+  const path =
+    `/${encodeURIComponent(scope.project)}/_apis/wiki/wikis/${encodeURIComponent(scope.wiki)}/pages` +
+    `?path=${encodeURIComponent(pagePath)}&api-version=7.1`
+  const demo = demoFor()
+  if (demo) {
+    // Mesma barreira do caminho real, sobre a URL que iria ao Azure.
+    assertWikiPageWrite(
+      'PUT',
+      assertAllowedAzureUrl(
+        `https://dev.azure.com/${azureOrganization()}${path}`,
+        azureOrganization()
+      ),
+      scope
+    )
+    return demo.putWikiPage(path, content, etag)
+  }
+  const response = await request(
+    path,
+    requirePat(),
+    {
+      method: 'PUT',
+      body: JSON.stringify({ content }),
+      headers: etag ? { 'If-Match': etag } : {}
+    },
+    { write: scope, accept: [409, 412] }
+  )
+  if (response.status === 409 || response.status === 412) {
+    throw new AppError('CATALOG_CONFLICT', `A página ${pagePath} mudou na wiki: absorva de novo.`)
+  }
 }
 
 /**

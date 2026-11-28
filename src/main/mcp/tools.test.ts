@@ -88,7 +88,18 @@ describe('ferramentas do servidor MCP', () => {
   })
 
   it('oferece o roteiro configurar_plataforma e os recursos de instrução e schema', () => {
-    expect(rpc('prompts/list')).toMatchObject({ prompts: [{ name: 'configurar_plataforma' }] })
+    const names = (rpc('prompts/list') as { prompts: { name: string }[] }).prompts.map(
+      (p) => p.name
+    )
+    expect(names).toEqual([
+      'configurar_plataforma',
+      'resumir_feedback',
+      'encaixar_oportunidade',
+      'discovery',
+      'quebra',
+      'analisar_bug',
+      'reescrever_bug'
+    ])
     const prompt = rpc('prompts/get', { name: 'configurar_plataforma' }) as {
       messages: { content: { text: string } }[]
     }

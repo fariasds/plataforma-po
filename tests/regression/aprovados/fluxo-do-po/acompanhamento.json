@@ -1,0 +1,82 @@
+{
+  "app": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "app",
+    "snapshotTakenAt": "2026-11-26T13:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [],
+    "workFolder": "unset"
+  },
+  "loja": {
+    "byFeature": [
+      {
+        "bugs": [
+          {
+            "id": 5290,
+            "open": false,
+            "state": "",
+            "title": "Troca recusada com o número do pedido",
+            "verdict": "Bug",
+            "via": "regra"
+          }
+        ],
+        "featureId": 4060,
+        "title": "Troca sem nota fiscal"
+      },
+      {
+        "bugs": [
+          {
+            "id": 5302,
+            "open": true,
+            "state": "New",
+            "title": "Cupom expirado ainda aceito",
+            "verdict": null,
+            "via": "azure"
+          }
+        ],
+        "featureId": 4088,
+        "title": "Cupom de desconto por categoria"
+      }
+    ],
+    "byRule": [
+      {
+        "bugs": [
+          5301
+        ],
+        "rule": "RN-CUP-004",
+        "title": "Cupom por categoria do produto"
+      },
+      {
+        "bugs": [
+          5290
+        ],
+        "rule": "RN-TRO-001",
+        "title": "Troca sem nota fiscal"
+      }
+    ],
+    "catalogConfigured": true,
+    "productId": "loja",
+    "snapshotTakenAt": "2026-11-26T13:00:00.000Z",
+    "toConfirm": [
+      {
+        "file": "Trocas.md",
+        "pbi": 4061,
+        "pbiState": "Done",
+        "rule": "RN-TRO-001",
+        "title": "Troca sem nota fiscal"
+      }
+    ],
+    "unanalyzed": [
+      {
+        "id": 5302,
+        "open": true,
+        "state": "New",
+        "title": "Cupom expirado ainda aceito",
+        "verdict": null
+      }
+    ],
+    "workFolder": "ok"
+  }
+}

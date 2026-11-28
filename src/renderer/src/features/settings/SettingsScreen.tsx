@@ -19,6 +19,7 @@ import { MONO_FONT, NEUTRA, SIDER, STATUS } from '../../theme'
 import { IssueList } from '../onboarding/IssueList'
 import { exportConfiguration, exportTemplate } from './exportConfig'
 import { ImportConfigModal } from './ImportConfigModal'
+import { InstructionsCard } from './InstructionsCard'
 import { ProposalCard } from './ProposalCard'
 
 const { Paragraph, Text, Title } = Typography
@@ -296,6 +297,8 @@ export function SettingsScreen(): React.JSX.Element {
               </Flex>
             </Card>
           )}
+
+          <InstructionsCard />
         </Flex>
       </Flex>
     </Flex>

@@ -4,6 +4,7 @@ import { calendarioComFeriado } from './calendario-com-feriado'
 import { desempenhoCincoSprints } from './desempenho-cinco-sprints'
 import { entregaPeloHistorico } from './entrega-pelo-historico'
 import { escopoInjetado } from './escopo-injetado'
+import { fluxoDoPo } from './fluxo-do-po'
 import { grupoDeProdutos } from './grupo-de-produtos'
 import { planningComRemanescentes } from './planning-com-remanescentes'
 import { processoCustomizado } from './processo-customizado'
@@ -28,5 +29,6 @@ export const SCENARIOS: readonly Scenario[] = [
   desempenhoCincoSprints,
   processoCustomizado,
   sprintVazia,
-  vitrine
+  vitrine,
+  fluxoDoPo
 ]

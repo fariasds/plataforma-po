@@ -1,0 +1,48 @@
+{
+  "app": {
+    "bugs": [
+      {
+        "closedDate": "2026-09-28T15:00:00",
+        "createdDate": "2026-09-22T14:00:00",
+        "description": "",
+        "id": 2103,
+        "open": false,
+        "parentId": null,
+        "state": "Closed",
+        "title": "App fecha ao girar a tela",
+        "type": "Bug"
+      }
+    ],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "app",
+    "takenAt": "2026-09-29T18:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-02"
+  },
+  "loja": {
+    "bugs": [
+      {
+        "closedDate": "2026-09-24T16:00:00",
+        "createdDate": "2026-09-23T10:00:00",
+        "description": "",
+        "id": 2003,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Preço sem desconto no carrinho",
+        "type": "Bug"
+      }
+    ],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "loja",
+    "takenAt": "2026-09-29T18:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-02"
+  }
+}

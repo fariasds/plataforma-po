@@ -72,7 +72,13 @@ export const ptBR = {
     sprintDelivery: 'Entregas da Sprint',
     bugAnalysis: 'Análise de Bugs',
     releaseNotes: 'Novidades',
-    connectAi: 'Conectar à sua IA'
+    connectAi: 'Conectar à sua IA',
+    features: 'Features',
+    catalog: 'Catálogo',
+    opportunities: 'Oportunidades',
+    followUp: 'Acompanhamento',
+    roadmap: 'Roadmap',
+    flow: 'Fluxo do PO'
   },
 
   squads: {
@@ -196,7 +202,12 @@ export const ptBR = {
         'bug-analysis': 'Ver na Análise de Bugs',
         settings: 'Abrir a Configuração',
         'connect-ai': 'Conectar a sua IA',
-        security: 'Abrir a Segurança'
+        security: 'Abrir a Segurança',
+        features: 'Abrir as Features',
+        opportunities: 'Ver as Oportunidades',
+        'follow-up': 'Abrir o Acompanhamento',
+        roadmap: 'Abrir o Roadmap',
+        catalog: 'Abrir o Catálogo'
       }
     },
     history: {
@@ -245,7 +256,7 @@ export const ptBR = {
 
   pat: {
     intro:
-      'Para carregar os dados, o app usa um token pessoal <b>somente leitura</b>. Ele fica guardado <b>criptografado só neste computador</b> — nunca é enviado para nenhum servidor além do Azure DevOps.',
+      'Para carregar os dados, o app usa um token pessoal <b>somente leitura</b>. Ele fica guardado <b>criptografado só neste computador</b> — nunca é enviado para nenhum servidor além do Azure DevOps. Só se você for publicar o catálogo na wiki (opcional, na tela Segurança) ele precisa também de escrita na wiki.',
     stepOpenUrl: 'Abra no navegador a página de tokens da organização: {url}',
     stepOpenMenu:
       'No Azure DevOps, clique no ícone de usuário (canto superior direito) → <b>Personal access tokens</b>.',
@@ -268,6 +279,38 @@ export const ptBR = {
     ruleLabel: 'Regra {rule}',
     ariaLabel: 'Como {title} é calculado',
     rules: {
+      'RN-CAT-06': {
+        title: 'A publicar',
+        text: 'A página está diferente da que veio da wiki na última absorção, ou nunca veio de lá. A regra está gravada no catálogo da pasta, mas ainda não na wiki, que é a versão oficial.'
+      },
+      'RN-FLX-05': {
+        title: 'Fase',
+        text:
+          'A Fase sai dos arquivos da pasta de trabalho, não da linha "Fase:" do README. Discovery até o checklist fechar; Pronta para quebra quando fecha; Em quebra quando o plano ganha regras; Publicada quando todas estão no catálogo. ' +
+          'O estado da Feature no Azure não muda a Fase: quando discorda, aparece como divergência.'
+      },
+      'RN-FLX-22': {
+        title: 'Bugs por Feature',
+        text:
+          'Um bug chega à Feature por dois caminhos: o vínculo no Azure (filho da Feature ou de um PBI dela) e a regra que ele viola, pela Origem da regra até o plano da Feature. ' +
+          'O mesmo bug conta uma vez por Feature, mesmo quando os dois caminhos dão nela. Bug com veredito "Não é bug" não conta.'
+      },
+      'RN-RDM-10': {
+        title: 'Peso das Janelas',
+        text:
+          'Uma Janela pesa em toda sprint que ela cobre. Discovery pesa em Produto/UX; Janela de Delivery, no Time Técnico; a Quebra pesa nas duas, porque o time técnico refina com o PO. ' +
+          'Empilhar Quebra com Delivery é o que mais estrangula o time técnico. Os pesos e os limites se ajustam em Pesos e limites.'
+      },
+      'RN-RDM-12': {
+        title: 'Carga de todos os Produtos',
+        text: 'A carga soma as Janelas de todos os Produtos, mesmo com um Produto escolhido: as pessoas são as mesmas. O filtro só muda as Features que aparecem na lista.'
+      },
+      'RN-RDM-17': {
+        title: 'Janela e Fase',
+        text:
+          'A Janela é o plano; a Fase é o que os arquivos da pasta mostram. Quando uma Janela termina e a Feature não chegou aonde o plano dizia, a Janela fica "fora da Janela". ' +
+          'Não é atraso: é a hora de mover a Janela ou terminar a etapa.'
+      },
       'RN-GLB-16': {
         title: 'Datas da demonstração',
         text:
@@ -482,7 +525,8 @@ export const ptBR = {
       'Aponte para os seus Produtos no Azure DevOps e acompanhe entregas, bugs e o andamento da sprint.',
     promises: {
       readOnlyTitle: 'Só leitura',
-      readOnlyText: 'O app nunca escreve no Azure DevOps.',
+      readOnlyText:
+        'O app só lê o Azure DevOps. Publicar o catálogo na wiki é opcional e pede a sua confirmação.',
       localTitle: 'Tudo local',
       localText: 'Sem servidor e sem conta. O token fica criptografado neste computador.',
       configurableTitle: 'Parametrizável',
@@ -834,7 +878,7 @@ export const ptBR = {
     openWizard: 'Abrir o assistente',
     safetyTitle: 'O que a sua IA pode fazer',
     safetyText:
-      'Ler a Configuração e gravar uma proposta, nada além disso. O servidor que ela inicia não usa a rede nem lê o token, e a Configuração só muda quando você clica em Aplicar.',
+      'Ler a Configuração e o fluxo do PO, propor mudanças na Configuração e nas instruções do processo, e gravar arquivos de texto na pasta de trabalho que você escolheu. O servidor que ela inicia não usa a rede nem lê o token, e a Configuração só muda quando você clica em Aplicar.',
     clients: {
       'claude-desktop': {
         label: 'Claude Desktop',
@@ -1151,6 +1195,273 @@ export const ptBR = {
     devFocusEmpty: 'Sem horas registradas no período.'
   },
 
+  flow: {
+    noProducts: 'Cadastre um Produto na Configuração para ver as Features dele.',
+    folder: {
+      label: 'Pasta de trabalho',
+      choose: 'Escolher a pasta de trabalho',
+      change: 'Trocar pasta',
+      unsetTitle: '{product} ainda não tem pasta de trabalho',
+      unsetText:
+        'É lá que moram o Brief, as Decisões e o Plano de PBIs de cada Feature, em features/<pasta>. Sem ela, a tela mostra só as Features abertas no Azure.',
+      missingTitle: 'A pasta de trabalho de {product} não foi encontrada',
+      missingText:
+        'Ela pode ter sido renomeada, movida ou estar num disco desconectado. Escolha de novo.'
+    },
+    snapshotFailed:
+      'Não deu para atualizar o retrato do Azure. A tela mostra o último retrato gravado.',
+    snapshotAt: 'Retrato do Azure de {date}',
+    noSnapshot: 'Sem retrato do Azure ainda',
+    empty: 'Nenhuma Feature aberta no Azure para {product}, e nenhuma pasta em features/.',
+    emptyColumn: 'Nenhuma',
+    others: 'Arquivadas e fora do fluxo ({count})',
+    phases: {
+      'Sem Discovery': 'Sem Discovery',
+      Discovery: 'Discovery',
+      'Pronta para quebra': 'Pronta para quebra',
+      'Em quebra': 'Em quebra',
+      Publicada: 'Publicada',
+      Arquivada: 'Arquivada',
+      'Fora do fluxo': 'Fora do fluxo'
+    },
+    card: {
+      draft: 'rascunho',
+      pendencies: { one: '{count} pendência', other: '{count} pendências' },
+      stale: 'parada há {days} dias',
+      divergence: 'diverge do Azure',
+      toConfirm: { one: '{count} ID a confirmar', other: '{count} IDs a confirmar' },
+      written: '{written} de {active} PBIs escritos'
+    },
+    detail: {
+      folder: 'Pasta:',
+      folderPath: 'features/{slug}',
+      updated: 'alterada há {days} dias',
+      updatedToday: 'alterada hoje',
+      readmePhase: 'O README diz "{readme}"; o app calcula {phase}.',
+      divergences: 'O Azure discorda',
+      reconcile: 'Confirmar no Azure',
+      reconcileHint:
+        'O app achou estes itens pelo título. Confirme o que é de cada um; só então o ID vai para o arquivo.',
+      exact: 'mesmo título',
+      similar: 'título parecido',
+      ambiguous: 'mais de um serve',
+      none: 'nenhum item do Azure com título igual ou parecido',
+      confirm: 'É este',
+      draftFeature: 'Feature desta pasta',
+      checklist: 'Para ficar Pronta para quebra',
+      pendencies: 'Pendências',
+      noPendencies: 'Nenhuma pendência.',
+      rules: 'Regras da Feature',
+      line: 'linha {line}',
+      stages: {
+        Encaixe: 'Encaixe',
+        Discovery: 'Discovery',
+        Quebra: 'Quebra',
+        Regras: 'Regras',
+        Acompanhamento: 'Acompanhamento'
+      }
+    },
+    linked: 'ID gravado no arquivo.'
+  },
+
+  opportunities: {
+    noFeedback:
+      'O Produto não declara feedback na Configuração ("poFlow.feedback"): as oportunidades vêm só da conversa com a IA e dos bugs sem regra.',
+    noFolder:
+      'Sem pasta de trabalho, a tela mostra só os feedbacks do Azure. As oportunidades da conversa e os bugs analisados moram na pasta.',
+    empty:
+      'Nenhuma oportunidade. Peça à sua IA para resumir e encaixar um feedback, ou traga uma dor na conversa.',
+    newFeature: 'Feature nova: {title}',
+    columns: {
+      opportunity: 'Oportunidade',
+      source: 'Origem',
+      fit: 'Encaixe',
+      feature: 'Feature',
+      next: 'O que falta'
+    },
+    source: { feedback: 'Feedback', conversa: 'Conversa', bug: 'Bug sem regra' },
+    fit: {
+      'Sem encaixe': 'Sem encaixe',
+      Proposto: 'Proposto',
+      Encaixada: 'Encaixada',
+      Descartada: 'Descartada'
+    }
+  },
+
+  roadmap: {
+    allProducts: 'Todos',
+    noFolder:
+      'Produtos sem pasta de trabalho ficam de fora: o plano mora no roadmap.json da pasta. Aponte a pasta na tela Features.',
+    fileError: 'O roadmap.json de {product} não é válido e não será sobrescrito: {error}',
+    noSprints: 'Nenhuma sprint no Azure: o Roadmap precisa da cadência de ao menos um Produto.',
+    empty: 'Nenhuma Feature no fluxo do PO. As Features abertas do retrato aparecem aqui.',
+    feature: 'Feature',
+    load: 'Carga',
+    trails: { produto: 'Produto/UX', tecnico: 'Time Técnico' },
+    loadCell: '{weight} de {limit}',
+    loadTitle: '{trail}: {count} features · peso {weight} de {limit}',
+    status: { dentro: 'Dentro', limite: 'No limite', sobrecarga: 'Sobrecarregada' },
+    windows: { discovery: 'Discovery', quebra: 'Quebra', delivery: 'Janela de Delivery' },
+    windowShort: { discovery: 'D', quebra: 'Q', delivery: 'E' },
+    outOfWindow: 'Fora da Janela',
+    projected: 'projetada',
+    draft: 'Rascunho',
+    archived: 'Arquivada',
+    showArchived: 'Mostrar arquivadas',
+    divergence: 'O Azure diz que fechou, e o plano ainda tem Janela pela frente.',
+    opportunities: '{count} oportunidades',
+    delivery: '{done}/{total} PBIs',
+    noPlan: 'Sem plano',
+    mySprint: {
+      title: 'Minha sprint',
+      empty: 'Nenhuma Janela na sprint corrente.',
+      pendencies: '{count} pendências',
+      none: 'Sem pendências'
+    },
+    edit: {
+      title: 'Plano de {title}',
+      start: 'Começa em',
+      length: 'Sprints',
+      skipped: 'pulada',
+      suggestion: 'Cabe sem estourar a partir de {sprint}.',
+      noSuggestion: 'Não cabe sem estourar na linha do tempo.',
+      create: 'Planejar a partir da sprint corrente',
+      save: 'Salvar',
+      archive: 'Arquivar no Roadmap',
+      unarchive: 'Desarquivar',
+      phase: 'Fase: {phase}',
+      saved: 'Plano gravado no roadmap.json.'
+    },
+    settings: {
+      button: 'Pesos e limites',
+      title: 'Pesos e limites das trilhas',
+      weight: 'Peso em {trail}',
+      limit: 'Limite de {trail} por sprint',
+      save: 'Salvar'
+    },
+    milestone: {
+      button: 'Gravar marco',
+      name: 'Nome do marco',
+      save: 'Gravar',
+      saved: 'Marco gravado em {count} pastas de trabalho.',
+      compare: 'Comparar com um marco',
+      none: 'Nada mudou desde o marco.',
+      entrou: 'Entrou no plano',
+      saiu: 'Saiu do plano',
+      arquivada: 'Arquivada',
+      movida: '{window}: {from} → {to}'
+    }
+  },
+
+  followUp: {
+    noFolder:
+      'Sem pasta de trabalho, a tela mostra só os bugs do retrato. As Análises de Bug e o catálogo de regras moram na pasta.',
+    noCatalog:
+      'O Produto não tem catálogo de regras ("catalog"): sem bugs pela regra violada e sem regras a conferir.',
+    unanalyzed: {
+      title: 'Bugs sem análise',
+      hint: 'Bugs abertos sem arquivo em bugs/. Peça à sua IA para analisá-los com o prompt analisar_bug.',
+      empty: 'Todo bug aberto já tem análise.'
+    },
+    byFeature: {
+      title: 'Bugs por Feature',
+      empty: 'Nenhum bug ligado a uma Feature, nem pelo Azure nem pela regra violada.',
+      bugs: '{count} bugs'
+    },
+    byRule: {
+      title: 'Bugs por regra',
+      empty: 'Nenhuma Análise de Bug com veredito "Bug" e regra violada.'
+    },
+    toConfirm: {
+      title: 'Regras a conferir',
+      hint: 'Regras "Não validada" cujo PBI já foi entregue: confira em uso e marque a validação no catálogo.',
+      empty: 'Nenhuma regra nova entregue esperando conferência.'
+    },
+    via: { azure: 'Azure', regra: 'Regra', ambos: 'Azure e regra' },
+    verdict: { none: 'sem análise' },
+    closed: 'fechado',
+    columns: {
+      bug: 'Bug',
+      state: 'Estado',
+      verdict: 'Veredito',
+      via: 'Caminho',
+      rule: 'Regra',
+      bugs: 'Bugs',
+      pbi: 'PBI entregue',
+      file: 'Arquivo'
+    }
+  },
+
+  instructions: {
+    title: 'Instruções do processo',
+    intro:
+      'O que a sua IA recebe nos prompts do fluxo do PO, pelo servidor MCP. O texto de fábrica segue o processo rule-first; quando a IA propõe um texto novo, ele aparece aqui, e só vale depois de você aplicar.',
+    default: 'de fábrica',
+    own: 'sua versão',
+    read: 'Ler',
+    reset: 'Voltar ao de fábrica',
+    proposal: 'A IA propôs um texto novo.',
+    proposalOf: 'Proposta para {title}',
+    apply: 'Aplicar',
+    discard: 'Descartar'
+  },
+
+  catalog: {
+    noSource:
+      'O catálogo de {product} não está configurado. Defina "catalog" no Produto, na Configuração: a wiki do Azure DevOps e a página raiz, ou "local" para manter o catálogo só na pasta.',
+    noFolder:
+      'Escolha a pasta de trabalho de {product} na tela Features: o catálogo mora em catalogo/, dentro dela.',
+    sourceWiki: 'Wiki {wiki}, a partir de {root}',
+    sourceLocal: 'Catálogo mantido na pasta, sem wiki',
+    absorbedAt: 'Absorvido em {date}',
+    neverAbsorbed: 'Ainda não absorvido',
+    absorb: 'Absorver da wiki',
+    empty: 'Nenhuma página em catalogo/ ainda.',
+    duplicates: 'O mesmo ID aparece em mais de uma página: {ids}. Vale a primeira.',
+    consults: 'Consulta também: {list}',
+    consultCount: '{name} ({count} regras)',
+    consultMissing: '{name} (sem catálogo)',
+    toPublish: 'a publicar',
+    publish: {
+      button: 'Publicar na wiki ({count})',
+      title: 'Publicar na wiki',
+      intro:
+        'Escolha as páginas. Depois, o app abre um diálogo do sistema com a lista; só ali a publicação é confirmada. Página que mudou na wiki desde a absorção é recusada: absorva de novo.',
+      next: 'Continuar',
+      cancelled: 'Nada foi publicado.',
+      done: '{count} páginas publicadas na wiki.'
+    },
+    noRules: 'nenhuma regra reconhecida',
+    rules: { one: '{count} regra', other: '{count} regras' },
+    columns: {
+      id: 'ID',
+      title: 'Regra',
+      status: 'Status',
+      validation: 'Validação',
+      updated: 'Atualizada'
+    },
+    preview: {
+      title: 'Absorver o catálogo da wiki',
+      hint: 'O que muda em catalogo/ se a versão da wiki entrar. Nada é gravado até você absorver.',
+      confirm: 'Absorver',
+      nothing: 'A cópia local já está igual à wiki.',
+      useWiki: 'Usar a da wiki',
+      added: 'entra: {ids}',
+      changed: 'muda: {ids}',
+      removed: 'sai: {ids}',
+      localOnly: 'Só na pasta, nunca veio da wiki (fica, a publicar): {files}',
+      done: 'Catálogo absorvido.',
+      status: {
+        new: 'nova na wiki',
+        changed: 'mudou na wiki',
+        unchanged: 'igual',
+        'local-changed': 'mudou só aqui (fica, a publicar)',
+        conflict: 'mudou nos dois lados',
+        'removed-in-wiki': 'saiu da wiki (fica aqui)'
+      }
+    }
+  },
+
   security: {
     introTitle: 'O que este app faz com o seu token e os seus dados',
     intro:
@@ -1159,6 +1470,14 @@ export const ptBR = {
       'A lista completa, a autoavaliação OWASP ASVS e os riscos aceitos estão em docs/seguranca.md, no repositório do projeto.',
     installedVersion: 'Versão instalada',
     guaranteesTitle: 'O que o app garante',
+    wikiPublish: {
+      title: 'Publicação do catálogo na wiki',
+      on: 'Ligada neste Perfil: o token pode escrever páginas do catálogo na wiki, sempre com a sua confirmação.',
+      off: 'Desligada neste Perfil: o app não escreve nada no Azure DevOps.',
+      turnOn: 'Ligar',
+      turnOff: 'Desligar',
+      demo: 'Na demonstração, a publicação grava só na wiki fictícia.'
+    },
     proof: 'Provado por',
     verifyTitle: 'Como conferir você mesmo',
     verifyInstaller:
@@ -1198,8 +1517,9 @@ export const ptBR = {
           'Só o processo principal o lê. A tela sabe apenas se existe um, e nenhum resultado ou erro o carrega.'
       },
       readOnly: {
-        title: 'O app só lê o Azure, nunca escreve',
-        detail: 'Mesmo que o seu token tenha permissão de escrita.'
+        title: 'O app só lê o Azure; a única escrita é a do catálogo, se você ligar',
+        detail:
+          'Com a publicação desligada, que é o padrão, nada é escrito, mesmo que o token tenha permissão de escrita. Ligada, o app grava só páginas do catálogo na wiki, e só depois de você confirmar a lista num diálogo do sistema.'
       },
       logs: {
         title: 'O token não aparece em log nem em mensagem de erro',
@@ -1221,9 +1541,9 @@ export const ptBR = {
           'Nem fala com serviço de IA. Para a sua IA vai só o que você vê na prévia, e quem cola é você.'
       },
       mcp: {
-        title: 'Conectada pelo MCP, a sua IA só propõe',
+        title: 'Conectada pelo MCP, a sua IA propõe e só escreve na pasta de trabalho',
         detail:
-          'O servidor que a sua IA inicia não usa rede nem lê o token. Ele grava só uma proposta, e nada muda até você aplicar.'
+          'O servidor que a sua IA inicia não usa rede nem lê o token. A Configuração e as instruções do processo ela só propõe, e nada muda até você aplicar. Arquivo ela grava só dentro da pasta de trabalho que você escolheu.'
       },
       window: {
         title: 'A janela roda isolada',

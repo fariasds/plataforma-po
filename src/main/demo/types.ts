@@ -1,5 +1,5 @@
 import type { WorkItemUpdate } from '@shared/azure'
-import type { StateCategory } from '@shared/discovery'
+import type { StateCategory } from '@shared/organization'
 
 /**
  * Forma de um Cenário: uma Configuração fictícia, o estado do Azure fictício e o
@@ -77,6 +77,11 @@ export interface FakeWorkItem {
   id: number
   fields: Record<string, unknown>
   updates: WorkItemUpdate[]
+  /**
+   * Vínculos "Related", num sentido só: o Azure fictício os devolve nos dois
+   * itens, como o real. Pai e filho saem de `System.Parent`.
+   */
+  related?: number[]
 }
 
 export interface FakePerson {
@@ -87,12 +92,20 @@ export interface FakePerson {
   descriptor: string
 }
 
+/** Uma wiki do projeto, com as páginas pelo caminho (`/Catálogo/Loja/Cupons`). */
+export interface FakeWiki {
+  name: string
+  project: string
+  pages: Array<{ path: string; content: string }>
+}
+
 export interface AzureState {
   organization: string
   /** Dono do PAT fictício: quem `connectionData` diz que está conectado. */
   user: FakePerson
   projects: FakeProject[]
   workItems: FakeWorkItem[]
+  wikis?: FakeWiki[]
 }
 
 export interface Scenario {

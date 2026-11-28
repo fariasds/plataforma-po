@@ -34,7 +34,7 @@ Use estes termos com este sentido, na conversa e nos nomes que criar:
 | `organization`     | **Nome** da organização no Azure DevOps (o que vem depois de `dev.azure.com/`).                                                         |
 | `appearance`       | Cor de destaque da interface.                                                                                                           |
 | `processProfiles`  | Perfis de processo, indexados por um ID. Cada Produto aponta para um.                                                                   |
-| `products`         | Os Produtos. `id` imutável, `name` livre, `project`, `areaPaths`, `excludedAreaPaths`, `team` (opcional), `processProfile` e `cadence`. |
+| `products`         | Os Produtos. `id` imutável, `name` livre, `project`, `areaPaths`, `excludedAreaPaths`, `team` (opcional), `processProfile`, `cadence` e `poFlow` (opcional). |
 | `groups`           | Grupos de produtos: um `id`, um `name` e a lista de IDs de Produto (pelo menos dois).                                                   |
 | `squads`           | Squads, na ordem das abas: `id`, `name`, `color` (opcional), os IDs de Produto (pelo menos um) e `capacityDefaults` (opcional).         |
 | `customFields`     | Nome de referência de campos customizados do Azure (ex.: `Contoso.Retrabalho`). `null` quando o PO não usa.                             |
@@ -48,6 +48,19 @@ Use estes termos com este sentido, na conversa e nos nomes que criar:
 `"continuous"` quando é um fluxo sem iterações — os indicadores o medem pela janela
 de datas da Sprint unificada dos outros Produtos, e ele não aparece no Planning nem
 na Daily.
+
+`poFlow` do Produto: o que o fluxo do PO lê do Azure. `featureType` é o tipo de work
+item da Feature (padrão `"Feature"`); `priorityField`, o campo numérico de prioridade
+(padrão `"Microsoft.VSTS.Common.BusinessValue"`, `null` desliga); `feedback`, de onde
+vêm as oportunidades — `type`, `states`, `areaPaths` (vazio usa as do Produto) e
+`link`: `"parent"` quando o feedback é pai da Feature, `"child"` quando é filho,
+`"related"` quando o vínculo é "Related". Sem `feedback`, as oportunidades vêm só da
+conversa.
+
+`catalog` do Produto: de onde vêm as regras de negócio dele. `source` é
+`{ "kind": "wiki", "wiki": "<nome da wiki>", "rootPage": "/<página raiz do catálogo>" }` ou
+`{ "kind": "local" }`, quando o catálogo é só a pasta `catalogo/`. `consults` lista outros Produtos
+cujo catálogo este consulta. Sem `catalog`, nenhuma Feature chega a Publicada.
 
 ## Nunca faça
 

@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs'
 import { join } from 'path'
+import { app } from 'electron'
 import { AppError } from '@shared/errors'
 import { SCRUM_PRESET } from '@shared/config/presets'
 import type { Configuration } from '@shared/config/schema'
@@ -34,6 +35,8 @@ export interface ProfileEntry {
   kind?: 'demo'
   /** O Cenário que alimenta a demonstração. */
   scenario?: string
+  /** A publicação do catálogo na wiki está ligada (ADR 0016). Sem o campo, desligada. */
+  wikiPublish?: boolean
 }
 
 interface ProfileIndex {
@@ -48,6 +51,8 @@ export interface ActiveProfile {
   kind: ProfileKind
   /** O Cenário da demonstração; `null` num Perfil com Azure de verdade. */
   scenario: string | null
+  /** RN-SEC-39: só com ela ligada o app escreve na wiki. */
+  wikiPublish: boolean
 }
 
 export interface CreateProfileInput {
@@ -65,7 +70,8 @@ function isEntry(value: unknown): value is ProfileEntry {
     typeof entry.id === 'string' &&
     PROFILE_ID_PATTERN.test(entry.id) &&
     typeof entry.name === 'string' &&
-    (entry.kind === undefined || (entry.kind === 'demo' && typeof entry.scenario === 'string'))
+    (entry.kind === undefined || (entry.kind === 'demo' && typeof entry.scenario === 'string')) &&
+    (entry.wikiPublish === undefined || typeof entry.wikiPublish === 'boolean')
   )
 }
 
@@ -113,8 +119,20 @@ function toActive(entry: ProfileEntry): ActiveProfile {
     name: entry.name,
     dir: profileDir(entry.id),
     kind: entry.kind === 'demo' ? 'demo' : 'azure',
-    scenario: entry.kind === 'demo' ? (entry.scenario ?? null) : null
+    scenario: entry.kind === 'demo' ? (entry.scenario ?? null) : null,
+    wikiPublish: entry.wikiPublish === true
   }
+}
+
+/** Liga ou desliga a publicação na wiki do Perfil ativo (RN-SEC-39). */
+export function setWikiPublish(enabled: boolean): ActiveProfile {
+  const index = readIndex()
+  const entry = index.profiles.find((profile) => profile.id === index.active)
+  if (!entry) throw new AppError('PROFILE_MISSING', 'Não há Perfil em uso.')
+  if (enabled) entry.wikiPublish = true
+  else delete entry.wikiPublish
+  writeIndex(index)
+  return toActive(entry)
 }
 
 /**
@@ -252,24 +270,46 @@ function writeDemoFiles(id: string, scenarioId: string): void {
  * "Explorar com dados de exemplo": torna ativa a demonstração, criando-a na
  * primeira vez. Existe no máximo uma; criar um Perfil real depois não a apaga.
  */
+/**
+ * O Cenário da demonstração. Em desenvolvimento, `PO_DEMO_SCENARIO` escolhe outro
+ * (`fluxo-do-po`, por exemplo), para ver uma tela nova com os dados que a provam. No
+ * app empacotado é sempre o `vitrine`, e a variável é ignorada (RN-GLB-15).
+ */
+export function wantedDemoScenario(
+  env: Record<string, string | undefined> = process.env,
+  packaged: boolean = app.isPackaged
+): string {
+  const chosen = env['PO_DEMO_SCENARIO']
+  if (packaged || !chosen) return DEMO_SCENARIO_ID
+  return demoScenario(chosen).id
+}
+
 export function startDemoProfile(): ActiveProfile {
   const index = readIndex()
+  const scenario = wantedDemoScenario()
   const existing = index.profiles.find((profile) => profile.kind === 'demo')
   if (existing) {
-    if (!existsSync(configPath(existing.id))) {
-      writeDemoFiles(existing.id, existing.scenario ?? DEMO_SCENARIO_ID)
+    // Trocou o Cenário pela variável: a demonstração é regravada com o novo.
+    const current = existing.scenario ?? DEMO_SCENARIO_ID
+    if (current !== scenario || !existsSync(configPath(existing.id))) {
+      writeDemoFiles(existing.id, scenario)
     }
-    writeIndex({ ...index, active: existing.id })
-    return toActive(existing)
+    const updated = { ...existing, scenario }
+    writeIndex({
+      ...index,
+      active: existing.id,
+      profiles: index.profiles.map((p) => (p.id === existing.id ? updated : p))
+    })
+    return toActive(updated)
   }
 
   const entry: ProfileEntry = {
     id: uniqueId(DEMO_NAME, index.profiles),
     name: DEMO_NAME,
     kind: 'demo',
-    scenario: DEMO_SCENARIO_ID
+    scenario
   }
-  writeDemoFiles(entry.id, DEMO_SCENARIO_ID)
+  writeDemoFiles(entry.id, scenario)
   writeIndex({ active: entry.id, profiles: [...index.profiles, entry] })
   return toActive(entry)
 }

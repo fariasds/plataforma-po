@@ -13,12 +13,15 @@ identificador próprio e ponteiro para onde ela vive no código.
 | [01-conceitos-globais.md](01-conceitos-globais.md) | O que vale em todas as telas: Produtos, Sprint unificada, horas úteis, tipos e estados de work item, conversão de complexidade |
 | [02-acesso-e-seguranca.md](02-acesso-e-seguranca.md) | O PAT: onde fica, quem o lê, para onde pode ir; a IA do PO: o que sai da máquina e como; e como o instalador é distribuído |
 | [03-configuracao.md](03-configuracao.md) | O arquivo de Configuração do Perfil: schema, IDs, referências, organização por nome e ausência de segredo |
+| [05-roadmap.md](05-roadmap.md) | **Roadmap** — as Janelas de cada Feature, a Fase sobre elas e a sobrecarga das trilhas |
 | [08-home.md](08-home.md) | Tela **Home** — tela de entrada: momento da sprint e primeiros passos |
 | [10-planning.md](10-planning.md) | Tela **Planning** — planejamento da próxima sprint |
 | [15-daily.md](15-daily.md) | Tela **Daily** — risco item a item durante a sprint |
 | [20-review-entregas.md](20-review-entregas.md) | **Review › Entregas da Sprint** |
 | [21-review-bugs.md](21-review-bugs.md) | **Review › Análise de Bugs** |
 | [22-review-desempenho.md](22-review-desempenho.md) | **Review › Desempenho da Equipe** (construída, oculta na navegação) |
+| [31-catalogo.md](31-catalogo.md) | **Catálogo** — as regras dos produtos do PO, absorvidas da wiki |
+| [30-fluxo-po.md](30-fluxo-po.md) | **Fluxo do PO** — o retrato do Azure e, nas próximas fatias, oportunidade, Discovery, quebra e acompanhamento |
 
 A numeração tem folga de propósito: uma tela nova em Review entra como `23`,
 uma seção nova entra como `03`, sem renumerar nada.
@@ -38,6 +41,8 @@ Cada regra tem um **ID estável** no formato `RN-<ÁREA>-<NN>`:
 | `RN-ENT` | Review › Entregas da Sprint |
 | `RN-BUG` | Review › Análise de Bugs |
 | `RN-DES` | Review › Desempenho da Equipe |
+| `RN-FLX` | Fluxo do PO |
+| `RN-CAT` | Catálogo de regras |
 
 **O ID nunca é reciclado.** Se uma regra deixa de valer, ela é marcada como
 revogada e o número morre com ela — assim uma conversa antiga que cita `RN-ENT-04`

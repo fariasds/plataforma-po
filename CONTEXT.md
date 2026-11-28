@@ -26,8 +26,8 @@ _Avoid_: settings, parametrização, setup
 
 **Dados de trabalho**:
 Informação que nasce do uso do app (itens manuais do Planning, desmarcações,
-capacidade, planejamento de Roadmap). Pertence ao Perfil e não faz parte da
-Configuração.
+capacidade). Pertence ao Perfil e não faz parte da Configuração. O plano do Roadmap
+não é Dado de trabalho: mora na pasta de trabalho do Produto (ADR 0017).
 _Avoid_: cache, estado local, preferências
 
 **Cenário**:
@@ -72,3 +72,43 @@ _Avoid_: iteração (iteração é do Azure)
 Regras de um processo de trabalho: quais tipos de work item contam, quais estados
 significam entrega e quais são terminais.
 _Avoid_: template, workflow
+
+### Fluxo do PO
+
+O vocabulário do processo rule-first (Discovery, Brief da Feature, Requisito,
+Decisão, Plano de PBIs, Quebra, Fase) está em `docs/fluxo-po/` e entra aqui com o
+código de cada fatia.
+
+**Retrato**:
+O que a janela leu do Azure para o fluxo do PO, por Produto: Features, os filhos
+delas, feedbacks e bugs, com a data em que foi tirado. Fica nos Dados de trabalho, e
+é dele que a IA do PO lê, porque o servidor MCP não fala com o Azure.
+_Avoid_: cache, snapshot (no texto), sincronização
+
+**Pasta de trabalho**:
+A pasta, escolhida pelo PO, onde moram os artefatos do fluxo de um Produto: o Brief,
+as Decisões, o Plano de PBIs, os PBIs escritos e o catálogo. Uma por Produto; o
+caminho é desta máquina e não entra na Configuração.
+_Avoid_: workspace, repositório, diretório do projeto
+
+**Fase**:
+Onde uma Feature está no fluxo do PO (Sem Discovery, Discovery, Pronta para quebra,
+Em quebra, Publicada, Arquivada, Fora do fluxo), calculada da pasta de trabalho e do
+retrato. Nunca é digitada: a linha `Fase:` do README só aparece quando diverge.
+_Avoid_: status, etapa (etapa é do fluxo, não da Feature)
+
+**Pendência**:
+O que falta para a Feature andar, calculado dos artefatos: Decisão em Proposta, PBI
+sem ID, regra em duas Features. Some quando o artefato existe; ninguém a marca.
+_Avoid_: tarefa, checklist (o checklist é o do Pronta para quebra)
+
+**Catálogo**:
+As regras de negócio de um Produto do PO, uma página por domínio, em `catalogo/` na
+pasta de trabalho. Pode vir da wiki do Azure, que é a versão oficial, ou ser mantido
+só na pasta. Não confundir com as regras do próprio app, em `docs/regras-de-negocio/`.
+_Avoid_: base de conhecimento, documentação
+
+**Instrução do processo**:
+O texto que a IA do PO recebe num prompt do fluxo (Discovery, quebra, análise de bug).
+Vem com o app, e o PO pode trocá-lo pelo dele; a IA só propõe a troca.
+_Avoid_: prompt (prompt é o que o servidor oferece; a instrução é o texto dele), template

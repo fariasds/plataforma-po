@@ -2,7 +2,7 @@ import { Alert, Table, Tag, Typography } from 'antd'
 import { ErrorState } from '../../../components/ErrorState'
 import { t } from '../../../i18n'
 import { idFromName, newKey, paletteColor, type WizardDraft } from '../draft'
-import { useDiscoveredProjects } from '../useDiscovery'
+import { useDiscoveredProjects } from '../useOrganization'
 import type { StepProps } from './types'
 
 const { Paragraph } = Typography

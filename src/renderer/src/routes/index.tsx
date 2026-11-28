@@ -3,6 +3,11 @@ import { AppLayout } from '../components/AppLayout'
 import { BugAnalysisScreen } from '../features/bug-analysis/BugAnalysisScreen'
 import { ConnectAiScreen } from '../features/connect-ai/ConnectAiScreen'
 import { DailyScreen } from '../features/daily/DailyScreen'
+import { CatalogScreen } from '../features/flow/CatalogScreen'
+import { FeaturesScreen } from '../features/flow/FeaturesScreen'
+import { FollowUpScreen } from '../features/flow/FollowUpScreen'
+import { OpportunitiesScreen } from '../features/flow/OpportunitiesScreen'
+import { RoadmapScreen } from '../features/flow/RoadmapScreen'
 import { HomeScreen } from '../features/home/HomeScreen'
 import { PlanningScreen } from '../features/planning/PlanningScreen'
 import { ReleaseNotesScreen } from '../features/release-notes/ReleaseNotesScreen'
@@ -33,6 +38,11 @@ export const router = createHashRouter([
       { path: 'dashboard/team-performance', element: <TeamPerformanceScreen /> },
       { path: 'planning', element: <PlanningScreen /> },
       { path: 'daily', element: <DailyScreen /> },
+      { path: 'features', element: <FeaturesScreen /> },
+      { path: 'oportunidades', element: <OpportunitiesScreen /> },
+      { path: 'acompanhamento', element: <FollowUpScreen /> },
+      { path: 'roadmap', element: <RoadmapScreen /> },
+      { path: 'catalogo', element: <CatalogScreen /> },
       { path: 'configuracao', element: <SettingsScreen /> },
       { path: 'configuracao/assistente', element: <RedoWizardScreen /> },
       { path: 'configuracao/conectar-ia', element: <ConnectAiScreen /> },

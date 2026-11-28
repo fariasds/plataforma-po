@@ -1,0 +1,50 @@
+{
+  "app": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [],
+      "duplicates": [],
+      "pages": [],
+      "productId": "app",
+      "source": null,
+      "workFolder": "unset"
+    }
+  },
+  "backoffice": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [],
+      "duplicates": [],
+      "pages": [],
+      "productId": "backoffice",
+      "source": null,
+      "workFolder": "unset"
+    }
+  },
+  "loja": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [],
+      "duplicates": [],
+      "pages": [],
+      "productId": "loja",
+      "source": null,
+      "workFolder": "unset"
+    }
+  },
+  "portal": {
+    "absorcao": null,
+    "catalogo": {
+      "absorbedAt": null,
+      "consults": [],
+      "duplicates": [],
+      "pages": [],
+      "productId": "portal",
+      "source": null,
+      "workFolder": "unset"
+    }
+  }
+}

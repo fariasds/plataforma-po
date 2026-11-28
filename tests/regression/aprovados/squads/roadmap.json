@@ -1,0 +1,357 @@
+{
+  "current": 4,
+  "features": [],
+  "load": [
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    }
+  ],
+  "milestones": [],
+  "products": [
+    {
+      "error": null,
+      "productId": "loja",
+      "workFolder": "unset"
+    },
+    {
+      "error": null,
+      "productId": "app",
+      "workFolder": "unset"
+    },
+    {
+      "error": null,
+      "productId": "portal",
+      "workFolder": "unset"
+    },
+    {
+      "error": null,
+      "productId": "backoffice",
+      "workFolder": "unset"
+    }
+  ],
+  "settings": {
+    "limits": {
+      "produto": 2,
+      "tecnico": 3
+    },
+    "weights": {
+      "delivery": {
+        "produto": 0,
+        "tecnico": 1
+      },
+      "discovery": {
+        "produto": 1,
+        "tecnico": 0
+      },
+      "quebra": {
+        "produto": 1,
+        "tecnico": 0.5
+      }
+    }
+  },
+  "timeline": [
+    {
+      "finish": "2026-09-04",
+      "label": "24 de ago. → 04 de set.",
+      "projected": false,
+      "start": "2026-08-24"
+    },
+    {
+      "finish": "2026-09-11",
+      "label": "31 de ago. → 11 de set.",
+      "projected": false,
+      "start": "2026-08-31"
+    },
+    {
+      "finish": "2026-09-18",
+      "label": "07 de set. → 18 de set.",
+      "projected": false,
+      "start": "2026-09-07"
+    },
+    {
+      "finish": "2026-09-25",
+      "label": "14 de set. → 25 de set.",
+      "projected": false,
+      "start": "2026-09-14"
+    },
+    {
+      "finish": "2026-10-02",
+      "label": "21 de set. → 02 de out.",
+      "projected": false,
+      "start": "2026-09-21"
+    },
+    {
+      "finish": "2026-10-09",
+      "label": "28 de set. → 09 de out.",
+      "projected": false,
+      "start": "2026-09-28"
+    },
+    {
+      "finish": "2026-10-16",
+      "label": "05 de out. → 16 de out.",
+      "projected": false,
+      "start": "2026-10-05"
+    },
+    {
+      "finish": "2026-10-23",
+      "label": "12 de out. → 23 de out.",
+      "projected": false,
+      "start": "2026-10-12"
+    },
+    {
+      "finish": "2026-10-30",
+      "label": "19/10–30/10",
+      "projected": true,
+      "start": "2026-10-19"
+    },
+    {
+      "finish": "2026-11-06",
+      "label": "26/10–06/11",
+      "projected": true,
+      "start": "2026-10-26"
+    },
+    {
+      "finish": "2026-11-13",
+      "label": "02/11–13/11",
+      "projected": true,
+      "start": "2026-11-02"
+    },
+    {
+      "finish": "2026-11-20",
+      "label": "09/11–20/11",
+      "projected": true,
+      "start": "2026-11-09"
+    },
+    {
+      "finish": "2026-11-27",
+      "label": "16/11–27/11",
+      "projected": true,
+      "start": "2026-11-16"
+    },
+    {
+      "finish": "2026-12-04",
+      "label": "23/11–04/12",
+      "projected": true,
+      "start": "2026-11-23"
+    },
+    {
+      "finish": "2026-12-11",
+      "label": "30/11–11/12",
+      "projected": true,
+      "start": "2026-11-30"
+    },
+    {
+      "finish": "2026-12-18",
+      "label": "07/12–18/12",
+      "projected": true,
+      "start": "2026-12-07"
+    },
+    {
+      "finish": "2026-12-25",
+      "label": "14/12–25/12",
+      "projected": true,
+      "start": "2026-12-14"
+    }
+  ]
+}

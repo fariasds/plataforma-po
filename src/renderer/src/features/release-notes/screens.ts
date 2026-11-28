@@ -10,7 +10,12 @@ export const SCREEN_ROUTE: Record<ReleaseNoteScreen, string> = {
   'bug-analysis': '/dashboard/bug-analysis',
   settings: '/configuracao',
   'connect-ai': '/configuracao/conectar-ia',
-  security: '/seguranca'
+  security: '/seguranca',
+  features: '/features',
+  opportunities: '/oportunidades',
+  'follow-up': '/acompanhamento',
+  roadmap: '/roadmap',
+  catalog: '/catalogo'
 }
 
 export function screenLabel(screen: ReleaseNoteScreen): string {
@@ -31,6 +36,16 @@ export function screenLabel(screen: ReleaseNoteScreen): string {
       return t('nav.connectAi')
     case 'security':
       return t('nav.security')
+    case 'features':
+      return t('nav.features')
+    case 'opportunities':
+      return t('nav.opportunities')
+    case 'follow-up':
+      return t('nav.followUp')
+    case 'roadmap':
+      return t('nav.roadmap')
+    case 'catalog':
+      return t('nav.catalog')
   }
 }
 

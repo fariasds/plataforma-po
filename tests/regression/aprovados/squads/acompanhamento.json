@@ -1,0 +1,42 @@
+{
+  "app": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "app",
+    "snapshotTakenAt": "2026-09-29T18:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [],
+    "workFolder": "unset"
+  },
+  "backoffice": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "backoffice",
+    "snapshotTakenAt": "2026-09-29T18:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [],
+    "workFolder": "unset"
+  },
+  "loja": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "loja",
+    "snapshotTakenAt": "2026-09-29T18:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [],
+    "workFolder": "unset"
+  },
+  "portal": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "portal",
+    "snapshotTakenAt": "2026-09-29T18:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [],
+    "workFolder": "unset"
+  }
+}

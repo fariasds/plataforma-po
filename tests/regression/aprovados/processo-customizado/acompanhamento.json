@@ -1,0 +1,22 @@
+{
+  "portal": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "portal",
+    "snapshotTakenAt": "2026-10-08T14:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [],
+    "workFolder": "unset"
+  },
+  "suporte": {
+    "byFeature": [],
+    "byRule": [],
+    "catalogConfigured": false,
+    "productId": "suporte",
+    "snapshotTakenAt": "2026-10-08T14:00:00.000Z",
+    "toConfirm": [],
+    "unanalyzed": [],
+    "workFolder": "unset"
+  }
+}

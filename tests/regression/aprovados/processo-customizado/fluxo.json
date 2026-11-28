@@ -1,0 +1,14 @@
+{
+  "portal": {
+    "features": [],
+    "productId": "portal",
+    "snapshotTakenAt": "2026-10-08T14:00:00.000Z",
+    "workFolder": "unset"
+  },
+  "suporte": {
+    "features": [],
+    "productId": "suporte",
+    "snapshotTakenAt": "2026-10-08T14:00:00.000Z",
+    "workFolder": "unset"
+  }
+}

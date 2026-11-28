@@ -321,6 +321,10 @@ tem PAT nem rede (`RN-SEC-27`).
   trabalho dela.
 - O pedido para a IA do PO funciona como num Perfil real (`RN-SEC-24`), com as
   descrições fictícias do Cenário.
+- **Em desenvolvimento**, a variável `PO_DEMO_SCENARIO` escolhe outro Cenário para a
+  demonstração (por exemplo, `fluxo-do-po`), para ver uma tela nova com os dados que a
+  provam. Entrar na demonstração com outro Cenário regrava a Configuração dela. No app
+  empacotado a variável é ignorada, e o Cenário é sempre o `vitrine`.
 
 **Implementado em:** `src/main/demo/demo-profile.ts` · `src/main/profile/profile-store.ts` ·
 `src/renderer/src/components/DemoBanner.tsx`

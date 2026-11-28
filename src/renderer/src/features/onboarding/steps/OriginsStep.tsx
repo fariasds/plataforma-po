@@ -1,10 +1,10 @@
 import { Alert, Button, Card, Flex, Form, Select, Switch, TreeSelect, Typography } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import type { DiscoveredArea } from '@shared/discovery'
+import type { DiscoveredArea } from '@shared/organization'
 import { ErrorState } from '../../../components/ErrorState'
 import { t } from '../../../i18n'
 import { idFromName, newKey, paletteColor, type ProductDraft } from '../draft'
-import { useDiscoveredAreas, useDiscoveredTeams } from '../useDiscovery'
+import { useDiscoveredAreas, useDiscoveredTeams } from '../useOrganization'
 import type { StepProps, UpdateDraft } from './types'
 
 const { Paragraph, Text } = Typography

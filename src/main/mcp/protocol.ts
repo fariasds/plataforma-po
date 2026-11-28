@@ -40,7 +40,9 @@ export interface McpPrompt {
   name: string
   title: string
   description: string
-  get(): { description: string; messages: PromptMessage[] }
+  /** Os argumentos que o cliente de IA pede ao PO antes de usar o prompt. */
+  arguments?: Array<{ name: string; description: string; required: boolean }>
+  get(args: Record<string, string>): { description: string; messages: PromptMessage[] }
 }
 
 export interface McpResource {
@@ -167,13 +169,25 @@ export function handleMessage(spec: McpServerSpec, message: unknown): JsonRpcRes
       return callTool(spec, id, params)
     case 'prompts/list':
       return ok(id, {
-        prompts: spec.prompts.map(({ name, title, description }) => ({ name, title, description }))
+        prompts: spec.prompts.map(({ name, title, description, arguments: args }) => ({
+          name,
+          title,
+          description,
+          ...(args ? { arguments: args } : {})
+        }))
       })
     case 'prompts/get': {
       const prompt = spec.prompts.find((candidate) => candidate.name === params.name)
       if (!prompt)
         return fail(id, RPC_ERRORS.invalidParams, `Prompt desconhecido: ${String(params.name)}`)
-      return ok(id, prompt.get())
+      // Só texto: o argumento vira linha do pedido, nunca código.
+      const raw = isRecord(params.arguments) ? params.arguments : {}
+      const args = Object.fromEntries(
+        Object.entries(raw).filter(
+          (entry): entry is [string, string] => typeof entry[1] === 'string'
+        )
+      )
+      return ok(id, prompt.get(args))
     }
     case 'resources/list':
       return ok(id, {

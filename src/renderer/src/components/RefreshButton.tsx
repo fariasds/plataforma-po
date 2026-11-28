@@ -18,7 +18,9 @@ const AZURE_QUERY_ROOTS = new Set([
   'daily',
   'sprint-delivery',
   'bug-analysis',
-  'team-performance'
+  'team-performance',
+  // O retrato do fluxo do PO: atualizar é ler o Azure de novo (RN-FLX-02).
+  'flow-snapshot'
 ])
 
 function isAzureQuery(query: Query): boolean {

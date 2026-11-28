@@ -54,6 +54,31 @@ export const ipc: IpcApi = {
   buildSprintGoalRequest: (selection, sprint, itemIds) =>
     unwrap(window.api.buildSprintGoalRequest(selection, sprint, itemIds)),
 
+  refreshFlowSnapshot: (productId) => unwrap(window.api.refreshFlowSnapshot(productId)),
+  getFlowBoard: (productId) => unwrap(window.api.getFlowBoard(productId)),
+  getWorkFolders: () => unwrap(window.api.getWorkFolders()),
+  chooseWorkFolder: (productId) => unwrap(window.api.chooseWorkFolder(productId)),
+  clearWorkFolder: (productId) => unwrap(window.api.clearWorkFolder(productId)),
+  linkPlannedPbi: (productId, slug, pbiKey, azureId) =>
+    unwrap(window.api.linkPlannedPbi(productId, slug, pbiKey, azureId)),
+  linkDraftFeature: (productId, slug, featureId) =>
+    unwrap(window.api.linkDraftFeature(productId, slug, featureId)),
+  getOpportunities: (productId) => unwrap(window.api.getOpportunities(productId)),
+  getFollowUp: (productId) => unwrap(window.api.getFollowUp(productId)),
+  getRoadmap: () => unwrap(window.api.getRoadmap()),
+  updateRoadmap: (productId, change) => unwrap(window.api.updateRoadmap(productId, change)),
+  createRoadmapMilestone: (name) => unwrap(window.api.createRoadmapMilestone(name)),
+  setRoadmapSettings: (settings) => unwrap(window.api.setRoadmapSettings(settings)),
+  setWikiPublish: (enabled) => unwrap(window.api.setWikiPublish(enabled)),
+  publishCatalog: (productId, files) => unwrap(window.api.publishCatalog(productId, files)),
+  getCatalog: (productId) => unwrap(window.api.getCatalog(productId)),
+  previewCatalogAbsorb: (productId) => unwrap(window.api.previewCatalogAbsorb(productId)),
+  absorbCatalog: (productId, useWiki) => unwrap(window.api.absorbCatalog(productId, useWiki)),
+  getInstructions: () => unwrap(window.api.getInstructions()),
+  applyInstructionProposal: (name) => unwrap(window.api.applyInstructionProposal(name)),
+  discardInstructionProposal: (name) => unwrap(window.api.discardInstructionProposal(name)),
+  resetInstruction: (name) => unwrap(window.api.resetInstruction(name)),
+
   checkForUpdate: () => unwrap(window.api.checkForUpdate()),
   openUpdateLink: (link) => unwrap(window.api.openUpdateLink(link))
 }

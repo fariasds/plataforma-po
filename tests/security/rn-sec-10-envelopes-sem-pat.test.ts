@@ -70,6 +70,38 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   writeWorkData: ['planning:loja', { items: [] }],
   // A IA entra para provar que o caminho dela também não devolve o PAT.
   buildSprintGoalRequest: ['loja', sprint, [101]],
+  // O retrato do fluxo do PO lê o Azure com o mesmo PAT (RN-FLX-01).
+  refreshFlowSnapshot: ['loja'],
+  getFlowBoard: ['loja'],
+  getWorkFolders: [],
+  chooseWorkFolder: ['loja'],
+  clearWorkFolder: ['loja'],
+  linkPlannedPbi: ['loja', 'pagamento-pix', 'P3', 4213],
+  linkDraftFeature: ['loja', 'retirada-loja', 4120],
+  getOpportunities: ['loja'],
+  getFollowUp: ['loja'],
+  getRoadmap: [],
+  setWikiPublish: [true],
+  publishCatalog: ['loja', ['Cupons.md']],
+  updateRoadmap: ['loja', { kind: 'archive', key: '#4088', archived: false }],
+  createRoadmapMilestone: ['Revisão'],
+  setRoadmapSettings: [
+    {
+      weights: {
+        discovery: { produto: 1, tecnico: 0 },
+        quebra: { produto: 1, tecnico: 0.5 },
+        delivery: { produto: 0, tecnico: 1 }
+      },
+      limits: { produto: 2, tecnico: 3 }
+    }
+  ],
+  getCatalog: ['loja'],
+  previewCatalogAbsorb: ['loja'],
+  absorbCatalog: ['loja', []],
+  getInstructions: [],
+  applyInstructionProposal: ['discovery'],
+  discardInstructionProposal: ['discovery'],
+  resetInstruction: ['discovery'],
   // A consulta de versão não leva o PAT (RN-SEC-33); o envelope dela também não.
   checkForUpdate: [],
   openUpdateLink: ['installer'],

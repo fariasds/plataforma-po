@@ -1,0 +1,26 @@
+{
+  "app": {
+    "currentDay": 9,
+    "holidayDays": [
+      5
+    ],
+    "inProgressCount": 0,
+    "items": [],
+    "remainingDays": 2,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 9
+  },
+  "loja": {
+    "currentDay": 9,
+    "holidayDays": [
+      5
+    ],
+    "inProgressCount": 0,
+    "items": [],
+    "remainingDays": 2,
+    "sprintDays": 10,
+    "weekBreakDay": 5,
+    "workingDays": 9
+  }
+}

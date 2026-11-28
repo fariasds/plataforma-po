@@ -55,7 +55,8 @@ export interface SelectionOption {
  * - `planning`: Planning e Daily; Produto de fluxo contínuo não tem sprint para
  *   planejar, então fica de fora — e com ele o Grupo que o contém.
  */
-export type SelectionKind = 'review' | 'planning'
+/** `flow`: o fluxo do PO, que trabalha por Produto (RN-FLX-03), sem Grupo nem Squad inteira. */
+export type SelectionKind = 'review' | 'planning' | 'flow'
 
 /**
  * Com uma Squad aberta (RN-GLB-17), só o que é dela: primeiro a Squad inteira
@@ -69,8 +70,11 @@ export function selectionOptions(
 ): SelectionOption[] {
   const members = squad ? new Set(squad.products) : null
   const products = config.products.filter(
-    (p) => (kind === 'review' || p.cadence === 'sprints') && (!members || members.has(p.id))
+    (p) => (kind !== 'planning' || p.cadence === 'sprints') && (!members || members.has(p.id))
   )
+  if (kind === 'flow') {
+    return products.map((p) => ({ id: p.id, name: p.name, color: p.color, isGroup: false }))
+  }
   const ids = new Set(products.map((p) => p.id))
   const groups = config.groups.filter((g) => g.products.every((id) => ids.has(id)))
   const whole: SelectionOption[] =

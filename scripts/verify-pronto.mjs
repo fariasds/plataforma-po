@@ -22,7 +22,9 @@ import { writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-export const RULE_ID = /RN-[A-Z]{3}-\d{2}/g
+// Exatamente dois dígitos: as regras dos produtos do PO têm três (`RN-DOC-045`) e não
+// são regras do app (ADR 0015).
+export const RULE_ID = /RN-[A-Z]{3}-\d{2}(?!\d)/g
 
 export const RULES_DIR = 'docs/regras-de-negocio/'
 

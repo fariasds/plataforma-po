@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react'
 import { Button, Dropdown, Flex, Layout, Tooltip, Typography, theme } from 'antd'
 import {
+  AuditOutlined,
+  BookOutlined,
   BugOutlined,
+  BulbOutlined,
   CalendarOutlined,
   CheckCircleOutlined,
   DownOutlined,
   FieldTimeOutlined,
   FundProjectionScreenOutlined,
   HomeOutlined,
+  NodeIndexOutlined,
+  PartitionOutlined,
   SafetyCertificateOutlined,
+  ScheduleOutlined,
   SettingOutlined
 } from '@ant-design/icons'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
@@ -44,6 +50,44 @@ const MAIN: NavEntry[] = [
   HOME,
   { key: '/planning', icon: <CalendarOutlined />, label: t('nav.planning'), refresh: true },
   { key: '/daily', icon: <FieldTimeOutlined />, label: t('nav.daily'), refresh: true }
+]
+
+/** O fluxo do PO (docs/fluxo-po/): o trabalho do PO antes e depois da sprint. */
+const FLOW: NavEntry[] = [
+  {
+    key: '/features',
+    icon: <NodeIndexOutlined />,
+    label: t('nav.features'),
+    group: t('nav.flow'),
+    refresh: true
+  },
+  {
+    key: '/oportunidades',
+    icon: <BulbOutlined />,
+    label: t('nav.opportunities'),
+    group: t('nav.flow'),
+    refresh: true
+  },
+  {
+    key: '/acompanhamento',
+    icon: <AuditOutlined />,
+    label: t('nav.followUp'),
+    group: t('nav.flow'),
+    refresh: true
+  },
+  {
+    key: '/roadmap',
+    icon: <ScheduleOutlined />,
+    label: t('nav.roadmap'),
+    group: t('nav.flow'),
+    refresh: true
+  },
+  {
+    key: '/catalogo',
+    icon: <BookOutlined />,
+    label: t('nav.catalog'),
+    group: t('nav.flow')
+  }
 ]
 
 /**
@@ -103,7 +147,7 @@ const CONNECT_AI_ENTRY: NavEntry = {
   group: t('nav.settings')
 }
 
-const ALL = [...MAIN, ...REVIEW, CONNECT_AI_ENTRY, SETTINGS, SECURITY, RELEASE_NOTES_ENTRY]
+const ALL = [...MAIN, ...FLOW, ...REVIEW, CONNECT_AI_ENTRY, SETTINGS, SECURITY, RELEASE_NOTES_ENTRY]
 
 /**
  * Preferência de interface desta máquina, não do Perfil: é o tamanho da tela de
@@ -244,7 +288,7 @@ function NavGroup({
   // Começa aberto quando a tela atual é dele: o PO vê onde está sem clicar.
   const [open, setOpen] = useState(containsActive)
   const [hovered, setHovered] = useState(false)
-  const listId = 'nav-group-review'
+  const listId = `nav-group-${entries[0]?.key.replace(/\W+/g, '') ?? 'grupo'}`
 
   if (collapsed) {
     return (
@@ -388,6 +432,14 @@ export function AppLayout(): React.JSX.Element {
                   onClick={() => navigate(entry.key)}
                 />
               ))}
+              <NavGroup
+                label={t('nav.flow')}
+                icon={<PartitionOutlined />}
+                entries={FLOW}
+                activeKey={current.key}
+                collapsed={collapsed}
+                onNavigate={navigate}
+              />
               <NavGroup
                 label={t('nav.review')}
                 icon={<FundProjectionScreenOutlined />}

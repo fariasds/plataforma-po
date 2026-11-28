@@ -1,6 +1,6 @@
 # Camada de planejamento local sobre a lista de features do Azure
 
-**Status:** aceita · 2026-08-31
+**Status:** aceita · 2026-08-31 · onde o plano mora foi substituído pelo [ADR 0017](0017-plano-do-roadmap-na-pasta-de-trabalho.md) em 2026-11-26
 
 O Roadmap precisa de duas coisas que vivem em lugares diferentes: a **lista de
 features**, que já existe como work item no Azure DevOps, e o **planejamento**

@@ -55,6 +55,30 @@ const api: IpcBridge = {
   buildSprintGoalRequest: (selection, sprint, itemIds) =>
     invoke(IPC_CHANNELS.buildSprintGoalRequest, selection, sprint, itemIds),
 
+  refreshFlowSnapshot: (productId) => invoke(IPC_CHANNELS.refreshFlowSnapshot, productId),
+  getFlowBoard: (productId) => invoke(IPC_CHANNELS.getFlowBoard, productId),
+  getWorkFolders: () => invoke(IPC_CHANNELS.getWorkFolders),
+  chooseWorkFolder: (productId) => invoke(IPC_CHANNELS.chooseWorkFolder, productId),
+  clearWorkFolder: (productId) => invoke(IPC_CHANNELS.clearWorkFolder, productId),
+  linkPlannedPbi: (productId, slug, pbiKey, azureId) =>
+    invoke(IPC_CHANNELS.linkPlannedPbi, productId, slug, pbiKey, azureId),
+  linkDraftFeature: (productId, slug, featureId) =>
+    invoke(IPC_CHANNELS.linkDraftFeature, productId, slug, featureId),
+  getOpportunities: (productId) => invoke(IPC_CHANNELS.getOpportunities, productId),
+  getFollowUp: (productId) => invoke(IPC_CHANNELS.getFollowUp, productId),
+  getRoadmap: () => invoke(IPC_CHANNELS.getRoadmap),
+  updateRoadmap: (productId, change) => invoke(IPC_CHANNELS.updateRoadmap, productId, change),
+  createRoadmapMilestone: (name) => invoke(IPC_CHANNELS.createRoadmapMilestone, name),
+  setRoadmapSettings: (settings) => invoke(IPC_CHANNELS.setRoadmapSettings, settings),
+  setWikiPublish: (enabled) => invoke(IPC_CHANNELS.setWikiPublish, enabled),
+  publishCatalog: (productId, files) => invoke(IPC_CHANNELS.publishCatalog, productId, files),
+  getCatalog: (productId) => invoke(IPC_CHANNELS.getCatalog, productId),
+  previewCatalogAbsorb: (productId) => invoke(IPC_CHANNELS.previewCatalogAbsorb, productId),
+  absorbCatalog: (productId, useWiki) => invoke(IPC_CHANNELS.absorbCatalog, productId, useWiki),
+  getInstructions: () => invoke(IPC_CHANNELS.getInstructions),
+  applyInstructionProposal: (name) => invoke(IPC_CHANNELS.applyInstructionProposal, name),
+  discardInstructionProposal: (name) => invoke(IPC_CHANNELS.discardInstructionProposal, name),
+  resetInstruction: (name) => invoke(IPC_CHANNELS.resetInstruction, name),
   checkForUpdate: () => invoke(IPC_CHANNELS.checkForUpdate),
   openUpdateLink: (link) => invoke(IPC_CHANNELS.openUpdateLink, link),
 

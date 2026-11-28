@@ -1,10 +1,13 @@
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { AppError } from '@shared/errors'
 import { assertReadOnlyRequest } from '../../src/main/security/network-guard'
 import { fixtureResponse } from '../fixtures/azure/responses'
 
 // RN-SEC-20: o app só lê do Azure. GET em tudo; o único POST é a consulta WIQL,
-// que é leitura apesar do verbo. Um PAT com escopo de escrita não vira escrita.
+// que é leitura apesar do verbo. Um PAT com escopo de escrita não vira escrita. A
+// exceção, publicar o catálogo na wiki, é uma função só (RN-SEC-39 a RN-SEC-41).
 
 vi.mock('electron', async () => (await import('../helpers/electron-mock')).electronMock)
 vi.mock('@shared/azure', async (importOriginal) => ({
@@ -91,5 +94,18 @@ describe('RN-SEC-20: o client.ts aplica a regra', () => {
       { code: 'AZURE_BLOCKED' }
     )
     expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
+describe('RN-SEC-20: a exceção é uma função só', () => {
+  it('só o putWikiPage passa o modo de escrita ao fetch', () => {
+    const client = readFileSync(
+      resolve(__dirname, '../../src/main/services/azure/client.ts'),
+      'utf8'
+    )
+    const writes = [...client.matchAll(/\{\s*write:\s*scope/g)]
+    expect(writes).toHaveLength(1)
+    const owner = client.lastIndexOf('export async function', writes[0].index)
+    expect(client.slice(owner, owner + 60)).toContain('putWikiPage')
   })
 })

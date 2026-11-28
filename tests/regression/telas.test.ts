@@ -1,5 +1,5 @@
 import { existsSync, readdirSync } from 'fs'
-import { join } from 'path'
+import { basename, join } from 'path'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import type { UnifiedSprint } from '@shared/azure'
 import type { Configuration } from '@shared/config/schema'
@@ -7,6 +7,7 @@ import type { AnticipatedShare, ManualPlanningItem, PlanningItem } from '@shared
 import { createCalendar } from '@shared/calendar'
 import { validateConfiguration } from '@shared/config/validate'
 import { sprintMoment } from '@shared/home'
+import { flowKeys } from '@shared/flow-snapshot'
 import { planningKeys } from '@shared/planning-keys'
 import type { CapacityConfig } from '../../src/renderer/src/features/planning/planning-rules'
 import { isAggregateSelection, squadOfSelection } from '@shared/squads'
@@ -32,7 +33,13 @@ process.env.TZ = 'America/Sao_Paulo'
 const state = vi.hoisted(() => ({
   config: null as Configuration | null,
   azure: null as FakeAzure | null,
-  workData: {} as Record<string, unknown>
+  workData: {} as Record<string, unknown>,
+  scenarioId: '',
+  anchor: 0,
+  /** A publicação na wiki ligada no Perfil fictício (RN-SEC-39). */
+  wikiPublish: false,
+  /** O que a publicação gravaria na pasta: registrado, nunca escrito na pasta fictícia. */
+  writes: [] as string[]
 }))
 
 function fake(): FakeAzure {
@@ -42,18 +49,58 @@ function fake(): FakeAzure {
 
 vi.mock('../../src/main/profile/config-loader', () => ({ getActiveConfig: () => state.config }))
 vi.mock('../../src/main/profile/profile-store', () => ({
-  requireActiveProfile: () => ({ id: 'cenario', name: 'Cenário', dir: '' })
+  requireActiveProfile: () => ({
+    id: 'cenario',
+    name: 'Cenário',
+    dir: '',
+    wikiPublish: state.wikiPublish
+  })
+}))
+vi.mock('../../src/main/profile/atomic-write', () => ({
+  writeFileAtomic: (file: string) => {
+    state.writes.push(basename(file))
+  }
 }))
 vi.mock('../../src/main/profile/paths', () => ({ configPath: () => '' }))
 vi.mock('../../src/main/profile/work-data', () => ({
   readWorkData: (_profileId: string, key: string) => state.workData[key]
 }))
+// A pasta de trabalho fictícia do Cenário, por Produto: tests/regression/pastas/<cenário>/<produto>.
+vi.mock('../../src/main/profile/work-folders', async () => {
+  const { existsSync: exists } = await import('fs')
+  const { join: joinPath } = await import('path')
+  return {
+    getWorkFolder: (_profileId: string, productId: string) => {
+      const dir = joinPath(__dirname, 'pastas', state.scenarioId, productId)
+      return exists(dir) ? dir : null
+    }
+  }
+})
+// Num checkout, a data dos arquivos é a do clone: o "parada há N dias" (RN-FLX-11)
+// sai de uma tabela fixa, pelo nome da pasta da Feature.
+vi.mock('../../src/main/flow/file-times', () => ({
+  lastModified: (dir: string) => {
+    const days = FOLDER_AGE_DAYS[basename(dir)]
+    return days === undefined ? null : state.anchor - days * 24 * 60 * 60 * 1000
+  }
+}))
+
 vi.mock('../../src/main/services/azure/client', () => ({
   fetchAzure: (path: string) => fake().fetchAzure(path),
   postAzure: (path: string, body: unknown) => fake().postAzure(path, body),
   fetchGraph: (path: string) => fake().fetchGraph(path),
   fetchAzureAvatar: (url: string) => fake().fetchAzureAvatar(url),
-  fetchAvatarByDescriptor: (descriptor: string) => fake().fetchAvatarByDescriptor(descriptor)
+  fetchAvatarByDescriptor: (descriptor: string) => fake().fetchAvatarByDescriptor(descriptor),
+  fetchWikiPage: (path: string) => fake().fetchWikiPage(path),
+  // O caminho que o client.ts montaria; a barreira dele é provada na RN-SEC-40.
+  putWikiPage: (productId: string, pagePath: string, content: string, etag: string | null) => {
+    const product = state.config!.products.find((p) => p.id === productId)!
+    const source = product.catalog!.source as { wiki: string; project?: string }
+    const path =
+      `/${encodeURIComponent(source.project ?? product.project)}/_apis/wiki/wikis/` +
+      `${encodeURIComponent(source.wiki)}/pages?path=${encodeURIComponent(pagePath)}&api-version=7.1`
+    return fake().putWikiPage(path, content, etag)
+  }
 }))
 
 const { getUnifiedSprints } = await import('../../src/main/services/azure/unified-sprints')
@@ -65,7 +112,17 @@ const { getPlanningData } = await import('../../src/main/services/azure/planning
 const { getPlanningItem } = await import('../../src/main/services/azure/planning-item')
 const { getCurrentUser, clearUserProfileCache } =
   await import('../../src/main/services/azure/directory')
-const discovery = await import('../../src/main/services/azure/discovery')
+const organization = await import('../../src/main/services/azure/organization')
+const { buildFlowSnapshot } = await import('../../src/main/services/azure/flow-snapshot')
+const { getFlowBoard } = await import('../../src/main/services/flow/board')
+const { getCatalogView } = await import('../../src/main/services/flow/catalog')
+const { getOpportunities } = await import('../../src/main/services/flow/opportunities')
+const { getFollowUp } = await import('../../src/main/services/flow/follow-up')
+const { getRoadmap } = await import('../../src/main/services/flow/roadmap')
+const { previewCatalogAbsorb } = await import('../../src/main/services/flow/absorb')
+const { publishCatalog } = await import('../../src/main/services/flow/publish')
+const { productCatalog } = await import('../../src/main/services/flow/catalog')
+const { filesToPublish } = await import('@shared/flow-absorb')
 const { buildSprintGoalRequest } = await import('../../src/main/services/ai/sprint-goal')
 const { resolveScope } = await import('../../src/main/services/azure/scope')
 const { buildPlanningSummary, summaryToMarkdown } =
@@ -74,6 +131,18 @@ const { buildPlanningRows, resolveCapacity, resolveSquadCapacity } =
   await import('../../src/renderer/src/features/planning/planning-rules')
 
 const APPROVED_DIR = join(__dirname, 'aprovados')
+
+/** Há quantos dias cada pasta de Feature das pastas fictícias foi alterada pela última vez. */
+const FOLDER_AGE_DAYS: Record<string, number> = {
+  'pagamento-pix': 3,
+  'cupom-categoria': 1,
+  'retirada-loja': 10,
+  'troca-sem-nota': 60,
+  'avaliacao-foto': 45,
+  'lista-presentes': 2,
+  'frete-gratis': 90,
+  'adhoc-troca-gateway': 200
+}
 
 /** Quantas sprints cada tela pede, como no renderer. */
 const HISTORY_SPRINTS = 12
@@ -272,15 +341,132 @@ export const SCREENS: Record<string, ScreenRun> = {
   },
 
   descoberta: async (scenario) => {
-    const result: Record<string, unknown> = { projetos: await discovery.listProjects() }
+    const result: Record<string, unknown> = { projetos: await organization.listProjects() }
     for (const { name } of scenario.azure.projects) {
-      const details = await discovery.getProcessDetails(name)
+      const details = await organization.getProcessDetails(name)
       result[name] = {
-        times: await discovery.listTeams(name),
-        areas: await discovery.getAreaTree(name),
+        times: await organization.listTeams(name),
+        areas: await organization.getAreaTree(name),
         processo: details,
-        sugestao: discovery.suggestProcessProfile(details),
-        campos: await discovery.listFields(name)
+        sugestao: organization.suggestProcessProfile(details),
+        campos: await organization.listFields(name)
+      }
+    }
+    return result
+  },
+
+  // O retrato é por Produto, não por seleção: é o que a IA do PO lê (RN-FLX-01).
+  retrato: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      result[product.id] = await buildFlowSnapshot(product.id)
+    }
+    return result
+  },
+
+  // O quadro do fluxo do PO: o retrato que a janela gravaria mais a pasta de
+  // trabalho do Produto (RN-FLX-05 a RN-FLX-11).
+  fluxo: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      state.workData[flowKeys.snapshot(product.id)] = await buildFlowSnapshot(product.id)
+      result[product.id] = getFlowBoard(product.id)
+    }
+    return result
+  },
+
+  // As oportunidades de cada Produto e o encaixe de cada uma (RN-FLX-14 a 16, RN-FLX-25).
+  oportunidades: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      state.workData[flowKeys.snapshot(product.id)] = await buildFlowSnapshot(product.id)
+      result[product.id] = getOpportunities(product.id)
+    }
+    return result
+  },
+
+  // O acompanhamento de cada Produto: bugs sem análise, por Feature e por regra, e
+  // regras a conferir (RN-FLX-21 a RN-FLX-24).
+  acompanhamento: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      state.workData[flowKeys.snapshot(product.id)] = await buildFlowSnapshot(product.id)
+      result[product.id] = getFollowUp(product.id)
+    }
+    return result
+  },
+
+  // O Roadmap: as Janelas de todas as pastas, a Fase sobre elas e a carga global
+  // (RN-RDM-01 a RN-RDM-21).
+  roadmap: async () => {
+    for (const product of state.config!.products) {
+      state.workData[flowKeys.snapshot(product.id)] = await buildFlowSnapshot(product.id)
+    }
+    return getRoadmap()
+  },
+
+  // A publicação na wiki (ADR 0016): o que falta publicar, a recusa por conflito com a
+  // wiki (RN-CAT-07), a lista que o diálogo do sistema mostra e as páginas gravadas.
+  publicacao: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      if (product.catalog?.source.kind !== 'wiki') continue
+      const catalog = productCatalog(product.id)
+      if (catalog.workFolder !== 'ok') {
+        result[product.id] = { pastaDeTrabalho: catalog.workFolder }
+        continue
+      }
+      const pending = filesToPublish(catalog.files, catalog.base)
+      const attempt = async (files: string[]): Promise<unknown> => {
+        state.writes = []
+        const dialogs: unknown[] = []
+        const before = fake().calls.length
+        try {
+          const done = await publishCatalog(product.id, files, async (input) => {
+            dialogs.push(input)
+            return true
+          })
+          return {
+            ...done,
+            dialogo: dialogs,
+            gravou: state.writes,
+            pedidos: fake()
+              .calls.slice(before)
+              .filter((c) => c.method === 'PUT')
+          }
+        } catch (error) {
+          return { erro: (error as { code?: string }).code ?? String(error), dialogo: dialogs }
+        }
+      }
+      state.wikiPublish = false
+      const off = await attempt(pending)
+      state.wikiPublish = true
+      const all = await attempt(pending)
+      // Sem as páginas que mudaram na wiki desde a absorção, a publicação passa.
+      const preview = await previewCatalogAbsorb(product.id)
+      const changedInWiki = new Set(
+        preview.pages
+          .filter((p) => p.status === 'conflict' || p.status === 'changed')
+          .map((p) => p.file)
+      )
+      const free = await attempt(pending.filter((file) => !changedInWiki.has(file)))
+      result[product.id] = { pendentes: pending, desligada: off, todas: all, semConflito: free }
+      state.wikiPublish = false
+    }
+    return result
+  },
+
+  // O catálogo de regras de cada Produto e o que a absorção da wiki mudaria (RN-CAT-01 a 06).
+  catalogo: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      const view = getCatalogView(product.id)
+      result[product.id] = {
+        catalogo: view,
+        absorcao:
+          view.source?.kind === 'wiki' && view.workFolder === 'ok'
+            ? await previewCatalogAbsorb(product.id)
+            : null
       }
     }
     return result
@@ -336,11 +522,25 @@ const COVERED_HANDLERS: Record<string, string> = {
   discoverAreas: 'descoberta',
   discoverProcess: 'descoberta',
   discoverFields: 'descoberta',
+  refreshFlowSnapshot: 'retrato',
+  getFlowBoard: 'fluxo',
+  getOpportunities: 'oportunidades',
+  getFollowUp: 'acompanhamento',
+  getRoadmap: 'roadmap',
+  publishCatalog: 'publicacao',
+  getCatalog: 'catalogo',
+  previewCatalogAbsorb: 'catalogo',
   buildSprintGoalRequest: 'pedido-ia'
 }
 
 /** Arquivos de handler cujos canais falam com o Azure. */
-const AZURE_HANDLER_FILES = ['azure-handlers.ts', 'discovery-handlers.ts', 'ai-handlers.ts']
+const AZURE_HANDLER_FILES = [
+  'azure-handlers.ts',
+  'organization-handlers.ts',
+  'flow-handlers.ts',
+  'publish-handlers.ts',
+  'ai-handlers.ts'
+]
 
 // ─── Execução ────────────────────────────────────────────────────────────────
 
@@ -354,7 +554,9 @@ function activate(scenario: Scenario): FakeAzure {
   }
   state.config = parsed.config
   state.azure = createFakeAzure(scenario.azure)
-  state.workData = scenario.workData ?? {}
+  state.workData = { ...(scenario.workData ?? {}) }
+  state.scenarioId = scenario.id
+  state.anchor = new Date(scenario.anchorDate).getTime()
   vi.setSystemTime(new Date(scenario.anchorDate))
   return state.azure
 }

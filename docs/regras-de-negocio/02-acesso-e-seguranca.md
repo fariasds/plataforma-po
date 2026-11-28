@@ -44,11 +44,11 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-17 | Autenticação da versão interna | Revogada (ADR 0002) |
 | RN-SEC-18 | O main só fala com o Azure e com a consulta de versão | `tests/security/rn-sec-18-fronteira-de-rede.test.ts` |
 | RN-SEC-19 | O PAT é apagado de log e erro | `tests/security/rn-sec-19-redacao.test.ts` |
-| RN-SEC-20 | Somente leitura no Azure | `tests/security/rn-sec-20-somente-leitura.test.ts` |
+| RN-SEC-20 | Somente leitura no Azure, com a exceção da publicação | `tests/security/rn-sec-20-somente-leitura.test.ts` |
 | RN-SEC-21 | Link externo só para a organização e para a Release | `tests/security/rn-sec-21-links-externos.test.ts` |
 | RN-SEC-22 | Instalador público pela esteira, com hash | `.github/workflows/release.yml` |
 | RN-SEC-23 | O app não inicia processo | `tests/security/rn-sec-23-fronteira-de-processo.test.ts` |
-| RN-SEC-24 | Só campos permitidos vão no pedido, redigidos e com prévia | `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts` |
+| RN-SEC-24 | Só campos permitidos vão no pedido e no retrato, redigidos | `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts` · `tests/security/rn-sec-24-dado-minimo-no-retrato.test.ts` |
 | RN-SEC-25 | O app executa só a IA que ele localiza | Revogada (ADR 0007) |
 | RN-SEC-26 | A resposta colada é texto, e é rascunho | `tests/security/rn-sec-26-resposta-da-ia.test.ts` |
 | RN-SEC-27 | Perfil de demonstração sem rede e sem PAT | `tests/security/rn-sec-27-perfil-de-demonstracao.test.ts` |
@@ -59,7 +59,13 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-32 | Para o GitHub só sai o que já é público | `tests/security/rn-sec-32-publicacao-so-da-historia-publica.test.ts` · hook de `pre-push` |
 | RN-SEC-33 | Consulta de versão nova sem token, num endereço só | `tests/security/rn-sec-33-consulta-de-versao.test.ts` |
 | RN-SEC-34 | O servidor MCP não faz rede nem lê o PAT | `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts` |
-| RN-SEC-35 | O servidor MCP grava só a proposta | `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts` |
+| RN-SEC-35 | O que o servidor MCP grava | `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts` |
+| RN-SEC-36 | A pasta de trabalho só vem do diálogo do sistema | `tests/security/rn-sec-36-pasta-de-trabalho-pelo-dialogo.test.ts` |
+| RN-SEC-37 | O que vem da wiki só é gravado dentro de catalogo/ | `tests/security/rn-sec-37-catalogo-so-dentro-da-pasta.test.ts` |
+| RN-SEC-38 | A IA grava só dentro da pasta de trabalho | `tests/security/rn-sec-38-ia-grava-so-na-pasta-de-trabalho.test.ts` |
+| RN-SEC-39 | A publicação na wiki vem desligada | `tests/security/rn-sec-39-publicacao-desligada-por-padrao.test.ts` |
+| RN-SEC-40 | A escrita só vai para página do catálogo | `tests/security/rn-sec-40-publicacao-so-no-catalogo.test.ts` |
+| RN-SEC-41 | Nada é publicado sem o diálogo do sistema | `tests/security/rn-sec-41-confirmacao-no-processo-principal.test.ts` |
 
 As regras da Configuração que protegem o PAT (`RN-CFG-04`, `05` e `06`) estão em
 [03-configuracao.md](03-configuracao.md), cada uma com o seu teste.
@@ -243,14 +249,17 @@ O log da janela encaminhado ao terminal também passa pela redação.
 
 **Provado por:** `tests/security/rn-sec-19-redacao.test.ts`.
 
-### RN-SEC-20 · Somente leitura no Azure
+### RN-SEC-20 · Somente leitura no Azure, com a exceção da publicação
 
-O app faz `GET`, e o **único `POST` permitido é a consulta WIQL**
-(`/_apis/wit/wiql`), que é leitura apesar do verbo. `PATCH`, `PUT`, `DELETE` e
-`POST` para qualquer outro caminho são recusados antes de sair.
+*Reescrita em 2026-11-27 (ADR 0016).* O caminho que alimenta as telas faz `GET`, e o
+**único `POST` permitido é a consulta WIQL** (`/_apis/wit/wiql`), que é leitura apesar
+do verbo. `PATCH`, `PUT`, `DELETE` e `POST` para qualquer outro caminho são recusados
+antes de sair, com a publicação ligada ou não.
 
-Um PAT criado com escopo de escrita, por engano, continua sem conseguir escrever
-pelo app.
+**A exceção é uma só:** publicar páginas do catálogo na wiki, por uma função separada
+(`putWikiPage`), cercada pelas `RN-SEC-39`, `RN-SEC-40` e `RN-SEC-41`. Com a publicação
+desligada, que é o padrão, um PAT criado com escopo de escrita continua sem conseguir
+escrever pelo app.
 
 **Provado por:** `tests/security/rn-sec-20-somente-leitura.test.ts`.
 
@@ -464,7 +473,17 @@ a prévia mostra: o que o PO vê é o que ele leva.
 que você colar numa IA vai para a conta dela, sob os termos dela". O app não envia
 nada e não tem como garantir o que o fornecedor faz depois.
 
-**Provado por:** `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts`.
+**O retrato do fluxo do PO** (`RN-FLX-01`, ampliada em 2026-11-26) também vai para a
+IA, pelo servidor MCP, e segue as mesmas regras: campo a campo, só os da tabela da
+`RN-FLX-01`; pessoa, histórico, esforço e qualquer outro campo ficam, mesmo na
+leitura com vínculos, que traz todos os campos do Azure. Título e descrição em texto
+puro e com a mesma redação. Os limites são os do pedido por item; o conjunto das
+descrições vai até 400.000 caracteres. A janela manda só o ID do Produto e recebe só
+as contagens e a data: a descrição não chega a ela.
+
+**Provado por:** `tests/security/rn-sec-24-dado-minimo-para-ia.test.ts` e
+`tests/security/rn-sec-24-dado-minimo-no-retrato.test.ts`, que lê o Cenário
+`fluxo-do-po` com token de cada forma e campo privado em todo item.
 
 ### ~~RN-SEC-25~~ · O app executa só a IA que ele localiza
 
@@ -529,30 +548,63 @@ Além disso:
 **Provado por:** `tests/security/rn-sec-34-servidor-mcp-sem-rede-e-sem-pat.test.ts`, que
 segue os imports a partir de `src/main/mcp/`.
 
-### RN-SEC-35 · O servidor MCP grava só a proposta
+### RN-SEC-35 · O que o servidor MCP grava
 
-O servidor MCP oferece três ferramentas: `ler_configuracao` e `validar`, que só
-leem, e `propor_configuracao`, a única que grava. Ela grava **só** `proposta.json`,
-na pasta do Perfil em que o servidor foi preso (`RN-SEC-34`). A Configuração, os
-Dados de trabalho, o `AGENTS.md`, o schema e os outros Perfis ficam como estão.
-Quem aplica a proposta é o PO, na janela (`RN-CFG-12`).
+*Reescrita em 2026-11-27 (ADR 0013, ADR 0014). Antes: o servidor gravava só a proposta
+de Configuração.*
 
-- **Proposta recusada não é gravada.** O servidor confere a proposta com as mesmas
-  regras do app (`RN-CFG-01` a `05`, `RN-CFG-09`) e devolve os erros com o caminho,
-  para a IA corrigir. A janela confere de novo ao mostrar e ao aplicar.
-- **A gravação é atômica** (temporário ao lado e troca), como a da Configuração:
-  a janela nunca lê uma proposta pela metade.
-- **A IA não escolhe caminho.** Nenhuma ferramenta recebe nome de arquivo; o
-  destino é sempre o do Perfil preso ao servidor.
-- O servidor também oferece o roteiro `configurar_plataforma` (as perguntas, o
-  porquê de cada uma e onde achar a resposta no Azure, em
-  `resources/mcp/configurar-plataforma.md`) e, como leitura, as instruções e o
-  schema da Configuração.
+O servidor MCP grava **três coisas, e nada mais**:
+
+1. **A proposta de Configuração**, `proposta.json`, pela ferramenta
+   `propor_configuracao`. Quem aplica é o PO, na janela (`RN-CFG-12`).
+2. **A proposta de instrução do processo**, `instrucoes/<nome>.proposta.md`, pela
+   ferramenta `propor_instrucao`. Quem aplica é o PO, na Configuração (`RN-FLX-26`).
+3. **Arquivo de texto na pasta de trabalho de um Produto**, pela ferramenta
+   `gravar_arquivo`, só pela guarda da `RN-SEC-38`.
+
+As duas propostas ficam na pasta do Perfil em que o servidor foi preso (`RN-SEC-34`). A
+Configuração, os Dados de trabalho, o `AGENTS.md`, o schema, as instruções em uso e os
+outros Perfis ficam como estão.
+
+- **Proposta recusada não é gravada.** O servidor confere a proposta de Configuração com
+  as mesmas regras do app (`RN-CFG-01` a `05`, `RN-CFG-09`) e devolve os erros com o
+  caminho, para a IA corrigir. A janela confere de novo ao mostrar e ao aplicar. A de
+  instrução precisa ter texto e até 100 KB, e o nome tem de ser de um prompt do processo.
+- **A gravação é atômica** (temporário ao lado e troca): a janela nunca lê um arquivo
+  pela metade.
+- **A IA não escolhe o caminho das propostas.** Ela escolhe o caminho só em
+  `gravar_arquivo`, e ele passa pela guarda.
+- O servidor também oferece o roteiro `configurar_plataforma`, os prompts do processo
+  rule-first e, como leitura, as instruções e o schema da Configuração.
 
 **Provado por:** `tests/security/rn-sec-35-servidor-mcp-grava-so-a-proposta.test.ts`: um
-teste estático sobre o grafo de imports do servidor (nenhuma escrita no disco além
-da gravação atômica, e toda gravação atômica do servidor vai para `proposalPath`) e
-um teste que chama as ferramentas e compara a pasta de dados inteira antes e depois.
+teste estático sobre o grafo de imports do servidor (nenhuma escrita no disco além da
+gravação atômica, e toda gravação atômica do servidor vai para `proposalPath`,
+`instructionProposalPath` ou `workspaceTarget`) e um teste que chama as ferramentas e
+compara a pasta de dados inteira antes e depois.
+
+### RN-SEC-38 · A IA grava só dentro da pasta de trabalho
+
+`gravar_arquivo` recebe o Produto, um caminho relativo e o texto. O arquivo só é gravado
+se o caminho couber na **pasta de trabalho daquele Produto**, que o PO escolheu pelo
+diálogo do sistema (`RN-SEC-36`):
+
+- **Só nas pastas do processo:** `features/`, `oportunidades/`, `bugs/` e `catalogo/`.
+  A raiz da pasta (onde fica o `roadmap.json`, do app) fica de fora.
+- **Só texto:** `.md`, `.drawio`, `.txt`, até 1 MB.
+- **Recusado:** caminho absoluto ou com letra de unidade, `..`, `.`, barra repetida,
+  parte que começa com ponto (`.absorcao.json`, `.git`), caractere que o Windows não
+  aceita e **qualquer link simbólico no caminho**, que levaria para fora.
+- **Um Produto não alcança a pasta de outro.** O caminho é sempre relativo à pasta do
+  Produto nomeado, e duas pastas de trabalho não podem ser a mesma, nem uma ficar dentro
+  da outra (`RN-FLX-03`). Por isso o catálogo de outro Produto, que este só consulta
+  (`RN-CAT-05`), não é gravável por ele.
+
+Recusa devolve "Nada foi gravado" e o motivo, para a IA corrigir.
+
+**Provado por:** `tests/security/rn-sec-38-ia-grava-so-na-pasta-de-trabalho.test.ts`, que
+chama a ferramenta com cada caminho proibido, com um link para fora da pasta e pelo
+Produto que consulta outro, e confere que nada foi gravado fora do lugar.
 
 ---
 
@@ -720,3 +772,54 @@ histórico do git.
 
 **Implementado em:** `.github/workflows/release.yml` · `.github/workflows/ci.yml` ·
 `.github/workflows/recolher-versao.yml`
+
+### RN-SEC-39 · A publicação na wiki vem desligada
+
+*Nova em 2026-11-27 (ADR 0016).* A única escrita do app no Azure, publicar páginas do
+catálogo na wiki, existe só no Perfil em que o PO **ligou a publicação**, na tela
+Segurança. Sem isso, o botão não aparece no Catálogo, o serviço recusa e a função que
+grava (`putWikiPage`, no `client.ts`) recusa antes de sair, com
+`WIKI_PUBLISH_OFF`.
+
+**Ligar pede a confirmação do sistema**, aberta pelo processo principal, porque a partir
+dela o token do Perfil passa a poder escrever. Desligar não pede. O estado fica na lista
+de Perfis (`perfis.json`), fora da pasta do Perfil que a IA lê, e a tela Segurança diz se
+ele está ligado (`RN-SEC-31`).
+
+**Provado por:** `tests/security/rn-sec-39-publicacao-desligada-por-padrao.test.ts`, que
+confere que o Perfil novo recusa sem chamar a rede, que cancelar o diálogo deixa
+desligado e que desligar de novo volta a recusar.
+
+### RN-SEC-40 · A escrita só vai para página do catálogo
+
+*Nova em 2026-11-27 (ADR 0016).* A barreira da escrita (`assertWikiPageWrite`) roda no
+mesmo `fetch` único da `RN-SEC-18`, depois da checagem de host e organização, e aceita
+só:
+
+- o verbo **`PUT`**;
+- o endereço de páginas **da wiki e do projeto** que a Configuração declara como
+  catálogo do Produto (`RN-CFG-15`);
+- o parâmetro `path` **abaixo da página raiz** do catálogo (não a própria raiz), sem `..`
+  nem `.`, e nenhum parâmetro além de `path` e `api-version`.
+
+A wiki e a raiz vêm da Configuração em uso, lidas pelo próprio `client.ts`, e não de
+quem chama. Produto com catálogo local não publica. O caminho de leitura continua
+recusando escrita (`RN-SEC-20`), com a publicação ligada ou não.
+
+**Provado por:** `tests/security/rn-sec-40-publicacao-so-no-catalogo.test.ts`, que
+recusa outro verbo, a raiz, página fora dela, raiz como prefixo, subida com `..`,
+parâmetro a mais, outra wiki, outro projeto e work item, e confere que o `client.ts`
+recusa antes de chamar a rede.
+
+### RN-SEC-41 · Nada é publicado sem o diálogo do sistema
+
+*Nova em 2026-11-27 (ADR 0016).* A janela escolhe as páginas; quem confirma é o PO, num
+diálogo do sistema que o **processo principal** abre, com a lista do que será criado ou
+atualizado. Cancelar não publica nada e não muda a base da absorção. Nenhum argumento
+do IPC dispensa o diálogo, e o servidor MCP não alcança a publicação (`RN-SEC-34`). Uma
+janela comprometida não consegue publicar sem o clique do PO num diálogo que ela não
+desenha.
+
+**Provado por:** `tests/security/rn-sec-41-confirmacao-no-processo-principal.test.ts`,
+que cancela e confirma pelo diálogo, e confere que o handler de IPC não repassa nada
+além do Produto e da lista.

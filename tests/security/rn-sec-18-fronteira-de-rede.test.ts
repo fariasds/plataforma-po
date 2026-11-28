@@ -86,8 +86,9 @@ describe('RN-SEC-18: fronteira de rede do main', () => {
   it('o client.ts tem um único fetch, logo depois da checagem', () => {
     const source = readFileSync(join(ROOT, CLIENT), 'utf8')
     expect(source.match(/\bfetch\s*\(/g) ?? []).toHaveLength(1)
+    // Host e organização sempre; depois, leitura (RN-SEC-20) ou a escrita da wiki (RN-SEC-40).
     expect(source).toMatch(
-      /assertReadOnlyRequest\(init\.method, assertAllowedAzureUrl\(url, azureOrganization\(\)\)\)\s*return fetch\(url, init\)/
+      /const allowed = assertAllowedAzureUrl\(url, azureOrganization\(\)\)\s*if \(write === null\) assertReadOnlyRequest\(init\.method, allowed\)\s*else assertWikiPageWrite\(init\.method, allowed, write\)\s*return fetch\(url, init\)/
     )
   })
 

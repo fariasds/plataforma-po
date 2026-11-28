@@ -1,0 +1,109 @@
+{
+  "app": {
+    "feedbackConfigured": true,
+    "opportunities": [
+      {
+        "action": null,
+        "azureId": 5220,
+        "discardReason": null,
+        "feature": {
+          "id": 4140,
+          "title": "Login por biometria"
+        },
+        "file": null,
+        "fit": "Encaixada",
+        "key": "feedback:5220",
+        "source": "feedback",
+        "title": "Digitar a senha no celular é lento"
+      }
+    ],
+    "productId": "app",
+    "snapshotTakenAt": "2026-11-26T13:00:00.000Z",
+    "workFolder": "unset"
+  },
+  "loja": {
+    "feedbackConfigured": true,
+    "opportunities": [
+      {
+        "action": "Nenhuma regra decide este bug: decida se vira Feature.",
+        "azureId": 5305,
+        "discardReason": null,
+        "feature": null,
+        "file": "bugs/BUG-5305-frete-na-retirada.md",
+        "fit": "Sem encaixe",
+        "key": "bug:5305",
+        "source": "bug",
+        "title": "Frete grátis não aparece na retirada"
+      },
+      {
+        "action": "Criar no Azure a Feature \"Lista de presentes\" e trocar a linha Feature: pelo ID.",
+        "azureId": null,
+        "discardReason": null,
+        "feature": {
+          "newTitle": "Lista de presentes"
+        },
+        "file": "oportunidades/2026-11-24-lista-de-casamento.md",
+        "fit": "Proposto",
+        "key": "conversa:oportunidades/2026-11-24-lista-de-casamento.md",
+        "source": "conversa",
+        "title": "Casais não conseguem montar lista de presentes"
+      },
+      {
+        "action": "No Azure, ligar #5198 como pai de #4088.",
+        "azureId": 5198,
+        "discardReason": null,
+        "feature": {
+          "id": 4088,
+          "title": "Cupom de desconto por categoria"
+        },
+        "file": "oportunidades/2026-11-20-cupom-em-promocao.md",
+        "fit": "Proposto",
+        "key": "feedback:5198",
+        "source": "feedback",
+        "title": "Cupom não vale para produto em promoção"
+      },
+      {
+        "action": null,
+        "azureId": null,
+        "discardReason": null,
+        "feature": {
+          "id": 4060,
+          "title": "Troca sem nota fiscal"
+        },
+        "file": "oportunidades/2026-11-25-troca-sem-motivo.md",
+        "fit": "Encaixada",
+        "key": "conversa:oportunidades/2026-11-25-troca-sem-motivo.md",
+        "source": "conversa",
+        "title": "Clientes querem trocar sem dizer o motivo"
+      },
+      {
+        "action": null,
+        "azureId": 5214,
+        "discardReason": null,
+        "feature": {
+          "id": 4102,
+          "title": "Pagamento por Pix no checkout"
+        },
+        "file": null,
+        "fit": "Encaixada",
+        "key": "feedback:5214",
+        "source": "feedback",
+        "title": "Clientes desistem do checkout por falta de Pix"
+      },
+      {
+        "action": null,
+        "azureId": null,
+        "discardReason": "fora da estratégia deste semestre",
+        "feature": null,
+        "file": "oportunidades/2026-11-02-modo-escuro.md",
+        "fit": "Descartada",
+        "key": "conversa:oportunidades/2026-11-02-modo-escuro.md",
+        "source": "conversa",
+        "title": "Clientes pedem modo escuro no site"
+      }
+    ],
+    "productId": "loja",
+    "snapshotTakenAt": "2026-11-26T13:00:00.000Z",
+    "workFolder": "ok"
+  }
+}

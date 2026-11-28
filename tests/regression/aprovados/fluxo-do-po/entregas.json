@@ -1,0 +1,62 @@
+{
+  "app": {
+    "2026-11-02_2026-11-13": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-11-16_2026-11-27": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    }
+  },
+  "loja": {
+    "2026-11-02_2026-11-13": {
+      "deliveredItems": [],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [],
+      "typeDistributionInSprint": []
+    },
+    "2026-11-16_2026-11-27": {
+      "deliveredItems": [
+        {
+          "closedAt": "2026-11-20T09:00:00",
+          "devTimeInSprintHours": 32,
+          "leadTimeHours": 104,
+          "workItem": {
+            "fields": {
+              "System.CreatedDate": "2026-11-01T09:00:00",
+              "System.Id": 5309,
+              "System.IterationPath": "Contoso",
+              "System.State": "Done",
+              "System.Title": "Pix recusado acima do limite",
+              "System.WorkItemType": "Bug"
+            },
+            "id": 5309,
+            "rev": 2
+          }
+        }
+      ],
+      "scopeInjectedCount": 0,
+      "totalInSprint": 0,
+      "typeDistribution": [
+        {
+          "name": "Bug",
+          "value": 104
+        }
+      ],
+      "typeDistributionInSprint": [
+        {
+          "name": "Bug",
+          "value": 32
+        }
+      ]
+    }
+  }
+}

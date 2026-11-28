@@ -124,6 +124,104 @@ export const processProfileSchema = z
   })
   .describe('Regras de um processo de trabalho: quais tipos contam e o que cada estado significa.')
 
+// ─── Fluxo do PO (RN-CFG-14) ─────────────────────────────────────────────────
+
+/** Campo de prioridade de fábrica: existe no processo Scrum. */
+export const DEFAULT_PRIORITY_FIELD = 'Microsoft.VSTS.Common.BusinessValue'
+
+const feedbackSchema = z
+  .strictObject({
+    type: nonEmpty.describe(
+      'Tipo de work item do feedback, como o Azure o escreve (ex.: "Feedback").'
+    ),
+    states: stateList(
+      'Estados em que o feedback entra no fluxo como oportunidade (ex.: "Approved").'
+    ),
+    areaPaths: z
+      .array(nonEmpty)
+      .default([])
+      .describe(
+        'Area paths onde o feedback vive, com os filhos. Vazio usa as áreas do Produto. Use "\\\\" como separador no JSON.'
+      ),
+    link: z
+      .enum(['parent', 'child', 'related'])
+      .describe(
+        'Como o feedback se liga à Feature no Azure: "parent" (o feedback é pai da Feature), "child" (é filho dela) ou "related" (vínculo Related).'
+      )
+  })
+  .describe('De onde vêm as oportunidades do fluxo do PO.')
+
+const poFlowSchema = z
+  .strictObject({
+    featureType: nonEmpty
+      .default('Feature')
+      .describe('Tipo de work item que o fluxo do PO trata como Feature.'),
+    priorityField: fieldRef
+      .nullable()
+      .default(DEFAULT_PRIORITY_FIELD)
+      .describe(
+        'Campo numérico de prioridade da Feature, maior primeiro (ex.: "Microsoft.VSTS.Common.BusinessValue"). Campo que não existe no projeto é ignorado.'
+      ),
+    feedback: feedbackSchema
+      .nullable()
+      .default(null)
+      .describe('Sem ele, as oportunidades vêm só da conversa com a IA do PO.')
+  })
+  .default({ featureType: 'Feature', priorityField: DEFAULT_PRIORITY_FIELD, feedback: null })
+  .describe('Fluxo do PO: o que é Feature, como ela é priorizada e de onde vem o feedback.')
+
+// ─── Catálogo de regras do Produto (RN-CFG-15) ───────────────────────────────
+
+/** O ID de regra do processo rule-first: `RN-DOC-045`, ou com subdomínio, `RN-ELN-APP-001`. */
+export const DEFAULT_RULE_ID_PATTERN = 'RN-[A-Z]+(?:-[A-Z]+)*-\\d+'
+
+const ruleIdPattern = z
+  .string()
+  .min(3)
+  .max(100)
+  .refine((value) => {
+    try {
+      // Sem grupo de captura: o app envolve o padrão no dele.
+      return new RegExp(value).source.length > 0 && !/\((?!\?:)/.test(value)
+    } catch {
+      return false
+    }
+  }, 'Use uma expressão regular válida, sem grupo de captura (ex.: "RN-[A-Z]+-\\\\d+").')
+
+const catalogSourceSchema = z.discriminatedUnion('kind', [
+  z
+    .strictObject({
+      kind: z.literal('wiki'),
+      wiki: nonEmpty.describe('Nome da wiki no Azure DevOps (ex.: "Loja.wiki"). Nunca uma URL.'),
+      project: nonEmpty.optional().describe('Projeto da wiki. Sem ele, vale o projeto do Produto.'),
+      rootPage: z
+        .string()
+        .regex(/^\/[^\n]*$/, 'Caminho da página na wiki, começando por "/".')
+        .describe(
+          'Página que reúne o catálogo deste Produto (ex.: "/Catálogo de Regras/Loja"). As páginas abaixo dela são os domínios.'
+        )
+    })
+    .describe('O catálogo é absorvido da wiki do Azure DevOps.'),
+  z
+    .strictObject({ kind: z.literal('local') })
+    .describe('O catálogo é a pasta catalogo/ da pasta de trabalho, mantida pelo PO.')
+])
+
+const catalogSchema = z
+  .strictObject({
+    source: catalogSourceSchema,
+    ruleIdPattern: ruleIdPattern
+      .default(DEFAULT_RULE_ID_PATTERN)
+      .describe('Como o ID de uma regra se escreve no título "### <ID> · <título>".'),
+    consults: z
+      .array(nonEmpty)
+      .default([])
+      .describe(
+        'IDs de outros Produtos cujo catálogo este consulta: a IA lê e cita as regras deles, mas não grava lá.'
+      )
+  })
+  .describe('De onde vêm as regras de negócio do Produto (ADR 0015).')
+
 // ─── Produto e Grupo ─────────────────────────────────────────────────────────
 
 export const productSchema = z
@@ -155,7 +253,12 @@ export const productSchema = z
       .default('sprints')
       .describe(
         '"sprints": o Produto tem iterações próprias no Azure. "continuous": fluxo sem iterações; os indicadores o medem pela janela de datas da Sprint unificada dos demais Produtos, e ele não aparece no Planning nem na Daily.'
-      )
+      ),
+    poFlow: poFlowSchema,
+    catalog: catalogSchema
+      .nullable()
+      .default(null)
+      .describe('Sem ele, o fluxo do PO funciona sem catálogo: nenhuma Feature chega a Publicada.')
   })
   .describe('Unidade que o PO acompanha.')
 
@@ -424,6 +527,23 @@ function checkReferences(config: ConfigurationShape, ctx: z.RefinementCtx): void
         `O Perfil de processo "${product.processProfile}" não existe em "processProfiles".`
       )
     }
+  })
+
+  // Catálogo consultado: outro Produto que existe (RN-CFG-15).
+  config.products.forEach((product, i) => {
+    product.catalog?.consults.forEach((ref, j) => {
+      if (ref === product.id) {
+        issue(
+          ['products', i, 'catalog', 'consults', j],
+          'O Produto não consulta o próprio catálogo.'
+        )
+      } else if (!productIds.has(ref)) {
+        issue(
+          ['products', i, 'catalog', 'consults', j],
+          `O catálogo consulta o Produto "${ref}", que não existe.`
+        )
+      }
+    })
   })
 
   const groupIds = new Set<string>()

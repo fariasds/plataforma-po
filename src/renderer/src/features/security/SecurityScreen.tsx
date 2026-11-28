@@ -1,6 +1,9 @@
-import { Card, Flex, Tag, Typography, theme } from 'antd'
+import { Button, Card, Flex, Tag, Typography, theme } from 'antd'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { SafetyCertificateOutlined } from '@ant-design/icons'
 import { t } from '../../i18n'
+import { ipc } from '../../ipc/client'
+import { PROFILE_QUERY_KEY, useProfileState } from '../../ipc/useProfile'
 import { MONO_FONT } from '../../theme'
 import { GUARANTEES, LIMITS, VERIFY_HASH_COMMAND, VERIFY_TESTS_COMMAND } from './guarantees'
 
@@ -13,6 +16,12 @@ const { Paragraph, Text, Title } = Typography
  */
 export function SecurityScreen(): React.JSX.Element {
   const { token } = theme.useToken()
+  const queryClient = useQueryClient()
+  const profile = useProfileState().data?.profile ?? null
+  const toggle = useMutation({
+    mutationFn: (enabled: boolean) => ipc.setWikiPublish(enabled),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY })
+  })
 
   const command = (text: string): React.ReactNode => (
     <Text
@@ -48,6 +57,27 @@ export function SecurityScreen(): React.JSX.Element {
           </Flex>
         </Flex>
       </Card>
+
+      {profile && (
+        <Card title={t('security.wikiPublish.title')}>
+          <Flex align="center" justify="space-between" gap={16} wrap>
+            <Flex vertical gap={2}>
+              <Text>
+                {profile.wikiPublish ? t('security.wikiPublish.on') : t('security.wikiPublish.off')}
+              </Text>
+              {profile.kind === 'demo' && (
+                <Text type="secondary">{t('security.wikiPublish.demo')}</Text>
+              )}
+            </Flex>
+            {/* Ligar abre a confirmação do sistema, no processo principal (RN-SEC-39). */}
+            <Button loading={toggle.isPending} onClick={() => toggle.mutate(!profile.wikiPublish)}>
+              {profile.wikiPublish
+                ? t('security.wikiPublish.turnOff')
+                : t('security.wikiPublish.turnOn')}
+            </Button>
+          </Flex>
+        </Card>
+      )}
 
       <Card title={t('security.guaranteesTitle')}>
         <Flex vertical>

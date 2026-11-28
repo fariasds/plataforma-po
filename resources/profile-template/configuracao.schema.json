@@ -228,6 +228,174 @@
               "sprints",
               "continuous"
             ]
+          },
+          "poFlow": {
+            "default": {
+              "featureType": "Feature",
+              "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+              "feedback": null
+            },
+            "description": "Fluxo do PO: o que é Feature, como ela é priorizada e de onde vem o feedback.",
+            "type": "object",
+            "properties": {
+              "featureType": {
+                "default": "Feature",
+                "description": "Tipo de work item que o fluxo do PO trata como Feature.",
+                "type": "string",
+                "minLength": 1
+              },
+              "priorityField": {
+                "default": "Microsoft.VSTS.Common.BusinessValue",
+                "description": "Campo numérico de prioridade da Feature, maior primeiro (ex.: \"Microsoft.VSTS.Common.BusinessValue\"). Campo que não existe no projeto é ignorado.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "feedback": {
+                "default": null,
+                "description": "Sem ele, as oportunidades vêm só da conversa com a IA do PO.",
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Tipo de work item do feedback, como o Azure o escreve (ex.: \"Feedback\")."
+                      },
+                      "states": {
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "description": "Estados em que o feedback entra no fluxo como oportunidade (ex.: \"Approved\")."
+                      },
+                      "areaPaths": {
+                        "default": [],
+                        "description": "Area paths onde o feedback vive, com os filhos. Vazio usa as áreas do Produto. Use \"\\\\\" como separador no JSON.",
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "link": {
+                        "type": "string",
+                        "enum": [
+                          "parent",
+                          "child",
+                          "related"
+                        ],
+                        "description": "Como o feedback se liga à Feature no Azure: \"parent\" (o feedback é pai da Feature), \"child\" (é filho dela) ou \"related\" (vínculo Related)."
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "states",
+                      "link"
+                    ],
+                    "additionalProperties": false,
+                    "description": "De onde vêm as oportunidades do fluxo do PO."
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "catalog": {
+            "default": null,
+            "description": "Sem ele, o fluxo do PO funciona sem catálogo: nenhuma Feature chega a Publicada.",
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "type": "string",
+                            "const": "wiki"
+                          },
+                          "wiki": {
+                            "type": "string",
+                            "minLength": 1,
+                            "description": "Nome da wiki no Azure DevOps (ex.: \"Loja.wiki\"). Nunca uma URL."
+                          },
+                          "project": {
+                            "description": "Projeto da wiki. Sem ele, vale o projeto do Produto.",
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "rootPage": {
+                            "type": "string",
+                            "pattern": "^\\/[^\\n]*$",
+                            "description": "Página que reúne o catálogo deste Produto (ex.: \"/Catálogo de Regras/Loja\"). As páginas abaixo dela são os domínios."
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "wiki",
+                          "rootPage"
+                        ],
+                        "additionalProperties": false,
+                        "description": "O catálogo é absorvido da wiki do Azure DevOps."
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "type": "string",
+                            "const": "local"
+                          }
+                        },
+                        "required": [
+                          "kind"
+                        ],
+                        "additionalProperties": false,
+                        "description": "O catálogo é a pasta catalogo/ da pasta de trabalho, mantida pelo PO."
+                      }
+                    ]
+                  },
+                  "ruleIdPattern": {
+                    "default": "RN-[A-Z]+(?:-[A-Z]+)*-\\d+",
+                    "description": "Como o ID de uma regra se escreve no título \"### <ID> · <título>\".",
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 100
+                  },
+                  "consults": {
+                    "default": [],
+                    "description": "IDs de outros Produtos cujo catálogo este consulta: a IA lê e cita as regras deles, mas não grava lá.",
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "source"
+                ],
+                "additionalProperties": false,
+                "description": "De onde vêm as regras de negócio do Produto (ADR 0015)."
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [

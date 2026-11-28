@@ -1,4 +1,11 @@
 import type { SprintGoalRequest } from './ai'
+import type { AbsorbPreview, CatalogView } from './flow-absorb'
+import type { FlowBoard } from './flow-board'
+import type { FollowUpView } from './flow-follow-up'
+import type { RoadmapChange, RoadmapSettings, RoadmapView } from './roadmap'
+import type { OpportunitiesView } from './flow-opportunities'
+import type { InstructionState } from './flow-prompts'
+import type { FlowSnapshotSummary } from './flow-snapshot'
 import type { McpLaunch } from './mcp-clients'
 import type { UpdateCheck, UpdateLink } from './update'
 import type { SerializedError } from './errors'
@@ -11,8 +18,8 @@ import type {
   DiscoveredField,
   DiscoveredProject,
   DiscoveredTeam,
-  ProcessDiscovery
-} from './discovery'
+  SuggestedProcess
+} from './organization'
 import type {
   BugAnalysisResult,
   DailyResult,
@@ -67,7 +74,14 @@ export type ProposalState =
 export interface ProfileState {
   status: ProfileStatus
   /** `dir` é a pasta que o app abre para o PO; o PAT não está nela (RN-CFG-06). */
-  profile: { id: string; name: string; dir: string; kind: ProfileKind } | null
+  profile: {
+    id: string
+    name: string
+    dir: string
+    kind: ProfileKind
+    /** A publicação do catálogo na wiki está ligada (RN-SEC-39). */
+    wikiPublish: boolean
+  } | null
   /** A Configuração em uso: a última versão válida. */
   config: Configuration | null
   /** Problemas do arquivo como está no disco agora. */
@@ -203,9 +217,92 @@ export interface IpcApi {
   /** Raiz da árvore de áreas do projeto, com os caminhos no formato da Configuração. */
   discoverAreas(project: string): Promise<DiscoveredArea>
   /** Tipos, estados com categoria e o Perfil de processo sugerido. */
-  discoverProcess(project: string): Promise<ProcessDiscovery>
+  discoverProcess(project: string): Promise<SuggestedProcess>
   /** Campos acrescentados pelo processo, para mapear em `customFields`. */
   discoverFields(project: string): Promise<DiscoveredField[]>
+
+  // --- Fluxo do PO (ADR 0011) ---------------------------------------------
+
+  /**
+   * Lê o Azure e grava o retrato do Produto nos Dados de trabalho, para a IA do
+   * PO ler pelo servidor MCP (RN-FLX-01, RN-FLX-02). Devolve só as contagens e a
+   * data: a descrição não vem para a janela (RN-SEC-24).
+   */
+  refreshFlowSnapshot(productId: string): Promise<FlowSnapshotSummary>
+  /**
+   * Fase, checklist e pendências de cada Feature do Produto, do retrato já gravado
+   * e da pasta de trabalho (RN-FLX-05 a RN-FLX-11). Não lê o Azure.
+   */
+  getFlowBoard(productId: string): Promise<FlowBoard>
+  /** A pasta de trabalho de cada Produto que já tem uma, pelo ID do Produto (RN-FLX-03). */
+  getWorkFolders(): Promise<Record<string, string>>
+  /**
+   * Abre o diálogo do sistema para o PO escolher a pasta de trabalho do Produto.
+   * A janela não manda caminho (RN-SEC-36). Devolve a pasta, ou `null` se o PO cancelou.
+   */
+  chooseWorkFolder(productId: string): Promise<string | null>
+  clearWorkFolder(productId: string): Promise<void>
+  /**
+   * O PO confirma que o PBI planejado é este item do Azure (RN-FLX-12). O main só
+   * grava `Azure: #<id>` no plano se o ID for um dos candidatos que ele encontrou.
+   */
+  linkPlannedPbi(
+    productId: string,
+    slug: string,
+    pbiKey: string,
+    azureId: number
+  ): Promise<FlowBoard>
+  /** O PO confirma a Feature do Azure de uma pasta rascunho (RN-FLX-13). */
+  linkDraftFeature(productId: string, slug: string, featureId: number): Promise<FlowBoard>
+  /**
+   * As oportunidades do Produto e o encaixe de cada uma (RN-FLX-14 a RN-FLX-16,
+   * RN-FLX-25), do retrato já gravado e da pasta de trabalho. Não lê o Azure.
+   */
+  getOpportunities(productId: string): Promise<OpportunitiesView>
+  /**
+   * O acompanhamento do Produto (RN-FLX-21 a RN-FLX-24): bugs sem análise, bugs por
+   * Feature e por regra, regras a conferir. Do retrato já gravado e da pasta; não lê o Azure.
+   */
+  getFollowUp(productId: string): Promise<FollowUpView>
+  /**
+   * O Roadmap de todos os Produtos (RN-RDM-01 a RN-RDM-21): as sprints do Azure, o
+   * `roadmap.json` de cada pasta de trabalho e o quadro do fluxo. A sobrecarga é global.
+   */
+  getRoadmap(): Promise<RoadmapView>
+  /** Grava uma mudança no `roadmap.json` do Produto: Janelas ou arquivamento (ADR 0017). */
+  updateRoadmap(productId: string, change: RoadmapChange): Promise<void>
+  /** Grava um marco com este nome em toda pasta de trabalho (RN-RDM-21). Devolve quantas. */
+  createRoadmapMilestone(name: string): Promise<number>
+  /** Pesos e limites das trilhas, do Perfil (RN-RDM-10, RN-RDM-11). */
+  setRoadmapSettings(settings: RoadmapSettings): Promise<RoadmapSettings>
+  /**
+   * Liga ou desliga a publicação do catálogo na wiki no Perfil (RN-SEC-39). Ligar
+   * abre a confirmação do sistema; devolve como ficou.
+   */
+  setWikiPublish(enabled: boolean): Promise<boolean>
+  /**
+   * Publica na wiki os arquivos do catálogo escolhidos, depois da confirmação do PO
+   * num diálogo do sistema (ADR 0016). A única escrita do app no Azure.
+   */
+  publishCatalog(
+    productId: string,
+    files: string[]
+  ): Promise<{ cancelled: boolean; published: string[] }>
+  /** O catálogo de regras do Produto na pasta de trabalho (ADR 0015). Não lê o Azure. */
+  getCatalog(productId: string): Promise<CatalogView>
+  /** Lê a wiki e diz, página a página, o que a absorção mudaria (RN-CAT-03). Não grava. */
+  previewCatalogAbsorb(productId: string): Promise<AbsorbPreview>
+  /**
+   * Lê a wiki de novo e absorve. `useWiki`: as páginas em conflito em que o PO
+   * escolheu a versão da wiki; as outras em conflito ficam como estão.
+   */
+  absorbCatalog(productId: string, useWiki: string[]): Promise<CatalogView>
+  /** As instruções do processo rule-first, o texto em uso e a proposta da IA (RN-FLX-26). */
+  getInstructions(): Promise<InstructionState[]>
+  applyInstructionProposal(name: string): Promise<InstructionState[]>
+  discardInstructionProposal(name: string): Promise<InstructionState[]>
+  /** Volta ao texto de fábrica. */
+  resetInstruction(name: string): Promise<InstructionState[]>
 
   // --- IA do PO (ADR 0007) ------------------------------------------------
   //
@@ -271,11 +368,33 @@ export const IPC_CHANNELS = {
   getPlanningItem: 'azure:planning-item',
   getDaily: 'azure:daily',
   getCurrentUser: 'azure:current-user',
-  discoverProjects: 'discovery:projects',
-  discoverTeams: 'discovery:teams',
-  discoverAreas: 'discovery:areas',
-  discoverProcess: 'discovery:process',
-  discoverFields: 'discovery:fields',
+  discoverProjects: 'organization:projects',
+  discoverTeams: 'organization:teams',
+  discoverAreas: 'organization:areas',
+  discoverProcess: 'organization:process',
+  discoverFields: 'organization:fields',
+  refreshFlowSnapshot: 'flow:refresh-snapshot',
+  getFlowBoard: 'flow:board',
+  getWorkFolders: 'flow:work-folders',
+  chooseWorkFolder: 'flow:choose-work-folder',
+  clearWorkFolder: 'flow:clear-work-folder',
+  linkPlannedPbi: 'flow:link-planned-pbi',
+  linkDraftFeature: 'flow:link-draft-feature',
+  getOpportunities: 'flow:opportunities',
+  getFollowUp: 'flow:follow-up',
+  getRoadmap: 'flow:roadmap',
+  updateRoadmap: 'flow:roadmap-update',
+  createRoadmapMilestone: 'flow:roadmap-milestone',
+  setRoadmapSettings: 'flow:roadmap-settings',
+  setWikiPublish: 'profile:wiki-publish',
+  publishCatalog: 'flow:catalog-publish',
+  getCatalog: 'flow:catalog',
+  previewCatalogAbsorb: 'flow:catalog-preview',
+  absorbCatalog: 'flow:catalog-absorb',
+  getInstructions: 'profile:instructions',
+  applyInstructionProposal: 'profile:instruction-apply',
+  discardInstructionProposal: 'profile:instruction-discard',
+  resetInstruction: 'profile:instruction-reset',
   buildSprintGoalRequest: 'ai:sprint-goal-request',
   checkForUpdate: 'update:check',
   openUpdateLink: 'update:open-link'

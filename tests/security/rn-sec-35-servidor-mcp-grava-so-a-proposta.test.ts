@@ -4,10 +4,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mcpEntries, reachableFrom, withoutComments } from '../helpers/import-graph'
 import { getUserDataDir, resetElectronMock } from '../helpers/electron-mock'
 
-// RN-SEC-35: o servidor MCP grava só a proposta, na pasta do Perfil dele (ADR
-// 0010). A IA do PO pode chamar qualquer ferramenta a qualquer hora; o que ela
-// consegue mudar no disco é `proposta.json`, e quem aplica é o PO, na janela
-// (RN-CFG-12).
+// RN-SEC-35: o servidor MCP grava só três coisas (ADR 0010, ADR 0013, ADR 0014). A
+// IA do PO pode chamar qualquer ferramenta a qualquer hora; o que ela consegue mudar
+// no disco é a proposta de Configuração e a de instrução, na pasta do Perfil dele, que
+// o PO aplica na janela (RN-CFG-12, RN-FLX-26), e arquivo de texto dentro da pasta de
+// trabalho de um Produto, pela guarda da RN-SEC-38.
 
 vi.mock('electron', async () => (await import('../helpers/electron-mock')).electronMock)
 
@@ -30,7 +31,7 @@ describe('RN-SEC-35: o servidor MCP grava só a proposta (estático)', () => {
     expect(offenders).toEqual([])
   })
 
-  it('no servidor, toda gravação atômica vai para proposalPath', () => {
+  it('no servidor, toda gravação atômica vai para uma proposta ou passa pela guarda da pasta', () => {
     const calls = reachable
       .filter((file) => file.startsWith('src/main/mcp/'))
       .flatMap((file) =>
@@ -41,7 +42,11 @@ describe('RN-SEC-35: o servidor MCP grava só a proposta (estático)', () => {
         ].map((match) => ({ file, target: match[1].trim() }))
       )
     expect(calls.length).toBeGreaterThan(0)
-    expect(calls.filter((call) => !/^proposalPath\(/.test(call.target))).toEqual([])
+    expect(
+      calls.filter(
+        (call) => !/^(?:proposalPath|instructionProposalPath|workspaceTarget)\(/.test(call.target)
+      )
+    ).toEqual([])
   })
 
   it('o detector reconhece as formas usuais', () => {

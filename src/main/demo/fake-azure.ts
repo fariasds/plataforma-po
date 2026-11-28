@@ -1,3 +1,5 @@
+import { AppError } from '@shared/errors'
+import { contentHash } from '@shared/flow-catalog'
 import { runWiql } from './wiql'
 import type { AzureState, FakeField, FakeIteration, FakeProject, FakeWorkItem } from './types'
 
@@ -55,7 +57,7 @@ const AVATAR_PNG =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
 
 export interface FakeAzureCall {
-  method: 'GET' | 'POST' | 'GRAPH' | 'AVATAR'
+  method: 'GET' | 'POST' | 'PUT' | 'GRAPH' | 'AVATAR'
   path: string
 }
 
@@ -69,6 +71,10 @@ export interface FakeAzure {
   fetchGraph<T>(path: string): Promise<{ body: T; continuation: string | null }>
   fetchAzureAvatar(url: string): Promise<string | null>
   fetchAvatarByDescriptor(descriptor: string): Promise<string | null>
+  /** A página com o ETag (o resumo do conteúdo), ou `null` se ela não existe. */
+  fetchWikiPage(path: string): Promise<{ content: string; etag: string | null } | null>
+  /** Grava a página; com ETag diferente do atual, recusa como o Azure (412). */
+  putWikiPage(path: string, content: string, etag: string | null): Promise<void>
 }
 
 // ─── Leitura do pedido ───────────────────────────────────────────────────────
@@ -190,6 +196,8 @@ export function createFakeAzure(state: AzureState): FakeAzure {
   const calls: FakeAzureCall[] = []
   const errors: string[] = []
   const byId = new Map(state.workItems.map((item) => [item.id, item]))
+  // Cópia: a publicação grava aqui, e o Cenário (constante do módulo) fica intacto.
+  const wikis = structuredClone(state.wikis ?? [])
 
   function project(name: string): FakeProject {
     const found = state.projects.find(
@@ -223,12 +231,46 @@ export function createFakeAzure(state: AzureState): FakeAzure {
     return found
   }
 
+  const workItemUrl = (id: number): string =>
+    `https://dev.azure.com/${state.organization}/_apis/wit/workItems/${id}`
+
+  /** Pai, filhos e "Related" do item, como o `$expand=relations` do Azure devolve. */
+  function relationsOf(found: FakeWorkItem): unknown[] {
+    const relation = (rel: string, id: number): unknown => ({
+      rel,
+      url: workItemUrl(id),
+      attributes: { isLocked: false }
+    })
+    const parent = found.fields['System.Parent']
+    const children = state.workItems.filter((w) => w.fields['System.Parent'] === found.id)
+    const related = new Set([
+      ...(found.related ?? []),
+      ...state.workItems.filter((w) => w.related?.includes(found.id)).map((w) => w.id)
+    ])
+    return [
+      ...(typeof parent === 'number'
+        ? [relation('System.LinkTypes.Hierarchy-Reverse', parent)]
+        : []),
+      ...children.map((child) => relation('System.LinkTypes.Hierarchy-Forward', child.id)),
+      ...[...related].map((id) => relation('System.LinkTypes.Related', id))
+    ]
+  }
+
   function workItemsBatch(
     path: string,
     query: URLSearchParams,
     scope: FakeProject | null
   ): unknown {
-    checkQuery(path, query, ['ids', 'fields', 'errorPolicy'])
+    checkQuery(path, query, ['ids', 'fields', 'errorPolicy', '$expand'])
+    const expand = query.get('$expand')
+    if (expand !== null) {
+      // O Azure real recusa "fields" junto com "$expand": com ele, vêm todos os campos.
+      if (expand !== 'relations')
+        throw new UnknownAzureRequestError(`$expand "${expand}" não previsto`)
+      if (query.has('fields')) {
+        throw new UnknownAzureRequestError(`"fields" junto com "$expand" em ${path}`)
+      }
+    }
     const ids = (query.get('ids') ?? '').split(',').map(Number)
     if (ids.length === 0 || ids.some((id) => !Number.isSafeInteger(id) || id <= 0)) {
       throw new UnknownAzureRequestError(`lista de IDs inválida em ${path}`)
@@ -240,12 +282,16 @@ export function createFakeAzure(state: AzureState): FakeAzure {
     if (omit !== null && omit !== 'omit') {
       throw new UnknownAzureRequestError(`errorPolicy "${omit}" não previsto`)
     }
-    const fields = requestedFields(query.get('fields'), scope, path)
+    const fields = expand ? null : requestedFields(query.get('fields'), scope, path)
     const value = ids.map((id) => {
       const found = byId.get(id)
       if (!found) {
         if (omit) return null
         throw new UnknownAzureRequestError(`work item ${id} não existe (${path})`)
+      }
+      if (!fields) {
+        const all = pick(found, ['System.Id', ...Object.keys(found.fields)])
+        return { id, rev: found.updates.length, fields: all, relations: relationsOf(found) }
       }
       return { id, rev: found.updates.length, fields: pick(found, fields) }
     })
@@ -256,6 +302,54 @@ export function createFakeAzure(state: AzureState): FakeAzure {
     checkQuery(path, query, [])
     const found = item(Number(id), path)
     return { count: found.updates.length, value: found.updates }
+  }
+
+  function wikiPage(projectName: string, wikiName: string, query: URLSearchParams): unknown {
+    project(projectName)
+    const wiki = wikis.find(
+      (w) =>
+        w.name.toLowerCase() === wikiName.toLowerCase() &&
+        w.project.toLowerCase() === projectName.toLowerCase()
+    )
+    if (!wiki) throw new UnknownAzureRequestError(`wiki "${wikiName}" não existe em ${projectName}`)
+    const pagePath = query.get('path') ?? '/'
+    const recursion = query.get('recursionLevel')
+    const withContent = query.get('includeContent') === 'true'
+    const under = (p: string, root: string): boolean =>
+      root === '/' || p === root || p.startsWith(`${root}/`)
+    const exists = wiki.pages.some((p) => under(p.path, pagePath))
+    if (!exists)
+      throw new UnknownAzureRequestError(`página "${pagePath}" não existe na wiki ${wikiName}`)
+    // Página "pai" sem conteúdo próprio existe na árvore do Azure mesmo sem estar na lista.
+    const build = (p: string, depth: number): unknown => {
+      const own = wiki.pages.find((page) => page.path === p)
+      const children = [
+        ...new Set(
+          wiki.pages
+            .filter((page) => page.path.startsWith(`${p === '/' ? '' : p}/`))
+            .map((page) => {
+              const rest = page.path.slice((p === '/' ? '' : p).length + 1).split('/')[0]
+              return `${p === '/' ? '' : p}/${rest}`
+            })
+        )
+      ].sort()
+      const node: Record<string, unknown> = {
+        path: p,
+        order: 0,
+        isParentPage: children.length > 0,
+        gitItemPath: `${p.replace(/ /g, '-')}.md`,
+        url: `https://dev.azure.com/${state.organization}/${projectName}/_apis/wiki/wikis/${wikiName}/pages${p}`
+      }
+      if (withContent && depth === 0) node.content = own?.content ?? ''
+      if (recursion === 'full' || (recursion === 'oneLevel' && depth === 0)) {
+        node.subPages = children.map((child) => build(child, depth + 1))
+      }
+      return node
+    }
+    if (recursion !== null && recursion !== 'full' && recursion !== 'oneLevel') {
+      throw new UnknownAzureRequestError(`recursionLevel "${recursion}" não previsto`)
+    }
+    return build(pagePath, 0)
   }
 
   function processType(
@@ -348,6 +442,12 @@ export function createFakeAzure(state: AzureState): FakeAzure {
       }
     }
 
+    // Wiki: a árvore de páginas e o conteúdo de uma página.
+    if ((m = matches(segments, [null, '_apis', 'wiki', 'wikis', null, 'pages']))) {
+      checkQuery(path, query, ['path', 'recursionLevel', 'includeContent'])
+      return wikiPage(m[0], m[1], query)
+    }
+
     // Projeto: campos, processo e árvores
     if ((m = matches(segments, [null, '_apis', 'wit', 'fields']))) {
       checkQuery(path, query, [])
@@ -431,6 +531,30 @@ export function createFakeAzure(state: AzureState): FakeAzure {
     return { value: state.user.descriptor }
   }
 
+  /** A página de wiki que a rota pede, para ler com ETag ou para gravar. */
+  function wikiTarget(
+    path: string,
+    allowed: readonly string[]
+  ): {
+    wiki: (typeof wikis)[number]
+    path: string
+    existing: { path: string; content: string } | undefined
+  } {
+    const { segments, query } = parsePath(path)
+    const m = matches(segments, [null, '_apis', 'wiki', 'wikis', null, 'pages'])
+    if (!m) throw new UnknownAzureRequestError(`rota de página não prevista: ${path}`)
+    checkQuery(path, query, allowed)
+    project(m[0])
+    const wiki = wikis.find(
+      (w) =>
+        w.name.toLowerCase() === m[1].toLowerCase() &&
+        w.project.toLowerCase() === m[0].toLowerCase()
+    )
+    if (!wiki) throw new UnknownAzureRequestError(`wiki "${m[1]}" não existe em ${m[0]}`)
+    const pagePath = query.get('path') ?? ''
+    return { wiki, path: pagePath, existing: wiki.pages.find((p) => p.path === pagePath) }
+  }
+
   /** Registra, e só então lança: o serviço pode engolir, a lista não esquece. */
   function guard<T>(call: FakeAzureCall, task: () => unknown): Promise<T> {
     calls.push(call)
@@ -458,6 +582,27 @@ export function createFakeAzure(state: AzureState): FakeAzure {
         if (!url.startsWith(prefix))
           throw new UnknownAzureRequestError(`avatar fora da organização: ${url}`)
         return avatar
+      }),
+    fetchWikiPage: (path) =>
+      guard({ method: 'GET', path }, () => {
+        const page = wikiTarget(path, ['path', 'includeContent'])
+        return page.existing
+          ? { content: page.existing.content, etag: `"${contentHash(page.existing.content)}"` }
+          : null
+      }),
+    putWikiPage: (path, content, etag) =>
+      guard({ method: 'PUT', path }, () => {
+        const page = wikiTarget(path, ['path'])
+        const current = page.existing ? `"${contentHash(page.existing.content)}"` : null
+        if (current !== etag) {
+          throw new AppError(
+            'CATALOG_CONFLICT',
+            `A página ${page.path} mudou na wiki: absorva de novo.`
+          )
+        }
+        if (page.existing) page.existing.content = content
+        else page.wiki.pages.push({ path: page.path, content })
+        return undefined
       }),
     fetchAvatarByDescriptor: (descriptor) =>
       guard({ method: 'AVATAR', path: descriptor }, () => {

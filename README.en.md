@@ -16,8 +16,10 @@ and team performance without writing a single query.
 
 ![Planning: sprint capacity and points per discipline](docs/imagens/planning.png)
 
-- **Read-only.** The app never writes to Azure DevOps, not even with a PAT that
-  would allow it.
+- **Read-only, with one optional exception.** The app does not write to Azure DevOps,
+  not even with a PAT that would allow it. The exception is publishing the business
+  rules catalog to the wiki: it is off by default, is turned on per Profile, and every
+  publication asks for your confirmation in a system dialog (ADR 0016).
 - **Fully local.** No server, no account, no login. Your PAT is encrypted on your
   machine and only ever leaves it to reach Azure DevOps.
 - **Configurable.** Products, process, calendar and fields live in a JSON file that
@@ -118,6 +120,16 @@ knows no one's AI account**: it works with Claude, ChatGPT, Copilot or any other
 
 Whatever you paste into an AI goes to that AI's account, under its terms. Check your
 organization's policy on sending work data to an AI.
+
+## PO flow
+
+The **Fluxo do PO** group in the menu follows a Feature from the opportunity to what
+comes back after delivery, in the rule-first process: **Features** (a phase computed
+from the files of a work folder you pick for each Product), **Oportunidades**,
+**Acompanhamento** (bugs by Feature and by rule), **Roadmap** (windows per sprint and
+team load) and **Catálogo** (the business rules, absorbed from the wiki). Connected
+through MCP, your AI reads the same data and writes only inside the work folder, never
+to Azure. The app never creates or changes a work item.
 
 ## How your PAT is protected
 

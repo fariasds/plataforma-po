@@ -1,0 +1,102 @@
+{
+  "loja": {
+    "bugs": [
+      {
+        "closedDate": "2026-09-23T15:00:00",
+        "createdDate": "2026-09-22T09:00:00",
+        "description": "",
+        "id": 5001,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Pagamento recusado com cartão válido",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-29T16:00:00",
+        "createdDate": "2026-09-24T10:00:00",
+        "description": "",
+        "id": 5002,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Estoque negativo após cancelamento",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-06T14:00:00",
+        "createdDate": "2026-09-28T09:00:00",
+        "description": "",
+        "id": 5003,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Nota fiscal com CNPJ errado",
+        "type": "Bug"
+      },
+      {
+        "closedDate": null,
+        "createdDate": "2026-10-05T10:00:00",
+        "description": "",
+        "id": 5004,
+        "open": true,
+        "parentId": null,
+        "state": "Approved",
+        "title": "Ícone desalinhado no menu",
+        "type": "Bug"
+      },
+      {
+        "closedDate": null,
+        "createdDate": "2026-10-06T09:00:00",
+        "description": "",
+        "id": 5005,
+        "open": true,
+        "parentId": null,
+        "state": "Committed",
+        "title": "[reincidente] Cache do catálogo desatualizado",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-09-10T11:00:00",
+        "createdDate": "2026-09-08T09:00:00",
+        "description": "",
+        "id": 5006,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "[Reincidente] Timeout no pagamento",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-10-01T10:00:00",
+        "createdDate": "2026-09-25T09:00:00",
+        "description": "",
+        "id": 5008,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Lentidão na busca",
+        "type": "Bug"
+      },
+      {
+        "closedDate": "2026-08-27T11:00:00",
+        "createdDate": "2026-08-26T09:00:00",
+        "description": "",
+        "id": 5009,
+        "open": false,
+        "parentId": null,
+        "state": "Done",
+        "title": "Carrinho vazio após login",
+        "type": "Bug"
+      }
+    ],
+    "children": [],
+    "features": [],
+    "feedbacks": null,
+    "priorityField": "Microsoft.VSTS.Common.BusinessValue",
+    "productId": "loja",
+    "takenAt": "2026-10-08T18:00:00.000Z",
+    "version": 1,
+    "windowStart": "2026-04-11"
+  }
+}
