@@ -202,7 +202,12 @@ export const ptBR = {
         'bug-analysis': 'Ver na Análise de Bugs',
         settings: 'Abrir a Configuração',
         'connect-ai': 'Conectar a sua IA',
-        security: 'Abrir a Segurança'
+        security: 'Abrir a Segurança',
+        features: 'Abrir as Features',
+        opportunities: 'Ver as Oportunidades',
+        'follow-up': 'Abrir o Acompanhamento',
+        roadmap: 'Abrir o Roadmap',
+        catalog: 'Abrir o Catálogo'
       }
     },
     history: {

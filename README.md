@@ -60,7 +60,9 @@ O escopo Graph fica atrás de **Show all scopes**. Sem ele tudo funciona: as fot
 dão lugar às iniciais.
 
 Não marque nenhum escopo de escrita. O app recusa qualquer escrita de qualquer forma
-(`RN-SEC-20`), mas um PAT só de leitura é a primeira barreira, e a mais simples.
+(`RN-SEC-20`), mas um PAT só de leitura é a primeira barreira, e a mais simples. A única
+exceção é publicar o catálogo na wiki, se você ligar a publicação: aí o PAT precisa
+também de **Wiki → Read & write**, e só as páginas do catálogo são gravadas.
 
 ## Primeira execução
 
@@ -116,6 +118,27 @@ de ninguém**: funciona com o Claude, o ChatGPT, o Copilot ou qualquer outra.
 
 O que você colar numa IA vai para a conta dela, sob os termos dela. Confira a
 política da sua organização sobre enviar dados de trabalho a uma IA.
+
+## Fluxo do PO
+
+O grupo **Fluxo do PO**, no menu, acompanha a Feature da oportunidade até o que volta
+depois da entrega, no processo rule-first:
+
+- **Features:** a Fase de cada Feature (Discovery, Pronta para quebra, Em quebra,
+  Publicada) calculada dos arquivos de uma **pasta de trabalho** que você escolhe para
+  cada Produto, com o que falta para ela andar.
+- **Oportunidades:** feedbacks do Azure, dores da conversa e bugs sem regra, com a
+  Feature em que cada um entra.
+- **Acompanhamento:** bugs sem análise, bugs por Feature e por regra, e regras novas
+  esperando conferência.
+- **Roadmap:** Discovery, Quebra e Delivery de cada Feature em sprints, com a carga de
+  Produto/UX e do Time Técnico.
+- **Catálogo:** as regras de negócio do Produto, absorvidas da wiki, e o que falta
+  publicar.
+
+Conectada pelo MCP, a sua IA lê o mesmo que as telas e segue os prompts do processo
+(Discovery, quebra, análise de bug). Ela grava só dentro da pasta de trabalho, nunca
+no Azure. O app não cria nem altera work item.
 
 ## Como seu PAT é protegido
 

@@ -33,6 +33,8 @@ Não há Next.js, Tailwind, shadcn/ui nem Recharts neste projeto.
 - `src/shared/` — contrato entre os dois: tipos, canais de IPC, schema da
   Configuração, lógica pura (calendário, horas úteis, story points).
 - `src/preload/` — ponte tipada. Nunca expõe `ipcRenderer` cru.
+- `src/main/flow/` — leitura do fluxo do PO no disco (quadro, catálogo, oportunidades,
+  acompanhamento, Roadmap). Sem rede: a janela e o servidor MCP calculam por aqui.
 - `src/main/mcp/` — servidor MCP da IA do PO (`--mcp --perfil <id>`, por stdio). Não
   faz rede, não lê o PAT e não alcança `services/` nem `ipc/` (`RN-SEC-34`,
   [ADR 0010](docs/adr/0010-servidor-mcp-local.md)).
@@ -57,6 +59,11 @@ dele é a da conta do sistema operacional ([ADR 0002](docs/adr/0002-sem-autentic
   valida e, se a validação falhar, mantém a última versão válida (`RN-CFG-07`).
   Schema em `src/shared/config/schema.ts`; regras em
   `docs/regras-de-negocio/03-configuracao.md`.
+- A **pasta de trabalho** de cada Produto fica **fora** de `<userData>`, escolhida pelo
+  diálogo do sistema (`RN-SEC-36`). Mora nela o que o PO versiona: `features/`,
+  `oportunidades/`, `bugs/`, `catalogo/` e o `roadmap.json`, que só a janela grava
+  ([ADR 0013](docs/adr/0013-pasta-de-trabalho-do-produto.md), [ADR 0017](docs/adr/0017-plano-do-roadmap-na-pasta-de-trabalho.md)).
+  A IA grava só nas quatro pastas do processo (`RN-SEC-38`).
 - Os **Dados de trabalho** (itens manuais do Planning, capacidade etc.) nascem do
   uso, são indexados pelo **ID** do Produto (`RN-CFG-08`) e não fazem parte da
   Configuração. Por isso ID de Produto e de Grupo é **imutável** (`RN-CFG-02`).

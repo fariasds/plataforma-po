@@ -1,5 +1,61 @@
 [
   {
+    "version": "1.6.0",
+    "date": "2026-11-27",
+    "items": [
+      {
+        "type": "new",
+        "highlight": true,
+        "title": "Fluxo do PO",
+        "text": "Um grupo novo no menu acompanha a Feature da oportunidade ao acompanhamento depois da entrega, a partir de uma pasta de trabalho que você escolhe para cada Produto.",
+        "details": "Aponte a pasta de trabalho de cada Produto na tela Features. O app lê o Azure DevOps e os arquivos da pasta (Discovery, decisões, plano de PBIs) e calcula a Fase de cada Feature e o que falta para ela andar. Conectada pelo MCP, a sua IA segue o processo rule-first: escreve o Discovery, quebra em PBIs e analisa bugs, gravando só dentro da pasta. O app não escreve work item no Azure.",
+        "screen": "features"
+      },
+      {
+        "type": "new",
+        "title": "Features e pendências",
+        "text": "Cada Feature numa Fase calculada dos arquivos, com o checklist e as pendências. O app acha no Azure o PBI ou a Feature que o plano cita, e você confirma com um clique.",
+        "screen": "features"
+      },
+      {
+        "type": "new",
+        "title": "Catálogo de regras",
+        "text": "As regras de negócio de cada Produto, absorvidas da wiki para a pasta, com a diferença página a página. A Feature chega a Publicada quando as regras dela estão no catálogo.",
+        "screen": "catalog"
+      },
+      {
+        "type": "new",
+        "title": "Oportunidades",
+        "text": "Feedbacks do Azure, dores trazidas na conversa e bugs sem regra, com o encaixe em cada Feature e o que falta fazer no Azure para fechar.",
+        "screen": "opportunities"
+      },
+      {
+        "type": "new",
+        "title": "Acompanhamento",
+        "text": "Bugs sem análise, bugs por Feature e por regra violada, e as regras novas já entregues que ainda não foram conferidas em uso.",
+        "screen": "follow-up"
+      },
+      {
+        "type": "new",
+        "title": "Roadmap",
+        "text": "Planeje Discovery, Quebra e Delivery de cada Feature em sprints, veja a Fase sobre o plano e a carga de Produto/UX e do Time Técnico. Grave marcos para comparar depois.",
+        "screen": "roadmap"
+      },
+      {
+        "type": "new",
+        "title": "Publicar o catálogo na wiki",
+        "text": "Opcional: ligada na tela Segurança, leva as páginas novas e alteradas do catálogo para a wiki, sempre depois da sua confirmação num diálogo do sistema.",
+        "screen": "catalog"
+      },
+      {
+        "type": "improvement",
+        "title": "Garantias novas na tela Segurança",
+        "text": "A tela Segurança mostra se a publicação na wiki está ligada e as travas dela, cada uma com o teste que prova. A sua IA conectada grava só dentro da pasta de trabalho.",
+        "screen": "security"
+      }
+    ]
+  },
+  {
     "version": "1.5.0",
     "date": "2026-11-21",
     "items": [
