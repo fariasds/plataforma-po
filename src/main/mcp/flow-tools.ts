@@ -8,6 +8,7 @@ import { flowBoard, storedSnapshot } from '../flow/board'
 import { productCatalog, productOf } from '../flow/catalog-files'
 import { FEATURES_DIR } from '../flow/feature-folders'
 import { followUpView } from '../flow/follow-up'
+import { roadmapInputs, roadmapSettings } from '../flow/roadmap'
 import { opportunitiesView } from '../flow/opportunities'
 import { writeFileAtomic } from '../profile/atomic-write'
 import { instructionProposalPath } from '../profile/paths'
@@ -237,6 +238,36 @@ export function flowTools(profileId: string, configuration: () => Configuration 
             : 'O Produto não tem catálogo de regras: sem bugs pela regra e sem regras a conferir.'
         ].filter(Boolean)
         return text([snapshotLine(snapshotTakenAt), ...notes, '', json(view)].join('\n'))
+      }
+    },
+    {
+      name: 'ler_roadmap',
+      title: 'Ler o Roadmap',
+      description:
+        'O plano do PO em Janelas (Discovery, Quebra e Delivery: a sprint de início e quantas sprints dura), por Feature, ao lado da Fase calculada e das oportunidades; mais os pesos e limites das trilhas. O roadmap.json é do app: para mudar o plano, diga ao PO o que mudar na tela Roadmap.',
+      inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+      readOnly: true,
+      call: () => {
+        const products = roadmapInputs(config(), profileId).map((p) => ({
+          produto: p.productId,
+          pastaDeTrabalho: p.board.workFolder,
+          erroNoArquivo: p.error,
+          features: p.board.features
+            .filter((f) => f.phase !== 'Fora do fluxo')
+            .map((f) => ({
+              chave: f.key,
+              titulo: f.title,
+              fase: f.phase,
+              prioridade: f.priority,
+              oportunidades: f.featureId !== null ? (p.opportunities.get(f.featureId) ?? 0) : 0,
+              plano:
+                p.file.features[f.key] ??
+                (f.slug ? p.file.features[`pasta:${f.slug}`] : null) ??
+                null
+            })),
+          marcos: p.file.milestones.map((m) => ({ nome: m.name, em: m.takenAt }))
+        }))
+        return text(json({ pesosELimites: roadmapSettings(profileId), produtos: products }))
       }
     },
     {

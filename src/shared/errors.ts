@@ -36,6 +36,9 @@ export type AppErrorCode =
   | 'WORK_FOLDER_INVALID'
   | 'RECONCILE_STALE'
   | 'CATALOG_INVALID'
+  /** O `roadmap.json` não valida, ou a Feature saiu do quadro: nada é gravado (ADR 0017). */
+  | 'ROADMAP_INVALID'
+  | 'ROADMAP_STALE'
   /** Valor de Dados de trabalho acima do limite, ou que não vira JSON. */
   | 'WORK_DATA_INVALID_VALUE'
   /** O arquivo de Dados de trabalho existe mas não é JSON válido. */

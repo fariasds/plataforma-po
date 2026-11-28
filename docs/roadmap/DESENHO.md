@@ -1,8 +1,8 @@
 # Roadmap — modelo de domínio
 
-> **Estado: em desenho.** Nada aqui está implementado. Quando o código existir, as
-> regras `RN-RDM-xx` migram para `docs/regras-de-negocio/05-roadmap.md` sem mudar
-> de ID — o ID nasce aqui e não é reciclado.
+> **Estado: implementado**, menos a `RN-RDM-13`. As regras valem como estão em
+> [`docs/regras-de-negocio/05-roadmap.md`](../regras-de-negocio/05-roadmap.md), que é a
+> fonte de verdade; este arquivo guarda o desenho e as alternativas.
 >
 > **Remodelado em 2026-11-26** para entrar no [fluxo do PO](../fluxo-po/DESENHO.md)
 > (etapa 5). O estudo inicial planejava três fases sem saber o que acontecia

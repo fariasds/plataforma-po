@@ -13,6 +13,7 @@ identificador próprio e ponteiro para onde ela vive no código.
 | [01-conceitos-globais.md](01-conceitos-globais.md) | O que vale em todas as telas: Produtos, Sprint unificada, horas úteis, tipos e estados de work item, conversão de complexidade |
 | [02-acesso-e-seguranca.md](02-acesso-e-seguranca.md) | O PAT: onde fica, quem o lê, para onde pode ir; a IA do PO: o que sai da máquina e como; e como o instalador é distribuído |
 | [03-configuracao.md](03-configuracao.md) | O arquivo de Configuração do Perfil: schema, IDs, referências, organização por nome e ausência de segredo |
+| [05-roadmap.md](05-roadmap.md) | **Roadmap** — as Janelas de cada Feature, a Fase sobre elas e a sobrecarga das trilhas |
 | [08-home.md](08-home.md) | Tela **Home** — tela de entrada: momento da sprint e primeiros passos |
 | [10-planning.md](10-planning.md) | Tela **Planning** — planejamento da próxima sprint |
 | [15-daily.md](15-daily.md) | Tela **Daily** — risco item a item durante a sprint |

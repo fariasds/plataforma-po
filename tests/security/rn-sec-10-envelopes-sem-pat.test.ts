@@ -80,6 +80,19 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   linkDraftFeature: ['loja', 'retirada-loja', 4120],
   getOpportunities: ['loja'],
   getFollowUp: ['loja'],
+  getRoadmap: [],
+  updateRoadmap: ['loja', { kind: 'archive', key: '#4088', archived: false }],
+  createRoadmapMilestone: ['Revisão'],
+  setRoadmapSettings: [
+    {
+      weights: {
+        discovery: { produto: 1, tecnico: 0 },
+        quebra: { produto: 1, tecnico: 0.5 },
+        delivery: { produto: 0, tecnico: 1 }
+      },
+      limits: { produto: 2, tecnico: 3 }
+    }
+  ],
   getCatalog: ['loja'],
   previewCatalogAbsorb: ['loja'],
   absorbCatalog: ['loja', []],

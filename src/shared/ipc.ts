@@ -2,6 +2,7 @@ import type { SprintGoalRequest } from './ai'
 import type { AbsorbPreview, CatalogView } from './flow-absorb'
 import type { FlowBoard } from './flow-board'
 import type { FollowUpView } from './flow-follow-up'
+import type { RoadmapChange, RoadmapSettings, RoadmapView } from './roadmap'
 import type { OpportunitiesView } from './flow-opportunities'
 import type { InstructionState } from './flow-prompts'
 import type { FlowSnapshotSummary } from './flow-snapshot'
@@ -256,6 +257,17 @@ export interface IpcApi {
    * Feature e por regra, regras a conferir. Do retrato já gravado e da pasta; não lê o Azure.
    */
   getFollowUp(productId: string): Promise<FollowUpView>
+  /**
+   * O Roadmap de todos os Produtos (RN-RDM-01 a RN-RDM-21): as sprints do Azure, o
+   * `roadmap.json` de cada pasta de trabalho e o quadro do fluxo. A sobrecarga é global.
+   */
+  getRoadmap(): Promise<RoadmapView>
+  /** Grava uma mudança no `roadmap.json` do Produto: Janelas ou arquivamento (ADR 0017). */
+  updateRoadmap(productId: string, change: RoadmapChange): Promise<void>
+  /** Grava um marco com este nome em toda pasta de trabalho (RN-RDM-21). Devolve quantas. */
+  createRoadmapMilestone(name: string): Promise<number>
+  /** Pesos e limites das trilhas, do Perfil (RN-RDM-10, RN-RDM-11). */
+  setRoadmapSettings(settings: RoadmapSettings): Promise<RoadmapSettings>
   /** O catálogo de regras do Produto na pasta de trabalho (ADR 0015). Não lê o Azure. */
   getCatalog(productId: string): Promise<CatalogView>
   /** Lê a wiki e diz, página a página, o que a absorção mudaria (RN-CAT-03). Não grava. */
@@ -350,6 +362,10 @@ export const IPC_CHANNELS = {
   linkDraftFeature: 'flow:link-draft-feature',
   getOpportunities: 'flow:opportunities',
   getFollowUp: 'flow:follow-up',
+  getRoadmap: 'flow:roadmap',
+  updateRoadmap: 'flow:roadmap-update',
+  createRoadmapMilestone: 'flow:roadmap-milestone',
+  setRoadmapSettings: 'flow:roadmap-settings',
   getCatalog: 'flow:catalog',
   previewCatalogAbsorb: 'flow:catalog-preview',
   absorbCatalog: 'flow:catalog-absorb',

@@ -94,6 +94,7 @@ const { getFlowBoard } = await import('../../src/main/services/flow/board')
 const { getCatalogView } = await import('../../src/main/services/flow/catalog')
 const { getOpportunities } = await import('../../src/main/services/flow/opportunities')
 const { getFollowUp } = await import('../../src/main/services/flow/follow-up')
+const { getRoadmap } = await import('../../src/main/services/flow/roadmap')
 const { previewCatalogAbsorb } = await import('../../src/main/services/flow/absorb')
 const { buildSprintGoalRequest } = await import('../../src/main/services/ai/sprint-goal')
 const { resolveScope } = await import('../../src/main/services/azure/scope')
@@ -368,6 +369,15 @@ export const SCREENS: Record<string, ScreenRun> = {
     return result
   },
 
+  // O Roadmap: as Janelas de todas as pastas, a Fase sobre elas e a carga global
+  // (RN-RDM-01 a RN-RDM-21).
+  roadmap: async () => {
+    for (const product of state.config!.products) {
+      state.workData[flowKeys.snapshot(product.id)] = await buildFlowSnapshot(product.id)
+    }
+    return getRoadmap()
+  },
+
   // O catálogo de regras de cada Produto e o que a absorção da wiki mudaria (RN-CAT-01 a 06).
   catalogo: async () => {
     const result: Record<string, unknown> = {}
@@ -438,6 +448,7 @@ const COVERED_HANDLERS: Record<string, string> = {
   getFlowBoard: 'fluxo',
   getOpportunities: 'oportunidades',
   getFollowUp: 'acompanhamento',
+  getRoadmap: 'roadmap',
   getCatalog: 'catalogo',
   previewCatalogAbsorb: 'catalogo',
   buildSprintGoalRequest: 'pedido-ia'

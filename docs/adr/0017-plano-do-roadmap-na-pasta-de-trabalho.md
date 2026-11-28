@@ -44,3 +44,16 @@ arquivo `roadmap.json` na **pasta de trabalho** do Produto
   PO.
 - **Uma Feature do Azure sem pasta** pode ter plano: a chave no `roadmap.json` é o
   ID do work item.
+
+## Como ficou na implementação
+
+- **Pesos e limites saíram do `roadmap.json`** e foram para os Dados de trabalho do
+  Perfil (`roadmap:settings`). A carga é uma só, somada sobre todas as pastas
+  (`RN-RDM-12`); com os pesos em cada pasta, dois Produtos poderiam declarar limites
+  diferentes para as mesmas pessoas. No `roadmap.json` ficam as Janelas, o
+  arquivamento e os marcos.
+- **O marco é gravado em toda pasta** com o mesmo nome e data, e a tela junta a
+  diferença de todas (`RN-RDM-21`).
+- **Arquivo que não valida não é sobrescrito**: a tela avisa e a gravação recusa.
+- **Criar rascunho pelo Roadmap ficou de fora.** O rascunho continua nascendo na pasta,
+  pela IA ou pelo PO; o Roadmap o planeja.

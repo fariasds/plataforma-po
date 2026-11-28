@@ -14,6 +14,7 @@ import {
   NodeIndexOutlined,
   PartitionOutlined,
   SafetyCertificateOutlined,
+  ScheduleOutlined,
   SettingOutlined
 } from '@ant-design/icons'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
@@ -71,6 +72,13 @@ const FLOW: NavEntry[] = [
     key: '/acompanhamento',
     icon: <AuditOutlined />,
     label: t('nav.followUp'),
+    group: t('nav.flow'),
+    refresh: true
+  },
+  {
+    key: '/roadmap',
+    icon: <ScheduleOutlined />,
+    label: t('nav.roadmap'),
     group: t('nav.flow'),
     refresh: true
   },

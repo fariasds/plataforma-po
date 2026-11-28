@@ -49,6 +49,7 @@ Ferramentas novas, todas presas ao Perfil do `--perfil`:
 | `listar_features` | As Features do Produto, com a Fase e as pendências | não |
 | `listar_oportunidades` | Oportunidades e o encaixe de cada uma | não |
 | `ler_acompanhamento` | Bugs sem análise, por Feature e por regra, e as regras a conferir | não |
+| `ler_roadmap` | O plano em Janelas, a Fase e as oportunidades de cada Feature, e os pesos e limites | não |
 | `gravar_arquivo` | Grava um arquivo dentro da pasta de trabalho de um Produto | **sim** |
 | `propor_instrucao` | Grava a proposta de instrução alterada (ADR 0014) | só a proposta |
 

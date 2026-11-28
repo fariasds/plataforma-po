@@ -1,5 +1,6 @@
 import { absorbCatalog } from '../services/flow/absorb'
 import { linkDraftFeature, linkPlannedPbi } from '../services/flow/reconcile'
+import { createRoadmapMilestone, setRoadmapSettings, updateRoadmap } from '../services/flow/roadmap'
 import { handle } from './registry'
 
 /**
@@ -16,4 +17,8 @@ export function registerFlowWriteHandlers(): void {
   )
   // Absorver grava no catálogo da pasta o que veio da wiki, depois de o PO ver a diferença.
   handle('absorbCatalog', (productId, useWiki) => absorbCatalog(productId, useWiki))
+  // O plano do Roadmap é do app: só a janela grava o roadmap.json (ADR 0017).
+  handle('updateRoadmap', (productId, change) => updateRoadmap(productId, change))
+  handle('createRoadmapMilestone', (name) => createRoadmapMilestone(name))
+  handle('setRoadmapSettings', (settings) => setRoadmapSettings(settings))
 }

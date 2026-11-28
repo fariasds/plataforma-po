@@ -4,6 +4,7 @@ import { getFlowBoard } from '../services/flow/board'
 import { getCatalogView } from '../services/flow/catalog'
 import { getFollowUp } from '../services/flow/follow-up'
 import { getOpportunities } from '../services/flow/opportunities'
+import { getRoadmap } from '../services/flow/roadmap'
 import { handle } from './registry'
 
 /**
@@ -16,6 +17,7 @@ export function registerFlowHandlers(): void {
   handle('getFlowBoard', (productId) => getFlowBoard(productId))
   handle('getOpportunities', (productId) => getOpportunities(productId))
   handle('getFollowUp', (productId) => getFollowUp(productId))
+  handle('getRoadmap', () => getRoadmap())
   handle('getCatalog', (productId) => getCatalogView(productId))
   handle('previewCatalogAbsorb', (productId) => previewCatalogAbsorb(productId))
 }

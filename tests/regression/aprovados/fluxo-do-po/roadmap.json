@@ -1,0 +1,910 @@
+{
+  "current": 5,
+  "features": [
+    {
+      "archived": false,
+      "azureState": "New",
+      "currentWindow": "quebra",
+      "delivery": {
+        "done": 0,
+        "source": "plano",
+        "total": 2
+      },
+      "divergence": false,
+      "draft": false,
+      "featureId": 4102,
+      "key": "#4102",
+      "opportunities": 1,
+      "pendencies": [
+        {
+          "code": "question-blocks",
+          "file": "discovery/brief.md",
+          "line": 34,
+          "message": "Pergunta em aberto que bloqueia a quebra: P2 · O QR expira em quanto tempo?",
+          "stage": "Discovery"
+        },
+        {
+          "code": "decision-proposed",
+          "file": "discovery/decisoes.md",
+          "line": 6,
+          "message": "D2 está em Proposta.",
+          "stage": "Discovery"
+        },
+        {
+          "code": "pbi-without-azure",
+          "file": "plano-pbis.md",
+          "line": 13,
+          "message": "P3 ainda não tem o ID do Azure. No Azure, #4213 tem o mesmo título: confirme.",
+          "stage": "Discovery"
+        },
+        {
+          "code": "pbi-without-azure",
+          "file": "plano-pbis.md",
+          "line": 17,
+          "message": "P4 ainda não tem o ID do Azure. No Azure, #4214 tem um título parecido: confirme se é ele.",
+          "stage": "Discovery"
+        },
+        {
+          "code": "design-not-written",
+          "file": "plano-pbis.md",
+          "line": 17,
+          "message": "P4 (design) ainda não está escrito.",
+          "stage": "Discovery"
+        },
+        {
+          "code": "rule-missing",
+          "file": "discovery/brief.md",
+          "message": "RN-PAG-099, citada no Brief, não existe no catálogo.",
+          "stage": "Discovery"
+        },
+        {
+          "code": "rule-changed",
+          "file": "discovery/brief.md",
+          "message": "RN-PAG-012 mudou em 2026-11-20, depois da D1 (2026-11-18). Revalide antes da quebra.",
+          "stage": "Quebra"
+        },
+        {
+          "code": "unrecognized-line",
+          "file": "discovery/decisoes.md",
+          "line": 10,
+          "message": "Linha não reconhecida: \"Status: Aprovada\" não é um status de Decisão. Use Proposta, Aceita ou Substituída por Dn.",
+          "stage": "Discovery"
+        }
+      ],
+      "phase": "Discovery",
+      "plan": {
+        "archived": false,
+        "delivery": {
+          "length": 2,
+          "start": "2026-12-14"
+        },
+        "discovery": {
+          "length": 2,
+          "start": "2026-10-19"
+        },
+        "quebra": {
+          "length": 2,
+          "start": "2026-11-16"
+        }
+      },
+      "priority": 29,
+      "productId": "loja",
+      "slug": "pagamento-pix",
+      "title": "Pagamento por Pix no checkout",
+      "windows": [
+        {
+          "end": 4,
+          "from": 3,
+          "kind": "discovery",
+          "length": 2,
+          "outOfWindow": true,
+          "start": "2026-10-19"
+        },
+        {
+          "end": 6,
+          "from": 5,
+          "kind": "quebra",
+          "length": 2,
+          "outOfWindow": false,
+          "start": "2026-11-16"
+        },
+        {
+          "end": 8,
+          "from": 7,
+          "kind": "delivery",
+          "length": 2,
+          "outOfWindow": false,
+          "start": "2026-12-14"
+        }
+      ]
+    },
+    {
+      "archived": false,
+      "azureState": "In Progress",
+      "currentWindow": "delivery",
+      "delivery": {
+        "done": 1,
+        "source": "plano",
+        "total": 2
+      },
+      "divergence": false,
+      "draft": false,
+      "featureId": 4088,
+      "key": "#4088",
+      "opportunities": 1,
+      "pendencies": [
+        {
+          "code": "rule-without-dev",
+          "file": "plano-pbis.md",
+          "message": "RN-CUP-010 não está em nenhum PBI de desenvolvimento.",
+          "stage": "Quebra"
+        },
+        {
+          "code": "rule-changed",
+          "file": "discovery/brief.md",
+          "message": "RN-PAG-012 mudou em 2026-11-20, depois da D1 (2026-10-01). Revalide antes da quebra.",
+          "stage": "Quebra"
+        },
+        {
+          "code": "rule-shared",
+          "file": "plano-pbis.md",
+          "message": "RN-CUP-009 também está no plano de outra Feature: pasta retirada-loja.",
+          "stage": "Quebra"
+        }
+      ],
+      "phase": "Em quebra",
+      "plan": {
+        "archived": false,
+        "delivery": {
+          "length": 3,
+          "start": "2026-11-16"
+        },
+        "discovery": {
+          "length": 2,
+          "start": "2026-09-07"
+        },
+        "quebra": {
+          "length": 2,
+          "start": "2026-10-05"
+        }
+      },
+      "priority": 22,
+      "productId": "loja",
+      "slug": "cupom-categoria",
+      "title": "Cupom de desconto por categoria",
+      "windows": [
+        {
+          "end": 1,
+          "from": 0,
+          "kind": "discovery",
+          "length": 2,
+          "outOfWindow": false,
+          "start": "2026-09-07"
+        },
+        {
+          "end": 3,
+          "from": 2,
+          "kind": "quebra",
+          "length": 2,
+          "outOfWindow": true,
+          "start": "2026-10-05"
+        },
+        {
+          "end": 7,
+          "from": 5,
+          "kind": "delivery",
+          "length": 3,
+          "outOfWindow": false,
+          "start": "2026-11-16"
+        }
+      ]
+    },
+    {
+      "archived": false,
+      "azureState": null,
+      "currentWindow": "quebra",
+      "delivery": {
+        "done": 0,
+        "source": "plano",
+        "total": 1
+      },
+      "divergence": false,
+      "draft": false,
+      "featureId": 4135,
+      "key": "#4135",
+      "opportunities": 0,
+      "pendencies": [
+        {
+          "code": "rule-changed",
+          "file": "discovery/brief.md",
+          "message": "RN-PAG-012 mudou em 2026-11-20, depois da D1 (2026-09-20). Revalide antes da quebra.",
+          "stage": "Quebra"
+        },
+        {
+          "code": "not-in-snapshot",
+          "message": "A Feature #4135 não está no retrato: fechada há mais de 180 dias, removida ou de outro Produto.",
+          "stage": "Discovery"
+        }
+      ],
+      "phase": "Pronta para quebra",
+      "plan": {
+        "archived": false,
+        "delivery": {
+          "length": 2,
+          "start": "2026-12-14"
+        },
+        "discovery": {
+          "length": 1,
+          "start": "2026-11-02"
+        },
+        "quebra": {
+          "length": 2,
+          "start": "2026-11-16"
+        }
+      },
+      "priority": null,
+      "productId": "loja",
+      "slug": "avaliacao-foto",
+      "title": "Avaliação de produto com foto",
+      "windows": [
+        {
+          "end": 4,
+          "from": 4,
+          "kind": "discovery",
+          "length": 1,
+          "outOfWindow": false,
+          "start": "2026-11-02"
+        },
+        {
+          "end": 6,
+          "from": 5,
+          "kind": "quebra",
+          "length": 2,
+          "outOfWindow": false,
+          "start": "2026-11-16"
+        },
+        {
+          "end": 8,
+          "from": 7,
+          "kind": "delivery",
+          "length": 2,
+          "outOfWindow": false,
+          "start": "2026-12-14"
+        }
+      ]
+    },
+    {
+      "archived": false,
+      "azureState": "New",
+      "currentWindow": null,
+      "delivery": null,
+      "divergence": false,
+      "draft": false,
+      "featureId": 4140,
+      "key": "#4140",
+      "opportunities": 1,
+      "pendencies": [],
+      "phase": "Sem Discovery",
+      "plan": null,
+      "priority": null,
+      "productId": "app",
+      "slug": null,
+      "title": "Login por biometria",
+      "windows": []
+    },
+    {
+      "archived": false,
+      "azureState": "New",
+      "currentWindow": null,
+      "delivery": null,
+      "divergence": false,
+      "draft": false,
+      "featureId": 4120,
+      "key": "#4120",
+      "opportunities": 0,
+      "pendencies": [],
+      "phase": "Sem Discovery",
+      "plan": null,
+      "priority": null,
+      "productId": "loja",
+      "slug": null,
+      "title": "Retirada na loja",
+      "windows": []
+    },
+    {
+      "archived": false,
+      "azureState": "Done",
+      "currentWindow": null,
+      "delivery": {
+        "done": 1,
+        "source": "plano",
+        "total": 1
+      },
+      "divergence": false,
+      "draft": false,
+      "featureId": 4060,
+      "key": "#4060",
+      "opportunities": 1,
+      "pendencies": [],
+      "phase": "Publicada",
+      "plan": {
+        "archived": false,
+        "delivery": {
+          "length": 2,
+          "start": "2026-09-21"
+        },
+        "discovery": {
+          "length": 1,
+          "start": "2026-08-24"
+        },
+        "quebra": {
+          "length": 1,
+          "start": "2026-09-07"
+        }
+      },
+      "priority": null,
+      "productId": "loja",
+      "slug": "troca-sem-nota",
+      "title": "Troca sem nota fiscal",
+      "windows": [
+        {
+          "end": -1,
+          "from": -1,
+          "kind": "discovery",
+          "length": 1,
+          "outOfWindow": false,
+          "start": "2026-08-24"
+        },
+        {
+          "end": 0,
+          "from": 0,
+          "kind": "quebra",
+          "length": 1,
+          "outOfWindow": false,
+          "start": "2026-09-07"
+        },
+        {
+          "end": 2,
+          "from": 1,
+          "kind": "delivery",
+          "length": 2,
+          "outOfWindow": false,
+          "start": "2026-09-21"
+        }
+      ]
+    },
+    {
+      "archived": false,
+      "azureState": null,
+      "currentWindow": null,
+      "delivery": null,
+      "divergence": false,
+      "draft": true,
+      "featureId": null,
+      "key": "pasta:lista-presentes",
+      "opportunities": 0,
+      "pendencies": [],
+      "phase": "Sem Discovery",
+      "plan": {
+        "archived": false,
+        "delivery": {
+          "length": 2,
+          "start": "2027-01-11"
+        },
+        "discovery": {
+          "length": 2,
+          "start": "2026-11-30"
+        },
+        "quebra": {
+          "length": 1,
+          "start": "2026-12-28"
+        }
+      },
+      "priority": null,
+      "productId": "loja",
+      "slug": "lista-presentes",
+      "title": "Lista de presentes",
+      "windows": [
+        {
+          "end": 7,
+          "from": 6,
+          "kind": "discovery",
+          "length": 2,
+          "outOfWindow": false,
+          "start": "2026-11-30"
+        },
+        {
+          "end": 8,
+          "from": 8,
+          "kind": "quebra",
+          "length": 1,
+          "outOfWindow": false,
+          "start": "2026-12-28"
+        },
+        {
+          "end": 10,
+          "from": 9,
+          "kind": "delivery",
+          "length": 2,
+          "outOfWindow": false,
+          "start": "2027-01-11"
+        }
+      ]
+    },
+    {
+      "archived": true,
+      "azureState": null,
+      "currentWindow": "quebra",
+      "delivery": null,
+      "divergence": false,
+      "draft": true,
+      "featureId": null,
+      "key": "pasta:retirada-loja",
+      "opportunities": 0,
+      "pendencies": [
+        {
+          "code": "pbi-without-azure",
+          "file": "plano-pbis.md",
+          "line": 3,
+          "message": "P1 ainda não tem o ID do Azure.",
+          "stage": "Discovery"
+        },
+        {
+          "code": "rule-discontinued",
+          "file": "plano-pbis.md",
+          "message": "RN-PAG-015 está descontinuada no catálogo.",
+          "stage": "Quebra"
+        },
+        {
+          "code": "rule-shared",
+          "file": "plano-pbis.md",
+          "message": "RN-CUP-009 também está no plano de outra Feature: #4088.",
+          "stage": "Quebra"
+        }
+      ],
+      "phase": "Em quebra",
+      "plan": {
+        "archived": true,
+        "delivery": {
+          "length": 2,
+          "start": "2026-11-30"
+        },
+        "discovery": {
+          "length": 0,
+          "start": "2026-11-16"
+        },
+        "quebra": {
+          "length": 1,
+          "start": "2026-11-16"
+        }
+      },
+      "priority": null,
+      "productId": "loja",
+      "slug": "retirada-loja",
+      "title": "Retirada na loja",
+      "windows": [
+        {
+          "end": 4,
+          "from": 5,
+          "kind": "discovery",
+          "length": 0,
+          "outOfWindow": false,
+          "start": "2026-11-16"
+        },
+        {
+          "end": 5,
+          "from": 5,
+          "kind": "quebra",
+          "length": 1,
+          "outOfWindow": false,
+          "start": "2026-11-16"
+        },
+        {
+          "end": 7,
+          "from": 6,
+          "kind": "delivery",
+          "length": 2,
+          "outOfWindow": false,
+          "start": "2026-11-30"
+        }
+      ]
+    }
+  ],
+  "load": [
+    {
+      "produto": {
+        "features": 2,
+        "status": "limite",
+        "weight": 2
+      },
+      "tecnico": {
+        "features": 1,
+        "status": "dentro",
+        "weight": 0.5
+      }
+    },
+    {
+      "produto": {
+        "features": 1,
+        "status": "dentro",
+        "weight": 1
+      },
+      "tecnico": {
+        "features": 1,
+        "status": "dentro",
+        "weight": 1
+      }
+    },
+    {
+      "produto": {
+        "features": 1,
+        "status": "dentro",
+        "weight": 1
+      },
+      "tecnico": {
+        "features": 2,
+        "status": "dentro",
+        "weight": 1.5
+      }
+    },
+    {
+      "produto": {
+        "features": 2,
+        "status": "limite",
+        "weight": 2
+      },
+      "tecnico": {
+        "features": 1,
+        "status": "dentro",
+        "weight": 0.5
+      }
+    },
+    {
+      "produto": {
+        "features": 2,
+        "status": "limite",
+        "weight": 2
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 2,
+        "status": "limite",
+        "weight": 2
+      },
+      "tecnico": {
+        "features": 3,
+        "status": "dentro",
+        "weight": 2
+      }
+    },
+    {
+      "produto": {
+        "features": 3,
+        "status": "sobrecarga",
+        "weight": 3
+      },
+      "tecnico": {
+        "features": 3,
+        "status": "dentro",
+        "weight": 2
+      }
+    },
+    {
+      "produto": {
+        "features": 1,
+        "status": "dentro",
+        "weight": 1
+      },
+      "tecnico": {
+        "features": 3,
+        "status": "limite",
+        "weight": 3
+      }
+    },
+    {
+      "produto": {
+        "features": 1,
+        "status": "dentro",
+        "weight": 1
+      },
+      "tecnico": {
+        "features": 3,
+        "status": "dentro",
+        "weight": 2.5
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 1,
+        "status": "dentro",
+        "weight": 1
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 1,
+        "status": "dentro",
+        "weight": 1
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    },
+    {
+      "produto": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      },
+      "tecnico": {
+        "features": 0,
+        "status": "dentro",
+        "weight": 0
+      }
+    }
+  ],
+  "milestones": [
+    {
+      "changes": [
+        {
+          "from": {
+            "length": 2,
+            "start": "2026-09-21"
+          },
+          "key": "#4088",
+          "kind": "movida",
+          "productId": "loja",
+          "to": {
+            "length": 2,
+            "start": "2026-10-05"
+          },
+          "window": "quebra"
+        },
+        {
+          "key": "#4102",
+          "kind": "entrou",
+          "productId": "loja"
+        },
+        {
+          "key": "pasta:lista-presentes",
+          "kind": "entrou",
+          "productId": "loja"
+        },
+        {
+          "key": "pasta:retirada-loja",
+          "kind": "arquivada",
+          "productId": "loja"
+        }
+      ],
+      "name": "Revisão de outubro",
+      "takenAt": "2026-10-15T12:00:00.000Z"
+    }
+  ],
+  "products": [
+    {
+      "error": null,
+      "productId": "loja",
+      "workFolder": "ok"
+    },
+    {
+      "error": null,
+      "productId": "app",
+      "workFolder": "unset"
+    }
+  ],
+  "settings": {
+    "limits": {
+      "produto": 2,
+      "tecnico": 3
+    },
+    "weights": {
+      "delivery": {
+        "produto": 0,
+        "tecnico": 1
+      },
+      "discovery": {
+        "produto": 1,
+        "tecnico": 0
+      },
+      "quebra": {
+        "produto": 1,
+        "tecnico": 0.5
+      }
+    }
+  },
+  "timeline": [
+    {
+      "finish": "2026-09-18",
+      "label": "07 de set. → 18 de set.",
+      "projected": false,
+      "start": "2026-09-07"
+    },
+    {
+      "finish": "2026-10-02",
+      "label": "21 de set. → 02 de out.",
+      "projected": false,
+      "start": "2026-09-21"
+    },
+    {
+      "finish": "2026-10-16",
+      "label": "05 de out. → 16 de out.",
+      "projected": false,
+      "start": "2026-10-05"
+    },
+    {
+      "finish": "2026-10-30",
+      "label": "19 de out. → 30 de out.",
+      "projected": false,
+      "start": "2026-10-19"
+    },
+    {
+      "finish": "2026-11-13",
+      "label": "02 de nov. → 13 de nov.",
+      "projected": false,
+      "start": "2026-11-02"
+    },
+    {
+      "finish": "2026-11-27",
+      "label": "16 de nov. → 27 de nov.",
+      "projected": false,
+      "start": "2026-11-16"
+    },
+    {
+      "finish": "2026-12-11",
+      "label": "30/11–11/12",
+      "projected": true,
+      "start": "2026-11-30"
+    },
+    {
+      "finish": "2026-12-25",
+      "label": "14/12–25/12",
+      "projected": true,
+      "start": "2026-12-14"
+    },
+    {
+      "finish": "2027-01-08",
+      "label": "28/12–08/01",
+      "projected": true,
+      "start": "2026-12-28"
+    },
+    {
+      "finish": "2027-01-22",
+      "label": "11/01–22/01",
+      "projected": true,
+      "start": "2027-01-11"
+    },
+    {
+      "finish": "2027-02-05",
+      "label": "25/01–05/02",
+      "projected": true,
+      "start": "2027-01-25"
+    },
+    {
+      "finish": "2027-02-19",
+      "label": "08/02–19/02",
+      "projected": true,
+      "start": "2027-02-08"
+    },
+    {
+      "finish": "2027-03-05",
+      "label": "22/02–05/03",
+      "projected": true,
+      "start": "2027-02-22"
+    },
+    {
+      "finish": "2027-03-19",
+      "label": "08/03–19/03",
+      "projected": true,
+      "start": "2027-03-08"
+    },
+    {
+      "finish": "2027-04-02",
+      "label": "22/03–02/04",
+      "projected": true,
+      "start": "2027-03-22"
+    },
+    {
+      "finish": "2027-04-16",
+      "label": "05/04–16/04",
+      "projected": true,
+      "start": "2027-04-05"
+    },
+    {
+      "finish": "2027-04-30",
+      "label": "19/04–30/04",
+      "projected": true,
+      "start": "2027-04-19"
+    },
+    {
+      "finish": "2027-05-14",
+      "label": "03/05–14/05",
+      "projected": true,
+      "start": "2027-05-03"
+    }
+  ]
+}

@@ -77,6 +77,7 @@ export const ptBR = {
     catalog: 'Catálogo',
     opportunities: 'Oportunidades',
     followUp: 'Acompanhamento',
+    roadmap: 'Roadmap',
     flow: 'Fluxo do PO'
   },
 
@@ -288,6 +289,22 @@ export const ptBR = {
         text:
           'Um bug chega à Feature por dois caminhos: o vínculo no Azure (filho da Feature ou de um PBI dela) e a regra que ele viola, pela Origem da regra até o plano da Feature. ' +
           'O mesmo bug conta uma vez por Feature, mesmo quando os dois caminhos dão nela. Bug com veredito "Não é bug" não conta.'
+      },
+      'RN-RDM-10': {
+        title: 'Peso das Janelas',
+        text:
+          'Uma Janela pesa em toda sprint que ela cobre. Discovery pesa em Produto/UX; Janela de Delivery, no Time Técnico; a Quebra pesa nas duas, porque o time técnico refina com o PO. ' +
+          'Empilhar Quebra com Delivery é o que mais estrangula o time técnico. Os pesos e os limites se ajustam em Pesos e limites.'
+      },
+      'RN-RDM-12': {
+        title: 'Carga de todos os Produtos',
+        text: 'A carga soma as Janelas de todos os Produtos, mesmo com um Produto escolhido: as pessoas são as mesmas. O filtro só muda as Features que aparecem na lista.'
+      },
+      'RN-RDM-17': {
+        title: 'Janela e Fase',
+        text:
+          'A Janela é o plano; a Fase é o que os arquivos da pasta mostram. Quando uma Janela termina e a Feature não chegou aonde o plano dizia, a Janela fica "fora da Janela". ' +
+          'Não é atraso: é a hora de mover a Janela ou terminar a etapa.'
       },
       'RN-GLB-16': {
         title: 'Datas da demonstração',
@@ -1262,6 +1279,71 @@ export const ptBR = {
       Proposto: 'Proposto',
       Encaixada: 'Encaixada',
       Descartada: 'Descartada'
+    }
+  },
+
+  roadmap: {
+    allProducts: 'Todos',
+    noFolder:
+      'Produtos sem pasta de trabalho ficam de fora: o plano mora no roadmap.json da pasta. Aponte a pasta na tela Features.',
+    fileError: 'O roadmap.json de {product} não é válido e não será sobrescrito: {error}',
+    noSprints: 'Nenhuma sprint no Azure: o Roadmap precisa da cadência de ao menos um Produto.',
+    empty: 'Nenhuma Feature no fluxo do PO. As Features abertas do retrato aparecem aqui.',
+    feature: 'Feature',
+    load: 'Carga',
+    trails: { produto: 'Produto/UX', tecnico: 'Time Técnico' },
+    loadCell: '{weight} de {limit}',
+    loadTitle: '{trail}: {count} features · peso {weight} de {limit}',
+    status: { dentro: 'Dentro', limite: 'No limite', sobrecarga: 'Sobrecarregada' },
+    windows: { discovery: 'Discovery', quebra: 'Quebra', delivery: 'Janela de Delivery' },
+    windowShort: { discovery: 'D', quebra: 'Q', delivery: 'E' },
+    outOfWindow: 'Fora da Janela',
+    projected: 'projetada',
+    draft: 'Rascunho',
+    archived: 'Arquivada',
+    showArchived: 'Mostrar arquivadas',
+    divergence: 'O Azure diz que fechou, e o plano ainda tem Janela pela frente.',
+    opportunities: '{count} oportunidades',
+    delivery: '{done}/{total} PBIs',
+    noPlan: 'Sem plano',
+    mySprint: {
+      title: 'Minha sprint',
+      empty: 'Nenhuma Janela na sprint corrente.',
+      pendencies: '{count} pendências',
+      none: 'Sem pendências'
+    },
+    edit: {
+      title: 'Plano de {title}',
+      start: 'Começa em',
+      length: 'Sprints',
+      skipped: 'pulada',
+      suggestion: 'Cabe sem estourar a partir de {sprint}.',
+      noSuggestion: 'Não cabe sem estourar na linha do tempo.',
+      create: 'Planejar a partir da sprint corrente',
+      save: 'Salvar',
+      archive: 'Arquivar no Roadmap',
+      unarchive: 'Desarquivar',
+      phase: 'Fase: {phase}',
+      saved: 'Plano gravado no roadmap.json.'
+    },
+    settings: {
+      button: 'Pesos e limites',
+      title: 'Pesos e limites das trilhas',
+      weight: 'Peso em {trail}',
+      limit: 'Limite de {trail} por sprint',
+      save: 'Salvar'
+    },
+    milestone: {
+      button: 'Gravar marco',
+      name: 'Nome do marco',
+      save: 'Gravar',
+      saved: 'Marco gravado em {count} pastas de trabalho.',
+      compare: 'Comparar com um marco',
+      none: 'Nada mudou desde o marco.',
+      entrou: 'Entrou no plano',
+      saiu: 'Saiu do plano',
+      arquivada: 'Arquivada',
+      movida: '{window}: {from} → {to}'
     }
   },
 
