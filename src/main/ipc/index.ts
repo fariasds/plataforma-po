@@ -3,6 +3,7 @@ import { registerAzureHandlers } from './azure-handlers'
 import { registerDemoHandlers } from './demo-handlers'
 import { registerFlowHandlers } from './flow-handlers'
 import { registerFlowWriteHandlers } from './flow-write-handlers'
+import { registerPublishHandlers } from './publish-handlers'
 import { registerOrganizationHandlers } from './organization-handlers'
 import { registerPatHandlers } from './pat-handlers'
 import { registerProfileHandlers } from './profile-handlers'
@@ -20,6 +21,7 @@ export function registerIpcHandlers(): void {
   registerOrganizationHandlers()
   registerFlowHandlers()
   registerFlowWriteHandlers()
+  registerPublishHandlers()
   registerAiHandlers()
   registerUpdateHandlers()
 }

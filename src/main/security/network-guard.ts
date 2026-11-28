@@ -64,6 +64,61 @@ export function assertReadOnlyRequest(method: string | undefined, url: URL): voi
   )
 }
 
+/** Onde a publicação pode escrever: a wiki e a página raiz do catálogo de um Produto. */
+export interface WikiWriteScope {
+  project: string
+  wiki: string
+  rootPage: string
+}
+
+/**
+ * RN-SEC-20 (a exceção) e RN-SEC-40: a única escrita do app é `PUT` de uma página de
+ * wiki, no endereço de páginas da wiki do catálogo, abaixo da página raiz dele. Sem
+ * `..`, sem outro parâmetro além de `path` e `api-version`.
+ */
+export function assertWikiPageWrite(
+  method: string | undefined,
+  url: URL,
+  scope: WikiWriteScope
+): void {
+  const refuse = (why: string): never => {
+    throw new AppError('AZURE_BLOCKED', `Escrita bloqueada: ${why}.`)
+  }
+  if ((method ?? 'GET').toUpperCase() !== 'PUT') refuse('a publicação só grava página de wiki')
+  const segments = url.pathname.split('/').map((s) => {
+    try {
+      return decodeURIComponent(s)
+    } catch {
+      return refuse('endereço mal formado')
+    }
+  })
+  // ['', org, project, '_apis', 'wiki', 'wikis', wiki, 'pages']
+  if (
+    segments.length !== 8 ||
+    segments[2] !== scope.project ||
+    segments[3] !== '_apis' ||
+    segments[4] !== 'wiki' ||
+    segments[5] !== 'wikis' ||
+    segments[6] !== scope.wiki ||
+    segments[7] !== 'pages'
+  ) {
+    refuse('o endereço não é de página da wiki do catálogo')
+  }
+  const keys = [...url.searchParams.keys()]
+  if (
+    keys.some((k) => k !== 'path' && k !== 'api-version') ||
+    url.searchParams.getAll('path').length !== 1
+  ) {
+    refuse('parâmetro fora do previsto')
+  }
+  const path = url.searchParams.get('path') ?? ''
+  const root = scope.rootPage.replace(/\/+$/, '')
+  if (!path.startsWith(`${root}/`) || path.split('/').some((s) => s === '..' || s === '.')) {
+    refuse('a página está fora do catálogo')
+  }
+  if (url.hash) refuse('endereço com fragmento')
+}
+
 /** RN-SEC-21: links externos só para páginas da organização em `dev.azure.com`. */
 export function isAllowedExternalUrl(raw: string, organization: string): boolean {
   const url = parseUrl(raw)

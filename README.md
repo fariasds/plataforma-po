@@ -14,7 +14,9 @@ entregas, bugs e desempenho do time sem montar consulta nenhuma.
 
 ![Planning: capacidade da sprint e pontos por disciplina](docs/imagens/planning.png)
 
-- **Só leitura.** O app nunca escreve no Azure DevOps, nem com um PAT que permita.
+- **Só leitura, com uma exceção opcional.** O app não escreve no Azure DevOps, nem com um
+  PAT que permita. A exceção é publicar o catálogo de regras na wiki: vem desligada, se liga
+  no Perfil e cada publicação pede a sua confirmação num diálogo do sistema (ADR 0016).
 - **Tudo local.** Sem servidor, sem conta, sem login. O PAT fica cifrado na sua
   máquina e só sai para o Azure DevOps.
 - **Parametrizável.** Produtos, processo, calendário e campos moram em um arquivo

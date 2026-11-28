@@ -39,6 +39,10 @@ export type AppErrorCode =
   /** O `roadmap.json` não valida, ou a Feature saiu do quadro: nada é gravado (ADR 0017). */
   | 'ROADMAP_INVALID'
   | 'ROADMAP_STALE'
+  /** A publicação na wiki está desligada no Perfil, ou o pedido saiu do catálogo (ADR 0016). */
+  | 'WIKI_PUBLISH_OFF'
+  /** A página mudou na wiki depois da absorção: absorva de novo antes de publicar. */
+  | 'CATALOG_CONFLICT'
   /** Valor de Dados de trabalho acima do limite, ou que não vira JSON. */
   | 'WORK_DATA_INVALID_VALUE'
   /** O arquivo de Dados de trabalho existe mas não é JSON válido. */

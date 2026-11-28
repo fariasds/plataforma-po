@@ -160,7 +160,13 @@ export function reloadProfileState(): ProfileState {
   const status = needsPat ? 'needs-pat' : loaded.lastValid ? 'ready' : 'invalid-config'
   return publish({
     status,
-    profile: { id: profile.id, name: profile.name, dir: profile.dir, kind: profile.kind },
+    profile: {
+      id: profile.id,
+      name: profile.name,
+      dir: profile.dir,
+      kind: profile.kind,
+      wikiPublish: profile.wikiPublish
+    },
     config: loaded.lastValid,
     errors: loaded.errors,
     hasAzureProfile: hasAzureProfile(),

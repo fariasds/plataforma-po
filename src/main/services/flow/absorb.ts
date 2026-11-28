@@ -18,14 +18,14 @@ import { catalogPath, getCatalogView, productCatalog, type ProductCatalog } from
  * lida de novo na hora de gravar: o que entra é o que está lá agora.
  */
 
-interface WikiCatalog extends ProductCatalog {
+export interface WikiCatalog extends ProductCatalog {
   wiki: string
   project: string
   rootPage: string
   dir: string
 }
 
-function wikiCatalog(productId: string): WikiCatalog {
+export function wikiCatalog(productId: string): WikiCatalog {
   const catalog = productCatalog(productId)
   const source = catalog.product.catalog?.source
   if (!source || source.kind !== 'wiki') {

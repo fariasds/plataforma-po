@@ -1,0 +1,38 @@
+{
+  "loja": {
+    "desligada": {
+      "dialogo": [],
+      "erro": "WIKI_PUBLISH_OFF"
+    },
+    "pendentes": [
+      "Rascunho de frete.md",
+      "Trocas.md"
+    ],
+    "semConflito": {
+      "cancelled": false,
+      "dialogo": [
+        {
+          "confirm": "Publicar",
+          "detail": "Criar: /Catálogo/Loja/Rascunho de frete",
+          "message": "Publicar 1 página na wiki Contoso.wiki?"
+        }
+      ],
+      "gravou": [
+        ".absorcao.json"
+      ],
+      "pedidos": [
+        {
+          "method": "PUT",
+          "path": "/Contoso/_apis/wiki/wikis/Contoso.wiki/pages?path=%2FCat%C3%A1logo%2FLoja%2FRascunho%20de%20frete&api-version=7.1"
+        }
+      ],
+      "published": [
+        "/Catálogo/Loja/Rascunho de frete"
+      ]
+    },
+    "todas": {
+      "dialogo": [],
+      "erro": "CATALOG_CONFLICT"
+    }
+  }
+}

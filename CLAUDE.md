@@ -71,7 +71,9 @@ dele é a da conta do sistema operacional ([ADR 0002](docs/adr/0002-sem-autentic
 3. **A Configuração guarda o nome da organização, nunca uma URL.** O host é sempre
    `dev.azure.com/<org>`; uma URL importada mandaria o PAT para outro servidor
    (`RN-CFG-04`).
-4. **O main só fala com o Azure, e só lê.** Um único `fetch`, atrás de
+4. **O main só fala com o Azure, e só lê** — a exceção é publicar o catálogo na wiki,
+   desligada por padrão e confirmada num diálogo do sistema (ADR 0016, `RN-SEC-39` a
+   `41`). Um único `fetch`, atrás de
    `assertAllowedAzureUrl`; o único `POST` é o WIQL (`RN-SEC-18`, `RN-SEC-20`).
 5. **Nada fixo no código para uma organização.** Produto, área, tipo, estado,
    campo customizado, feriado e cor de destaque vêm da Configuração.

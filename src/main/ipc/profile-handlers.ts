@@ -1,3 +1,4 @@
+import { setWikiPublishing } from '../services/flow/publish'
 import { BrowserWindow, app, dialog, shell } from 'electron'
 import { AppError } from '@shared/errors'
 import { IPC_EVENTS } from '@shared/ipc'
@@ -99,6 +100,9 @@ export function registerProfileHandlers(): void {
     if (result.canceled || result.filePaths.length === 0) return null
     return setWorkFolder(profile.id, product.id, result.filePaths[0])
   })
+
+  // RN-SEC-39: ligar a publicação na wiki pede a confirmação do sistema, no main.
+  handle('setWikiPublish', (enabled) => setWikiPublishing(enabled === true))
 
   handle('clearWorkFolder', (productId) =>
     clearWorkFolder(requireActiveProfile().id, activeProduct(productId).id)

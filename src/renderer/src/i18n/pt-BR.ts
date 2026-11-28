@@ -251,7 +251,7 @@ export const ptBR = {
 
   pat: {
     intro:
-      'Para carregar os dados, o app usa um token pessoal <b>somente leitura</b>. Ele fica guardado <b>criptografado só neste computador</b> — nunca é enviado para nenhum servidor além do Azure DevOps.',
+      'Para carregar os dados, o app usa um token pessoal <b>somente leitura</b>. Ele fica guardado <b>criptografado só neste computador</b> — nunca é enviado para nenhum servidor além do Azure DevOps. Só se você for publicar o catálogo na wiki (opcional, na tela Segurança) ele precisa também de escrita na wiki.',
     stepOpenUrl: 'Abra no navegador a página de tokens da organização: {url}',
     stepOpenMenu:
       'No Azure DevOps, clique no ícone de usuário (canto superior direito) → <b>Personal access tokens</b>.',
@@ -520,7 +520,8 @@ export const ptBR = {
       'Aponte para os seus Produtos no Azure DevOps e acompanhe entregas, bugs e o andamento da sprint.',
     promises: {
       readOnlyTitle: 'Só leitura',
-      readOnlyText: 'O app nunca escreve no Azure DevOps.',
+      readOnlyText:
+        'O app só lê o Azure DevOps. Publicar o catálogo na wiki é opcional e pede a sua confirmação.',
       localTitle: 'Tudo local',
       localText: 'Sem servidor e sem conta. O token fica criptografado neste computador.',
       configurableTitle: 'Parametrizável',
@@ -1416,6 +1417,15 @@ export const ptBR = {
     consultCount: '{name} ({count} regras)',
     consultMissing: '{name} (sem catálogo)',
     toPublish: 'a publicar',
+    publish: {
+      button: 'Publicar na wiki ({count})',
+      title: 'Publicar na wiki',
+      intro:
+        'Escolha as páginas. Depois, o app abre um diálogo do sistema com a lista; só ali a publicação é confirmada. Página que mudou na wiki desde a absorção é recusada: absorva de novo.',
+      next: 'Continuar',
+      cancelled: 'Nada foi publicado.',
+      done: '{count} páginas publicadas na wiki.'
+    },
     noRules: 'nenhuma regra reconhecida',
     rules: { one: '{count} regra', other: '{count} regras' },
     columns: {
@@ -1455,6 +1465,14 @@ export const ptBR = {
       'A lista completa, a autoavaliação OWASP ASVS e os riscos aceitos estão em docs/seguranca.md, no repositório do projeto.',
     installedVersion: 'Versão instalada',
     guaranteesTitle: 'O que o app garante',
+    wikiPublish: {
+      title: 'Publicação do catálogo na wiki',
+      on: 'Ligada neste Perfil: o token pode escrever páginas do catálogo na wiki, sempre com a sua confirmação.',
+      off: 'Desligada neste Perfil: o app não escreve nada no Azure DevOps.',
+      turnOn: 'Ligar',
+      turnOff: 'Desligar',
+      demo: 'Na demonstração, a publicação grava só na wiki fictícia.'
+    },
     proof: 'Provado por',
     verifyTitle: 'Como conferir você mesmo',
     verifyInstaller:
@@ -1494,8 +1512,9 @@ export const ptBR = {
           'Só o processo principal o lê. A tela sabe apenas se existe um, e nenhum resultado ou erro o carrega.'
       },
       readOnly: {
-        title: 'O app só lê o Azure, nunca escreve',
-        detail: 'Mesmo que o seu token tenha permissão de escrita.'
+        title: 'O app só lê o Azure; a única escrita é a do catálogo, se você ligar',
+        detail:
+          'Com a publicação desligada, que é o padrão, nada é escrito, mesmo que o token tenha permissão de escrita. Ligada, o app grava só páginas do catálogo na wiki, e só depois de você confirmar a lista num diálogo do sistema.'
       },
       logs: {
         title: 'O token não aparece em log nem em mensagem de erro',

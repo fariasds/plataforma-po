@@ -350,9 +350,11 @@ export const fluxoDoPo: Scenario = {
     'RN-CAT-04',
     'RN-CAT-05',
     'RN-CAT-06',
+    'RN-CAT-07',
     'RN-CFG-14',
     'RN-CFG-15',
-    'RN-SEC-24'
+    'RN-SEC-24',
+    'RN-SEC-39'
   ],
   telas: [
     'retrato',
@@ -360,6 +362,7 @@ export const fluxoDoPo: Scenario = {
     'oportunidades',
     'acompanhamento',
     'roadmap',
+    'publicacao',
     'catalogo',
     'descoberta'
   ],

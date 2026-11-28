@@ -81,6 +81,8 @@ const ARGS: { [K in keyof IpcApi]: unknown[] } = {
   getOpportunities: ['loja'],
   getFollowUp: ['loja'],
   getRoadmap: [],
+  setWikiPublish: [true],
+  publishCatalog: ['loja', ['Cupons.md']],
   updateRoadmap: ['loja', { kind: 'archive', key: '#4088', archived: false }],
   createRoadmapMilestone: ['Revisão'],
   setRoadmapSettings: [

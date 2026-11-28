@@ -49,8 +49,13 @@ export const GUARANTEES: readonly Guarantee[] = [
   },
   {
     key: 'readOnly',
-    rules: ['RN-SEC-20'],
-    proof: ['tests/security/rn-sec-20-somente-leitura.test.ts']
+    rules: ['RN-SEC-20', 'RN-SEC-39', 'RN-SEC-40', 'RN-SEC-41'],
+    proof: [
+      'tests/security/rn-sec-20-somente-leitura.test.ts',
+      'tests/security/rn-sec-39-publicacao-desligada-por-padrao.test.ts',
+      'tests/security/rn-sec-40-publicacao-so-no-catalogo.test.ts',
+      'tests/security/rn-sec-41-confirmacao-no-processo-principal.test.ts'
+    ]
   },
   { key: 'logs', rules: ['RN-SEC-19'], proof: ['tests/security/rn-sec-19-redacao.test.ts'] },
   {

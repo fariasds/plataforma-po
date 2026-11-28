@@ -44,7 +44,7 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-17 | Autenticação da versão interna | Revogada (ADR 0002) |
 | RN-SEC-18 | O main só fala com o Azure e com a consulta de versão | `tests/security/rn-sec-18-fronteira-de-rede.test.ts` |
 | RN-SEC-19 | O PAT é apagado de log e erro | `tests/security/rn-sec-19-redacao.test.ts` |
-| RN-SEC-20 | Somente leitura no Azure | `tests/security/rn-sec-20-somente-leitura.test.ts` |
+| RN-SEC-20 | Somente leitura no Azure, com a exceção da publicação | `tests/security/rn-sec-20-somente-leitura.test.ts` |
 | RN-SEC-21 | Link externo só para a organização e para a Release | `tests/security/rn-sec-21-links-externos.test.ts` |
 | RN-SEC-22 | Instalador público pela esteira, com hash | `.github/workflows/release.yml` |
 | RN-SEC-23 | O app não inicia processo | `tests/security/rn-sec-23-fronteira-de-processo.test.ts` |
@@ -63,6 +63,9 @@ Cada regra aponta para o seu teste no índice abaixo.
 | RN-SEC-36 | A pasta de trabalho só vem do diálogo do sistema | `tests/security/rn-sec-36-pasta-de-trabalho-pelo-dialogo.test.ts` |
 | RN-SEC-37 | O que vem da wiki só é gravado dentro de catalogo/ | `tests/security/rn-sec-37-catalogo-so-dentro-da-pasta.test.ts` |
 | RN-SEC-38 | A IA grava só dentro da pasta de trabalho | `tests/security/rn-sec-38-ia-grava-so-na-pasta-de-trabalho.test.ts` |
+| RN-SEC-39 | A publicação na wiki vem desligada | `tests/security/rn-sec-39-publicacao-desligada-por-padrao.test.ts` |
+| RN-SEC-40 | A escrita só vai para página do catálogo | `tests/security/rn-sec-40-publicacao-so-no-catalogo.test.ts` |
+| RN-SEC-41 | Nada é publicado sem o diálogo do sistema | `tests/security/rn-sec-41-confirmacao-no-processo-principal.test.ts` |
 
 As regras da Configuração que protegem o PAT (`RN-CFG-04`, `05` e `06`) estão em
 [03-configuracao.md](03-configuracao.md), cada uma com o seu teste.
@@ -246,14 +249,17 @@ O log da janela encaminhado ao terminal também passa pela redação.
 
 **Provado por:** `tests/security/rn-sec-19-redacao.test.ts`.
 
-### RN-SEC-20 · Somente leitura no Azure
+### RN-SEC-20 · Somente leitura no Azure, com a exceção da publicação
 
-O app faz `GET`, e o **único `POST` permitido é a consulta WIQL**
-(`/_apis/wit/wiql`), que é leitura apesar do verbo. `PATCH`, `PUT`, `DELETE` e
-`POST` para qualquer outro caminho são recusados antes de sair.
+*Reescrita em 2026-11-27 (ADR 0016).* O caminho que alimenta as telas faz `GET`, e o
+**único `POST` permitido é a consulta WIQL** (`/_apis/wit/wiql`), que é leitura apesar
+do verbo. `PATCH`, `PUT`, `DELETE` e `POST` para qualquer outro caminho são recusados
+antes de sair, com a publicação ligada ou não.
 
-Um PAT criado com escopo de escrita, por engano, continua sem conseguir escrever
-pelo app.
+**A exceção é uma só:** publicar páginas do catálogo na wiki, por uma função separada
+(`putWikiPage`), cercada pelas `RN-SEC-39`, `RN-SEC-40` e `RN-SEC-41`. Com a publicação
+desligada, que é o padrão, um PAT criado com escopo de escrita continua sem conseguir
+escrever pelo app.
 
 **Provado por:** `tests/security/rn-sec-20-somente-leitura.test.ts`.
 
@@ -766,3 +772,54 @@ histórico do git.
 
 **Implementado em:** `.github/workflows/release.yml` · `.github/workflows/ci.yml` ·
 `.github/workflows/recolher-versao.yml`
+
+### RN-SEC-39 · A publicação na wiki vem desligada
+
+*Nova em 2026-11-27 (ADR 0016).* A única escrita do app no Azure, publicar páginas do
+catálogo na wiki, existe só no Perfil em que o PO **ligou a publicação**, na tela
+Segurança. Sem isso, o botão não aparece no Catálogo, o serviço recusa e a função que
+grava (`putWikiPage`, no `client.ts`) recusa antes de sair, com
+`WIKI_PUBLISH_OFF`.
+
+**Ligar pede a confirmação do sistema**, aberta pelo processo principal, porque a partir
+dela o token do Perfil passa a poder escrever. Desligar não pede. O estado fica na lista
+de Perfis (`perfis.json`), fora da pasta do Perfil que a IA lê, e a tela Segurança diz se
+ele está ligado (`RN-SEC-31`).
+
+**Provado por:** `tests/security/rn-sec-39-publicacao-desligada-por-padrao.test.ts`, que
+confere que o Perfil novo recusa sem chamar a rede, que cancelar o diálogo deixa
+desligado e que desligar de novo volta a recusar.
+
+### RN-SEC-40 · A escrita só vai para página do catálogo
+
+*Nova em 2026-11-27 (ADR 0016).* A barreira da escrita (`assertWikiPageWrite`) roda no
+mesmo `fetch` único da `RN-SEC-18`, depois da checagem de host e organização, e aceita
+só:
+
+- o verbo **`PUT`**;
+- o endereço de páginas **da wiki e do projeto** que a Configuração declara como
+  catálogo do Produto (`RN-CFG-15`);
+- o parâmetro `path` **abaixo da página raiz** do catálogo (não a própria raiz), sem `..`
+  nem `.`, e nenhum parâmetro além de `path` e `api-version`.
+
+A wiki e a raiz vêm da Configuração em uso, lidas pelo próprio `client.ts`, e não de
+quem chama. Produto com catálogo local não publica. O caminho de leitura continua
+recusando escrita (`RN-SEC-20`), com a publicação ligada ou não.
+
+**Provado por:** `tests/security/rn-sec-40-publicacao-so-no-catalogo.test.ts`, que
+recusa outro verbo, a raiz, página fora dela, raiz como prefixo, subida com `..`,
+parâmetro a mais, outra wiki, outro projeto e work item, e confere que o `client.ts`
+recusa antes de chamar a rede.
+
+### RN-SEC-41 · Nada é publicado sem o diálogo do sistema
+
+*Nova em 2026-11-27 (ADR 0016).* A janela escolhe as páginas; quem confirma é o PO, num
+diálogo do sistema que o **processo principal** abre, com a lista do que será criado ou
+atualizado. Cancelar não publica nada e não muda a base da absorção. Nenhum argumento
+do IPC dispensa o diálogo, e o servidor MCP não alcança a publicação (`RN-SEC-34`). Uma
+janela comprometida não consegue publicar sem o clique do PO num diálogo que ela não
+desenha.
+
+**Provado por:** `tests/security/rn-sec-41-confirmacao-no-processo-principal.test.ts`,
+que cancela e confirma pelo diálogo, e confere que o handler de IPC não repassa nada
+além do Produto e da lista.

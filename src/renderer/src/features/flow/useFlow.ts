@@ -89,6 +89,20 @@ export function usePreviewAbsorb(): ReturnType<typeof useMutation<AbsorbPreview,
   return useMutation({ mutationFn: (productId: string) => ipc.previewCatalogAbsorb(productId) })
 }
 
+export function usePublishCatalog(): ReturnType<
+  typeof useMutation<
+    { cancelled: boolean; published: string[] },
+    Error,
+    { productId: string; files: string[] }
+  >
+> {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ productId, files }) => ipc.publishCatalog(productId, files),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['catalog'] })
+  })
+}
+
 export function useAbsorbCatalog(): ReturnType<
   typeof useMutation<CatalogView, Error, { productId: string; useWiki: string[] }>
 > {

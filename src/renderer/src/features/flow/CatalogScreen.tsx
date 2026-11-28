@@ -11,16 +11,19 @@ import {
   Tag,
   Typography
 } from 'antd'
-import { CloudDownloadOutlined } from '@ant-design/icons'
+import { useState } from 'react'
+import { CloudDownloadOutlined, CloudUploadOutlined } from '@ant-design/icons'
 import type { CatalogPageView } from '@shared/flow-absorb'
 import { ErrorState } from '../../components/ErrorState'
 import { HelpTip } from '../../components/HelpTip'
 import { ProductFilter } from '../../components/ProductFilter'
 import { formatDateTime, formatList, t, tPlural } from '../../i18n'
 import { useSelection } from '../../ipc/useAzure'
+import { useProfileState } from '../../ipc/useProfile'
 import { MONO_FONT, STATUS } from '../../theme'
 import { AbsorbModal } from './AbsorbModal'
-import { useAbsorbCatalog, useCatalog, usePreviewAbsorb } from './useFlow'
+import { PublishModal } from './PublishModal'
+import { useAbsorbCatalog, useCatalog, usePreviewAbsorb, usePublishCatalog } from './useFlow'
 
 const { Text } = Typography
 
@@ -36,11 +39,16 @@ export function CatalogScreen(): React.JSX.Element {
   const catalog = useCatalog(productId)
   const preview = usePreviewAbsorb()
   const absorb = useAbsorbCatalog()
+  const publish = usePublishCatalog()
+  const [publishing, setPublishing] = useState(false)
+  // RN-SEC-39: o botão só existe com a publicação ligada no Perfil.
+  const canPublish = useProfileState().data?.profile?.wikiPublish === true
 
   if (selection.options.length === 0) return <Empty description={t('flow.noProducts')} />
 
   const view = catalog.data
   const isWiki = view?.source?.kind === 'wiki'
+  const toPublish = (view?.pages ?? []).filter((p) => p.toPublish).map((p) => p.file)
 
   return (
     <Space orientation="vertical" size="large" style={{ width: '100%' }}>
@@ -72,6 +80,11 @@ export function CatalogScreen(): React.JSX.Element {
                 {t('catalog.absorb')}
               </Button>
             )}
+            {isWiki && canPublish && toPublish.length > 0 && (
+              <Button icon={<CloudUploadOutlined />} onClick={() => setPublishing(true)}>
+                {t('catalog.publish.button', { count: toPublish.length })}
+              </Button>
+            )}
           </Flex>
         )}
       </Flex>
@@ -79,6 +92,7 @@ export function CatalogScreen(): React.JSX.Element {
       {catalog.isError && <ErrorState error={catalog.error} onRetry={() => catalog.refetch()} />}
       {preview.isError && <ErrorState error={preview.error} />}
       {absorb.isError && <ErrorState error={absorb.error} />}
+      {publish.isError && <ErrorState error={publish.error} />}
 
       {catalog.isPending ? (
         <Skeleton active paragraph={{ rows: 8 }} />
@@ -114,6 +128,28 @@ export function CatalogScreen(): React.JSX.Element {
             <Collapse items={view.pages.map((page) => pageItem(page, isWiki))} />
           )}
         </>
+      )}
+
+      {publishing && (
+        <PublishModal
+          files={toPublish}
+          pending={publish.isPending}
+          onCancel={() => setPublishing(false)}
+          onConfirm={(files) =>
+            publish.mutate(
+              { productId, files },
+              {
+                onSettled: () => setPublishing(false),
+                onSuccess: (result) =>
+                  void (result.cancelled
+                    ? message.info(t('catalog.publish.cancelled'))
+                    : message.success(
+                        t('catalog.publish.done', { count: result.published.length })
+                      ))
+              }
+            )
+          }
+        />
       )}
 
       <AbsorbModal

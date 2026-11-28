@@ -74,7 +74,14 @@ export type ProposalState =
 export interface ProfileState {
   status: ProfileStatus
   /** `dir` é a pasta que o app abre para o PO; o PAT não está nela (RN-CFG-06). */
-  profile: { id: string; name: string; dir: string; kind: ProfileKind } | null
+  profile: {
+    id: string
+    name: string
+    dir: string
+    kind: ProfileKind
+    /** A publicação do catálogo na wiki está ligada (RN-SEC-39). */
+    wikiPublish: boolean
+  } | null
   /** A Configuração em uso: a última versão válida. */
   config: Configuration | null
   /** Problemas do arquivo como está no disco agora. */
@@ -268,6 +275,19 @@ export interface IpcApi {
   createRoadmapMilestone(name: string): Promise<number>
   /** Pesos e limites das trilhas, do Perfil (RN-RDM-10, RN-RDM-11). */
   setRoadmapSettings(settings: RoadmapSettings): Promise<RoadmapSettings>
+  /**
+   * Liga ou desliga a publicação do catálogo na wiki no Perfil (RN-SEC-39). Ligar
+   * abre a confirmação do sistema; devolve como ficou.
+   */
+  setWikiPublish(enabled: boolean): Promise<boolean>
+  /**
+   * Publica na wiki os arquivos do catálogo escolhidos, depois da confirmação do PO
+   * num diálogo do sistema (ADR 0016). A única escrita do app no Azure.
+   */
+  publishCatalog(
+    productId: string,
+    files: string[]
+  ): Promise<{ cancelled: boolean; published: string[] }>
   /** O catálogo de regras do Produto na pasta de trabalho (ADR 0015). Não lê o Azure. */
   getCatalog(productId: string): Promise<CatalogView>
   /** Lê a wiki e diz, página a página, o que a absorção mudaria (RN-CAT-03). Não grava. */
@@ -366,6 +386,8 @@ export const IPC_CHANNELS = {
   updateRoadmap: 'flow:roadmap-update',
   createRoadmapMilestone: 'flow:roadmap-milestone',
   setRoadmapSettings: 'flow:roadmap-settings',
+  setWikiPublish: 'profile:wiki-publish',
+  publishCatalog: 'flow:catalog-publish',
   getCatalog: 'flow:catalog',
   previewCatalogAbsorb: 'flow:catalog-preview',
   absorbCatalog: 'flow:catalog-absorb',

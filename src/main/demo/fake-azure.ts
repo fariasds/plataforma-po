@@ -1,3 +1,5 @@
+import { AppError } from '@shared/errors'
+import { contentHash } from '@shared/flow-catalog'
 import { runWiql } from './wiql'
 import type { AzureState, FakeField, FakeIteration, FakeProject, FakeWorkItem } from './types'
 
@@ -55,7 +57,7 @@ const AVATAR_PNG =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
 
 export interface FakeAzureCall {
-  method: 'GET' | 'POST' | 'GRAPH' | 'AVATAR'
+  method: 'GET' | 'POST' | 'PUT' | 'GRAPH' | 'AVATAR'
   path: string
 }
 
@@ -69,6 +71,10 @@ export interface FakeAzure {
   fetchGraph<T>(path: string): Promise<{ body: T; continuation: string | null }>
   fetchAzureAvatar(url: string): Promise<string | null>
   fetchAvatarByDescriptor(descriptor: string): Promise<string | null>
+  /** A página com o ETag (o resumo do conteúdo), ou `null` se ela não existe. */
+  fetchWikiPage(path: string): Promise<{ content: string; etag: string | null } | null>
+  /** Grava a página; com ETag diferente do atual, recusa como o Azure (412). */
+  putWikiPage(path: string, content: string, etag: string | null): Promise<void>
 }
 
 // ─── Leitura do pedido ───────────────────────────────────────────────────────
@@ -190,6 +196,8 @@ export function createFakeAzure(state: AzureState): FakeAzure {
   const calls: FakeAzureCall[] = []
   const errors: string[] = []
   const byId = new Map(state.workItems.map((item) => [item.id, item]))
+  // Cópia: a publicação grava aqui, e o Cenário (constante do módulo) fica intacto.
+  const wikis = structuredClone(state.wikis ?? [])
 
   function project(name: string): FakeProject {
     const found = state.projects.find(
@@ -298,7 +306,7 @@ export function createFakeAzure(state: AzureState): FakeAzure {
 
   function wikiPage(projectName: string, wikiName: string, query: URLSearchParams): unknown {
     project(projectName)
-    const wiki = (state.wikis ?? []).find(
+    const wiki = wikis.find(
       (w) =>
         w.name.toLowerCase() === wikiName.toLowerCase() &&
         w.project.toLowerCase() === projectName.toLowerCase()
@@ -523,6 +531,30 @@ export function createFakeAzure(state: AzureState): FakeAzure {
     return { value: state.user.descriptor }
   }
 
+  /** A página de wiki que a rota pede, para ler com ETag ou para gravar. */
+  function wikiTarget(
+    path: string,
+    allowed: readonly string[]
+  ): {
+    wiki: (typeof wikis)[number]
+    path: string
+    existing: { path: string; content: string } | undefined
+  } {
+    const { segments, query } = parsePath(path)
+    const m = matches(segments, [null, '_apis', 'wiki', 'wikis', null, 'pages'])
+    if (!m) throw new UnknownAzureRequestError(`rota de página não prevista: ${path}`)
+    checkQuery(path, query, allowed)
+    project(m[0])
+    const wiki = wikis.find(
+      (w) =>
+        w.name.toLowerCase() === m[1].toLowerCase() &&
+        w.project.toLowerCase() === m[0].toLowerCase()
+    )
+    if (!wiki) throw new UnknownAzureRequestError(`wiki "${m[1]}" não existe em ${m[0]}`)
+    const pagePath = query.get('path') ?? ''
+    return { wiki, path: pagePath, existing: wiki.pages.find((p) => p.path === pagePath) }
+  }
+
   /** Registra, e só então lança: o serviço pode engolir, a lista não esquece. */
   function guard<T>(call: FakeAzureCall, task: () => unknown): Promise<T> {
     calls.push(call)
@@ -550,6 +582,27 @@ export function createFakeAzure(state: AzureState): FakeAzure {
         if (!url.startsWith(prefix))
           throw new UnknownAzureRequestError(`avatar fora da organização: ${url}`)
         return avatar
+      }),
+    fetchWikiPage: (path) =>
+      guard({ method: 'GET', path }, () => {
+        const page = wikiTarget(path, ['path', 'includeContent'])
+        return page.existing
+          ? { content: page.existing.content, etag: `"${contentHash(page.existing.content)}"` }
+          : null
+      }),
+    putWikiPage: (path, content, etag) =>
+      guard({ method: 'PUT', path }, () => {
+        const page = wikiTarget(path, ['path'])
+        const current = page.existing ? `"${contentHash(page.existing.content)}"` : null
+        if (current !== etag) {
+          throw new AppError(
+            'CATALOG_CONFLICT',
+            `A página ${page.path} mudou na wiki: absorva de novo.`
+          )
+        }
+        if (page.existing) page.existing.content = content
+        else page.wiki.pages.push({ path: page.path, content })
+        return undefined
       }),
     fetchAvatarByDescriptor: (descriptor) =>
       guard({ method: 'AVATAR', path: descriptor }, () => {

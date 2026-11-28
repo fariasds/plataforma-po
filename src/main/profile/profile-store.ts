@@ -35,6 +35,8 @@ export interface ProfileEntry {
   kind?: 'demo'
   /** O Cenário que alimenta a demonstração. */
   scenario?: string
+  /** A publicação do catálogo na wiki está ligada (ADR 0016). Sem o campo, desligada. */
+  wikiPublish?: boolean
 }
 
 interface ProfileIndex {
@@ -49,6 +51,8 @@ export interface ActiveProfile {
   kind: ProfileKind
   /** O Cenário da demonstração; `null` num Perfil com Azure de verdade. */
   scenario: string | null
+  /** RN-SEC-39: só com ela ligada o app escreve na wiki. */
+  wikiPublish: boolean
 }
 
 export interface CreateProfileInput {
@@ -66,7 +70,8 @@ function isEntry(value: unknown): value is ProfileEntry {
     typeof entry.id === 'string' &&
     PROFILE_ID_PATTERN.test(entry.id) &&
     typeof entry.name === 'string' &&
-    (entry.kind === undefined || (entry.kind === 'demo' && typeof entry.scenario === 'string'))
+    (entry.kind === undefined || (entry.kind === 'demo' && typeof entry.scenario === 'string')) &&
+    (entry.wikiPublish === undefined || typeof entry.wikiPublish === 'boolean')
   )
 }
 
@@ -114,8 +119,20 @@ function toActive(entry: ProfileEntry): ActiveProfile {
     name: entry.name,
     dir: profileDir(entry.id),
     kind: entry.kind === 'demo' ? 'demo' : 'azure',
-    scenario: entry.kind === 'demo' ? (entry.scenario ?? null) : null
+    scenario: entry.kind === 'demo' ? (entry.scenario ?? null) : null,
+    wikiPublish: entry.wikiPublish === true
   }
+}
+
+/** Liga ou desliga a publicação na wiki do Perfil ativo (RN-SEC-39). */
+export function setWikiPublish(enabled: boolean): ActiveProfile {
+  const index = readIndex()
+  const entry = index.profiles.find((profile) => profile.id === index.active)
+  if (!entry) throw new AppError('PROFILE_MISSING', 'Não há Perfil em uso.')
+  if (enabled) entry.wikiPublish = true
+  else delete entry.wikiPublish
+  writeIndex(index)
+  return toActive(entry)
 }
 
 /**

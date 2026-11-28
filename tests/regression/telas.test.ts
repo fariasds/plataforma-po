@@ -35,7 +35,11 @@ const state = vi.hoisted(() => ({
   azure: null as FakeAzure | null,
   workData: {} as Record<string, unknown>,
   scenarioId: '',
-  anchor: 0
+  anchor: 0,
+  /** A publicação na wiki ligada no Perfil fictício (RN-SEC-39). */
+  wikiPublish: false,
+  /** O que a publicação gravaria na pasta: registrado, nunca escrito na pasta fictícia. */
+  writes: [] as string[]
 }))
 
 function fake(): FakeAzure {
@@ -45,7 +49,17 @@ function fake(): FakeAzure {
 
 vi.mock('../../src/main/profile/config-loader', () => ({ getActiveConfig: () => state.config }))
 vi.mock('../../src/main/profile/profile-store', () => ({
-  requireActiveProfile: () => ({ id: 'cenario', name: 'Cenário', dir: '' })
+  requireActiveProfile: () => ({
+    id: 'cenario',
+    name: 'Cenário',
+    dir: '',
+    wikiPublish: state.wikiPublish
+  })
+}))
+vi.mock('../../src/main/profile/atomic-write', () => ({
+  writeFileAtomic: (file: string) => {
+    state.writes.push(basename(file))
+  }
 }))
 vi.mock('../../src/main/profile/paths', () => ({ configPath: () => '' }))
 vi.mock('../../src/main/profile/work-data', () => ({
@@ -76,7 +90,17 @@ vi.mock('../../src/main/services/azure/client', () => ({
   postAzure: (path: string, body: unknown) => fake().postAzure(path, body),
   fetchGraph: (path: string) => fake().fetchGraph(path),
   fetchAzureAvatar: (url: string) => fake().fetchAzureAvatar(url),
-  fetchAvatarByDescriptor: (descriptor: string) => fake().fetchAvatarByDescriptor(descriptor)
+  fetchAvatarByDescriptor: (descriptor: string) => fake().fetchAvatarByDescriptor(descriptor),
+  fetchWikiPage: (path: string) => fake().fetchWikiPage(path),
+  // O caminho que o client.ts montaria; a barreira dele é provada na RN-SEC-40.
+  putWikiPage: (productId: string, pagePath: string, content: string, etag: string | null) => {
+    const product = state.config!.products.find((p) => p.id === productId)!
+    const source = product.catalog!.source as { wiki: string; project?: string }
+    const path =
+      `/${encodeURIComponent(source.project ?? product.project)}/_apis/wiki/wikis/` +
+      `${encodeURIComponent(source.wiki)}/pages?path=${encodeURIComponent(pagePath)}&api-version=7.1`
+    return fake().putWikiPage(path, content, etag)
+  }
 }))
 
 const { getUnifiedSprints } = await import('../../src/main/services/azure/unified-sprints')
@@ -96,6 +120,9 @@ const { getOpportunities } = await import('../../src/main/services/flow/opportun
 const { getFollowUp } = await import('../../src/main/services/flow/follow-up')
 const { getRoadmap } = await import('../../src/main/services/flow/roadmap')
 const { previewCatalogAbsorb } = await import('../../src/main/services/flow/absorb')
+const { publishCatalog } = await import('../../src/main/services/flow/publish')
+const { productCatalog } = await import('../../src/main/services/flow/catalog')
+const { filesToPublish } = await import('@shared/flow-absorb')
 const { buildSprintGoalRequest } = await import('../../src/main/services/ai/sprint-goal')
 const { resolveScope } = await import('../../src/main/services/azure/scope')
 const { buildPlanningSummary, summaryToMarkdown } =
@@ -378,6 +405,57 @@ export const SCREENS: Record<string, ScreenRun> = {
     return getRoadmap()
   },
 
+  // A publicação na wiki (ADR 0016): o que falta publicar, a recusa por conflito com a
+  // wiki (RN-CAT-07), a lista que o diálogo do sistema mostra e as páginas gravadas.
+  publicacao: async () => {
+    const result: Record<string, unknown> = {}
+    for (const product of state.config!.products) {
+      if (product.catalog?.source.kind !== 'wiki') continue
+      const catalog = productCatalog(product.id)
+      if (catalog.workFolder !== 'ok') {
+        result[product.id] = { pastaDeTrabalho: catalog.workFolder }
+        continue
+      }
+      const pending = filesToPublish(catalog.files, catalog.base)
+      const attempt = async (files: string[]): Promise<unknown> => {
+        state.writes = []
+        const dialogs: unknown[] = []
+        const before = fake().calls.length
+        try {
+          const done = await publishCatalog(product.id, files, async (input) => {
+            dialogs.push(input)
+            return true
+          })
+          return {
+            ...done,
+            dialogo: dialogs,
+            gravou: state.writes,
+            pedidos: fake()
+              .calls.slice(before)
+              .filter((c) => c.method === 'PUT')
+          }
+        } catch (error) {
+          return { erro: (error as { code?: string }).code ?? String(error), dialogo: dialogs }
+        }
+      }
+      state.wikiPublish = false
+      const off = await attempt(pending)
+      state.wikiPublish = true
+      const all = await attempt(pending)
+      // Sem as páginas que mudaram na wiki desde a absorção, a publicação passa.
+      const preview = await previewCatalogAbsorb(product.id)
+      const changedInWiki = new Set(
+        preview.pages
+          .filter((p) => p.status === 'conflict' || p.status === 'changed')
+          .map((p) => p.file)
+      )
+      const free = await attempt(pending.filter((file) => !changedInWiki.has(file)))
+      result[product.id] = { pendentes: pending, desligada: off, todas: all, semConflito: free }
+      state.wikiPublish = false
+    }
+    return result
+  },
+
   // O catálogo de regras de cada Produto e o que a absorção da wiki mudaria (RN-CAT-01 a 06).
   catalogo: async () => {
     const result: Record<string, unknown> = {}
@@ -449,6 +527,7 @@ const COVERED_HANDLERS: Record<string, string> = {
   getOpportunities: 'oportunidades',
   getFollowUp: 'acompanhamento',
   getRoadmap: 'roadmap',
+  publishCatalog: 'publicacao',
   getCatalog: 'catalogo',
   previewCatalogAbsorb: 'catalogo',
   buildSprintGoalRequest: 'pedido-ia'
@@ -459,6 +538,7 @@ const AZURE_HANDLER_FILES = [
   'azure-handlers.ts',
   'organization-handlers.ts',
   'flow-handlers.ts',
+  'publish-handlers.ts',
   'ai-handlers.ts'
 ]
 

@@ -98,6 +98,23 @@ que **nunca veio dela**, está a publicar: a regra está gravada no catálogo da
 mas ainda não na wiki, que é a versão oficial. A comparação ignora a diferença de fim
 de linha.
 
+### RN-CAT-07 · Publicar na wiki
+
+*Nova em 2026-11-27 (ADR 0016).* Com a publicação ligada no Perfil (`RN-SEC-39`), o
+botão **Publicar na wiki** lista as páginas a publicar; o PO escolhe, e o app confere,
+página a página, a wiki **antes** de pedir a confirmação:
+
+- **Página que veio da absorção:** o conteúdo na wiki tem de ser o da última absorção.
+  Se mudou (ou sumiu), a publicação inteira é recusada com `CATALOG_CONFLICT`: o PO
+  absorve de novo e resolve a diferença primeiro.
+- **Página nova, que nunca veio da wiki:** não pode existir na wiki ainda. O caminho é a
+  raiz mais o nome do arquivo, sem `.md`; nome que a absorção não devolveria ao mesmo
+  arquivo é recusado.
+
+Confirmado o diálogo do sistema (`RN-SEC-41`), cada página vai com o ETag lido, e o Azure
+recusa se ela mudou nesse meio-tempo. O que foi publicado vira a nova base da absorção
+(`.absorcao.json`) e deixa de estar a publicar.
+
 ---
 
 ## A tela Catálogo
